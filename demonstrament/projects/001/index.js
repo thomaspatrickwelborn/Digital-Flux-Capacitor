@@ -1,4 +1,3 @@
-import './utils/persist.js'
 import path from 'node:path'
 import { readFile } from 'node:fs/promises'
 import yargs from 'yargs'

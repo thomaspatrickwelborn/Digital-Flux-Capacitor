@@ -88,8 +88,6 @@ class SpreadsheetToSpreadsheetDatabase extends EventEmitter {
 			modelNamesIndex++
 		}
 		await this.#readWorkbook($workbookPath)
-		console.log(this)
-		throw new Error("!")
 		this.emit('output', this)
 	}
 }

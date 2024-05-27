@@ -3,6 +3,7 @@ import * as Generators from './Generators/index.js'
 class FilesystemDatabaseToFilesystem extends EventEmitter {
 	constructor($settings) {
 		super()
+		console.log(this)
 		this.#settings = $settings
 		this.filesystem = this.#settings.filesystem
 		return this.#start()
@@ -24,7 +25,6 @@ class FilesystemDatabaseToFilesystem extends EventEmitter {
 		const fsElements = foldCollection.concat(fileCollection)
 		await FSElements(fsElements, $preflux, this)
 		await FSElementsContent(fsElements, $preflux, this)
-		throw new Error("!")
 	}
 }
 export default FilesystemDatabaseToFilesystem
