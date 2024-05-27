@@ -1,7 +1,7 @@
 {
-  "name": "spreadsheet-to-database",
+  "name": "digital-flux-capacitor",
   "author": "Thomas Patrick Welborn",
-  "description": "Converts an XLSX Spreadsheet to a Mongo Database.",
+  "description": "Digital Workflow Tool. Document Generator.",
   "license": "CC-BY-NC-ND-4.0",
   "version": "1.0.0",
   "devDependencies": {
@@ -11,7 +11,7 @@
     "glob": "^10.3.10",
     "js-beautify": "^1.15.1",
     "mongoose": "^8.0.3",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.1/xlsx-0.20.1.tgz",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz",
     "yargs": "^17.7.2"
   },
   "type": "module",
@@ -22,15 +22,7 @@
     "restart": "pm2 restart ecosystem.config.cjs",
     "stop": "pm2 stop ecosystem.config.cjs && npm run save",
     "delete": "pm2 delete ecosystem.config.cjs && npm run save",
-    "ls": "pm2 ls",
-    "start-photo-application": "pm2 start ecosystem.config.cjs --only photo-application && npm run save",
-    "restart-photo-application": "pm2 restart ecosystem.config.cjs --only photo-application ",
-    "stop-photo-application": "pm2 stop ecosystem.config.cjs --only photo-application && npm run save",
-    "delete-photo-application": "pm2 delete ecosystem.config.cjs --only photo-application && npm run save",
-    "start-mvc-framework": "pm2 start ecosystem.config.cjs --only mvc-framework && npm run save",
-    "restart-mvc-framework": "pm2 restart ecosystem.config.cjs --only mvc-framework ",
-    "stop-mvc-framework": "pm2 stop ecosystem.config.cjs --only mvc-framework && npm run save",
-    "delete-mvc-framework": "pm2 delete ecosystem.config.cjs --only mvc-framework && npm run save"
+    "ls": "pm2 ls"
   },
   "imports": {
     "#core/*": "./development/core/*",
