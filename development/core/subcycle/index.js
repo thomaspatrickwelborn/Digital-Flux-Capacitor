@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { EventEmitter } from 'node:events'
-
+import flux from '../../flux/index.js'
 class Subcycle extends EventEmitter {
 	constructor($settings) {
 		super()
@@ -10,11 +10,7 @@ class Subcycle extends EventEmitter {
 	#settings
 	async #start($settings) {
 		const preflux = $settings.preflux
-		const fluxPath = path.join(
-			process.env.PWD, 'development/flux', $settings.flux, 'index.js'
-		)
-		const Flux = await import(fluxPath)
-		.then($module => $module.default)
+		const Flux = flux[$settings.flux]
 		this.flux = await new Flux($settings)
 		if(preflux !== undefined) {
 			preflux.on('output', this.#prefluxOutput.bind(this))
