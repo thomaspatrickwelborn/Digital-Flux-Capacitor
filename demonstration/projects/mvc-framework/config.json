@@ -1,0 +1,33 @@
+{
+	"project": {
+		"name": "mvc-framework",
+		"path": "demonstration/projects/mvc-framework"
+	},
+	"cycle": ["spreadsheet-to-filesystem", {
+		"subcycles": [
+			["spreadsheet-to-spreadsheet-database", {
+				"flux": "spreadsheet-to-spreadsheet-database",
+				"spreadsheet": {
+					"path": "demonstration/projects/mvc-framework/development.xlsx"
+				},
+				"database": {
+					"uri": "mongodb://127.0.0.1:27017/mvc-framework-spreadsheet",
+				  "options": {}
+				}
+			}],
+			["spreadsheet-database-to-filesystem-database", {
+				"flux": "spreadsheet-database-to-filesystem-database",
+				"database": {
+					"uri": "mongodb://127.0.0.1:27017/mvc-framework-filesystem",
+					"options": {}
+				}
+			}],
+			["filesystem-database-to-filesystem", {
+				"flux": "filesystem-database-to-filesystem",
+				"filesystem": {
+					"path": "demonstration/projects/mvc-framework/codebase"
+				}
+			}]
+		]
+	}]
+}
