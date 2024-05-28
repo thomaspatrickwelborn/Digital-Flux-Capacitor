@@ -1,16 +1,12 @@
 import { fillEmptyCells } from '#utils/index.js'
+import assignProps from './assignProps/index.js'
 const translexes = [
-	["assignProps", await import(
-		"./assignProps/index.js"
-	).then($module => $module.default)],
-	["assignLMNProps", await import(
-		"./assignLMNProps/index.js"
-	).then($module => $module.default)],
+	["assignProps", assignProps],
 ]
 
 async function Supposit($settings) {
 	const {
-		nom, com, modIndex, mods, merges, ranges, lmnRanges
+		nom, com, modIndex, mods, merges, ranges
 	} = $settings
 	const sup = fillEmptyCells($settings.sup)
 	var supposit = {}
@@ -22,16 +18,15 @@ async function Supposit($settings) {
 		switch(translexisMethodType) {
 			case 'Function':
 				supposit = $translexisMethod(supposit, {
-					modIndex, mods, lmnRanges, sup, com
+					modIndex, mods, sup, com
 				})
 				break
 			case 'AsyncFunction':
 				supposit = await $translexisMethod(supposit, {
-					modIndex, mods, lmnRanges, sup, com
+					modIndex, mods, sup, com
 				})
 				break
 		}
-	console.log($settings)
 		translexesIndex++
 	}
 	return supposit
