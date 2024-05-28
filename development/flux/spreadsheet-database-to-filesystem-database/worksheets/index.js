@@ -13,23 +13,18 @@ async function Worksheets($worksheets, $settings) {
 			$worksheetClassIndex, $worksheet
 		] of Array.from($worksheetClass.entries())) {
 			const Worksheet = worksheets[$worksheetClassName]
-			const lmnRanges = $worksheet.getLMNRanges(
-				$worksheet.getRanges({ includeHidden: false })
-			)
 			var worksheetCollect
 			switch(typeOf(Worksheet)) {
 				case 'asyncfunction':
 					worksheetCollect = await Worksheet($worksheet.collect, {
 						worksheet: $worksheet,
 						models: fluxModels,
-						lmnRanges: lmnRanges
 					})
 					break
 				case 'function':
 					worksheetCollect = Worksheet($worksheet.collect, {
 						worksheet: $worksheet,
 						models: fluxModels,
-						lmnRanges: lmnRanges,
 					})
 					break
 			}
