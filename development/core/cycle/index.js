@@ -2,13 +2,10 @@ import { EventEmitter } from 'node:events'
 import Subcycle from '#core/subcycle/index.js'
 
 class Cycle extends EventEmitter {
-	constructor($settings) {
+	#settings = {}
+	constructor($settings = {}) {
 		super()
-		return this.#start($settings)
-	}
-	async #start($settings) {
-		this.#setSubcycles($settings.subcycles)
-		return this
+		this.#settings = $settings
 	}
 	#subcycles = new Map()
 	async #setSubcycles($subcycles) {
@@ -26,10 +23,15 @@ class Cycle extends EventEmitter {
 				.at(subcyclesIndex - 1)
 				.flux
 			}
-			const subcycle = await new Subcycle($subcycleSettings)
+			const subcycle = new Subcycle($subcycleSettings)
+			await subcycle.start()
 			subcycles.set($subcycleName, subcycle)
 			subcyclesIndex++
 		}
+		return this
+	}
+	async start() {
+		await this.#setSubcycles(this.#settings.subcycles)
 		return this
 	}
 }

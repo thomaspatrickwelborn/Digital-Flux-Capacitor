@@ -8,6 +8,7 @@ import {
 import { Mixed } from 'mongoose'
 
 function assignProps($prop, $settings) {
+	console.log('assignProps')
 	var { sup, com } = $settings
 	const verizon = sup.length
 	var horizon = sup.reduce(

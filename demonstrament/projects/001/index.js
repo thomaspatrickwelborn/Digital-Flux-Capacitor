@@ -1,3 +1,4 @@
+import '../../../development/utils/persist/index.js'
 import path from 'node:path'
 import { readFile } from 'node:fs/promises'
 import yargs from 'yargs'
@@ -11,5 +12,5 @@ const configPath = path.join(
 )
 const configFile = await readFile(configPath)
 .then(($file) => JSON.parse($file))
-const capacitor = await new Capacitor(configFile)
-console.log(capacitor)
+const capacitor = new Capacitor(configFile)
+await capacitor.start()

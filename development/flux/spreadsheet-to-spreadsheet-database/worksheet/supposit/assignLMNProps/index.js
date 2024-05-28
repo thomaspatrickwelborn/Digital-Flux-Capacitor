@@ -16,14 +16,18 @@ function assignLMNProps($prop, $settings) {
 	// Mod Com Rows
 	const modComRowsLength = modCom.length
 	var modComRowsIndex = 0
-	iterateModComRows: while(modComRowsIndex < modComRowsLength) {
+	iterateModComRows:
+	while(modComRowsIndex < modComRowsLength) {
 		const modComRow = modCom[modComRowsIndex]
 		const modComRowLMNRangeData = rowLMNRangeFromLMNRanges(modComRow, lmnRanges)
 		const modComRowLMNRangeIndex = modComRowLMNRangeData.comRowLMNRangeIndex
 		const modComRowLMNRange = modComRowLMNRangeData.comRowLMNRange
 		var meterScopeIndex = modComRowLMNRangeIndex
 		const modLMNRange = modComRowLMNRangeData.lmnRange
-		if(modLMNRange['PAT'] !== undefined) {
+		if(
+			modLMNRange !== undefined &&
+			modLMNRange['PAT'] !== undefined
+		) {
 			$prop[modLMNRange['PAT'].Key] = String
 		}
 		// Subduct Mods
@@ -50,7 +54,10 @@ function assignLMNProps($prop, $settings) {
 				const subductModComRowLMNRangeIndex = subductModComRowLMNRangeData.comRowLMNRangeIndex
 				const subductModComRowLMNRange = subductModComRowLMNRangeData.comRowLMNRange
 				const subductModLMNRange = subductModComRowLMNRangeData.lmnRange
-				if(subductModLMNRange === undefined) continue iterateSubductModComRows
+				if(subductModLMNRange === undefined) {
+					subductModComRowsIndex++
+					continue iterateSubductModComRows
+				}
 				var subductMeterScopeIndex = subductModComRowLMNRangeIndex
 				if(subductMeterScopeIndex <= meterScopeIndex) {
 					modComRowsIndex++
@@ -61,7 +68,6 @@ function assignLMNProps($prop, $settings) {
 					continue iterateSubductModComRows
 				}
 				// Subduct Mod LMN Subset Range
-				// console.log(subductModLMNRange)
 				const subductModLMNSubsetRange = subductModLMNRange['SUBSET']
 				const subductModLMNSubsetRangeVal = subductModLMNSubsetRange.Key || subductModComRow
 				.slice(subductModLMNSubsetRange.Ref.s.c, subductModLMNSubsetRange.Ref.e.c + 1)[0]

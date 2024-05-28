@@ -10,20 +10,10 @@ const Schemata = { FileSchema, FoldSchema }
 class SpreadsheetDatabaseToFilesystemDatabase extends EventEmitter {
 	constructor($settings) {
 		super()
-		console.log(this)
 		this.#settings = $settings
-		return this.#start()
+		return this
 	}
 	#settings
-	async #start() {
-		await this.#startDBConnection()
-		this.#setDBConnectionModels()
-		return this
-	}
-	async #stop() {
-		await this.#stopDBConnection()
-		return this
-	}
 	worksheets = new Map()
 	dbConnection
 	async #startDBConnection() {
@@ -73,6 +63,15 @@ class SpreadsheetDatabaseToFilesystemDatabase extends EventEmitter {
 			fluxModels: models,
 		})
 		this.emit('output', this)
+	}
+	async start() {
+		await this.#startDBConnection()
+		this.#setDBConnectionModels()
+		return this
+	}
+	async stop() {
+		await this.#stopDBConnection()
+		return this
 	}
 }
 export default SpreadsheetDatabaseToFilesystemDatabase

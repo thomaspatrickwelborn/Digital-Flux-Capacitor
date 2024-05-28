@@ -6,25 +6,15 @@ import * as XLSX from 'xlsx'
 import { readFile } from 'node:fs/promises'
 import Workbook from './workbook/index.js'
 
-XLSX.set_fs(fs)
+// XLSX.set_fs(fs)
 
 class SpreadsheetToSpreadsheetDatabase extends EventEmitter {
 	constructor($settings) {
 		super()
 		this.#settings = $settings
-		return this.#start()
+		return this
 	}
 	#settings
-	async #start() {
-		await this.#startDBConnection()
-		await this.#startWorkbookWatch()
-		return this
-	}
-	async #stop() {
-		await this.#stopWorkbookWatch()
-		await this.#stopDBConnection()
-		return this
-	}
 	dbConnection
 	async #startDBConnection() {
 		if(this.dbConnection === undefined) {
@@ -42,11 +32,12 @@ class SpreadsheetToSpreadsheetDatabase extends EventEmitter {
 	#_workbook
 	get workbook() { return this.#_workbook }
 	async #setWorkbook($workbookPath, $workbook) {
-		this.#_workbook = await new Workbook({
+		this.#_workbook = new Workbook({
 			workbookPath: $workbookPath, 
 			workbook: $workbook,
 			dbConnection: this.dbConnection, 
 		})
+		await this.#_workbook.start()
 		return this
 	}
 	async #readWorkbook($workbookPath) {
@@ -78,7 +69,6 @@ class SpreadsheetToSpreadsheetDatabase extends EventEmitter {
 		return this.#workbookWatch
 	}
 	async #workbookWatchChange($workbookPath) {
-		console.log($workbookPath)
 		await this.dbConnection.dropDatabase()
 		const modelNames = this.dbConnection.modelNames()
 		const modelNamesLength = modelNames.length
@@ -89,8 +79,17 @@ class SpreadsheetToSpreadsheetDatabase extends EventEmitter {
 			modelNamesIndex++
 		}
 		await this.#readWorkbook($workbookPath)
-		console.log(this)
-		// this.emit('output', this)
+		this.emit('output', this)
+	}
+	async start() {
+		await this.#startDBConnection()
+		await this.#startWorkbookWatch()
+		return this
+	}
+	async stop() {
+		await this.#stopWorkbookWatch()
+		await this.#stopDBConnection()
+		return this
 	}
 }
 

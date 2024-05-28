@@ -45,15 +45,16 @@ class Worksheet extends EventEmitter {
 		this.#setCols(worksheetData['!cols'])
 		this.#setMerges(worksheetData['!merges'])
 		this.#setData(worksheetData['!data'])
-		return this.#generateCollections()
+		return
 	}
-	async #generateCollections() {
+	async start() {
 		const data = this.#getData({ includeHidden: false, condensed: true })
 		const ranges = this.getRanges({ includeHidden: false })
 		const lmnRanges = this.getLMNRanges(ranges)
 		const merges = this.#getMerges({ includeHidden: false })
 		const mods = await this.#setMods(data, ranges, merges)
 		const supposits = await this.#setSupposits(mods, ranges, merges, lmnRanges)
+		console.log('start')
 		const schemata = await this.#setSchemata(mods, ranges, merges, lmnRanges)
 		const models = await this.#setModels(mods, ranges, merges, lmnRanges)
 		const composits = await this.#setComposits(mods, ranges, merges, lmnRanges)
@@ -611,6 +612,7 @@ class Worksheet extends EventEmitter {
 				lmnRanges: $lmnRanges,
 				merges: this.#getMerges({ includeHidden: false }),
 			})
+			console.log('setSupposits')
 			supposits.set(nom, deepmerge(
 				supposits.get(nom) || {},
 				supposit,

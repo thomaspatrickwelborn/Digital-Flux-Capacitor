@@ -4,14 +4,10 @@ import { mkdir } from 'node:fs/promises'
 import Cycle from '#core/cycle/index.js'
 
 class Capacitor extends EventEmitter {
-	constructor($settings) {
+	#settings = {}
+	constructor($settings = {}) {
 		super()
-		return this.#start($settings)
-	}
-	async #start($settings) {
-		await this.#setProject($settings.project)
-		await this.#setCycles($settings.cycle)
-		return this
+		this.#settings = $settings
 	}
 	#project
 	async #setProject($project) {
@@ -23,8 +19,14 @@ class Capacitor extends EventEmitter {
 	async #setCycles($cycle) {
 		const cycles = this.#cycles
 		const [$cycleName, $cycleSettings] = $cycle
-		const cycle = await new Cycle($cycleSettings)
+		const cycle = new Cycle($cycleSettings)
+		await cycle.start()
 		cycles.set($cycleName, cycle)
+		return this
+	}
+	async start() {
+		await this.#setProject(this.#settings.project)
+		await this.#setCycles(this.#settings.cycle)
 		return this
 	}
 }

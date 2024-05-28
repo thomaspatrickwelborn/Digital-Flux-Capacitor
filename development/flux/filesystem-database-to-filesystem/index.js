@@ -3,19 +3,12 @@ import * as Generators from './Generators/index.js'
 class FilesystemDatabaseToFilesystem extends EventEmitter {
 	constructor($settings) {
 		super()
-		console.log(this)
 		this.#settings = $settings
 		this.filesystem = this.#settings.filesystem
-		return this.#start()
+		return this
 	}
 	#settings
 	filesystem
-	async #start() {
-		return this
-	}
-	async #stop() {
-		return this
-	}
 	async input($preflux) {
 		const fsDBConnection = $preflux.dbConnection
 		const { File, Fold } = fsDBConnection.models
@@ -25,6 +18,12 @@ class FilesystemDatabaseToFilesystem extends EventEmitter {
 		const fsElements = foldCollection.concat(fileCollection)
 		await FSElements(fsElements, $preflux, this)
 		await FSElementsContent(fsElements, $preflux, this)
+	}
+	async start() {
+		return this
+	}
+	async stop() {
+		return this
 	}
 }
 export default FilesystemDatabaseToFilesystem

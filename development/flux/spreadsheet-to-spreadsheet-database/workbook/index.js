@@ -17,11 +17,13 @@ class Workbook extends EventEmitter {
 		this.name = path.basename(this.#workbookPath).split('.')[0]
 		this.workbook = workbook
 		this.#dbConnection = dbConnection
+	}
+	async start() {
 		const {
 			Workbook,
 			Sheets
-		} = workbook
-		return this.#setWorksheets(Workbook, Sheets)
+		} = this.workbook
+		return await this.#setWorksheets(Workbook, Sheets)
 	}
 	#workbookPath
 	name
@@ -66,11 +68,12 @@ class Workbook extends EventEmitter {
 			workbookWorksheetData['!cols'] = workbookWorksheetCols
 			workbookWorksheetData['!merges'] = workbookWorksheetMerges
 			workbookWorksheetData['!ranges'] = workbookWorksheetRanges
-			const worksheet = await new Worksheet({
+			const worksheet = new Worksheet({
 				worksheetName: workbookWorksheetName,
 				worksheetData: workbookWorksheetData,
 				dbConnection: this.#dbConnection,
 			})
+			await worksheet.start()
 			switch(worksheets.has(workbookWorksheetClassName)) {
 				case true: 
 					worksheets

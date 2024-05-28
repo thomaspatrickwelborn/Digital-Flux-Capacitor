@@ -31,6 +31,7 @@ async function Supposit($settings) {
 				})
 				break
 		}
+	console.log($settings)
 		translexesIndex++
 	}
 	return supposit
