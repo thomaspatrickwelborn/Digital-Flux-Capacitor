@@ -37,7 +37,7 @@ function assignPORProps($collect, $worksheet) {
 						preductCollectDocPortal.flow === 'O'
 					) {
 						var collectDocImportPath = preductCollectDoc.path
-						.replace(new RegExp(`^${preductCollectDoc.workspace}/`), '')
+						// .replace(new RegExp(`^${preductCollectDoc.workspace}/`), '')
 						collectDocImportPath = collectDocImportPath
 						.replace(new RegExp(`^node_modules/`), '')
 						// Collect Doc Import
@@ -71,7 +71,7 @@ function assignPORProps($collect, $worksheet) {
 						antductCollectDocPortal.flow === 'O'
 					) {
 						const collectDocImportPath = antductCollectDoc.path
-						.replace(new RegExp(`^${antductCollectDoc.workspace}/`), '')
+						// .replace(new RegExp(`^${antductCollectDoc.workspace}/`), '')
 						// Collect Doc Import
 						const collectDocImport = {}
 						// Import Name

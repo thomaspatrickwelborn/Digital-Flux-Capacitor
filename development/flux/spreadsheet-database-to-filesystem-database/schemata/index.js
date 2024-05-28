@@ -34,7 +34,7 @@ const FSSettingsSchema = new Schema({
 	},
 	encoding: String,
 	template: String,
-	workspace: String,
+	workspaces: [String],
 	type: String,
 }, FSSettingsSchemaOptions)
 // FS Data Import Name Schema

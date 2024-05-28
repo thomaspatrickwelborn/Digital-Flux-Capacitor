@@ -52,10 +52,13 @@ function assignPropPath($collect, $settings) {
 				const modSupRowsLength = modSup.length
 				var modSupRowsIndex = 0
 				var prop = scopedDoc
+				console.log('prop', prop)
+				// if(prop[propKey]) break iterateModSupRows
 				var propKey
 				iterateModSupRows: while(modSupRowsIndex < modSupRowsLength) {
 					const modSupRow = modSup[modSupRowsIndex]
 					const modSupRowLMNRangeData = rowLMNRangeFromLMNRanges(modSupRow, lmnRanges)
+					console.log('modSupRowLMNRangeData', modSupRowLMNRangeData)
 					const modSupRowLMNRangeIndex = modSupRowLMNRangeData.rowLMNRangeIndex
 					const modSupRowLMNRange = modSupRowLMNRangeData.rowLMNRange
 					const anterModSupRow = modSup[modSupRowsIndex + 1]
@@ -63,7 +66,9 @@ function assignPropPath($collect, $settings) {
 						break iterateModSupRows
 					}
 					const anterModSupRowLMNRangeData = rowLMNRangeFromLMNRanges(anterModSupRow, lmnRanges)
+					console.log('anterModSupRowLMNRangeData', anterModSupRowLMNRangeData)
 					const anterModSupRowLMNRangeIndex = anterModSupRowLMNRangeData.rowLMNRangeIndex
+					if(anterModSupRowLMNRangeIndex === -1) 
 					propKey = modSupRowLMNRange[0]
 					if(anterModSupRowLMNRangeIndex === -1) {
 						path.push(prop[propKey])

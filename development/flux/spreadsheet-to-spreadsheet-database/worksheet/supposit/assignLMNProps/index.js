@@ -8,8 +8,11 @@ function assignLMNProps($prop, $settings) {
 	if(lmnRanges.length === 0) return $prop
 	// Mods
 	const modNom = mods[modIndex][1].nom
+	// console.log('modNom', modNom)
 	const modSup = mods[modIndex][1].sup
+	// console.log('modSup', modSup)
 	const modCom = mods[modIndex][1].com
+	// console.log('modCom', modCom)
 	// Mod Com Rows
 	const modComRowsLength = modCom.length
 	var modComRowsIndex = 0
@@ -26,7 +29,8 @@ function assignLMNProps($prop, $settings) {
 		// Subduct Mods
 		const subductModsLength = mods.length
 		var subductModsIndex = modIndex
-		iterateSubductMods: while(subductModsIndex < subductModsLength) {
+		iterateSubductMods: 
+		while(subductModsIndex < subductModsLength) {
 			const subductMod = mods[subductModsIndex][1]
 			const subductModNom = subductMod.nom
 			const subductModSup = subductMod.sup
@@ -39,12 +43,14 @@ function assignLMNProps($prop, $settings) {
 			} else {
 				subductModComRowsIndex = 0
 			}
-			iterateSubductModComRows: while(subductModComRowsIndex < subductModComRowsLength) {
+			iterateSubductModComRows: 
+			while(subductModComRowsIndex < subductModComRowsLength) {
 				const subductModComRow = subductModCom[subductModComRowsIndex]
 				const subductModComRowLMNRangeData = rowLMNRangeFromLMNRanges(subductModComRow, lmnRanges)
 				const subductModComRowLMNRangeIndex = subductModComRowLMNRangeData.comRowLMNRangeIndex
 				const subductModComRowLMNRange = subductModComRowLMNRangeData.comRowLMNRange
 				const subductModLMNRange = subductModComRowLMNRangeData.lmnRange
+				if(subductModLMNRange === undefined) continue iterateSubductModComRows
 				var subductMeterScopeIndex = subductModComRowLMNRangeIndex
 				if(subductMeterScopeIndex <= meterScopeIndex) {
 					modComRowsIndex++
@@ -55,6 +61,7 @@ function assignLMNProps($prop, $settings) {
 					continue iterateSubductModComRows
 				}
 				// Subduct Mod LMN Subset Range
+				// console.log(subductModLMNRange)
 				const subductModLMNSubsetRange = subductModLMNRange['SUBSET']
 				const subductModLMNSubsetRangeVal = subductModLMNSubsetRange.Key || subductModComRow
 				.slice(subductModLMNSubsetRange.Ref.s.c, subductModLMNSubsetRange.Ref.e.c + 1)[0]

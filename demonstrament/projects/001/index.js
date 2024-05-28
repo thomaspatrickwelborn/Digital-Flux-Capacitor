@@ -12,3 +12,4 @@ const configPath = path.join(
 const configFile = await readFile(configPath)
 .then(($file) => JSON.parse($file))
 const capacitor = await new Capacitor(configFile)
+console.log(capacitor)

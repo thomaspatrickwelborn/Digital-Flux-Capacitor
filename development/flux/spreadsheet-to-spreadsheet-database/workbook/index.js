@@ -33,6 +33,7 @@ class Workbook extends EventEmitter {
 		const workbookWorksheets = $Workbook.Sheets
 		const workbookWorksheetsLength = workbookWorksheets.length
 		var workbookWorksheetsIndex = 0
+		iterateWorkbookWorksheets: 
 		while(workbookWorksheetsIndex < workbookWorksheetsLength) {
 			const workbookWorksheet = workbookWorksheets[workbookWorksheetsIndex]
 			const workbookWorksheetNameData = workbookWorksheet.name.split('_')
@@ -45,7 +46,7 @@ class Workbook extends EventEmitter {
 				workbookWorksheetHidden === 1
 			) {
 				workbookWorksheetsIndex++
-				continue
+				continue iterateWorkbookWorksheets
 			}
 			const workbookWorksheetID = Number(workbookWorksheet.sheetId)
 			const workbookWorksheetData = $Sheets[workbookWorksheetName]

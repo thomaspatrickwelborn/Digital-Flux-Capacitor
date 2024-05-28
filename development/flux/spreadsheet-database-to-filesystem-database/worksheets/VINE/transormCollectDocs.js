@@ -41,7 +41,7 @@ function transormCollectDocs($collect, $worksheet) {
 	while(collectIndex < collectLength) {
 		const collectDoc = $collect[collectIndex]
 		const fsSettingsPropKeys = [
-			'id', 'name', 'workspace', 'path', 'permissions', 
+			'id', 'name', 'workspaces', 'path', 'permissions', 
 			'operations', 'template', 'encoding', 'subset'
 		]
 		const fsDataPropKeys = [

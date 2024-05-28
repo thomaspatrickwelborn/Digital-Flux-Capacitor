@@ -3,6 +3,7 @@ import path from 'node:path'
 import url from 'node:url'
 import ejs from 'ejs'
 import { asyncWriteFile } from '#utils/index.js'
+// import * as Templates from '../../Templates/index.js'
 const projectPath = process.env.PWD
 const modulePath = path.dirname(
 	url.fileURLToPath(import.meta.url)
@@ -59,6 +60,8 @@ async function FSElementsContent($collection, $preflux, $flux) {
 					'index.ejs'
 				)
 			)
+			// const Template = Templates[collectionDoc.fs.template]
+			// console.log(Template)
 			const templateModel = {
 				file: collectionDoc,
 				fileImports: collectionDoc.data.import,

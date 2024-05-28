@@ -3,7 +3,7 @@ import * as fs from 'node:fs'
 import chokidar from 'chokidar'
 import { createConnection } from 'mongoose'
 import * as XLSX from 'xlsx'
-import { asyncReadFile, asyncWriteFile } from '#utils/index.js'
+import { readFile } from 'node:fs/promises'
 import Workbook from './workbook/index.js'
 
 XLSX.set_fs(fs)
@@ -11,7 +11,6 @@ XLSX.set_fs(fs)
 class SpreadsheetToSpreadsheetDatabase extends EventEmitter {
 	constructor($settings) {
 		super()
-		console.log(this)
 		this.#settings = $settings
 		return this.#start()
 	}
@@ -51,7 +50,7 @@ class SpreadsheetToSpreadsheetDatabase extends EventEmitter {
 		return this
 	}
 	async #readWorkbook($workbookPath) {
-		const workbookFile = await asyncReadFile($workbookPath)
+		const workbookFile = await readFile($workbookPath)
 		.then(($buffer) => XLSX.read($buffer, {
 			type: 'buffer',
 			raw: true,
@@ -65,6 +64,7 @@ class SpreadsheetToSpreadsheetDatabase extends EventEmitter {
 	async #startWorkbookWatch() {
 		const { path } = this.#settings.spreadsheet
 		this.#workbookWatch = chokidar.watch(path)
+		this.#workbookWatch.once('add', this.#workbookWatchChange.bind(this))
 		this.#workbookWatch.on('change', this.#workbookWatchChange.bind(this))
 		await new Promise(($resolve, $reject) => {
 			this.#workbookWatch.on('ready', $resolve)
@@ -78,6 +78,7 @@ class SpreadsheetToSpreadsheetDatabase extends EventEmitter {
 		return this.#workbookWatch
 	}
 	async #workbookWatchChange($workbookPath) {
+		console.log($workbookPath)
 		await this.dbConnection.dropDatabase()
 		const modelNames = this.dbConnection.modelNames()
 		const modelNamesLength = modelNames.length
@@ -88,7 +89,8 @@ class SpreadsheetToSpreadsheetDatabase extends EventEmitter {
 			modelNamesIndex++
 		}
 		await this.#readWorkbook($workbookPath)
-		this.emit('output', this)
+		console.log(this)
+		// this.emit('output', this)
 	}
 }
 
