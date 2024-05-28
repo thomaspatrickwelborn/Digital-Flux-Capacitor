@@ -51,14 +51,14 @@ class Worksheet extends EventEmitter {
 		const data = this.#getData({ includeHidden: false, condensed: true })
 		const ranges = this.getRanges({ includeHidden: false })
 		const lmnRanges = this.getLMNRanges(ranges)
+		console.log(lmnRanges)
 		const merges = this.#getMerges({ includeHidden: false })
 		const mods = await this.#setMods(data, ranges, merges)
-		const supposits = await this.#setSupposits(mods, ranges, merges, lmnRanges)
-		console.log('start')
-		const schemata = await this.#setSchemata(mods, ranges, merges, lmnRanges)
-		const models = await this.#setModels(mods, ranges, merges, lmnRanges)
-		const composits = await this.#setComposits(mods, ranges, merges, lmnRanges)
-		const collect = await this.#setCollect(mods, ranges, composits, lmnRanges)
+		const supposits = await this.#setSupposits(mods, ranges, merges)
+		const schemata = await this.#setSchemata(mods, ranges, merges)
+		const models = await this.#setModels(mods, ranges, merges)
+		const composits = await this.#setComposits(mods, ranges, merges)
+		const collect = await this.#setCollect(mods, ranges, composits)
 		return this
 	}
 	#worksheetData
@@ -585,7 +585,6 @@ class Worksheet extends EventEmitter {
 			var { nom } = $mod
 			const supposit = supposits.get(nom)
 			if(schemata.has(nom) === false) {
-				console.log('supposit', supposit)
 				var schema = new Schema(supposit, {
 					strict: false,
 					validateBeforeSave: false,
@@ -613,7 +612,6 @@ class Worksheet extends EventEmitter {
 				lmnRanges: $lmnRanges,
 				merges: this.#getMerges({ includeHidden: false }),
 			})
-			console.log('setSupposits')
 			supposits.set(nom, deepmerge(
 				supposits.get(nom) || {},
 				supposit,

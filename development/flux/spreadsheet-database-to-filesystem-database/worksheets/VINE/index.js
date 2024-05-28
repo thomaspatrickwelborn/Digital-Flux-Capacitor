@@ -5,10 +5,11 @@ import saveCollectDocs from './saveCollectDocs.js'
 
 async function VINE($collect, $settings) {
 	const { worksheet, models } = $settings
-	$collect = collectDocsToCollectObjects($collect, worksheet)
-	$collect = assignPORProps($collect, worksheet)
-	$collect = transormCollectDocs($collect, worksheet)
-	$collect = await saveCollectDocs($collect, models)
+	console.log('$collect', $settings)
+	// $collect = collectDocsToCollectObjects($collect, worksheet)
+	// $collect = assignPORProps($collect, worksheet)
+	// $collect = transormCollectDocs($collect, worksheet)
+	// $collect = await saveCollectDocs($collect, models)
 	return $collect
 }
 

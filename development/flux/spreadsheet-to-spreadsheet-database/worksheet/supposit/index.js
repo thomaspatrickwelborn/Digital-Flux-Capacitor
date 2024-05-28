@@ -6,7 +6,7 @@ const translexes = [
 
 async function Supposit($settings) {
 	const {
-		nom, com, modIndex, mods, merges, ranges, lmnRanges
+		nom, com, modIndex, mods, merges, ranges
 	} = $settings
 	const sup = fillEmptyCells($settings.sup)
 	var supposit = {}
@@ -18,12 +18,12 @@ async function Supposit($settings) {
 		switch(translexisMethodType) {
 			case 'Function':
 				supposit = $translexisMethod(supposit, {
-					modIndex, mods, lmnRanges, sup, com
+					modIndex, mods, sup, com
 				})
 				break
 			case 'AsyncFunction':
 				supposit = await $translexisMethod(supposit, {
-					modIndex, mods, lmnRanges, sup, com
+					modIndex, mods, sup, com
 				})
 				break
 		}

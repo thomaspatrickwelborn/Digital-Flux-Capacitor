@@ -3,7 +3,7 @@ const Translexes = []
 async function Collect($settings) {
 	var collect = []
 	const {
-		mods, composits, dbConnection, lmnRanges
+		mods, composits, dbConnection
 	} = $settings
 	const modsLength = mods.length
 	var modsIndex = 0
@@ -35,12 +35,12 @@ async function Collect($settings) {
 		switch(translexisMethodType) {
 			case 'Function':
 				collect = $translexisMethod(collect, {
-					mods: mods, lmnRanges, composits
+					mods: mods, composits
 				})
 				break
 			case 'AsyncFunction':
 				collect = await $translexisMethod(collect, {
-					mods: mods, lmnRanges, composits
+					mods: mods, composits
 				})
 				break
 		}

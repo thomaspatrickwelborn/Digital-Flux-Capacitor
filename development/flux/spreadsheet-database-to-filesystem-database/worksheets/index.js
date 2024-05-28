@@ -16,6 +16,7 @@ async function Worksheets($worksheets, $settings) {
 			const lmnRanges = $worksheet.getLMNRanges(
 				$worksheet.getRanges({ includeHidden: false })
 			)
+			console.log(lmnRanges)
 			var worksheetCollect
 			switch(typeOf(Worksheet)) {
 				case 'asyncfunction':

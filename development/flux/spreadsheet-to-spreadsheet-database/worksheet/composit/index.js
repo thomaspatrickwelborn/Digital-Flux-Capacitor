@@ -6,7 +6,7 @@ const translexes = [
 
 async function Composit($settings = {}) {
 	const {
-		nom, sup, com, modIndex, mods, merges, ranges, lmnRanges
+		nom, sup, com, modIndex, mods, merges, ranges
 	} = $settings
 	const supRows = fillEmptyCells(sup)
 	const comRows = com
@@ -24,12 +24,12 @@ async function Composit($settings = {}) {
 			switch(translexisMethodType) {
 				case 'Function':
 					apposit = $translexisMethod(apposit, {
-						com, comRow, modIndex, mods, merges, lmnRanges, sup, supRows
+						com, comRow, modIndex, mods, merges, sup, supRows
 					})
 					break
 				case 'AsyncFunction':
 					apposit = await $translexisMethod(apposit, {
-						com, comRow, modIndex, mods, merges, lmnRanges, sup, supRows
+						com, comRow, modIndex, mods, merges, sup, supRows
 					})
 					break
 			}
