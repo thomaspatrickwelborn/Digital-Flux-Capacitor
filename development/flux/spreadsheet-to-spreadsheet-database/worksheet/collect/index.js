@@ -1,8 +1,4 @@
-const Translexes = [
-	["assignLMNProps", await import(
-		"./assignLMNProps/index.js"
-	).then($module => $module.default)],
-]
+const Translexes = []
 
 async function Collect($settings) {
 	var collect = []

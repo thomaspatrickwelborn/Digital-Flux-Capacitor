@@ -1,11 +1,7 @@
 import { fillEmptyCells } from '#utils/index.js'
+import assignProps from './assignProps/index.js'
 const translexes = [
-	["assignProps", await import(
-		"./assignProps/index.js"
-	).then($module => $module.default)],
-	["assignLMNProps", await import(
-		"./assignLMNProps/index.js"
-	).then($module => $module.default)],
+	["assignProps", assignProps],
 ]
 
 async function Composit($settings = {}) {

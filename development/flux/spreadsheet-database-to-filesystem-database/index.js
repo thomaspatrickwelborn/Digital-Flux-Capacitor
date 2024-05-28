@@ -62,7 +62,7 @@ class SpreadsheetDatabaseToFilesystemDatabase extends EventEmitter {
 			prefluxWorkbook: $preflux.workbook,
 			fluxModels: models,
 		})
-		this.emit('output', this)
+		// this.emit('output', this)
 	}
 	async start() {
 		await this.#startDBConnection()

@@ -35,7 +35,7 @@ class Worksheet extends EventEmitter {
 	constructor($settings) {
 		super()
 		const {
-			worksheetName, worksheetData, dbConnection, translexes
+			worksheetName, worksheetData, dbConnection
 		} = $settings
 		this.#worksheetData = worksheetData
 		this.#dbConnection = dbConnection
@@ -585,6 +585,7 @@ class Worksheet extends EventEmitter {
 			var { nom } = $mod
 			const supposit = supposits.get(nom)
 			if(schemata.has(nom) === false) {
+				console.log('supposit', supposit)
 				var schema = new Schema(supposit, {
 					strict: false,
 					validateBeforeSave: false,
