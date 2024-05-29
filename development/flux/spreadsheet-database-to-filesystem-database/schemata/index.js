@@ -18,7 +18,4 @@ const File = new Schema({
 	export: [ExportSchema],
 }, defaultSchemataOptions)
 
-export {
-	File,
-	Fold,
-}
+export { File, Fold }

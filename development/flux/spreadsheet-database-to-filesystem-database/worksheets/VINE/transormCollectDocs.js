@@ -64,7 +64,6 @@ function transormCollectDocs($collect, $worksheet) {
 			import: transformCollectDocPort(collectDoc.import),
 			export: transformCollectDocPort(collectDoc.export),
 		}
-		console.log(element.fs)
 		collect.push(element)
 		collectIndex++
 	}
