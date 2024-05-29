@@ -46,20 +46,20 @@ async function FSElementsContent($collection, $preflux, $flux) {
 			// console.log(Template)
 			const templateModel = {
 				file: collectionDoc,
-				fileImports: collectionDoc.data.import,
-				fileExports: collectionDoc.data.export,
-				fileBlocks: collectionDoc.data.blocks,
+				fileImports: collectionDoc.import,
+				fileExports: collectionDoc.export,
+				fileBlocks: collectionDoc.blocks,
 				operators: operators,
 				reserved: reserved,
 			}
-			console.log(templateModel)
-			/*
 			const fileData = await ejs.renderFile(templatePath, templateModel, {
 				async: true,
 				localsName: '$data',
 				rmWhitespace: false,
 				filename: true,
 			})
+			console.log(fileData)
+			/*
 			const beautifiedFileData = beautify.js(fileData, {
 				indent_size: 2, 
 				indent_char: ' ',
