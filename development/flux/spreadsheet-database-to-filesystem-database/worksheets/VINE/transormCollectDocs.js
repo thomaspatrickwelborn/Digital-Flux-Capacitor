@@ -52,7 +52,7 @@ function transormCollectDocs($collect, $worksheet) {
 				id: collectDoc.fs.id,
 				workspaces: collectDoc.fs.workspaces,
 				name: collectDoc.fs.name,
-				path: path,
+				path: collectDoc.path,
 				template: collectDoc.fs.template,
 				type: collectDoc.fs.type,
 				operations: collectDoc.fs.operations,
@@ -64,6 +64,7 @@ function transormCollectDocs($collect, $worksheet) {
 			import: transformCollectDocPort(collectDoc.import),
 			export: transformCollectDocPort(collectDoc.export),
 		}
+		console.log(element.fs)
 		collect.push(element)
 		collectIndex++
 	}

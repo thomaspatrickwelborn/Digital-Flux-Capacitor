@@ -6,7 +6,6 @@ export default function assignPATProps($collect, $worksheet) {
   for(const [
     $lmnRangeName, $lmnRangeSettings
   ] of lmnRanges) {
-    console.log($lmnRangeName, $lmnRangeSettings)
     const { PAT } = $lmnRangeSettings
   }
   return $collect

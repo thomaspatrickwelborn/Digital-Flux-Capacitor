@@ -4,6 +4,7 @@ import { glob, globSync, globStream, globStreamSync, Glob } from 'glob'
 import differentiateFSElements from './differentiateFSElements.js'
 
 async function FSElements($collection, $preflux, $flux) {
+	console.log($flux)
 	const fsRootPath = $flux.filesystem.path
 	var fsRootStat
 	try {
