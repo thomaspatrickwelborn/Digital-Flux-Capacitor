@@ -1,12 +1,14 @@
 import { fillEmptyCells } from '#utils/index.js'
 import assignProps from './assignProps/index.js'
+import assignLMNProps from './assignLMNProps/index.js'
 const translexes = [
 	["assignProps", assignProps],
+	["assignLMNProps", assignLMNProps],
 ]
 
 async function Composit($settings = {}) {
 	const {
-		nom, sup, com, modIndex, mods, merges, ranges
+		nom, sup, com, modIndex, mods, merges, lmnRanges
 	} = $settings
 	const supRows = fillEmptyCells(sup)
 	const comRows = com
@@ -24,12 +26,12 @@ async function Composit($settings = {}) {
 			switch(translexisMethodType) {
 				case 'Function':
 					apposit = $translexisMethod(apposit, {
-						com, comRow, modIndex, mods, merges, sup, supRows
+						com, comRow, modIndex, mods, merges, sup, supRows, lmnRanges
 					})
 					break
 				case 'AsyncFunction':
 					apposit = await $translexisMethod(apposit, {
-						com, comRow, modIndex, mods, merges, sup, supRows
+						com, comRow, modIndex, mods, merges, sup, supRows, lmnRanges
 					})
 					break
 			}

@@ -1,12 +1,20 @@
-function rowLMNRangeFromLMNRanges($row, $lmnRanges) {
+function rowLMNRangeFromLMNRanges(
+	$row, $lmnRanges
+) {
 	var rowLMNRangeIndex, rowLMNRange
 	var lmnRange
-	iterateLMNRanges: for(const [$lmnRangeName, $lmnRange] of $lmnRanges) {
+	iterateLMNRanges: for(const [
+		$lmnRangeName, $lmnRange
+	] of $lmnRanges) {
 		rowLMNRange = $row.slice(
-			$lmnRange['LMN'].Ref.s.c, $lmnRange['LMN'].Ref.e.c + 1
+			$lmnRange['LMN'].Ref.s.c, 
+			$lmnRange['LMN'].Ref.e.c + 1
 		)
-		rowLMNRangeIndex = rowLMNRange.findIndex(
-			($rowLMNRangeVal) => $rowLMNRangeVal !== undefined
+		rowLMNRangeIndex = rowLMNRange
+		.findIndex(
+			($rowLMNRangeVal) => (
+				$rowLMNRangeVal !== undefined
+			)
 		)
 		if(rowLMNRangeIndex === -1) {
 			continue iterateLMNRanges

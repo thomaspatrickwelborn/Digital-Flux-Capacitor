@@ -21,16 +21,6 @@ const Defaults = {
 }
 const { Row, Col, Range, Cell } = tem
 
-function lmnPropRangeRefsMatch($lmnPropRangeA, $lmnPropRangeB) {
-	return (
-		$lmnPropRangeA.Ref.s.r === $lmnPropRangeB.Ref.s.r &&
-		$lmnPropRangeA.Ref.s.c === $lmnPropRangeB.Ref.s.c &&
-		$lmnPropRangeA.Ref.e.r === $lmnPropRangeB.Ref.e.r &&
-		$lmnPropRangeA.Ref.s.e === $lmnPropRangeB.Ref.s.e
-	) ? true
-	  : false
-}
-
 class Worksheet extends EventEmitter {
 	constructor($settings) {
 		super()
@@ -50,15 +40,15 @@ class Worksheet extends EventEmitter {
 	async start() {
 		const data = this.#getData({ includeHidden: false, condensed: true })
 		const ranges = this.getRanges({ includeHidden: false })
-		const lmnRanges = this.getLMNRanges(ranges)
-		console.log(lmnRanges)
+		const lmnRanges = this.getLMNRanges()
 		const merges = this.#getMerges({ includeHidden: false })
 		const mods = await this.#setMods(data, ranges, merges)
-		const supposits = await this.#setSupposits(mods, ranges, merges)
-		const schemata = await this.#setSchemata(mods, ranges, merges)
-		const models = await this.#setModels(mods, ranges, merges)
-		const composits = await this.#setComposits(mods, ranges, merges)
-		const collect = await this.#setCollect(mods, ranges, composits)
+		const supposits = await this.#setSupposits(mods, ranges, merges, lmnRanges)
+		const schemata = await this.#setSchemata(mods, ranges, merges, lmnRanges)
+		const models = await this.#setModels(mods, ranges, merges, lmnRanges)
+		const composits = await this.#setComposits(mods, ranges, merges, lmnRanges)
+		const collect = await this.#setCollect(mods, ranges, composits, lmnRanges)
+		console.log(collect)
 		return this
 	}
 	#worksheetData
@@ -213,8 +203,17 @@ class Worksheet extends EventEmitter {
 		) ? this.#getData()
 		  : this.#getData($options)
 	}
-	getLMNRanges($ranges) {
-		const lmnRanges = $ranges
+	#lmnPropRangeRefsMatch($lmnPropRangeA, $lmnPropRangeB) {
+		return (
+			$lmnPropRangeA.Ref.s.r === $lmnPropRangeB.Ref.s.r &&
+			$lmnPropRangeA.Ref.s.c === $lmnPropRangeB.Ref.s.c &&
+			$lmnPropRangeA.Ref.e.r === $lmnPropRangeB.Ref.e.r &&
+			$lmnPropRangeA.Ref.s.e === $lmnPropRangeB.Ref.s.e
+		) ? true
+		  : false
+	}
+	getLMNRanges() {
+		const lmnRanges = this.ranges
 		.reduce(
 			($lmnRanges, $range) => {
 				if($range.Name.match(/^LMN_[0-9]$/)) {
@@ -229,20 +228,20 @@ class Worksheet extends EventEmitter {
 		] of lmnRanges) {
 			// LMN
 			const lmnRegExp = new RegExp(`${$lmnRangeName}`)
-			const lmn = $ranges
+			const lmn = this.ranges
 			.find(($range) => $range.Name.match(lmnRegExp))
 			if(lmn === undefined) continue iterateLMNRangeProp
 			$lmnRangeProps['LMN'] = lmn
 			// SUPSET
 			const lmnSupsetRegExp = new RegExp(`^${$lmnRangeName}_SUPSET`)
-			const lmnSupset = $ranges
+			const lmnSupset = this.ranges
 			.find(($range) => $range.Name.match(lmnSupsetRegExp))
 			if(lmnSupset !== undefined) {
 				$lmnRangeProps['SUPSET'] = {
 					Name: lmnSupset.Name,
 					Ref: lmnSupset.Ref,
 				}
-				const lmnSupsetRefMatchesLMNRef = lmnPropRangeRefsMatch(lmn, lmnSupset)
+				const lmnSupsetRefMatchesLMNRef = this.#lmnPropRangeRefsMatch(lmn, lmnSupset)
 				const lmnSupsetNameData = lmnSupset.Name.split('_')
 				var lmnSupsetPropKey
 				if(
@@ -266,14 +265,14 @@ class Worksheet extends EventEmitter {
 			}
 			// SUBSET
 			const lmnSubsetRegExp = new RegExp(`^${$lmnRangeName}_SUBSET`)
-			const lmnSubset = $ranges
+			const lmnSubset = this.ranges
 			.find(($range) => $range.Name.match(lmnSubsetRegExp))
 			if(lmnSubset !== undefined) {
 				$lmnRangeProps['SUBSET'] = {
 					Name: lmnSubset.Name,
 					Ref: lmnSubset.Ref,
 				}
-				const lmnSubsetRefMatchesLMNRef = lmnPropRangeRefsMatch(lmn, lmnSubset)
+				const lmnSubsetRefMatchesLMNRef = this.#lmnPropRangeRefsMatch(lmn, lmnSubset)
 				const lmnSubsetNameData = lmnSubset.Name.split('_')
 				var lmnSubsetPropKey
 				if(
@@ -295,7 +294,7 @@ class Worksheet extends EventEmitter {
 			}
 			// PAT
 			const lmnPatRegExp = new RegExp(`${$lmnRangeName}_PAT_`)
-			const lmnPat = $ranges
+			const lmnPat = this.ranges
 			.find(($range) => $range.Name.match(lmnPatRegExp))
 			if(lmnPat !== undefined) {
 				$lmnRangeProps['PAT'] = {
@@ -585,11 +584,10 @@ class Worksheet extends EventEmitter {
 			var { nom } = $mod
 			const supposit = supposits.get(nom)
 			if(schemata.has(nom) === false) {
-				var schema = new Schema(supposit, {
-					strict: false,
-					validateBeforeSave: false,
-				})
+				var schema = new Schema(supposit)
+				console.log('schema', schema)
 			  schemata.set(nom, schema)
+			  console.log(schemata.get(nom))
 			}
 			modsIndex++
 		}
@@ -617,6 +615,7 @@ class Worksheet extends EventEmitter {
 				supposit,
 				{ arrayMerge: combineMerge },
 			))
+			console.log(supposits.get(nom))
 			modsIndex++
 		}
 		return supposits

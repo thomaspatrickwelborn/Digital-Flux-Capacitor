@@ -7,7 +7,7 @@ import {
 } from '#utils/index.js'
 import { Mixed } from 'mongoose'
 
-function assignProps($prop, $settings) {
+function assignProps($supposit, $settings) {
 	var { sup, com } = $settings
 	const verizon = sup.length
 	var horizon = sup.reduce(
@@ -19,51 +19,60 @@ function assignProps($prop, $settings) {
 		}, 0
 	)
 	var colsIndex = 0
+	iterateColsIndex: 
 	while(colsIndex < horizon) {
-		var prop = $prop
+		var supposit = $supposit
 		var rows  = sup
 		var rowsIndex = 0
+		iterateRowsIndex: 
 		while(rowsIndex < verizon) {
 			const isLastRow = (rowsIndex === verizon - 1)
-			const propKey = rows[rowsIndex][colsIndex]
-			if(propKey === undefined) break
+			const suppositKey = rows[rowsIndex][colsIndex]
+			if(suppositKey === undefined) break iterateRowsIndex
   		var colType = inferType(com, colsIndex)
 			var anterKey = (!isLastRow)
 				? rows[rowsIndex + 1][colsIndex]
 				: undefined
 			const typeOfAnterKey = typeOf(anterKey)
-			var propVal = (
+			var suppositVal = (
 				typeOfAnterKey === 'number'
 			) ? []
 			  : (
 		  	typeOfAnterKey === 'string'
 	  	) ? {}
-			  : colType
-		  if(propVal === undefined) {
-		  	propVal = Mixed
-		  }
-		  switch(typeOf(prop)) {
+			  : (
+		  	colType !== undefined
+	  	) ? colType
+			  : Mixed
+			switchTypeOfSupposit: 
+		  switch(typeOf(suppositVal)) {
 			  case 'array':
 		  	case 'object':
-			  	prop[propKey] = prop[propKey] || propVal
-			  	break
+			  	supposit[suppositKey] = supposit[suppositKey] || suppositVal
+			  	break switchTypeOfSupposit
 		  	default:
-		  		prop[propKey] = propVal
-		  		break
+		  		if(suppositKey === 'type') {
+		  			supposit[suppositKey] = {
+		  				type: suppositVal
+		  			}
+		  		} else {
+		  			supposit[suppositKey] = suppositVal
+		  		}
+		  		break switchTypeOfSupposit
 		  }
-			const typeOfPropVal = typeOf(prop[propKey])
-	    prop = (
+			const typeOfPropVal = typeOf(supposit[suppositKey])
+	    supposit = (
 	    	typeOfAnterKey !== 'undefined' && (
 					typeOfPropVal === 'object' ||
 					typeOfPropVal === 'array'
 				)
-			) ? prop[propKey]
-			  : prop
+			) ? supposit[suppositKey]
+			  : supposit
 	  	rowsIndex++
 		}
 		colsIndex++
 	}
-	return $prop
+	return $supposit
 }
 
 export default assignProps

@@ -1,9 +1,13 @@
-const Translexes = []
+const Translexes = [
+	["assignLMNProps", await import(
+		"./assignLMNProps/index.js"
+	).then($module => $module.default)],
+]
 
 async function Collect($settings) {
 	var collect = []
 	const {
-		mods, composits, dbConnection
+		mods, composits, dbConnection, lmnRanges
 	} = $settings
 	const modsLength = mods.length
 	var modsIndex = 0
@@ -35,12 +39,12 @@ async function Collect($settings) {
 		switch(translexisMethodType) {
 			case 'Function':
 				collect = $translexisMethod(collect, {
-					mods: mods, composits
+					mods: mods, lmnRanges, composits
 				})
 				break
 			case 'AsyncFunction':
 				collect = await $translexisMethod(collect, {
-					mods: mods, composits
+					mods: mods, lmnRanges, composits
 				})
 				break
 		}

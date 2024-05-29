@@ -3,7 +3,10 @@ function collectDocsToCollectObjects($collect, $worksheet) {
 	var collectIndex = 0
 	while(collectIndex < collectLength) {
 		const collectDoc = $collect[collectIndex]
-		$collect[collectIndex] = collectDoc.toObject()
+		$collect[collectIndex] = collectDoc.toObject({
+			flattenObjectIds: true,
+			versionKey: false,
+		})
 		collectIndex++
 	}
 	return $collect
