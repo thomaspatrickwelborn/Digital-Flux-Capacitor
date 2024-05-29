@@ -82,7 +82,6 @@ function assignPropPath($collect, $settings) {
 				}
 				scopesIndex++
 			}
-			console.log(modComLMNRange['PAT'])
 			collectDoc[modComLMNRange['PAT'].Key] = path.join('/')
 			collectDocsIndex++
 			modComRowsIndex++

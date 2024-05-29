@@ -9,9 +9,9 @@ async function VINE($collect, $settings) {
 	$collect = collectDocsToCollectObjects($collect, worksheet)
 	$collect = assignPORProps($collect, worksheet)
 	$collect = assignPATProps($collect, worksheet)
-	console.log('$collect', $collect)
-	// $collect = transormCollectDocs($collect, worksheet)
-	// $collect = await saveCollectDocs($collect, models)
+	$collect = transormCollectDocs($collect, worksheet)
+	$collect = await saveCollectDocs($collect, models)
+	console.log($collect)
 	return $collect
 }
 

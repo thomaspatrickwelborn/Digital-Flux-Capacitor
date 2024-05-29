@@ -48,7 +48,6 @@ class Worksheet extends EventEmitter {
 		const models = await this.#setModels(mods, ranges, merges, lmnRanges)
 		const composits = await this.#setComposits(mods, ranges, merges, lmnRanges)
 		const collect = await this.#setCollect(mods, ranges, composits, lmnRanges)
-		console.log(collect)
 		return this
 	}
 	#worksheetData
@@ -585,9 +584,7 @@ class Worksheet extends EventEmitter {
 			const supposit = supposits.get(nom)
 			if(schemata.has(nom) === false) {
 				var schema = new Schema(supposit)
-				console.log('schema', schema)
 			  schemata.set(nom, schema)
-			  console.log(schemata.get(nom))
 			}
 			modsIndex++
 		}
@@ -615,7 +612,6 @@ class Worksheet extends EventEmitter {
 				supposit,
 				{ arrayMerge: combineMerge },
 			))
-			console.log(supposits.get(nom))
 			modsIndex++
 		}
 		return supposits

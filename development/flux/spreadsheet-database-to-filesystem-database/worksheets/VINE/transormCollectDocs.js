@@ -4,13 +4,15 @@ function transformCollectDocPort($ports) {
 	const portsLength = $ports.length
 	if(portsLength === 0) return $ports
 	var portsIndex = 0
-	iteratePorts: while(portsIndex < portsLength) {
+	iteratePorts:
+	while(portsIndex < portsLength) {
 		const port = $ports[portsIndex]
 		const portNames = []
 		const portNamesData = port.name.split('\n')
 		const portNamesDataLength = portNamesData.length
 		var portNamesDataIndex = 0
-		iteratePortNamesData: while(portNamesDataIndex < portNamesDataLength) {
+		iteratePortNamesData: 
+		while(portNamesDataIndex < portNamesDataLength) {
 			const portNameData = portNamesData[portNamesDataIndex].split(' ')
 			if(portNameData.length === 1) {
 				portNames.push({
@@ -38,58 +40,31 @@ function transormCollectDocs($collect, $worksheet) {
 	const collect = []
 	const collectLength = $collect.length
 	var collectIndex = 0
+	iterateCollectDocs: 
 	while(collectIndex < collectLength) {
 		const collectDoc = $collect[collectIndex]
-		const fsSettingsPropKeys = [
-			'id', 'name', 'workspaces', 'path', 'permissions', 
-			'operations', 'template', 'encoding', 'subset'
-		]
-		const fsDataPropKeys = [
-			'import', 'export'
-		]
-		const fsSettings = {}
-		const fsData = {}
-		const fsElement = {}
-		for(var [
-			$collectDocPropKey, $collectDocPropVal
-		] of Object.entries(collectDoc)) {
-			// FS Element Settings
-			if(
-				fsSettingsPropKeys.includes($collectDocPropKey)
-			) {
-				switch($collectDocPropKey) {
-					case 'subset':
-						fsSettings['type'] = $collectDocPropVal
-						break
-					default:
-						fsSettings[$collectDocPropKey] = $collectDocPropVal
-						break
-				}
-			}
-			// FS Element Data
-			if(
-				fsDataPropKeys.includes($collectDocPropKey)
-			) {
-				switch($collectDocPropKey) {
-					case 'import':
-					case 'export':
-						fsData[$collectDocPropKey] = transformCollectDocPort($collectDocPropVal)
-					default:
-						fsData[$collectDocPropKey] = $collectDocPropVal
-						break
-				}
-			}
+		if(collectDoc.fs === undefined) {
+			collectIndex++
+			continue iterateCollectDocs
 		}
-		switch(collectDoc.subset) {
-			case 'File':
-				fsElement.fs = fsSettings
-				fsElement.data = fsData
-				break
-			case 'Fold':
-				fsElement.fs = fsSettings
-				break
+		const element = {
+			fs: {
+				id: collectDoc.fs.id,
+				workspaces: collectDoc.fs.workspaces,
+				name: collectDoc.fs.name,
+				path: path,
+				template: collectDoc.fs.template,
+				type: collectDoc.fs.type,
+				operations: collectDoc.fs.operations,
+				encoding: collectDoc.fs.encoding,
+				permissions: collectDoc.fs.permission,
+			},
+			files: collectDoc.files,
+			folds: collectDoc.folds,
+			import: transformCollectDocPort(collectDoc.import),
+			export: transformCollectDocPort(collectDoc.export),
 		}
-		collect.push(fsElement)
+		collect.push(element)
 		collectIndex++
 	}
 	return collect
