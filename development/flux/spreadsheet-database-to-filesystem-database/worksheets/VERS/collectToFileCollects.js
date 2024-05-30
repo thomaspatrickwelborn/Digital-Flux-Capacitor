@@ -28,6 +28,7 @@ async function collectToFileCollects($collect, $worksheet) {
 				($comRowLMNRangeCell) => $comRowLMNRangeCell !== undefined
 			)
 			if(comRowLMNRangeNameIndex === 0) {
+				console.log('collectDoc', collectDoc)
 				await collectDoc.populate({
 					path: 'blocks',
 					strictPopulate: false,

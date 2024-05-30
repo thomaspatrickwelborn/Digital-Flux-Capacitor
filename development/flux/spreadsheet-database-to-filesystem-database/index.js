@@ -56,14 +56,13 @@ class SpreadsheetDatabaseToFilesystemDatabase extends EventEmitter {
 	async input($preflux) {
 		await this.#deleteDBConnectionModels()
 		const models = this.#setDBConnectionModels()
-		console.log(models)
 		const filesystemDBConnection = this.dbConnection
 		const spreadsheetDBConnection = $preflux.dbConnection
 		const worksheets = await Worksheets(this.worksheets, {
 			prefluxWorkbook: $preflux.workbook,
 			fluxModels: models,
 		})
-		this.emit('output', this)
+		// this.emit('output', this)
 	}
 	async start() {
 		await this.#startDBConnection()
