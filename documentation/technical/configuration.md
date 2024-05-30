@@ -1,6 +1,6 @@
 # DFC Configuration
 1. [Capacitor](#Capacitor)
-  A. Cycles
+  
     1. [Spreadsheet-To-Filesystem Cycle](#Spreadsheet-To-Filesystem%20Cycle)
       A. Subcycles
         1. [Spreadsheet-To-Spreadsheet-Database](configuration-subcycles/spreadsheet-to-spreadsheet-database/index.md)
