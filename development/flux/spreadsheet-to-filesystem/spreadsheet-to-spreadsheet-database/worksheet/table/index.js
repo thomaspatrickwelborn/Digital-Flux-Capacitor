@@ -171,322 +171,55 @@ export default class extends EventTarget {
     ) ? this.getData()
       : this.getData($options)
   }
-  #lmnPropRangeRefsMatch($lmnPropRangeA, $lmnPropRangeB) {
-    return (
-      $lmnPropRangeA.Ref.s.r === $lmnPropRangeB.Ref.s.r &&
-      $lmnPropRangeA.Ref.s.c === $lmnPropRangeB.Ref.s.c &&
-      $lmnPropRangeA.Ref.e.r === $lmnPropRangeB.Ref.e.r &&
-      $lmnPropRangeA.Ref.s.e === $lmnPropRangeB.Ref.s.e
-    ) ? true
-      : false
-  }
-  lmnRanges() {
-    const lmnRanges = this.ranges
-    .reduce(
-      ($lmnRanges, $range) => {
-        if($range.Name.match(/^LMN_[0-9]$/)) {
-          const lmnRangeID = Number($range.Name.split('_')[1])
-          $lmnRanges[lmnRangeID] = [$range.Name, {}]
-        }
-        return $lmnRanges
-      }, []
-    )
-    iterateLMNRangeProp: for(const [
-      $lmnRangeName, $lmnRangeProps
-    ] of lmnRanges) {
-      // LMN
-      const lmnRegExp = new RegExp(`${$lmnRangeName}`)
-      const lmn = this.ranges
-      .find(($range) => $range.Name.match(lmnRegExp))
-      if(lmn === undefined) continue iterateLMNRangeProp
-      $lmnRangeProps['LMN'] = lmn
-      // SUPSET
-      const lmnSupsetRegExp = new RegExp(`^${$lmnRangeName}_SUPSET`)
-      const lmnSupset = this.ranges
-      .find(($range) => $range.Name.match(lmnSupsetRegExp))
-      if(lmnSupset !== undefined) {
-        $lmnRangeProps['SUPSET'] = {
-          Name: lmnSupset.Name,
-          Ref: lmnSupset.Ref,
-        }
-        const lmnSupsetRefMatchesLMNRef = this.#lmnPropRangeRefsMatch(lmn, lmnSupset)
-        const lmnSupsetNameData = lmnSupset.Name.split('_')
-        var lmnSupsetPropKey
-        if(
-          lmnSupsetRefMatchesLMNRef === true &&
-          lmnSupsetNameData.length === 4
-        ) {
-          $lmnRangeProps['SUPSET'].Key = lmnSupsetNameData[3]
-        } /* else if(
-          lmnSupsetRefMatchesLMNRef === false &&
-          lmnSupsetNameData.length === 4
-        ) {
-          $lmnRangeProps['SUPSET'].$Key = lmnSupsetNameData[3]
-        } */ else if(
-          lmnSupsetRefMatchesLMNRef === true &&
-          lmnSupsetNameData.length === 3
-        ) {
-          $lmnRangeProps['SUPSET'].Key = LMNProps['LMN_SUPSET'].key
-        }
-        if(lmnSupsetPropKey !== undefined) {
-        }
-      }
-      // SUBSET
-      const lmnSubsetRegExp = new RegExp(`^${$lmnRangeName}_SUBSET`)
-      const lmnSubset = this.ranges
-      .find(($range) => $range.Name.match(lmnSubsetRegExp))
-      if(lmnSubset !== undefined) {
-        $lmnRangeProps['SUBSET'] = {
-          Name: lmnSubset.Name,
-          Ref: lmnSubset.Ref,
-        }
-        const lmnSubsetRefMatchesLMNRef = this.#lmnPropRangeRefsMatch(lmn, lmnSubset)
-        const lmnSubsetNameData = lmnSubset.Name.split('_')
-        var lmnSubsetPropKey
-        if(
-          lmnSubsetRefMatchesLMNRef === true &&
-          lmnSubsetNameData.length === 4
-        ) {
-          $lmnRangeProps['SUBSET'].Key = lmnSubsetNameData[3]
-        } /* else if(
-          lmnSubsetRefMatchesLMNRef === false &&
-          lmnSubsetNameData.length === 4
-        ) {
-          $lmnRangeProps['SUBSET'].$Key = lmnSubsetNameData[3]
-        } */ else if(
-          lmnSubsetRefMatchesLMNRef === true &&
-          lmnSubsetNameData.length === 3
-        ) {
-          $lmnRangeProps['SUBSET'].Key = LMNProps['LMN_SUBSET'].key
-        }
-      }
-      // PAT
-      const lmnPatRegExp = new RegExp(`${$lmnRangeName}_PAT_`)
-      const lmnPat = this.ranges
-      .find(($range) => $range.Name.match(lmnPatRegExp))
-      if(lmnPat !== undefined) {
-        $lmnRangeProps['PAT'] = {
-          Key: lmnPat.Name.replace(lmnPatRegExp, ''),
-          Name: lmnPat.Name,
-          Ref: lmnPat.Ref,
-        }
-      }
-    }
-    return lmnRanges
-  }
-  #_ranges = []
-  get ranges() {
-    const $options = Defaults.GetRangesOptions
-    const { includeHidden } = $options
-    const _ranges = this.#_ranges
-    const ranges = []
-    const rangesLength = _ranges.length
-    var rangesIndex = 0
-    while(rangesIndex < rangesLength) {
-      const range = _ranges[rangesIndex]
-      const { Name, Ref } = range
-      if(includeHidden === false) {
-        const hidden = this.#hidden
-        const hiddenRows = hidden.rows
-        const hiddenRowsLength = hiddenRows.length
-        const hiddenCols = hidden.cols
-        const hiddenColsLength = hiddenCols.length
-        var hiddenRowsIndex = 0
-        while(hiddenRowsIndex < hiddenRowsLength) {
-          const $hiddenRowIndex = hiddenRows[hiddenRowsIndex]
-          if($hiddenRowIndex < Ref.s.r) {
-            if(Ref.s.r - 1 < 0) {
-              if(Ref.e.r - 1 < 0) {
-                Ref.s.r = -1
-                Ref.e.r = -1
-              } else {
-                Ref.s.r = 0
-                Ref.e.r -= 1
-              }
-            } else {
-              Ref.s.r -= 1
-              Ref.e.r -= 1
-            }
-          } else if(
-            $hiddenRowIndex >= Ref.s.r &&
-            $hiddenRowIndex <= Ref.e.r
-          ) {
-            if(Ref.e.r - 1 < Ref.s.r) {
-              Ref.s.r = -1
-              Ref.e.r = -1
-            } else {
-              Ref.e.r -= 1
-            }
-          }
-          hiddenRowsIndex++
-        }
-        var hiddenColsIndex = 0
-        while(hiddenColsIndex < hiddenColsLength) {
-          const $hiddenColIndex = hiddenCols[hiddenColsIndex]
-          if($hiddenColIndex < Ref.s.c) {
-            if(Ref.s.c - 1 < 0) {
-              if(Ref.e.c - 1 < 0) {
-                Ref.s.c = -1
-                Ref.e.c = -1
-              } else {
-                Ref.s.c = 0
-                Ref.e.c -= 1
-              }
-            } else {
-              Ref.s.c -= 1
-              Ref.e.c -= 1
-            }
-          } else if(
-            $hiddenColIndex >= Ref.s.c &&
-            $hiddenColIndex <= Ref.e.c
-          ) {
-            if(Ref.e.c - 1 < Ref.s.c) {
-              Ref.s.c = -1
-              Ref.e.c = -1
-            } else {
-              Ref.e.c -= 1
-            }
-          }
-          hiddenColsIndex++
-        }
-        if((
-          Ref.s.r !== -1 &&
-          Ref.e.r !== -1
-        ) && (
-          Ref.s.c !== -1 &&
-          Ref.e.c !== -1
-        )) ranges.push(range)
-      } else {
-        ranges.push(range)
-      }
-      rangesIndex++
-    }
-    return ranges
-  }
-  set ranges($ranges) {
-    const _ranges = this._ranges
-    if(Object.isFrozen(_ranges) === false) {
-      const rangesLength = $ranges.length
-      var rangesIndex = 0
-      while(rangesIndex < rangesLength) {
-        const range = $ranges[rangesIndex]
-        const rangeRefFrags = range.Ref.split('!')
-        const rangeRefFragsIndex = rangeRefFrags.length - 1
-        const rangeRef = XLSX.utils.decode_range(
-          rangeRefFrags[rangeRefFragsIndex]
-        )
-        range.Ref = rangeRef
-        Object.freeze(range)
-        _ranges.push(range)
-        rangesIndex++
-      }
-      Object.freeze(_ranges)
-    }
-    return this.ranges
-  }
-  #getRangesByName($rangeName, $rangesOptions) {
-    var ranges
-    if(typeOf($rangeName) === 'string') {
-      ranges = this.getRanges($rangesOptions).filter(
-        ($range) => $range.Name === $rangeName
+  #_mods = new Map()
+  get #mods() { return this.#_mods }
+  set #mods($mods) {
+    const { data, ranges, merges } = $mods
+    const _mods = this.#_mods
+    if(Object.isFrozen(_mods) === false) {
+      const modRanges = ranges
+      .filter(($range) => $range.Name.match(
+        new RegExp(Defaults.ModRangeNameRegExp)
+      ) !== null)
+      .sort(($rangeA, $rangeB) => (
+        $rangeA.Ref.s.r < $rangeB.Ref.s.r
+      ) ? -1
+        : 1
       )
-    } else if($rangeName instanceof RegExp) {
-      ranges = this.getRanges($rangesOptions).filter(
-        ($modRange) => $modRange.Name.match($rangeName)
-      )
-    }
-    return ranges
-  }
-  #_merges = []
-  get #merges() {
-    const $options = Defaults.GetMergesOptions
-    const { includeHidden } = $options
-    if(includeHidden === true) return this.merges
-    const merges = []
-    const mergesLength = this.merges.length
-    var mergesIndex = 0
-    while(mergesIndex < mergesLength) {
-      const merge = structuredClone(this.merges[mergesIndex])
-      if(includeHidden === false) {
-        const hidden = this.#hidden
-        const hiddenRows = hidden.rows
-        const hiddenRowsLength = hiddenRows.length
-        const hiddenCols = hidden.cols
-        const hiddenColsLength = hiddenCols.length
-        var hiddenRowsIndex = 0
-        while(hiddenRowsIndex < hiddenRowsLength) {
-          const $hiddenRowIndex = hiddenRows[hiddenRowsIndex]
-          if($hiddenRowIndex < merge.s.r) {
-            if(merge.s.r - 1 < 0) {
-              if(merge.e.r - 1 < 0) {
-                merge.s.r = -1
-                merge.e.r = -1
-              } else {
-                merge.s.r = 0
-                merge.e.r -= 1
-              }
-            } else {
-              merge.s.r -= 1
-              merge.e.r -= 1
-            }
-          } else if(
-            $hiddenRowIndex >= merge.s.r &&
-            $hiddenRowIndex <= merge.e.r
-          ) {
-            if(merge.e.r - 1 < merge.s.r) {
-              merge.s.r = -1
-              merge.e.r = -1
-            } else {
-              merge.e.r -= 1
-            }
-          }
-          hiddenRowsIndex++
+      const modRangesLength = modRanges.length
+      var modRangesIndex = 0
+      while(modRangesIndex < modRangesLength) {
+        const modRange = modRanges[modRangesIndex]
+        const { Name, Ref } = modRange
+        var [$key, $index, $val] = Name.split('_', 3)
+        $index = Number($index)
+        var mod = (
+          _mods.has($index) === true
+        ) ? _mods.get($index) 
+          : _mods.set($index, {
+          nom_: String, sup: Array, com: Array
+        }).get($index)
+        if(
+          $val === 'SUP' ||
+          $val === 'COM'
+        ) {
+          const modRangeRows = data
+          .slice(Ref.s.r, Ref.e.r + 1)
+          .reduce(($modRangeRows, $modRangeRow) => {
+            const modRangeRow = $modRangeRow.slice(Ref.s.c, Ref.e.c + 1)
+            $modRangeRows.push(modRangeRow)
+            return $modRangeRows
+          }, [])
+          var modKey = $val.toLowerCase() 
+          mod[modKey] = modRangeRows
+        } else {
+          mod.nom = $val
         }
-        var hiddenColsIndex = 0
-        while(hiddenColsIndex < hiddenColsLength) {
-          const $hiddenColIndex = hiddenCols[hiddenColsIndex]
-          if($hiddenColIndex < merge.s.c) {
-            if(merge.s.c - 1 < 0) {
-              if(merge.e.c - 1 < 0) {
-                merge.s.c = -1
-                merge.e.c = -1
-              } else {
-                merge.s.c = 0
-                merge.e.c -= 1
-              }
-            } else {
-              merge.s.c -= 1
-              merge.e.c -= 1
-            }
-          } else if(
-            $hiddenColIndex >= merge.s.c &&
-            $hiddenColIndex <= merge.e.c
-          ) {
-            if(merge.e.c - 1 < merge.s.c) {
-              merge.s.c = -1
-              merge.e.c = -1
-            } else {
-              merge.e.c -= 1
-            }
-          }
-          hiddenColsIndex++
-        }
-        if((
-          merge.s.r !== -1 &&
-          merge.e.r !== -1
-        ) && (
-          merge.s.c !== -1 &&
-          merge.e.c !== -1
-        )) merges.push(merge)
-      } else {
-        merges.push(merge)
+        _mods.set($index, mod)
+        modRangesIndex++
       }
-      mergesIndex++
+      Object.freeze(_mods)
     }
-    return merges
-  }
-  set #merges($merges) {
-    this.#_merges = $merges
-    Object.freeze(this.#_merges)
+    return this._mods
   }
 }
