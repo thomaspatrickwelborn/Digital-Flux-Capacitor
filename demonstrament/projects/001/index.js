@@ -4,7 +4,6 @@ import { readFile } from 'node:fs/promises'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import Capacitor from '../../../development/index.js'
-
 const argv = yargs(hideBin(process.argv)).argv
 const configPath = path.join(
   process.env.PWD,

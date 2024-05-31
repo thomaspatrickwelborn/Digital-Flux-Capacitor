@@ -1,39 +1,54 @@
+import { typeOf } from '#utils/index.js'
 import { EventEmitter } from 'node:events'
-import Subcycle from '#core/subcycle/index.js'
 
 class Cycle extends EventEmitter {
-	#settings = {}
-	constructor($settings = {}) {
-		super()
-		this.#settings = $settings
-	}
-	#subcycles = new Map()
-	async #setSubcycles($subcycles) {
-		const subcycles = this.#subcycles
-		const subcyclesLength = $subcycles.length
-		var subcyclesIndex = 0
-		while(subcyclesIndex < subcyclesLength) {
-			const [
-				$subcycleName, $subcycleSettings
-			] = $subcycles[subcyclesIndex]
-			if(subcyclesIndex > 0) {
-				$subcycleSettings.preflux = Array.from(
-					subcycles.values()
-				)
-				.at(subcyclesIndex - 1)
-				.flux
-			}
-			const subcycle = new Subcycle($subcycleSettings)
-			await subcycle.start()
-			subcycles.set($subcycleName, subcycle)
-			subcyclesIndex++
-		}
-		return this
-	}
-	async start() {
-		await this.#setSubcycles(this.#settings.subcycles)
-		return this
-	}
+  #_settings = {}
+  get settings() { return this.#_settings }
+  set settings($settings) { this.#_settings = $settings }
+  constructor($settings = {}, $Subcycles = {}) {
+    super()
+    this.settings = $settings
+    this.Subcycles = $Subcycles
+    this.subcycles = this.settings.subcycles
+  }
+  #_Subcycles = {}
+  get Subcycles() { return this.#_Subcycles }
+  set Subcycles($Subcycles) { this.#_Subcycles = $Subcycles }
+  #_subcycles = new Map()
+  get subcycles() { return this.#_subcycles }
+  set subcycles($subcycles) {
+    const _Subcycles = this.#_Subcycles
+    const _subcycles = this.#_subcycles
+    const subcyclesLength = $subcycles.length
+    var subcyclesIndex = 0
+    while(subcyclesIndex < subcyclesLength) {
+      const [
+        $subcycleName, $subcycleSettings
+      ] = $subcycles[subcyclesIndex]
+      if(subcyclesIndex > 0) {
+        $subcycleSettings.preflux = Array.from(
+          subcycles.values()
+        )
+        .at(subcyclesIndex - 1)
+      }
+      const Subcycle = _Subcycles[$subcycleName]
+      const subcycle = new Subcycle($subcycleSettings)
+      _subcycles.set($subcycleName, subcycle)
+      subcyclesIndex++
+    }
+    return this
+  }
+  async start() {
+    for(const $subcycle of this.subcycles.values()) {
+    	if(typeOf($subcycle.start === 'function')) {
+    		$subcycle.start()
+    	} else
+    	if(typeOf($subcycle.start === 'function')) {
+	      await $subcycle.start()
+    	}
+    }
+    return this
+  }
 }
 
 export default Cycle

@@ -1,24 +1,20 @@
 import { EventEmitter } from 'node:events'
-import * as fs from 'node:fs'
 import chokidar from 'chokidar'
 import { createConnection } from 'mongoose'
 import * as XLSX from 'xlsx'
 import { readFile } from 'node:fs/promises'
+import Subcycle from '#core/subcycle/index.js'
 import Workbook from './workbook/index.js'
 
-// XLSX.set_fs(fs)
-
-class SpreadsheetToSpreadsheetDatabase extends EventEmitter {
+class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 	constructor($settings) {
-		super()
-		this.#settings = $settings
+		super($settings)
 		return this
 	}
-	#settings
 	dbConnection
 	async #startDBConnection() {
 		if(this.dbConnection === undefined) {
-			const { uri, options } = this.#settings.database
+			const { uri, options } = this.settings.database
 			this.dbConnection = await createConnection(uri, options)
 			.asPromise()
 		}
@@ -53,7 +49,7 @@ class SpreadsheetToSpreadsheetDatabase extends EventEmitter {
 	}
 	#workbookWatch
 	async #startWorkbookWatch() {
-		const { path } = this.#settings.spreadsheet
+		const { path } = this.settings.spreadsheet
 		this.#workbookWatch = chokidar.watch(path)
 		this.#workbookWatch.once('add', this.#workbookWatchChange.bind(this))
 		this.#workbookWatch.on('change', this.#workbookWatchChange.bind(this))
@@ -84,6 +80,7 @@ class SpreadsheetToSpreadsheetDatabase extends EventEmitter {
 	async start() {
 		await this.#startDBConnection()
 		await this.#startWorkbookWatch()
+		
 		return this
 	}
 	async stop() {

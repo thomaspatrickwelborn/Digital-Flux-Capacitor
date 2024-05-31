@@ -1,35 +1,45 @@
 import { EventEmitter } from 'node:events'
-import path from 'node:path'
-import { mkdir } from 'node:fs/promises'
-import Cycle from '#core/cycle/index.js'
-
+import * as Flux from '../../flux/index.js'
 class Capacitor extends EventEmitter {
-	#settings = {}
-	constructor($settings = {}) {
-		super()
-		this.#settings = $settings
-	}
-	#project
-	async #setProject($project) {
-		this.#project = $project
-		await mkdir($project.path, { recursive: true })
-		return this
-	}
-	#_cycles = new Map()
-	get #cycles() { return this.#_cycles }
-	set #cycles($cycles) {
-		const _cycles = this.#_cycles
-		const [$cycleName, $cycleSettings] = $cycle
-		const cycle = new Cycle($cycleSettings)
-		await cycle.start()
-		cycles.set($cycleName, cycle)
-		return this
-	}
-	async start() {
-		await this.#setProject(this.#settings.project)
-		await this.#setCycles(this.#settings.cycle)
-		return this
-	}
+  #_settings = {}
+  get settings() { return this.#_settings }
+  set settings($settings) { this.#_settings = $settings }
+  constructor($settings = {}) {
+    super()
+    this.Cycles = Flux
+    this.settings = $settings
+    this.project = this.settings.project
+    this.cycles = this.settings.cycles
+  }
+  #_Cycles
+  get Cycles() { return this.#_Cycles }
+  set Cycles($Cycles) { this.#_Cycles = $Cycles }
+  #_project
+  set project($project) {
+    this.#_project = $project
+    return this
+  }
+  #_cycles = new Map()
+  get cycles() { return this.#_cycles }
+  set cycles($cycles) {
+    const _Cycles = this.#_Cycles
+    const _cycles = this.#_cycles
+    iterateCycles: 
+    for(const [
+      $cycleName, $cycleSettings
+    ] of $cycles) {
+      const Cycle = _Cycles[$cycleName]
+      const cycle = new Cycle($cycleSettings)
+      _cycles.set($cycleName, cycle)
+    }
+    return this
+  }
+  async start() {
+    for(const $cycle of this.cycles.values()) {
+      await $cycle.start()
+    }
+    return this
+  }
 }
 
 export default Capacitor

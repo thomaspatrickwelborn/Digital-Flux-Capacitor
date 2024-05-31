@@ -9,8 +9,7 @@
 ```
 {
   "project": {
-    "name": "dfc-demo-001",
-    "path": "development"
+    "name": String
   },
   "cycles": [
     ["spreadsheet-to-filesystem", SpreadsheetToFilesystem]
@@ -18,12 +17,3 @@
 }
 ```
 
-### Spreadsheet To Filesystem (Cycle)
-```
-{
-  "name": "spreadsheet-to-filesystem",
-  "subcycles": [
-    ["spreadsheet-to-spreadsheet-database", SpreadsheetToSpreadsheetDatabase]
-  ]
-}
-```
