@@ -1,8 +1,7 @@
 import path from 'path'
-import { EventEmitter } from 'node:events'
 import Worksheet from '../worksheet/index.js'
 
-class Workbook extends EventEmitter {
+class Workbook extends EventTarget {
 	#workbookPath
 	name
 	
@@ -45,10 +44,10 @@ class Workbook extends EventEmitter {
 				continue iterateWorkbookWorksheets
 			}
 			const workbookWorksheetID = Number(workbookWorksheet.sheetId)
-			const workbookWorksheetData = Sheets[workbookWorksheetName]
-			const workbookWorksheetRows = workbookWorksheetData['!rows'] || []
-			const workbookWorksheetCols = workbookWorksheetData['!cols'] || []
-			const workbookWorksheetMerges = workbookWorksheetData['!merges'] || []
+			const workbookWorksheetTable = Sheets[workbookWorksheetName]
+			const workbookWorksheetRows = workbookWorksheetTable['!rows'] || []
+			const workbookWorksheetCols = workbookWorksheetTable['!cols'] || []
+			const workbookWorksheetMerges = workbookWorksheetTable['!merges'] || []
 			const workbookWorksheetRanges = Workbook.Names.reduce((
 				$worksheetRanges, $worksheetRange
 			) => {
@@ -58,13 +57,13 @@ class Workbook extends EventEmitter {
 				) $worksheetRanges.push($worksheetRange)
 				return $worksheetRanges
 			}, [])
-			workbookWorksheetData['!rows'] = workbookWorksheetRows
-			workbookWorksheetData['!cols'] = workbookWorksheetCols
-			workbookWorksheetData['!merges'] = workbookWorksheetMerges
-			workbookWorksheetData['!ranges'] = workbookWorksheetRanges
+			workbookWorksheetTable['!rows'] = workbookWorksheetRows
+			workbookWorksheetTable['!cols'] = workbookWorksheetCols
+			workbookWorksheetTable['!merges'] = workbookWorksheetMerges
+			workbookWorksheetTable['!ranges'] = workbookWorksheetRanges
 			const worksheet = new Worksheet({
 				worksheetName: workbookWorksheetName,
-				worksheetData: workbookWorksheetData,
+				worksheetTable: workbookWorksheetTable,
 				dbConnection: this.#dbConnection,
 			})
 			_worksheets
