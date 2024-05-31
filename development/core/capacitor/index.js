@@ -15,9 +15,10 @@ class Capacitor extends EventEmitter {
 		await mkdir($project.path, { recursive: true })
 		return this
 	}
-	#cycles = new Map()
-	async #setCycles($cycle) {
-		const cycles = this.#cycles
+	#_cycles = new Map()
+	get #cycles() { return this.#_cycles }
+	set #cycles($cycles) {
+		const _cycles = this.#_cycles
 		const [$cycleName, $cycleSettings] = $cycle
 		const cycle = new Cycle($cycleSettings)
 		await cycle.start()
