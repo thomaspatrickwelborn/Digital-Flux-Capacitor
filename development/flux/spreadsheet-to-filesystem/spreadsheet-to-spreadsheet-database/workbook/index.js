@@ -1,13 +1,12 @@
 import path from 'path'
 import { EventEmitter } from 'node:events'
-import * as XLSX from 'xlsx'
-import * as fs from 'node:fs'
 import Worksheet from '../worksheet/index.js'
-import { Cell } from '#utils/tem/index.js'
-
-XLSX.set_fs(fs)
 
 class Workbook extends EventEmitter {
+	#workbookPath
+	name
+	
+	#dbConnection
 	constructor($settings) {
 		super()
 		const {
@@ -16,23 +15,18 @@ class Workbook extends EventEmitter {
 		this.#workbookPath = workbookPath
 		this.name = path.basename(this.#workbookPath).split('.')[0]
 		this.workbook = workbook
+		this.worksheets = this.workbook
 		this.#dbConnection = dbConnection
 	}
-	async start() {
-		const {
-			Workbook,
-			Sheets
-		} = this.workbook
-		return await this.#setWorksheets(Workbook, Sheets)
-	}
-	#workbookPath
-	name
-	workbook
-	#dbConnection
-	worksheets = new Map()
-	async #setWorksheets($Workbook, $Sheets) {
-		const worksheets = this.worksheets
-		const workbookWorksheets = $Workbook.Sheets
+	#_workbook
+	get workbook() { return this.#_workbook }
+	set workbook($workbook) { this.#_workbook = Object.freeze($workbook) }
+	#_worksheets = new Map()
+	get worksheets() { return this.#_worksheets }
+	set worksheets($workbook) {
+		const { Workbook, Sheets } = this.workbook
+		const _worksheets = this.#_worksheets
+		const workbookWorksheets = Workbook.Sheets
 		const workbookWorksheetsLength = workbookWorksheets.length
 		var workbookWorksheetsIndex = 0
 		iterateWorkbookWorksheets: 
@@ -51,11 +45,11 @@ class Workbook extends EventEmitter {
 				continue iterateWorkbookWorksheets
 			}
 			const workbookWorksheetID = Number(workbookWorksheet.sheetId)
-			const workbookWorksheetData = $Sheets[workbookWorksheetName]
+			const workbookWorksheetData = Sheets[workbookWorksheetName]
 			const workbookWorksheetRows = workbookWorksheetData['!rows'] || []
 			const workbookWorksheetCols = workbookWorksheetData['!cols'] || []
 			const workbookWorksheetMerges = workbookWorksheetData['!merges'] || []
-			const workbookWorksheetRanges = $Workbook.Names.reduce((
+			const workbookWorksheetRanges = Workbook.Names.reduce((
 				$worksheetRanges, $worksheetRange
 			) => {
 				if(
@@ -73,21 +67,15 @@ class Workbook extends EventEmitter {
 				worksheetData: workbookWorksheetData,
 				dbConnection: this.#dbConnection,
 			})
-			await worksheet.start()
-			switch(worksheets.has(workbookWorksheetClassName)) {
-				case true: 
-					worksheets
-					.get(workbookWorksheetClassName)
-					.set(workbookWorksheetClassIndex, worksheet)
-					break
-				case false:
-					worksheets
-					.set(workbookWorksheetClassName, new Map([
-						[workbookWorksheetClassIndex, worksheet]
-					]))
-					break
-			}
+			_worksheets
+			.set(workbookWorksheetClassName, worksheet)
 			workbookWorksheetsIndex++
+		}
+		return this
+	}
+	async start() {
+		for(const $worksheet of this.worksheets.values()) {
+			await $worksheet.start()
 		}
 		return this
 	}
