@@ -1,19 +1,9 @@
 # Digital Flux Capacitor Configuration
-1. [Capacitor](#Capacitor)
-   1. [Spreadsheet-To-Filesystem Cycle](#Spreadsheet-To-Filesystem)  
-      1. [Spreadsheet-To-Spreadsheet-Database](configuration-subcycles/spreadsheet-to-spreadsheet-database/index.md)
-         1. [Spreadsheet](configuration-subcycles/spreadsheet-to-spreadsheet-database/#Spreadsheet)
-            1. [Worksheet](configuration-subcycles/spreadsheet-to-spreadsheet-database/worksheet/index.md)
-               1. [Areas](#Areas)
-               2. [Models](#Models)
-                  1. [Model Supposit](#Model-Supposit)
-                  1. [Model Composit](#Model-Composit)
-            2. [Ranges](ranges/index.md)
-            3. [Element Ranges](element-ranges/index.md)
-         2. [Spreadsheet-Database](configuration-subcycles/spreadsheet-to-spreadsheet-database/#Spreadsheet-Database)
-      2. [Spreadsheet-Database-To-Filesystem-Database](configuration-subcycles/spreadsheet-database-to-filesystem-database/index.md)
-      3. [Filesystem-Database-To-Filesystem](configuration-subcycles/filesystem-database-to-filesystem/index.md)
-
++ [Capacitor](#capacitor)
+   + [Spreadsheet-To-Filesystem Cycle](#spreadsheet-to-filesystem-cycle) 
+      - [Spreadsheet-To-Spreadsheet-Database Subcycle](subcycles/spreadsheet-to-spreadsheet-database/index.md)
+      - [Spreadsheet-Database-To-Filesystem-Database](subcycles/spreadsheet-database-to-filesystem-database/index.md)
+      - [Filesystem-Database-To-Filesystem](subcycles/filesystem-database-to-filesystem/index.md)
 
 ## Capacitor
 ```
@@ -28,7 +18,7 @@
 }
 ```
 
-### Spreadsheet To Filesystem
+### Spreadsheet To Filesystem (Cycle)
 ```
 {
   "name": "spreadsheet-to-filesystem",

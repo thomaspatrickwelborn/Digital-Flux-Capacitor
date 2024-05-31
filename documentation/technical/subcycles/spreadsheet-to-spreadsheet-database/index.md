@@ -1,8 +1,8 @@
-# Spreadsheet-To-Spreadsheet-Database (Subcycle)
-1. [Spreadsheet To Spreadsheet Database](#Spreadsheet-To-Spreadsheet-Database)
-   1. [Spreadsheet](#Spreadsheet)
-      1. [Worksheet](worksheet/index.md)
-   2. [Spreadsheet-Database](#Spreadsheet-Database)
+# Spreadsheet-To-Spreadsheet-Database Subcycle
++ [Spreadsheet To Spreadsheet Database](#spreadsheet-to-spreadsheet-database)
+   + [Spreadsheet](#spreadsheet)
+      - [Worksheet](worksheet/index.md)
+   + [Spreadsheet-Database](#spreadsheet-database)
 
 ## Spreadsheet To Spreadsheet Database
 ```
