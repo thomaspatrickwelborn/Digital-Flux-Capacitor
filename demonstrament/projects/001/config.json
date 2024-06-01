@@ -13,7 +13,7 @@
 							"VINE": {
 								"ranges": {
 									"MOD_0": {
-										"name": "Filesystem"
+										"Class": "Filesystem"
 									}
 								}
 							}

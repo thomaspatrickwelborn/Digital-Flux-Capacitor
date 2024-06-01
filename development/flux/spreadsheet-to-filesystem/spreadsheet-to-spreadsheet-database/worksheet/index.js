@@ -1,4 +1,3 @@
-import deepmerge from 'deepmerge'
 import { Schema, Types } from 'mongoose'
 import Table from './table/index.js'
 import Suppository from './suppository/index.js'
@@ -31,24 +30,20 @@ export default class Worksheet extends EventTarget {
 		const {
 			worksheetName, worksheetTable, dbConnection
 		} = $settings
-
 		this.name = worksheetName
 		this.#dbConnection = dbConnection
 		this.#table = worksheetTable
+		this.#suppository = this.#table
+		console.log(this.#suppository)
 		return
 	}
 	async start() {
-		// const tableData = this.#table.data
-		// const ranges = this.#table.ranges
-		// const lmnRanges = this.#table.lmnRanges
-		// const merges = this.#getMerges({ includeHidden: false })
-		// const merges = this.#table.merges
-		// const mods = await this.#setMods(tableData, ranges, merges)
-		// this.#mods = { tableData, ranges, merges }
-		// const mods = this.#mods
-		// const supposits = await this.#setSupposits(mods, ranges, merges, lmnRanges)
-		// this.#supposits = { mods, ranges, merges, lmnRanges }
+		// await this.#suppository.start()
 		throw new Error("!")
+		// this.#compository = this.#table
+		// console.log(this.#suppository)
+		// const supposits = await this.#setSupposits()
+		// this.#supposits = { mods, ranges, merges, lmnRanges }
 		// const schemata = await this.#setSchemata(mods, ranges, merges, lmnRanges)
 		// const models = await this.#setModels(mods, ranges, merges, lmnRanges)
 		// const composits = await this.#setComposits(mods, ranges, merges, lmnRanges)
@@ -61,6 +56,12 @@ export default class Worksheet extends EventTarget {
 			ranges: this.#options.ranges
 		})
 	}
+	#_suppository
+	get #suppository() { return this.#_suppository }
+	set #suppository($suppository) {
+		this.#_suppository = new Suppository($suppository)
+	}
+
 	// #dbConnection
 	// get #area() { return this.getRanges().find(
 	// 	($range) => $range.Name === 'AREA'
@@ -68,10 +69,6 @@ export default class Worksheet extends EventTarget {
 	
 	// schemata = new Map()
 
-	// #_supposits = new Map()
-	// set #supposits($supposits) {
-	// 	this.#_supposits = new Suppository($supposits)
-	// }
 
 	// composits = new Map()
 	// async #setComposits($composits) {

@@ -13,7 +13,7 @@ export default class Ranges extends EventTarget {
     super()
     this.#settings = $settings
     this.#options = $options
-    this.#hidden = this.#options.hidden
+    this.#hidden = this.#settings.hidden
     const _ranges = this
     if(Object.isFrozen(_ranges) === false) {
       const rangesLength = this.#settings.length
@@ -26,6 +26,9 @@ export default class Ranges extends EventTarget {
           rangeRefFrags[rangeRefFragsIndex]
         )
         range.Ref = rangeRef
+        if(this.#options[range.Name] !== undefined) {
+          Object.assign(range, this.#options[range.Name])
+        }
         Object.freeze(range)
         Array.prototype.push.call(_ranges, range)
         rangesIndex++

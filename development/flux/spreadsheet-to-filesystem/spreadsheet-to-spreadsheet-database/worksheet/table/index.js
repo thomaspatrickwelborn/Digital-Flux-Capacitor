@@ -10,7 +10,7 @@ const Defaults = {
   GetMergesOptions: { includeHidden: true },
   GetRangesOptions: { includeHidden: true },
   GetDataOptions: { includeHidden: false, condensed: true },
-  ModRangeNameRegExp: /MOD_[0-9]+_((SUP|COM)|[A-Za-z0-9]+)/,
+  ModRangeNameRegExp: /MOD_[0-9]/,
   OmitRangeNameRegExp: /^OMIT/,
 }
 const { Row, Col, Range, Cell } = tem
@@ -43,9 +43,9 @@ export default class Table extends EventTarget {
   }
   get ranges() { return this.#_ranges }
   set ranges($ranges) {
-    this.#_ranges = new Ranges($ranges, Object.assign({
+    this.#_ranges = new Ranges(Object.assign($ranges, {
       hidden: this.hidden
-    }, this.#options.ranges))
+    }), this.#options.ranges)
   }
   get lmnRanges() { return this.#_lmnRanges }
   set lmnRanges($lmnRanges) { this.#_lmnRanges = new LMNRanges($lmnRanges) }
@@ -203,16 +203,18 @@ export default class Table extends EventTarget {
       )
       const modRangesLength = modRanges.length
       var modRangesIndex = 0
+      var modRangeClassName
       while(modRangesIndex < modRangesLength) {
-        const modRange = modRanges[modRangesIndex]
-        const { Name, Ref } = modRange
+        var modRange = modRanges[modRangesIndex]
+        const { Name, Ref, Class } = modRange
+        modRangeClassName = modRangeClassName || Class
         var [$key, $index, $val] = Name.split('_', 3)
         $index = Number($index)
         var mod = (
           _mods.has($index) === true
         ) ? _mods.get($index) 
           : _mods.set($index, {
-          nom: String, sup: Array, com: Array
+          nom: modRangeClassName, sup: Array, com: Array
         }).get($index)
         if(
           $val === 'SUP' ||
@@ -227,8 +229,6 @@ export default class Table extends EventTarget {
           }, [])
           var modKey = $val.toLowerCase() 
           mod[modKey] = modRangeRows
-        } else {
-          mod.nom = $val
         }
         _mods.set($index, mod)
         modRangesIndex++

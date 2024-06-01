@@ -1,24 +1,32 @@
+import { Schema } from 'mongoose'
+import deepmerge from 'deepmerge'
+import { combineMerge } from '#utils/index.js'
 import Supposit from './supposit/index.js'
 export default class Suppository extends EventTarget {
+  #settings
   #dbConnection
   #_supposits = new Map()
   #_schemata = new Map()
   #_models = new Map()
   constructor($settings) {
     super()
-    this.settings = $settings
+    this.#settings = $settings
+    this.supposits = this.#settings
+    this.schemata = this.#settings
+    console.log(this.schemata)
   }
-  get supposits() {}
+  async start() {}
+  get supposits() { return this.#_supposits }
   set supposits($supposits) {
+    const _supposits = this.#_supposits
     var { mods, ranges, lmnRanges } = $supposits
     mods = Array.from(mods.entries())
     const modsLength = mods.length
     var modsIndex = 0
-    const supposits = this.supposits
     while(modsIndex < modsLength) {
       var [$modIndex, $mod] = mods[modsIndex]
       var { nom, sup, com } = $mod
-      var supposit = Supposit({
+      var supposit = new Supposit({
         nom, sup, com, 
         modIndex: $modIndex, 
         mods: mods,
@@ -26,28 +34,24 @@ export default class Suppository extends EventTarget {
         lmnRanges: lmnRanges,
         // merges: this.#getMerges({ includeHidden: false }),
       })
-      supposits.set(nom, deepmerge(
-        supposits.get(nom) || {},
-        supposit,
-        { arrayMerge: combineMerge },
-      ))
+      _supposits.set(nom, supposit)
       modsIndex++
     }
   }
   get schemata() { return this.#_schemata }
   set schemata($schemata) {
-    const { mods, ranges } = $schemata
-    $mods = Array.from($mods.entries())
+    let { mods, ranges } = $schemata
+    mods = Array.from(mods.entries())
     const supposits = this.supposits
-    const modsLength = $mods.length
+    const modsLength = mods.length
     var modsIndex = 0
     const schemata = this.schemata
     while(modsIndex < modsLength) {
-      var [$modIndex, $mod] = $mods[modsIndex]
+      var [$modIndex, $mod] = mods[modsIndex]
       var { nom } = $mod
       const supposit = supposits.get(nom)
       if(schemata.has(nom) === false) {
-        var schema = new Schema(supposit)
+        var schema = new Schema(supposit.content)
         schemata.set(nom, schema)
       }
       modsIndex++
