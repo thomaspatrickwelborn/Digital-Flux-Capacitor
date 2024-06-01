@@ -18,19 +18,23 @@ const Defaults = {
 	OmitRangeNameRegExp: /^OMIT/,
 }
 
-class Worksheet extends EventTarget {
+export default class Worksheet extends EventTarget {
+	#settings
+	#options
 	name
 	#dbConnection
 	#_table
-	constructor($settings) {
+	constructor($settings, $options) {
 		super()
+		this.#settings = $settings
+		this.#options = $options
 		const {
 			worksheetName, worksheetTable, dbConnection
 		} = $settings
+
 		this.name = worksheetName
 		this.#dbConnection = dbConnection
 		this.#table = worksheetTable
-		console.log(this.#table)
 		return
 	}
 	async start() {
@@ -44,7 +48,6 @@ class Worksheet extends EventTarget {
 		// const mods = this.#mods
 		// const supposits = await this.#setSupposits(mods, ranges, merges, lmnRanges)
 		// this.#supposits = { mods, ranges, merges, lmnRanges }
-		// console.log(this.#supposits)
 		throw new Error("!")
 		// const schemata = await this.#setSchemata(mods, ranges, merges, lmnRanges)
 		// const models = await this.#setModels(mods, ranges, merges, lmnRanges)
@@ -53,7 +56,11 @@ class Worksheet extends EventTarget {
 		return this
 	}
 	get #table() { return this.#_table }
-	set #table($table) { this.#_table = new Table($table)}
+	set #table($table) {
+		this.#_table = new Table($table, {
+			ranges: this.#options.ranges
+		})
+	}
 	// #dbConnection
 	// get #area() { return this.getRanges().find(
 	// 	($range) => $range.Name === 'AREA'
@@ -73,5 +80,3 @@ class Worksheet extends EventTarget {
 	// collect
 	
 }
-
-export default Worksheet

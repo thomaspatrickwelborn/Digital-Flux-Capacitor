@@ -4,17 +4,18 @@ import Worksheet from '../worksheet/index.js'
 class Workbook extends EventTarget {
 	#workbookPath
 	name
-	
+	#settings
 	#dbConnection
 	constructor($settings) {
 		super()
+		this.#settings = $settings
 		const {
-			workbookPath, workbook, dbConnection
-		} = $settings
+			workbookPath, workbook, worksheets, dbConnection
+		} = this.#settings
 		this.#workbookPath = workbookPath
 		this.name = path.basename(this.#workbookPath).split('.')[0]
 		this.workbook = workbook
-		this.worksheets = this.workbook
+		this.worksheets = worksheets
 		this.#dbConnection = dbConnection
 	}
 	#_workbook
@@ -22,8 +23,9 @@ class Workbook extends EventTarget {
 	set workbook($workbook) { this.#_workbook = Object.freeze($workbook) }
 	#_worksheets = new Map()
 	get worksheets() { return this.#_worksheets }
-	set worksheets($workbook) {
+	set worksheets($worksheets) {
 		const { Workbook, Sheets } = this.workbook
+		const _workbook = this.#_workbook
 		const _worksheets = this.#_worksheets
 		const workbookWorksheets = Workbook.Sheets
 		const workbookWorksheetsLength = workbookWorksheets.length
@@ -57,6 +59,7 @@ class Workbook extends EventTarget {
 				) $worksheetRanges.push($worksheetRange)
 				return $worksheetRanges
 			}, [])
+			const workbookWorksheetOptions = $worksheets[workbookWorksheetName]
 			workbookWorksheetTable['!rows'] = workbookWorksheetRows
 			workbookWorksheetTable['!cols'] = workbookWorksheetCols
 			workbookWorksheetTable['!merges'] = workbookWorksheetMerges
@@ -65,7 +68,7 @@ class Workbook extends EventTarget {
 				worksheetName: workbookWorksheetName,
 				worksheetTable: workbookWorksheetTable,
 				dbConnection: this.#dbConnection,
-			})
+			}, workbookWorksheetOptions)
 			_worksheets
 			.set(workbookWorksheetClassName, worksheet)
 			workbookWorksheetsIndex++

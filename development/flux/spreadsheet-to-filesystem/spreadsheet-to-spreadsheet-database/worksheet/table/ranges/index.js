@@ -1,3 +1,4 @@
+import { typeOf } from '#utils/index.js'
 import * as XLSX from 'xlsx'
 const Defaults = {
   GetRangesOptions: { includeHidden: true },
@@ -33,7 +34,7 @@ export default class Ranges extends EventTarget {
     }
   }
   
-  filterRanges($options = {}) {
+  #filterRanges($options = {}) {
     $options = Object.assign(
       {}, Defaults.GetRangesOptions, $options
     )
@@ -126,11 +127,11 @@ export default class Ranges extends EventTarget {
   getRangesByName($rangeName, $rangesOptions) {
     var ranges
     if(typeOf($rangeName) === 'string') {
-      ranges = this.filterRanges($rangesOptions).filter(
+      ranges = this.#filterRanges($rangesOptions).filter(
         ($range) => $range.Name === $rangeName
       )
     } else if($rangeName instanceof RegExp) {
-      ranges = this.filterRanges($rangesOptions).filter(
+      ranges = this.#filterRanges($rangesOptions).filter(
         ($modRange) => $modRange.Name.match($rangeName)
       )
     }

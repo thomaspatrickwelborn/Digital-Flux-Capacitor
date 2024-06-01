@@ -15,7 +15,8 @@ const Defaults = {
 }
 const { Row, Col, Range, Cell } = tem
 export default class Table extends EventTarget {
-  #_settings = {}
+  #settings = {}
+  #options = {}
   #_hidden = { rows: [], cols: [] }
   #_rows = []
   #_cols = []
@@ -24,21 +25,28 @@ export default class Table extends EventTarget {
   #_lmnRanges
   #_merges
   #_mods = new Map()
-  constructor($settings) {
+  constructor($settings, $options) {
     super()
-    this.settings = $settings
-    this.ranges = this.settings['!ranges']
-    this.rows = this.settings['!rows']
-    this.cols = this.settings['!cols']
-    this.merges = this.settings['!merges']
-    this.data = this.settings['!data']
+    this.#settings = $settings
+    this.#options = $options
+    this.ranges = this.#settings['!ranges']
+    this.lmnRanges = this.#settings['!ranges']
+    this.rows = this.#settings['!rows']
+    this.cols = this.#settings['!cols']
+    this.merges = this.#settings['!merges']
+    this.data = this.#settings['!data']
+    this.mods = {
+      data: this.data,
+      ranges: this.ranges,
+      merges: this.merges,
+    }
   }
-  get settings() { return this.#_settings }
-  set settings($settings) { this.#_settings = Object.freeze($settings) }
   get ranges() { return this.#_ranges }
-  set ranges($ranges) { this.#_ranges = new Ranges($ranges, {
-    hidden: this.hidden
-  }) }
+  set ranges($ranges) {
+    this.#_ranges = new Ranges($ranges, Object.assign({
+      hidden: this.hidden
+    }, this.#options.ranges))
+  }
   get lmnRanges() { return this.#_lmnRanges }
   set lmnRanges($lmnRanges) { this.#_lmnRanges = new LMNRanges($lmnRanges) }
   get merges() { return this.#_merges }
@@ -98,9 +106,10 @@ export default class Table extends EventTarget {
     return _cols
   }
   get data() {
-    const $options = Defaults.GetDataOptions
     const _data = this.#_data
-    const { includeHidden, condensed } = $options
+    const {
+      includeHidden, condensed
+    } = Defaults.GetDataOptions
     const hidden = this.hidden
     const hiddenRows = hidden.rows
     const hiddenCols = hidden.cols
@@ -151,10 +160,9 @@ export default class Table extends EventTarget {
   set data($data = []) {
     const _data = this.#_data
     if(Object.isFrozen(_data) === false) {
-      const area = this.ranges.find(
-        ($range) => $range.Name === 'AREA'
-      )
-      if(area === undefined) return
+      const areas = this.ranges.getRangesByName('AREA')
+      if(areas === undefined) return
+      const area = areas[0]
       const rowsLength = $data.length
       const maxRowsLength = area.Ref.e.r
       var rowsIndex = 0
@@ -180,10 +188,6 @@ export default class Table extends EventTarget {
       }
       Object.freeze(_data)
     }
-    return (
-      $options !== undefined
-    ) ? this.getData()
-      : this.getData($options)
   }
   get mods() { return this.#_mods }
   set mods($mods) {
@@ -191,9 +195,7 @@ export default class Table extends EventTarget {
     const _mods = this.#_mods
     if(Object.isFrozen(_mods) === false) {
       const modRanges = ranges
-      .filter(($range) => $range.Name.match(
-        new RegExp(Defaults.ModRangeNameRegExp)
-      ) !== null)
+      .getRangesByName(new RegExp(Defaults.ModRangeNameRegExp))
       .sort(($rangeA, $rangeB) => (
         $rangeA.Ref.s.r < $rangeB.Ref.s.r
       ) ? -1
@@ -210,7 +212,7 @@ export default class Table extends EventTarget {
           _mods.has($index) === true
         ) ? _mods.get($index) 
           : _mods.set($index, {
-          nom_: String, sup: Array, com: Array
+          nom: String, sup: Array, com: Array
         }).get($index)
         if(
           $val === 'SUP' ||
@@ -233,6 +235,5 @@ export default class Table extends EventTarget {
       }
       Object.freeze(_mods)
     }
-    return this._mods
   }
 }

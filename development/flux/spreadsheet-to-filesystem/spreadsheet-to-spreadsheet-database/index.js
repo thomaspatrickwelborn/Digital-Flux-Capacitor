@@ -27,13 +27,14 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 	}
 	#_workbook
 	get workbook() { return this.#_workbook }
-	async #setWorkbook($workbookPath, $workbook) {
+	set workbook($workbook) {
+		const { path, worksheets } = this.settings.spreadsheet
 		this.#_workbook = new Workbook({
-			workbookPath: $workbookPath, 
+			worksheets,
+			workbookPath: path, 
 			workbook: $workbook,
 			dbConnection: this.dbConnection, 
 		})
-		await this.#_workbook.start()
 		return this
 	}
 	async #readWorkbook($workbookPath) {
@@ -44,15 +45,20 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 			dense: true,
 			cellStyles: true,
 		}))
-		await this.#setWorkbook($workbookPath, workbookFile)
+		this.workbook = workbookFile
+		await this.#_workbook.start()
 		return this
 	}
 	#workbookWatch
 	async #startWorkbookWatch() {
 		const { path } = this.settings.spreadsheet
 		this.#workbookWatch = chokidar.watch(path)
-		this.#workbookWatch.once('add', this.#workbookWatchChange.bind(this))
-		this.#workbookWatch.on('change', this.#workbookWatchChange.bind(this))
+		this.#workbookWatch.once(
+			'add', this.#workbookWatchChange.bind(this)
+		)
+		this.#workbookWatch.on(
+			'change', this.#workbookWatchChange.bind(this)
+		)
 		await new Promise(($resolve, $reject) => {
 			this.#workbookWatch.on('ready', $resolve)
 			this.#workbookWatch.on('error', $reject)
