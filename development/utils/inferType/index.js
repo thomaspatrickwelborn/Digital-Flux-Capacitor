@@ -1,4 +1,3 @@
-import XLSX from 'xlsx'
 import parseCell from '../parseCell/index.js'
 import { typeOf } from '#utils/index.js'
 const vals = {

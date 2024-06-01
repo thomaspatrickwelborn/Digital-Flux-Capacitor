@@ -1,4 +1,10 @@
+import * as XLSX from 'xlsx'
+const Defaults = {
+  GetRangesOptions: { includeHidden: true },
+}
+
 export default class Ranges extends EventTarget {
+  length = 0
   #settings = {}
   #options = {}
   #hidden = {}
@@ -7,13 +13,32 @@ export default class Ranges extends EventTarget {
     this.#settings = $settings
     this.#options = $options
     this.#hidden = this.#options.hidden
+    const _ranges = this
+    if(Object.isFrozen(_ranges) === false) {
+      const rangesLength = this.#settings.length
+      var rangesIndex = 0
+      while(rangesIndex < rangesLength) {
+        const range = this.#settings[rangesIndex]
+        const rangeRefFrags = range.Ref.split('!')
+        const rangeRefFragsIndex = rangeRefFrags.length - 1
+        const rangeRef = XLSX.utils.decode_range(
+          rangeRefFrags[rangeRefFragsIndex]
+        )
+        range.Ref = rangeRef
+        Object.freeze(range)
+        Array.prototype.push.call(_ranges, range)
+        rangesIndex++
+      }
+      Object.freeze(_ranges)
+    }
   }
   
-  #_ranges = []
-  get ranges() {
-    const $options = Defaults.GetRangesOptions
+  filterRanges($options = {}) {
+    $options = Object.assign(
+      {}, Defaults.GetRangesOptions, $options
+    )
     const { includeHidden } = $options
-    const _ranges = this.#_ranges
+    const _ranges = this
     const ranges = []
     const rangesLength = _ranges.length
     var rangesIndex = 0
@@ -98,35 +123,14 @@ export default class Ranges extends EventTarget {
     }
     return ranges
   }
-  set ranges($ranges) {
-    const _ranges = this._ranges
-    if(Object.isFrozen(_ranges) === false) {
-      const rangesLength = $ranges.length
-      var rangesIndex = 0
-      while(rangesIndex < rangesLength) {
-        const range = $ranges[rangesIndex]
-        const rangeRefFrags = range.Ref.split('!')
-        const rangeRefFragsIndex = rangeRefFrags.length - 1
-        const rangeRef = XLSX.utils.decode_range(
-          rangeRefFrags[rangeRefFragsIndex]
-        )
-        range.Ref = rangeRef
-        Object.freeze(range)
-        _ranges.push(range)
-        rangesIndex++
-      }
-      Object.freeze(_ranges)
-    }
-    return this.ranges
-  }
-  #getRangesByName($rangeName, $rangesOptions) {
+  getRangesByName($rangeName, $rangesOptions) {
     var ranges
     if(typeOf($rangeName) === 'string') {
-      ranges = this.getRanges($rangesOptions).filter(
+      ranges = this.filterRanges($rangesOptions).filter(
         ($range) => $range.Name === $rangeName
       )
     } else if($rangeName instanceof RegExp) {
-      ranges = this.getRanges($rangesOptions).filter(
+      ranges = this.filterRanges($rangesOptions).filter(
         ($modRange) => $modRange.Name.match($rangeName)
       )
     }
