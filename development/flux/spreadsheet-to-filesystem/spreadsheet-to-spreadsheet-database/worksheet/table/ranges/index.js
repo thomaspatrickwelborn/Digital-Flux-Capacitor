@@ -1,6 +1,12 @@
 export default class Ranges extends EventTarget {
-  constructor($settings = {}) {
+  #settings = {}
+  #options = {}
+  #hidden = {}
+  constructor($settings = {}, $options = {}) {
     super()
+    this.#settings = $settings
+    this.#options = $options
+    this.#hidden = this.#options.hidden
   }
   
   #_ranges = []

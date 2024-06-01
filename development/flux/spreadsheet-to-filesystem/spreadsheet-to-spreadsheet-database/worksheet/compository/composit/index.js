@@ -6,15 +6,38 @@ const translexes = [
 	["assignLMNProps", assignLMNProps],
 ]
 
+export default class Composit extends EventTarget {
+	length = 0
+	#settings = {}
+	name
+	#_supRows
+	#_comRows
+	constructor($settings = {}) {
+		super()
+		this.#settings = $settings
+		const {
+			nom, sup, com, modIndex, mods, merges, lmnRanges
+		} = $settings
+		this.name = nom
+		this.supRows = this.sup
+		this.comRows = this.com
+	}
+	get supRows() { return this.#_supRows }
+	set supRows($supRows) { this.#_supRows = fillEmptyCells($supRows) }
+	get comRows() { return this.#_comRows }
+	set comRows($comRows) { this.#_comRows = $comRows }
+}
+/*
 async function Composit($settings = {}) {
 	const {
 		nom, sup, com, modIndex, mods, merges, lmnRanges
 	} = $settings
-	const supRows = fillEmptyCells(sup)
+	this.supRows = sup
+	// const supRows = fillEmptyCells(sup)
 	const comRows = com
 	const comRowsLength = comRows.length
 	var comRowsIndex = 0
-	const composit = []
+	const composit = this
 	while(comRowsIndex < comRowsLength) {
 		const comRow = comRows[comRowsIndex]
 		var apposit = {}
@@ -37,9 +60,10 @@ async function Composit($settings = {}) {
 			}
 			translexesIndex++
 		}
-		composit.push(apposit)
+		Array.prototype.push.call(composit, apposit)
 		comRowsIndex++
 	}
 	return composit
 }
 export default Composit
+*/

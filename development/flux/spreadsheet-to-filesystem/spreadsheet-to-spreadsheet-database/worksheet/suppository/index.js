@@ -1,5 +1,6 @@
 import Supposit from './supposit/index.js'
 export default class Suppository extends EventTarget {
+  #dbConnection
   #_supposits = new Map()
   #_schemata = new Map()
   #_models = new Map()
@@ -8,8 +9,8 @@ export default class Suppository extends EventTarget {
     this.settings = $settings
   }
   get supposits() {}
-  set supposits() {
-    var { mods, ranges, lmnRanges } = this.settings
+  set supposits($supposits) {
+    var { mods, ranges, lmnRanges } = $supposits
     mods = Array.from(mods.entries())
     const modsLength = mods.length
     var modsIndex = 0
@@ -34,7 +35,8 @@ export default class Suppository extends EventTarget {
     }
   }
   get schemata() { return this.#_schemata }
-  set schemata($mods, $ranges) {
+  set schemata($schemata) {
+    const { mods, ranges } = $schemata
     $mods = Array.from($mods.entries())
     const supposits = this.supposits
     const modsLength = $mods.length
@@ -52,7 +54,8 @@ export default class Suppository extends EventTarget {
     }
     return schemata
   }
-  models($mods, $ranges, $merges) {
+  models($models) {
+    const { mods, ranges, merges } = $models
     $mods = Array.from($mods.entries())
     const schemata = this.schemata
     const modsLength = $mods.length

@@ -1,8 +1,14 @@
 export default class Merges extends EventTarget {
-  constructor($settings = {}) {
-    super()
-  }
+  #settings = {}
+  #options = {}
+  #hidden = {}
   merges = []
+  constructor($settings = {}, $options = {}) {
+    super()
+    this.#settings = $settings
+    this.#options = $options
+    this.#hidden = this.#options.hidden
+  }
   #getMerges($options = Defaults.GetMergesOptions) {
     const { includeHidden } = $options
     if(includeHidden === true) return this.merges

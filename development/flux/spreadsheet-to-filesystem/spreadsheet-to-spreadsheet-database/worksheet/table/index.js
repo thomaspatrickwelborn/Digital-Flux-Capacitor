@@ -1,7 +1,10 @@
 import {
   typeOf, parseCell, tem
 } from '#utils/index.js'
-import XLSX from 'xlsx'
+import Ranges from './ranges/index.js'
+import LMNRanges from './lmnRanges/index.js'
+import Merges from './merges/index.js'
+
 const Defaults = {
   GetModsOptions: { includeHidden: true, condensed: false },
   GetMergesOptions: { includeHidden: true },
@@ -11,38 +14,51 @@ const Defaults = {
   OmitRangeNameRegExp: /^OMIT/,
 }
 const { Row, Col, Range, Cell } = tem
-export default class extends EventTarget {
+export default class Table extends EventTarget {
+  #_settings = {}
+  #_hidden = { rows: [], cols: [] }
+  #_rows = []
+  #_cols = []
+  #_data = []
+  #_ranges
+  #_lmnRanges
+  #_merges
+  #_mods = new Map()
   constructor($settings) {
     super()
     this.settings = $settings
     this.ranges = this.settings['!ranges']
-    this.#rows = this.settings['!rows']
-    this.#cols = this.settings['!cols']
-    this.#merges = this.settings['!merges']
-    this.#data = this.settings['!data']
+    this.rows = this.settings['!rows']
+    this.cols = this.settings['!cols']
+    this.merges = this.settings['!merges']
+    this.data = this.settings['!data']
   }
-  #_settings
   get settings() { return this.#_settings }
   set settings($settings) { this.#_settings = Object.freeze($settings) }
-  #_hidden
-  get #hidden() {
+  get ranges() { return this.#_ranges }
+  set ranges($ranges) { this.#_ranges = new Ranges($ranges, {
+    hidden: this.hidden
+  }) }
+  get lmnRanges() { return this.#_lmnRanges }
+  set lmnRanges($lmnRanges) { this.#_lmnRanges = new LMNRanges($lmnRanges) }
+  get merges() { return this.#_merges }
+  set merges($merges) { this.#_merges = new Merges($merges) }
+  get hidden() {
     if(this.#_hidden === undefined) {
-      const hidden = { rows: [], cols: [] }
-      const rows = this.#rows.reduce(($rows, $row, $rowIndex) => {
+      const _hidden = this.#_hidden 
+      const rows = this.rows.reduce(($rows, $row, $rowIndex) => {
         if($row.hidden === true) $rows.push($rowIndex)
         return $rows
-      }, hidden.rows).reverse()
-      const cols = this.#cols.reduce(($cols, $col, $colIndex) => {
+      }, _hidden.rows).reverse()
+      const cols = this.cols.reduce(($cols, $col, $colIndex) => {
         if($col.hidden === true) $cols.push($colIndex)
         return $cols
-      }, hidden.cols).reverse()
-      this.#_hidden = hidden
+      }, _hidden.cols).reverse()
     }
     return this.#_hidden
   }
-  #_rows = []
-  get #rows() { return this.#_rows }
-  set #rows($rows = []) {
+  get rows() { return this.#_rows }
+  set rows($rows = []) {
     const _rows = this.#_rows
     if(Object.isFrozen(_rows) === false) {
       $rows = structuredClone($rows)
@@ -61,9 +77,8 @@ export default class extends EventTarget {
     }
     return _rows
   }
-  #_cols = []
-  get #cols() { return this.#_cols }
-  set #cols($cols = []) {
+  get cols() { return this.#_cols }
+  set cols($cols = []) {
     const _cols = this.#_cols
     if(Object.isFrozen(_cols) === false) {
       $cols = structuredClone($cols)
@@ -82,12 +97,11 @@ export default class extends EventTarget {
     }
     return _cols
   }
-  #_data = []
   get data() {
     const $options = Defaults.GetDataOptions
     const _data = this.#_data
     const { includeHidden, condensed } = $options
-    const hidden = this.#hidden
+    const hidden = this.hidden
     const hiddenRows = hidden.rows
     const hiddenCols = hidden.cols
     const rows = []
@@ -134,7 +148,7 @@ export default class extends EventTarget {
     }
     return rows
   }
-  set #data($data = []) {
+  set data($data = []) {
     const _data = this.#_data
     if(Object.isFrozen(_data) === false) {
       const area = this.ranges.find(
@@ -171,9 +185,8 @@ export default class extends EventTarget {
     ) ? this.getData()
       : this.getData($options)
   }
-  #_mods = new Map()
-  get #mods() { return this.#_mods }
-  set #mods($mods) {
+  get mods() { return this.#_mods }
+  set mods($mods) {
     const { data, ranges, merges } = $mods
     const _mods = this.#_mods
     if(Object.isFrozen(_mods) === false) {

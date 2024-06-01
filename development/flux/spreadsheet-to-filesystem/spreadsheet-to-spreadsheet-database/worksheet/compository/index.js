@@ -1,5 +1,6 @@
 import Composit from './composit/index.js'
-export default class extends Compository {
+export default class Compository extends EventTarget {
+  #dbConnection
   #_settings = {}
   #_composits = new Map()
   #_collects = new Map()
@@ -18,7 +19,7 @@ export default class extends Compository {
       const {
         nom, sup, com
       } = $mod
-      var composit = await Composit({
+      var composit = new Composit({
         nom, sup, com, 
         ranges, lmnRanges, 
         modsIndex, mods,
@@ -29,10 +30,11 @@ export default class extends Compository {
     }
   }
   get collects() { return this.#_collects }
-  set collects($mods, $ranges, $composits, $lmnRanges) {
+  set collects($collects) {
+    const { $mods, $ranges, $composits, $lmnRanges } = $collects
     $mods = Array.from($mods.entries())
     $composits = Array.from($composits.entries())
-    this.collect = await Collect({
+    this.collect = new Collect({
       mods: $mods, 
       composits: $composits, 
       dbConnection: this.#dbConnection,
