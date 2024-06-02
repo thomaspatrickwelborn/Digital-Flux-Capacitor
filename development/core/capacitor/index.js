@@ -2,8 +2,6 @@ import { EventEmitter } from 'node:events'
 import * as Flux from '../../flux/index.js'
 class Capacitor extends EventEmitter {
   #_settings = {}
-  get settings() { return this.#_settings }
-  set settings($settings) { this.#_settings = $settings }
   constructor($settings = {}) {
     super()
     this.Cycles = Flux
@@ -11,6 +9,8 @@ class Capacitor extends EventEmitter {
     this.project = this.settings.project
     this.cycles = this.settings.cycles
   }
+  get settings() { return this.#_settings }
+  set settings($settings) { this.#_settings = $settings }
   #_Cycles
   get Cycles() { return this.#_Cycles }
   set Cycles($Cycles) { this.#_Cycles = $Cycles }
@@ -31,12 +31,6 @@ class Capacitor extends EventEmitter {
       const Cycle = _Cycles[$cycleName]
       const cycle = new Cycle($cycleSettings)
       _cycles.set($cycleName, cycle)
-    }
-    return this
-  }
-  async start() {
-    for(const $cycle of this.cycles.values()) {
-      await $cycle.start()
     }
     return this
   }

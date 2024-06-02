@@ -12,11 +12,11 @@ class Workbook extends EventTarget {
 		const {
 			workbookPath, workbook, worksheets, dbConnection
 		} = this.#settings
+		this.#dbConnection = dbConnection
 		this.#workbookPath = workbookPath
 		this.name = path.basename(this.#workbookPath).split('.')[0]
 		this.workbook = workbook
 		this.worksheets = worksheets
-		this.#dbConnection = dbConnection
 	}
 	#_workbook
 	get workbook() { return this.#_workbook }

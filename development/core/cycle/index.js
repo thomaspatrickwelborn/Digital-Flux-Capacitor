@@ -3,14 +3,14 @@ import { EventEmitter } from 'node:events'
 
 class Cycle extends EventEmitter {
   #_settings = {}
-  get settings() { return this.#_settings }
-  set settings($settings) { this.#_settings = $settings }
   constructor($settings = {}, $Subcycles = {}) {
     super()
     this.settings = $settings
     this.Subcycles = $Subcycles
     this.subcycles = this.settings.subcycles
   }
+  get settings() { return this.#_settings }
+  set settings($settings) { this.#_settings = $settings }
   #_Subcycles = {}
   get Subcycles() { return this.#_Subcycles }
   set Subcycles($Subcycles) { this.#_Subcycles = $Subcycles }
@@ -35,17 +35,6 @@ class Cycle extends EventEmitter {
       const subcycle = new Subcycle($subcycleSettings)
       _subcycles.set($subcycleName, subcycle)
       subcyclesIndex++
-    }
-    return this
-  }
-  async start() {
-    for(const $subcycle of this.subcycles.values()) {
-    	if(typeOf($subcycle.start === 'function')) {
-    		$subcycle.start()
-    	} else
-    	if(typeOf($subcycle.start === 'function')) {
-	      await $subcycle.start()
-    	}
     }
     return this
   }

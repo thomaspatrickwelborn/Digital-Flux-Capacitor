@@ -22,6 +22,8 @@ export default class Worksheet extends EventTarget {
 	#options
 	name
 	#dbConnection
+	#_suppository
+	#_compository
 	#_table
 	constructor($settings, $options) {
 		super()
@@ -34,13 +36,12 @@ export default class Worksheet extends EventTarget {
 		this.#dbConnection = dbConnection
 		this.#table = worksheetTable
 		this.#suppository = this.#table
-		console.log(this.#suppository)
+		this.#compository = this.#table
 		return
 	}
 	async start() {
 		// await this.#suppository.start()
 		throw new Error("!")
-		// this.#compository = this.#table
 		// console.log(this.#suppository)
 		// const supposits = await this.#setSupposits()
 		// this.#supposits = { mods, ranges, merges, lmnRanges }
@@ -56,24 +57,16 @@ export default class Worksheet extends EventTarget {
 			ranges: this.#options.ranges
 		})
 	}
-	#_suppository
 	get #suppository() { return this.#_suppository }
 	set #suppository($suppository) {
-		this.#_suppository = new Suppository($suppository)
+		this.#_suppository = new Suppository($suppository, {
+			dbConnection: this.#dbConnection
+		})
 	}
-
-	// #dbConnection
-	// get #area() { return this.getRanges().find(
-	// 	($range) => $range.Name === 'AREA'
-	// ) }
-	
-	// schemata = new Map()
-
-
-	// composits = new Map()
-	// async #setComposits($composits) {
-
-	// }
-	// collect
-	
+	get #compository() { return this.#_compository }
+	set #compository($compository) {
+		this.#_compository = new Compository($compository, {
+			dbConnection: this.#dbConnection
+		})
+	}
 }

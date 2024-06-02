@@ -18,8 +18,8 @@ function assignProps($prop, $settings) {
 				? supRows[supRowsIndex + 1][supColsIndex]
 				: undefined
 			const typeOfAnterKey = typeOf(anterKey)
-			rowCellMerge = merges.find(
-				($merge) => ((
+			rowCellMerge = Array.prototype.find.call(
+				merges, ($merge) => ((
 					supRowsIndex >= $merge.s.r &&
  					supRowsIndex <= $merge.e.r
 				) && (

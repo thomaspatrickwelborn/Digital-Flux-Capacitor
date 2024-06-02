@@ -7,35 +7,47 @@ import Subcycle from '#core/subcycle/index.js'
 import Workbook from './workbook/index.js'
 
 class SpreadsheetToSpreadsheetDatabase extends Subcycle {
+	#_dbConnection
+	#_workbook
+	#_workbookWatch
 	constructor($settings) {
 		super($settings)
+		this.dbConnection = this.settings.database
+		this.#_dbConnection.once(
+			'connected', function databaseConnected($event) {
+				this.workbookWatch = this.settings.spreadsheet
+			}.bind(this)
+		)
 		return this
 	}
-	dbConnection
-	async #startDBConnection() {
-		if(this.dbConnection === undefined) {
-			const { uri, options } = this.settings.database
-			this.dbConnection = await createConnection(uri, options)
-			.asPromise()
+	get dbConnection() { return this.#_dbConnection }
+	set dbConnection($database) {
+		if(this.#_dbConnection === undefined) {
+			const { uri, options } = $database
+			this.#_dbConnection = createConnection(uri, options)
 		}
-		return this.dbConnection
 	}
-	async #stopDBConnection() {
-		await this.dbConnection.close()
-		this.dbConnection = undefined
-		return this.dbConnection
-	}
-	#_workbook
 	get workbook() { return this.#_workbook }
 	set workbook($workbook) {
 		const { path, worksheets } = this.settings.spreadsheet
+		const dbConnection = this.dbConnection
 		this.#_workbook = new Workbook({
 			worksheets,
 			workbookPath: path, 
 			workbook: $workbook,
-			dbConnection: this.dbConnection, 
+			dbConnection, 
 		})
-		return this
+	}
+	get workbookWatch() { return this.#_workbookWatch }
+	set workbookWatch($workbookWatch) {
+		const { path } = this.settings.spreadsheet
+		this.#_workbookWatch = chokidar.watch(path)
+		this.workbookWatch.once(
+			'add', this.#workbookWatchChange.bind(this)
+		)
+		this.workbookWatch.on(
+			'change', this.#workbookWatchChange.bind(this)
+		)
 	}
 	async #readWorkbook($workbookPath) {
 		const workbookFile = await readFile($workbookPath)
@@ -49,27 +61,6 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 		await this.#_workbook.start()
 		return this
 	}
-	#workbookWatch
-	async #startWorkbookWatch() {
-		const { path } = this.settings.spreadsheet
-		this.#workbookWatch = chokidar.watch(path)
-		this.#workbookWatch.once(
-			'add', this.#workbookWatchChange.bind(this)
-		)
-		this.#workbookWatch.on(
-			'change', this.#workbookWatchChange.bind(this)
-		)
-		await new Promise(($resolve, $reject) => {
-			this.#workbookWatch.on('ready', $resolve)
-			this.#workbookWatch.on('error', $reject)
-		})
-		return this.#workbookWatch
-	}
-	async #stopWorkbookWatch() {
-		await this.#workbookWatch.close()
-		this.#workbookWatch = undefined
-		return this.#workbookWatch
-	}
 	async #workbookWatchChange($workbookPath) {
 		await this.dbConnection.dropDatabase()
 		const modelNames = this.dbConnection.modelNames()
@@ -82,17 +73,6 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 		}
 		await this.#readWorkbook($workbookPath)
 		this.emit('output', this)
-	}
-	async start() {
-		await this.#startDBConnection()
-		await this.#startWorkbookWatch()
-		
-		return this
-	}
-	async stop() {
-		await this.#stopWorkbookWatch()
-		await this.#stopDBConnection()
-		return this
 	}
 }
 

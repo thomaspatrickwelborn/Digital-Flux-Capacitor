@@ -1,15 +1,19 @@
 export default class Merges extends EventTarget {
+  length = 0
   #settings = {}
   #options = {}
   #hidden = {}
-  merges = []
   constructor($settings = {}, $options = {}) {
     super()
     this.#settings = $settings
     this.#options = $options
     this.#hidden = this.#options.hidden
+    iterateMerges: 
+    for(const $merge of $settings) {
+      Array.prototype.push.call(this, $merge)
+    }
   }
-  #getMerges($options = Defaults.GetMergesOptions) {
+  filterMerges($options = Defaults.GetMergesOptions) {
     const { includeHidden } = $options
     if(includeHidden === true) return this.merges
     const merges = []
@@ -94,10 +98,5 @@ export default class Merges extends EventTarget {
       mergesIndex++
     }
     return merges
-  }
-  #setMerges($merges) {
-    this.merges = $merges
-    Object.freeze(this.merges)
-    return this.#getMerges()
   }
 }

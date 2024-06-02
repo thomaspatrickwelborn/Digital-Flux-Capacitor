@@ -1,17 +1,24 @@
 import Composit from './composit/index.js'
+import Collect from './collect/index.js'
 export default class Compository extends EventTarget {
   #dbConnection
   #_settings = {}
+  #_options = {}
   #_composits = new Map()
   #_collects = new Map()
-  constructor($settings) {
+  constructor($settings = {}, $options = {}) {
     super()
     this.settings = $settings
+    this.options = $options
+    this.#dbConnection = this.options.dbConnection
+    this.composits = this.settings
+    this.collects = this.settings
   }
+  get composits() { return this.#_composits }
   set composits($composits) {
-    const { mods, ranges, merges, lmnRanges } = this.settings
+    var { mods, ranges, merges, lmnRanges } = this.settings
     mods = Array.from(mods.entries())
-    const composits = this.composits
+    const _composits = this.#_composits
     const modsLength = mods.length 
     var modsIndex = 0
     while(modsIndex < modsLength) {
@@ -25,21 +32,21 @@ export default class Compository extends EventTarget {
         modsIndex, mods,
         merges,
       })
-      composits.set($modIndex, composit)
+      _composits.set($modIndex, composit)
       modsIndex++
     }
   }
   get collects() { return this.#_collects }
   set collects($collects) {
-    const { $mods, $ranges, $composits, $lmnRanges } = $collects
-    $mods = Array.from($mods.entries())
-    $composits = Array.from($composits.entries())
+    var { mods, ranges, lmnRanges } = $collects
+    var composits = Array.from(this.composits.entries())
+    mods = Array.from(mods.entries())
     this.collect = new Collect({
-      mods: $mods, 
-      composits: $composits, 
+      mods, 
+      composits, 
       dbConnection: this.#dbConnection,
-      ranges: $ranges,
-      lmnRanges: $lmnRanges,
+      ranges,
+      lmnRanges,
     })
     return this.collect
   }

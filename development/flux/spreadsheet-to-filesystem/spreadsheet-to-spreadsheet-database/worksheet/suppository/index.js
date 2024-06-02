@@ -4,16 +4,19 @@ import { combineMerge } from '#utils/index.js'
 import Supposit from './supposit/index.js'
 export default class Suppository extends EventTarget {
   #settings
+  #options
   #dbConnection
   #_supposits = new Map()
   #_schemata = new Map()
   #_models = new Map()
-  constructor($settings) {
+  constructor($settings = {}, $options = {}) {
     super()
     this.#settings = $settings
+    this.#options = $options
+    this.#dbConnection = this.#options.dbConnection
     this.supposits = this.#settings
     this.schemata = this.#settings
-    console.log(this.schemata)
+    this.models = this.#settings
   }
   async start() {}
   get supposits() { return this.#_supposits }
@@ -32,7 +35,6 @@ export default class Suppository extends EventTarget {
         mods: mods,
         ranges: ranges, 
         lmnRanges: lmnRanges,
-        // merges: this.#getMerges({ includeHidden: false }),
       })
       _supposits.set(nom, supposit)
       modsIndex++
@@ -58,23 +60,23 @@ export default class Suppository extends EventTarget {
     }
     return schemata
   }
-  models($models) {
-    const { mods, ranges, merges } = $models
-    $mods = Array.from($mods.entries())
+  get models() { return this.#_models }
+  set models($models) {
+    let { mods, ranges } = $models
+    mods = Array.from(mods.entries())
     const schemata = this.schemata
-    const modsLength = $mods.length
+    const modsLength = mods.length
     var modsIndex = 0
-    const models = this.models
+    const _models = this.#_models
     while(modsIndex < modsLength) {
-      var [$modIndex, $mod] = $mods[modsIndex]
+      var [$modIndex, $mod] = mods[modsIndex]
       var { nom, sup, com } = $mod
       var schema = schemata.get(nom)
-      if(models[nom] === undefined) {
+      if(_models[nom] === undefined) {
         var model = this.#dbConnection.model(nom, schema)
-        models.set(nom, model)
+        _models.set(nom, model)
       }
       modsIndex++
     }
-    return models
   }
 }
