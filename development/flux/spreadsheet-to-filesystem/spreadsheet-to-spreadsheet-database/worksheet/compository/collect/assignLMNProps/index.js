@@ -4,8 +4,8 @@ import assignPropPath from './assignPropPath.js'
 async function assignLMNProps($collect, $settings) {
 	var { mods, ranges, composits, lmnRanges } = $settings
 	if(lmnRanges.length === 0) return $collect
-	$collect = await assignProps($collect, { mods, lmnRanges, composits })
-	$collect = assignPropPath($collect, { mods, lmnRanges, composits })
+	$collect = assignProps($collect, { mods, lmnRanges, composits })
+	// $collect = assignPropPath($collect, { mods, lmnRanges, composits })
 	return $collect
 }
 

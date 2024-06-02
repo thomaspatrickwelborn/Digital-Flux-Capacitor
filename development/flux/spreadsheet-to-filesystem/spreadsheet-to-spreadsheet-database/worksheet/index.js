@@ -39,18 +39,6 @@ export default class Worksheet extends EventTarget {
 		this.#compository = this.#table
 		return
 	}
-	async start() {
-		// await this.#suppository.start()
-		throw new Error("!")
-		// console.log(this.#suppository)
-		// const supposits = await this.#setSupposits()
-		// this.#supposits = { mods, ranges, merges, lmnRanges }
-		// const schemata = await this.#setSchemata(mods, ranges, merges, lmnRanges)
-		// const models = await this.#setModels(mods, ranges, merges, lmnRanges)
-		// const composits = await this.#setComposits(mods, ranges, merges, lmnRanges)
-		// const collect = await this.#setCollect(mods, ranges, composits, lmnRanges)
-		return this
-	}
 	get #table() { return this.#_table }
 	set #table($table) {
 		this.#_table = new Table($table, {

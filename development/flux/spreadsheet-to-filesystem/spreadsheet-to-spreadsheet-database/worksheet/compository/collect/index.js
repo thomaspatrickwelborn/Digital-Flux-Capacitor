@@ -16,7 +16,6 @@ export default class Collect extends EventTarget {
 		const {
 			mods, composits, dbConnection, lmnRanges
 		} = $settings
-		console.log(dbConnection)
 		const modsLength = mods.length
 		var modsIndex = 0
 		iterateMods: 
@@ -27,7 +26,6 @@ export default class Collect extends EventTarget {
 			const [
 				$compositIndex, $composit
 			] = composits[modsIndex]
-			console.log(dbConnection.models)
 			const Model = dbConnection.models[nom]
 			const collectRows = $composit
 			const collectRowsLength = collectRows.length
@@ -36,40 +34,35 @@ export default class Collect extends EventTarget {
 			while(collectRowsIndex < collectRowsLength) {
 				const collectRow = collectRows[collectRowsIndex]
 				const collectDoc = new Model(collectRow)
-				Array.prototype.push.call(collect, collectDoc.save())
+				console.log(collectDoc)
+				Array.prototype.push.call(collect, collectDoc)
 				collectRowsIndex++
 			}
 			modsIndex++
 		}
-		// const translexes = Translexes
-		// const translexesLength = translexes.length
-		// var translexesIndex = 0
-		// while(translexesIndex < translexesLength) {
-		// 	const [$translexisName, $translexisMethod] = translexes[translexesIndex]
-		// 	const translexisMethodType = $translexisMethod.constructor.name
-		// 	switch(translexisMethodType) {
-		// 		case 'Function':
-		// 			collect = $translexisMethod(collect, {
-		// 				mods: mods, lmnRanges, composits
-		// 			})
-		// 			break
-		// 		case 'AsyncFunction':
-		// 			collect = await $translexisMethod(collect, {
-		// 				mods: mods, lmnRanges, composits
-		// 			})
-		// 			break
-		// 	}
-		// 	translexesIndex++
-		// }
-		// const collectDocsLength = collect.length
-		// var collectDocsIndex = 0
-		// while(collectDocsIndex < collectDocsLength) {
-		// 	var collectDoc = await collect[collectDocsIndex]
-		// 	.save({
-		// 		validateBeforeSave: false,
-		// 	})
-		// 	collectDocsIndex++
-		// }
-		// return collect
+		const translexes = Translexes
+		const translexesLength = translexes.length
+		var translexesIndex = 0
+		while(translexesIndex < translexesLength) {
+			const [$translexisName, $translexisMethod] = translexes[translexesIndex]
+			const translexisMethodType = $translexisMethod.constructor.name
+			collect = $translexisMethod(collect, {
+				mods: mods, lmnRanges, composits
+			})
+			translexesIndex++
+		}
+		const collectDocsLength = collect.length
+		var collectDocsIndex = 0
+		while(collectDocsIndex < collectDocsLength) {
+			var collectDoc = collect[collectDocsIndex]
+			.save({
+				validateBeforeSave: false,
+			}).then(() => {
+				Array.prototype.splice.call(
+					collect, collectDocsIndex, collectDocsIndex + 1, collectDoc
+				)
+			})
+			collectDocsIndex++
+		}
 	}
 }

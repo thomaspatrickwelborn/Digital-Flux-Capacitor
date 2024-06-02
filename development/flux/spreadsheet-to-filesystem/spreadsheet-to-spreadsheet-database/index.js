@@ -58,7 +58,6 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 			cellStyles: true,
 		}))
 		this.workbook = workbookFile
-		await this.#_workbook.start()
 		return this
 	}
 	async #workbookWatchChange($workbookPath) {

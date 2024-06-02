@@ -75,12 +75,6 @@ class Workbook extends EventTarget {
 		}
 		return this
 	}
-	async start() {
-		for(const $worksheet of this.worksheets.values()) {
-			await $worksheet.start()
-		}
-		return this
-	}
 }
 
 export default Workbook

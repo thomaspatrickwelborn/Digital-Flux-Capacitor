@@ -18,7 +18,6 @@ export default class Suppository extends EventTarget {
     this.schemata = this.#settings
     this.models = this.#settings
   }
-  async start() {}
   get supposits() { return this.#_supposits }
   set supposits($supposits) {
     const _supposits = this.#_supposits
