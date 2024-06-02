@@ -1,7 +1,6 @@
 import { typeOf } from '#utils/index.js'
 import { LMNProps } from '#utils/defaults/index.js'
 import { rowLMNRangeFromLMNRanges } from '#utils/index.js'
-import assignPropPath from './assignPropPath.js'
 
 async function assignProps($collect, $settings) {
 	var { mods, lmnRanges, composits } = $settings
@@ -21,6 +20,7 @@ async function assignProps($collect, $settings) {
 		while(modComRowsIndex < modComRowsLength) {
 			const collectDoc = $collect[collectDocsIndex]
 			const modComRow = modCom[modComRowsIndex]
+			console.log('lmnRanges', lmnRanges)
 			const modComRowLMNRangeData = rowLMNRangeFromLMNRanges(modComRow, lmnRanges)
 			const modComRowLMNRangeIndex = modComRowLMNRangeData.rowLMNRangeIndex
 			const modComRowLMNRange = modComRowLMNRangeData.rowLMNRange

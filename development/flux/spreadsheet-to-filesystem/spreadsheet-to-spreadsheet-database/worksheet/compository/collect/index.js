@@ -1,7 +1,6 @@
+import assignLMNProps from './assignLMNProps/index.js'
 const Translexes = [
-	// ["assignLMNProps", await import(
-	// 	"./assignLMNProps/index.js"
-	// ).then($module => $module.default)],
+	["assignLMNProps", assignLMNProps],
 ]
 
 export default class Collect extends EventTarget {
@@ -34,7 +33,6 @@ export default class Collect extends EventTarget {
 			while(collectRowsIndex < collectRowsLength) {
 				const collectRow = collectRows[collectRowsIndex]
 				const collectDoc = new Model(collectRow)
-				console.log(collectDoc)
 				Array.prototype.push.call(collect, collectDoc)
 				collectRowsIndex++
 			}

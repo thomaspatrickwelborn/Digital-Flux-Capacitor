@@ -14,6 +14,15 @@
 								"ranges": {
 									"MOD_0": {
 										"Class": "Filesystem"
+									},
+									"LMN_0": {
+										"aaa": "bbb"
+									},
+									"LMN_0_SUPSET": {
+										"ccc": "ddd"
+									},
+									"LMN_0_SUBSET": {
+										"eee": "fff"
 									}
 								}
 							}

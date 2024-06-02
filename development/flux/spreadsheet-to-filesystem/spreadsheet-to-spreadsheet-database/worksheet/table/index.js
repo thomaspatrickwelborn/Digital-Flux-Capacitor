@@ -30,7 +30,9 @@ export default class Table extends EventTarget {
     this.#settings = $settings
     this.#options = $options
     this.ranges = this.#settings['!ranges']
-    this.lmnRanges = this.#settings['!ranges']
+    this.lmnRanges = this.ranges.getRangesByName(
+      new RegExp(/^LMN_[0-9]/)
+    )
     this.rows = this.#settings['!rows']
     this.cols = this.#settings['!cols']
     this.merges = this.#settings['!merges']
