@@ -14,7 +14,7 @@ const Defaults = {
   OmitRangeNameRegExp: /^OMIT/,
 }
 const { Row, Col, Range, Cell } = tem
-export default class Table extends EventTarget {
+export default class Depository extends EventTarget {
   #settings = {}
   #options = {}
   #_hidden = { rows: [], cols: [] }

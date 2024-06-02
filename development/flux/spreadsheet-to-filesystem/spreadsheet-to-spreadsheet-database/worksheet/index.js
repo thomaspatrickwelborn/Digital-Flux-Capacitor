@@ -1,5 +1,5 @@
 import { Schema, Types } from 'mongoose'
-import Table from './table/index.js'
+import Depository from './depository/index.js'
 import Suppository from './suppository/index.js'
 import Compository from './compository/index.js'
 import {
@@ -24,7 +24,7 @@ export default class Worksheet extends EventTarget {
 	#dbConnection
 	#_suppository
 	#_compository
-	#_table
+	#_depository
 	constructor($settings, $options) {
 		super()
 		this.#settings = $settings
@@ -34,14 +34,14 @@ export default class Worksheet extends EventTarget {
 		} = $settings
 		this.name = worksheetName
 		this.#dbConnection = dbConnection
-		this.#table = worksheetTable
-		this.#suppository = this.#table
-		this.#compository = this.#table
+		this.#depository = worksheetTable
+		this.#suppository = this.#depository
+		this.#compository = this.#depository
 		return
 	}
-	get #table() { return this.#_table }
-	set #table($table) {
-		this.#_table = new Table($table, {
+	get #depository() { return this.#_depository }
+	set #depository($depository) {
+		this.#_depository = new Depository($depository, {
 			ranges: this.#options.ranges
 		})
 	}
