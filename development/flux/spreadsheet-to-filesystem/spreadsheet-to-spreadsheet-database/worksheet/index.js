@@ -13,7 +13,7 @@ const Defaults = {
 	GetMergesOptions: { includeHidden: true },
 	GetRangesOptions: { includeHidden: true },
 	GetDataOptions: {  condensed: true, includeHidden: true },
-	ModRangeNameRegExp: /MOD_[0-9]+_((SUP|COM)|[A-Za-z0-9]+)/,
+	ModRangeNameRegExp: /^MOD_[0-9]/,
 	OmitRangeNameRegExp: /^OMIT/,
 }
 

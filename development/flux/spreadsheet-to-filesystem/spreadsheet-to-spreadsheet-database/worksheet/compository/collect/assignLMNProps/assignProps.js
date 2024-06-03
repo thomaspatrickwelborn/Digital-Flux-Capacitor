@@ -9,24 +9,17 @@ async function assignProps($collect, $settings) {
 	var collectDocsIndex = 0
 	iterateMods: 
 	while(modsIndex < modsLength) {
-		// Mods
 		const modNom = mods[modsIndex][1].nom
 		const modSup = mods[modsIndex][1].sup
 		const modCom = mods[modsIndex][1].com
-		// Mod Com Rows
 		const modComRowsLength = modCom.length
 		var modComRowsIndex = 0
 		iterateModComRows: 
 		while(modComRowsIndex < modComRowsLength) {
 			const collectDoc = $collect[collectDocsIndex]
 			const modComRow = modCom[modComRowsIndex]
-			console.log('lmnRanges', lmnRanges)
-			const modComRowLMNRangeData = rowLMNRangeFromLMNRanges(modComRow, lmnRanges)
-			const modComRowLMNRangeIndex = modComRowLMNRangeData.rowLMNRangeIndex
-			const modComRowLMNRange = modComRowLMNRangeData.rowLMNRange
-			var meterScopeIndex = modComRowLMNRangeIndex
-			const modLMNRange = modComRowLMNRangeData.lmnRange
-			// Subduct Mods
+			const modComRowLMNRangeData = lmnRanges.parseRow(modComRow)
+			var meterScopeIndex = modComRowLMNRangeData.LMN_INDEX
 			const subductModsLength = mods.length
 			var subductModsIndex = modsIndex
 			var subductCollectDocsIndex = collectDocsIndex + 1
@@ -36,7 +29,6 @@ async function assignProps($collect, $settings) {
 				const subductModNom = subductMod.nom
 				const subductModSup = subductMod.sup
 				const subductModCom = subductMod.com
-				// Subduct Mod Com Rows
 				const subductModComRowsLength = subductModCom.length
 				var subductModComRowsIndex
 				if(modsIndex === subductModsIndex) {
@@ -48,31 +40,19 @@ async function assignProps($collect, $settings) {
 				while(subductModComRowsIndex < subductModComRowsLength) {
 					const subductCollectDoc = $collect[subductCollectDocsIndex]
 					const subductModComRow = subductModCom[subductModComRowsIndex]
-					const subductModComRowLMNRangeData = rowLMNRangeFromLMNRanges(subductModComRow, lmnRanges)
-					const subductModComRowLMNRangeIndex = subductModComRowLMNRangeData.rowLMNRangeIndex
-					const subductModComRowLMNRange = subductModComRowLMNRangeData.rowLMNRange
-					const subductModLMNRange = subductModComRowLMNRangeData.lmnRange
-					var subductMeterScopeIndex = subductModComRowLMNRangeIndex
+					const subductModComRowLMNRangeData = lmnRanges.parseRow(subductModComRow)
+					var subductMeterScopeIndex = subductModComRowLMNRangeData.LMN_INDEX
 					if(subductMeterScopeIndex <= meterScopeIndex) {
 						collectDocsIndex++
 						modComRowsIndex++
 						continue iterateModComRows
-					}
+					} else
 					if(subductMeterScopeIndex > meterScopeIndex + 1) {
 						subductCollectDocsIndex++
 						subductModComRowsIndex++
 						continue iterateSubductModComRows
 					}
-					// Subduct Mod LMN Subset Range
-					const subductModLMNSubsetRange = subductModLMNRange['SUBSET']
-					const subductModLMNSubsetRangeVal = subductModLMNSubsetRange.Key || subductModComRow
-					.slice(subductModLMNSubsetRange.Ref.s.c, subductModLMNSubsetRange.Ref.e.c + 1)[0]
-					// Subduct Mod LMN Supset Range
-					const subductModLMNSupsetRange = subductModLMNRange['SUPSET']
-					const subductModLMNSupsetRangeVal = subductModLMNSupsetRange.Key || subductModComRow
-					.slice(subductModLMNSupsetRange.Ref.s.c, subductModLMNSupsetRange.Ref.e.c + 1)[0]
-					// Supter/Subter Property Assignments
-					collectDoc[subductModLMNSupsetRangeVal].push(subductCollectDoc._id)
+					collectDoc[subductModComRowLMNRangeData.SUPSET].push(subductCollectDoc._id)
 					subductCollectDocsIndex++
 					subductModComRowsIndex++
 				}

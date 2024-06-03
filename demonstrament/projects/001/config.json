@@ -23,6 +23,10 @@
 									},
 									"LMN_0_SUBSET": {
 										"eee": "fff"
+									},
+									"LMN_PAT": {
+										"key": "path",
+										"delimiter": "/"
 									}
 								}
 							}

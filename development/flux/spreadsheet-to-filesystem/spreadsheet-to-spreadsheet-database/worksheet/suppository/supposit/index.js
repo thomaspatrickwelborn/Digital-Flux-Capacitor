@@ -3,7 +3,7 @@ import assignProps from './assignProps/index.js'
 import assignLMNProps from './assignLMNProps/index.js'
 const translexes = [
 	["assignProps", assignProps],
-	// ["assignLMNProps", assignLMNProps],
+	["assignLMNProps", assignLMNProps],
 ]
 
 export default class Supposit extends EventTarget {

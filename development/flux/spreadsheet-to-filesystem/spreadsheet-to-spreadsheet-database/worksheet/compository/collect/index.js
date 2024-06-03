@@ -44,8 +44,8 @@ export default class Collect extends EventTarget {
 		while(translexesIndex < translexesLength) {
 			const [$translexisName, $translexisMethod] = translexes[translexesIndex]
 			const translexisMethodType = $translexisMethod.constructor.name
-			collect = $translexisMethod(collect, {
-				mods: mods, lmnRanges, composits
+			$translexisMethod(collect, {
+				mods, lmnRanges, composits
 			})
 			translexesIndex++
 		}
@@ -55,9 +55,9 @@ export default class Collect extends EventTarget {
 			var collectDoc = collect[collectDocsIndex]
 			.save({
 				validateBeforeSave: false,
-			}).then(() => {
+			}).then(($collectDoc) => {
 				Array.prototype.splice.call(
-					collect, collectDocsIndex, collectDocsIndex + 1, collectDoc
+					collect, collectDocsIndex, collectDocsIndex + 1, $collectDoc
 				)
 			})
 			collectDocsIndex++

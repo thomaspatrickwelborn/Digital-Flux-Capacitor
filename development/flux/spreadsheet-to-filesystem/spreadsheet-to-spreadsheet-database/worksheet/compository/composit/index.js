@@ -3,7 +3,7 @@ import assignProps from './assignProps/index.js'
 import assignLMNProps from './assignLMNProps/index.js'
 const translexes = [
 	["assignProps", assignProps],
-	// ["assignLMNProps", assignLMNProps],
+	["assignLMNProps", assignLMNProps],
 ]
 
 export default class Composit extends EventTarget {
@@ -45,13 +45,12 @@ export default class Composit extends EventTarget {
 			while(translexesIndex < translexesLength) {
 				const [$translexisName, $translexisMethod] = translexes[translexesIndex]
 				const translexisMethodType = $translexisMethod.constructor.name
-
 				apposit = $translexisMethod(apposit, {
 					com, comRow, modIndex, mods, merges, sup, supRows, lmnRanges
 				})
-				Array.prototype.push.call(composit, apposit)
 				translexesIndex++
 			}
+			Array.prototype.push.call(composit, apposit)
 			comRowsIndex++
 		}
 	}

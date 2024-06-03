@@ -26,14 +26,26 @@ export default class Ranges extends EventTarget {
           rangeRefFrags[rangeRefFragsIndex]
         )
         range.Ref = rangeRef
-        if(this.#options[range.Name] !== undefined) {
-          Object.assign(range, this.#options[range.Name])
-        }
-        Object.freeze(range)
         Array.prototype.push.call(_ranges, range)
         rangesIndex++
       }
-      Object.freeze(_ranges)
+      for(const [
+        $rangeName, $rangeOptions
+      ] of Object.entries(this.#options)) {
+        let range = this.getRangesByName($rangeName)[0]
+        if(range !== undefined) {
+          Object.assign(range, this.#options[range.Name])
+        } else {
+          range = Object.assign({
+            Name: $rangeName,
+            Ref: {
+              s: { r: null, c: null },
+              e: { r: null, c: null },
+            }
+          }, $rangeOptions)
+          Array.prototype.push.call(_ranges, range)
+        }
+      }
     }
   }
   
@@ -135,7 +147,9 @@ export default class Ranges extends EventTarget {
       )
     } else if($rangeName instanceof RegExp) {
       ranges = this.#filterRanges($rangesOptions).filter(
-        ($modRange) => $modRange.Name.match($rangeName)
+        ($modRange) => {
+          return $modRange.Name.match($rangeName)
+        }
       )
     }
     return ranges

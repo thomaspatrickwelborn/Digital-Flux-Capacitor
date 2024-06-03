@@ -10,7 +10,7 @@ const Defaults = {
   GetMergesOptions: { includeHidden: true },
   GetRangesOptions: { includeHidden: true },
   GetDataOptions: { includeHidden: false, condensed: true },
-  ModRangeNameRegExp: /MOD_[0-9]/,
+  ModRangeNameRegExp: /^MOD_[0-9]/,
   OmitRangeNameRegExp: /^OMIT/,
 }
 const { Row, Col, Range, Cell } = tem
@@ -31,7 +31,7 @@ export default class Depository extends EventTarget {
     this.#options = $options
     this.ranges = this.#settings['!ranges']
     this.lmnRanges = this.ranges.getRangesByName(
-      new RegExp(/^LMN_[0-9]/)
+      new RegExp(/^LMN_/)
     )
     this.rows = this.#settings['!rows']
     this.cols = this.#settings['!cols']

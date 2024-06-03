@@ -27,7 +27,7 @@ export default class Compository extends EventTarget {
         nom, sup, com
       } = $mod
       var composit = new Composit({
-        nom, sup, com, 
+        nom, sup, com,  
         ranges, lmnRanges, 
         modsIndex, mods,
         merges,
