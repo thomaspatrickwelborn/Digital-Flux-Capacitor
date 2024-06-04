@@ -48,7 +48,6 @@ export default class Ranges extends EventTarget {
       }
     }
   }
-  
   #filterRanges($options = {}) {
     $options = Object.assign(
       {}, Defaults.GetRangesOptions, $options

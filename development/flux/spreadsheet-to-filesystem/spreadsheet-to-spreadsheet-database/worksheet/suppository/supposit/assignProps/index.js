@@ -1,10 +1,4 @@
-import {
-	typeOf,
-	fillEmptyCells,
-	inferType,
-	combineMerge,
-	isNamedRange,
-} from '#utils/index.js'
+import { typeOf, inferType } from '#utils/index.js'
 import { Mixed } from 'mongoose'
 
 function assignProps($supposit, $settings) {

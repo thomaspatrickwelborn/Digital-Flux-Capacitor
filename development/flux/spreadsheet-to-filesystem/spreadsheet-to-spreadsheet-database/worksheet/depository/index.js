@@ -163,7 +163,7 @@ export default class Depository extends EventTarget {
     const _data = this.#_data
     if(Object.isFrozen(_data) === false) {
       const areas = this.ranges.getRangesByName('AREA')
-      if(areas === undefined) return
+      if(areas.length === 0) return
       const area = areas[0]
       const rowsLength = $data.length
       const maxRowsLength = area.Ref.e.r

@@ -52,15 +52,18 @@ export default class Collect extends EventTarget {
 		const collectDocsLength = collect.length
 		var collectDocsIndex = 0
 		while(collectDocsIndex < collectDocsLength) {
+			const spliceIndex = collectDocsIndex
 			var collectDoc = collect[collectDocsIndex]
 			.save({
 				validateBeforeSave: false,
 			}).then(($collectDoc) => {
+				console.log('spliceIndex', spliceIndex)
 				Array.prototype.splice.call(
-					collect, collectDocsIndex, collectDocsIndex + 1, $collectDoc
+					collect, spliceIndex, spliceIndex + 1, $collectDoc
 				)
 			})
 			collectDocsIndex++
 		}
+		console.log(this)
 	}
 }

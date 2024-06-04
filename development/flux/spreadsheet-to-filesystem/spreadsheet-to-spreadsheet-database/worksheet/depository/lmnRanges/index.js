@@ -42,7 +42,7 @@ export default class LMNRanges extends EventTarget {
       parsement.SUBSET = $row.slice(SUBSET.Ref.s.c, SUBSET.Ref.e.c + 1)[0]
     }
     if(PAT !== undefined) {
-      parsement.PAT = PAT
+      parsement.PAT = $row.slice(PAT.Ref.s.c, PAT.Ref.e.c + 1)[0]
     }
     return parsement
   }

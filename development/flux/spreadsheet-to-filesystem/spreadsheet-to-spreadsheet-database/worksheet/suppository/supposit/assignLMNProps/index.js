@@ -23,9 +23,6 @@ function assignLMNProps($supposit, $settings) {
 			modComRowsIndex++
 			continue iterateModComRows
 		}
-		if(modComRowLMNRangeData.PAT !== undefined) {
-			$supposit[modComRowLMNRangeData.PAT.key] = String
-		}
 		// Subduct Mods
 		const subductModsLength = mods.length
 		var subductModsIndex = modIndex

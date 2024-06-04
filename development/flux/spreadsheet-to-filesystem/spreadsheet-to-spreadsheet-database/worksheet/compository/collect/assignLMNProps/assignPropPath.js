@@ -12,6 +12,7 @@ function assignPropPath($collect, $settings) {
 		const modNom = $mod.nom
 		const modSup = $mod.sup
 		const modCom = $mod.com
+		const modSupRowsLength = modSup.length
 		const modComRowsLength = modCom.length
 		var modComRowsIndex = 0
 		iterateModComRows: 
@@ -44,19 +45,18 @@ function assignPropPath($collect, $settings) {
 			iterateScopes: 
 			while(scopesIndex < scopesLength) {
 				const scopedDoc = scopes[scopesIndex]
-				const modSupRowsLength = modSup.length
-				var modSupRowsIndex = 0
-				var prop = scopedDoc
-				var propKey
+				let modSupRowsIndex = 0
+				let prop = scopedDoc
+				let propKey
 				iterateModSupRows: 
 				while(modSupRowsIndex < modSupRowsLength) {
 					const modSupRow = modSup[modSupRowsIndex]
-					const modSupRowLMNRangeData = lmnRanges.parseRow(modSupRow, lmnRanges)
+					const modSupRowLMNRangeData = lmnRanges.parseRow(modSupRow)
 					const anterModSupRow = modSup[modSupRowsIndex + 1]
 					if(anterModSupRow === undefined) {
 						break iterateModSupRows
 					}
-					const anterModSupRowLMNRangeData = lmnRanges.parseRow(anterModSupRow, lmnRanges)
+					const anterModSupRowLMNRangeData = lmnRanges.parseRow(anterModSupRow)
 					propKey = modSupRowLMNRangeData.LMN_VAL
 					if(anterModSupRowLMNRangeData.LMN_INDEX === -1) {
 						path.push(prop[propKey])
@@ -68,8 +68,19 @@ function assignPropPath($collect, $settings) {
 				}
 				scopesIndex++
 			}
-
-			collectDoc[modComRowLMNRangeData.PAT.key] = path.join(modComRowLMNRangeData.PAT.delimiter)
+			var modSupRowsIndex = 0
+			let prop = collectDoc
+			let propKey
+			reiterateModSupRows: 
+			while(modSupRowsIndex < modSupRowsLength) {
+				const modSupRow = modSup[modSupRowsIndex]
+				const modSupRowLMNRangeData = lmnRanges.parseRow(modSupRow)
+				propKey = modSupRowLMNRangeData.PAT
+				if(typeof prop[propKey] !== 'object') break reiterateModSupRows
+				prop = prop[propKey]
+				modSupRowsIndex++
+			}
+			prop[propKey] = path.join(modComRowLMNRangeData.PAT)
 			collectDocsIndex++
 			modComRowsIndex++
 		}

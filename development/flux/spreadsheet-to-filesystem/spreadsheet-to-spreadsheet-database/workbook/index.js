@@ -59,7 +59,8 @@ class Workbook extends EventTarget {
 				) $worksheetRanges.push($worksheetRange)
 				return $worksheetRanges
 			}, [])
-			const workbookWorksheetOptions = $worksheets[workbookWorksheetName]
+			const workbookWorksheetOptions = $worksheets[workbookWorksheetName] || {}
+			console.log(workbookWorksheetOptions)
 			workbookWorksheetTable['!rows'] = workbookWorksheetRows
 			workbookWorksheetTable['!cols'] = workbookWorksheetCols
 			workbookWorksheetTable['!merges'] = workbookWorksheetMerges
