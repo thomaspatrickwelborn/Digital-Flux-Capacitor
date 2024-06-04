@@ -57,4 +57,8 @@ export default class Worksheet extends EventTarget {
 			dbConnection: this.#dbConnection
 		})
 	}
+	async saveCompository() {
+		await this.#compository.saveCollects()
+		return this
+	}
 }

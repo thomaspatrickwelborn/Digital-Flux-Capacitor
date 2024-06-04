@@ -6,11 +6,9 @@ const Translexes = [
 export default class Collect extends EventTarget {
 	length = 0
 	#settings = {}
-	// #dbConnection
 	constructor($settings) {
 		super()
 		this.#settings = $settings
-		// this.#dbConnection = this.#settings.dbConnection
 		var collect = this
 		const {
 			mods, composits, dbConnection, lmnRanges
@@ -49,21 +47,17 @@ export default class Collect extends EventTarget {
 			})
 			translexesIndex++
 		}
-		const collectDocsLength = collect.length
+	}
+	async save() {
+		const collectDocsLength = this.length
 		var collectDocsIndex = 0
 		while(collectDocsIndex < collectDocsLength) {
-			const spliceIndex = collectDocsIndex
-			var collectDoc = collect[collectDocsIndex]
+			await this[collectDocsIndex]
 			.save({
 				validateBeforeSave: false,
-			}).then(($collectDoc) => {
-				console.log('spliceIndex', spliceIndex)
-				Array.prototype.splice.call(
-					collect, spliceIndex, spliceIndex + 1, $collectDoc
-				)
 			})
 			collectDocsIndex++
 		}
-		console.log(this)
+		return this
 	}
 }

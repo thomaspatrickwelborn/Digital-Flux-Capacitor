@@ -60,7 +60,6 @@ class Workbook extends EventTarget {
 				return $worksheetRanges
 			}, [])
 			const workbookWorksheetOptions = $worksheets[workbookWorksheetName] || {}
-			console.log(workbookWorksheetOptions)
 			workbookWorksheetTable['!rows'] = workbookWorksheetRows
 			workbookWorksheetTable['!cols'] = workbookWorksheetCols
 			workbookWorksheetTable['!merges'] = workbookWorksheetMerges
@@ -76,6 +75,10 @@ class Workbook extends EventTarget {
 		}
 		return this
 	}
+	async saveWorksheets() {
+		for(const $worksheet of this.#_worksheets.values()) {
+			await $worksheet.saveCompository()
+		}
+	}
 }
-
 export default Workbook

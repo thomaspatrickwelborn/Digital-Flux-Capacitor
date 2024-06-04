@@ -38,16 +38,29 @@ export default class Compository extends EventTarget {
   }
   get collects() { return this.#_collects }
   set collects($collects) {
+    const _collects = this.#_collects
     var { mods, ranges, lmnRanges } = $collects
-    var composits = Array.from(this.composits.entries())
     mods = Array.from(mods.entries())
-    this.collect = new Collect({
-      mods, 
-      composits, 
-      dbConnection: this.#dbConnection,
-      ranges,
-      lmnRanges,
-    })
-    return this.collect
+    var composits = Array.from(this.composits.entries())
+    const modsLength = mods.length 
+    var modsIndex = 0
+    while(modsIndex < modsLength) {
+      const [$modIndex, $mod] = mods[modsIndex]
+      const collect = new Collect({
+        mods, 
+        composits, 
+        dbConnection: this.#dbConnection,
+        ranges,
+        lmnRanges,
+      })
+      _collects.set($modIndex, collect)
+      modsIndex++
+    }
+  }
+  async saveCollects() {
+    for(const $collect of this.collects.values()) {
+      await $collect.save()
+    }
+    return this
   }
 }

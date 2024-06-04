@@ -58,6 +58,8 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 			cellStyles: true,
 		}))
 		this.workbook = workbookFile
+		await this.workbook.saveWorksheets()
+		this.emit('output', this)
 		return this
 	}
 	async #workbookWatchChange($workbookPath) {
@@ -71,7 +73,6 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 			modelNamesIndex++
 		}
 		await this.#readWorkbook($workbookPath)
-		this.emit('output', this)
 	}
 }
 
