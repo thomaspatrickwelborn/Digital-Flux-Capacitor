@@ -1,5 +1,5 @@
-import { EventEmitter } from 'node:events'
 import { createConnection } from 'mongoose'
+import Subcycle from '#core/subcycle/index.js'
 import {
 	File as FileSchema,
 	Fold as FoldSchema,
@@ -7,11 +7,9 @@ import {
 import Worksheets from './worksheets/index.js'
 const Schemata = { FileSchema, FoldSchema }
 
-class SpreadsheetDatabaseToFilesystemDatabase extends EventEmitter {
+class SpreadsheetDatabaseToFilesystemDatabase extends Subcycle {
 	constructor($settings) {
-		super()
-		this.#settings = $settings
-		return this
+		super($settings)
 	}
 	#settings
 	worksheets = new Map()
@@ -53,13 +51,13 @@ class SpreadsheetDatabaseToFilesystemDatabase extends EventEmitter {
 		}
 		return this.dbConnection.models
 	}
-	async input($preflux) {
+	async input($presubcycle) {
 		await this.#deleteDBConnectionModels()
 		const models = this.#setDBConnectionModels()
 		const filesystemDBConnection = this.dbConnection
-		const spreadsheetDBConnection = $preflux.dbConnection
+		const spreadsheetDBConnection = $presubcycle.dbConnection
 		const worksheets = await Worksheets(this.worksheets, {
-			prefluxWorkbook: $preflux.workbook,
+			presubcycleWorkbook: $presubcycle.workbook,
 			fluxModels: models,
 		})
 		// this.emit('output', this)

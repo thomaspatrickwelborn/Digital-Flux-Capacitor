@@ -25,14 +25,14 @@ class Cycle extends EventEmitter {
       const [
         $subcycleName, $subcycleSettings
       ] = $subcycles[subcyclesIndex]
-      if(subcyclesIndex > 0) {
-        $subcycleSettings.preflux = Array.from(
-          subcycles.values()
-        )
-        .at(subcyclesIndex - 1)
-      }
       const Subcycle = _Subcycles[$subcycleName]
       const subcycle = new Subcycle($subcycleSettings)
+      if(subcyclesIndex > 0) {
+        const presubcycle = [..._subcycles.values()][subcyclesIndex - 1]
+        presubcycle.on('output', function presubcycleOutput() {
+          subcycle.input(...arguments)
+        })
+      }
       _subcycles.set($subcycleName, subcycle)
       subcyclesIndex++
     }

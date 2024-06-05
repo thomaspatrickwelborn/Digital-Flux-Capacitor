@@ -1,4 +1,3 @@
-import { EventEmitter } from 'node:events'
 import chokidar from 'chokidar'
 import { createConnection } from 'mongoose'
 import * as XLSX from 'xlsx'
@@ -59,7 +58,7 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 		}))
 		this.workbook = workbookFile
 		await this.workbook.saveWorksheets()
-		// this.emit('output', this)
+		this.emit('output', this)
 		return this
 	}
 	async #workbookWatchChange($workbookPath) {

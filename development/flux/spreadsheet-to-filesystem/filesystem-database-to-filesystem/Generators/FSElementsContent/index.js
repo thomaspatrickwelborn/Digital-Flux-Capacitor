@@ -15,8 +15,8 @@ const reserved = {
 	ignore: ['constructor', 'super']
 }
 
-async function FSElementsContent($collection, $preflux, $flux) {
-	const fsDBConnection = $preflux.dbConnection
+async function FSElementsContent($collection, $presubcycle, $flux) {
+	const fsDBConnection = $presubcycle.dbConnection
 	const File = fsDBConnection.models['File']
 	const collectionLength = $collection.length
 	var collectionIndex = 0

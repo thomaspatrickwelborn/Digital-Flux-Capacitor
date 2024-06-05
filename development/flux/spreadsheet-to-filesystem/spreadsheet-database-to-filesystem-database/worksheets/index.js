@@ -5,10 +5,10 @@ import VINE from './VINE/index.js'
 import VIRE from './VIRE/index.js'
 const worksheets = { VERS, VIEW, VINE, VIRE }
 async function Worksheets($worksheets, $settings) {
-	const { prefluxWorkbook, fluxModels } = $settings
+	const { presubcycleWorkbook, fluxModels } = $settings
 	for(const [
 		$worksheetClassName, $worksheetClass
-	] of Array.from(prefluxWorkbook.worksheets.entries())) {
+	] of Array.from(presubcycleWorkbook.worksheets.entries())) {
 		for(const [
 			$worksheetClassIndex, $worksheet
 		] of Array.from($worksheetClass.entries())) {

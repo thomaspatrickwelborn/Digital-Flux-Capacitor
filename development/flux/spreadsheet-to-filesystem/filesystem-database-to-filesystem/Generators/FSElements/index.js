@@ -3,7 +3,7 @@ import { rm, rmdir, open, opendir, mkdir, stat } from 'node:fs/promises'
 import { glob, globSync, globStream, globStreamSync, Glob } from 'glob'
 import differentiateFSElements from './differentiateFSElements.js'
 
-async function FSElements($collection, $preflux, $flux) {
+async function FSElements($collection, $presubcycle, $flux) {
 	console.log($flux)
 	const fsRootPath = $flux.filesystem.path
 	var fsRootStat
