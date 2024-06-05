@@ -1,3 +1,10 @@
+const LMNRangeDefaults = {
+  DEX: Number,
+  VAL: String,
+  SUBSET: String,
+  SUPSET: String,
+  PAT: String,
+}
 export default class LMNRanges extends EventTarget {
   length = 0
   constructor($settings) {
@@ -6,43 +13,87 @@ export default class LMNRanges extends EventTarget {
       Array.prototype.push.call(this, $lmnRange)
     }
   }
-  get LMN() { return Array.prototype.find.call(
-    this, 
-    ($lmnRange) => $lmnRange.Name.match(new RegExp(/^LMN_[0-9]*$/))
-  ) }
-  get SUPSET() { return Array.prototype.find.call(
-    this,
-    ($lmnRange) => $lmnRange.Name.match(new RegExp(/^LMN_[0-9]*_SUPSET$/))
-  ) }
-  get SUBSET() { return Array.prototype.find.call(
-    this,
-    ($lmnRange) => $lmnRange.Name.match(new RegExp(/^LMN_[0-9]*_SUBSET$/))
-  ) }
-  get PAT() { return Array.prototype.find.call(
-    this,
-    ($lmnRange) => $lmnRange.Name.match(new RegExp(/^LMN_PAT$/))
-  ) }
+  #_LMN
+  get LMN() { if(this.#_LMN === undefined) {
+    this.#_LMN = Array.prototype.filter.call(
+      this,  ($lmnRange) => $lmnRange.Name.match(
+        new RegExp(/^LMN_[0-9]*$/)
+    ) ) }
+    return this.#_LMN
+  }
+  #_SUPSET
+  get SUPSET() { if(this.#_SUPSET === undefined) {
+    this.#_SUPSET = Array.prototype.filter.call(
+      this, ($lmnRange) => $lmnRange.Name.match(
+        new RegExp(/^LMN_[0-9]*_SUPSET$/)
+    ) ) }
+    return this.#_SUPSET
+  }
+  #_SUBSET
+  get SUBSET() { if(this.#_SUBSET === undefined) {
+    this.#_SUBSET = Array.prototype.filter.call(
+      this, ($lmnRange) => $lmnRange.Name.match(
+        new RegExp(/^LMN_[0-9]*_SUBSET$/)
+    ) ) }
+    return this.#_SUBSET
+  }
+  #_PAT
+  get PAT() { if(this.#_PAT === undefined) {
+    this.#_PAT = Array.prototype.filter.call(
+      this, ($lmnRange) => $lmnRange.Name.match(
+        new RegExp(/^LMN_[0-9]*_PAT$/)
+    ) ) }
+    return this.#_PAT
+  }
   parseRow($row) {
     const parsement = {}
-    let LMN = this.LMN
-    let SUPSET = this.SUPSET
-    let SUBSET = this.SUBSET
-    let PAT = this.PAT
-    if(LMN !== undefined) {
-      parsement.LMN = $row.slice(LMN.Ref.s.c, LMN.Ref.e.c + 1)
-      parsement.LMN_INDEX = parsement.LMN.findIndex(($rowCell) => {
-        return $rowCell !== undefined
+    iterateLMNRanges: 
+    for(const $LMN of this.LMN) {
+      const [$rangeName, $rangeIndex] = $LMN.Name.split('_')
+      // LMN
+      const lmnRangeSlice = $row.slice(
+        $LMN.Ref.s.c, $LMN.Ref.e.c + 1
+      )
+      // DEX
+      const DEX = lmnRangeSlice.findIndex(($rowCellLMNRange) => {
+        return $rowCellLMNRange !== undefined
       })
-      parsement.LMN_VAL = parsement.LMN[parsement.LMN_INDEX]
-    }
-    if(SUPSET !== undefined) {
-      parsement.SUPSET = $row.slice(SUPSET.Ref.s.c, SUPSET.Ref.e.c + 1)[0]
-    }
-    if(SUBSET !== undefined) {
-      parsement.SUBSET = $row.slice(SUBSET.Ref.s.c, SUBSET.Ref.e.c + 1)[0]
-    }
-    if(PAT !== undefined) {
-      parsement.PAT = $row.slice(PAT.Ref.s.c, PAT.Ref.e.c + 1)[0]
+      if(DEX === -1) continue iterateLMNRanges
+      const VAL = lmnRangeSlice[DEX]
+      // SUPSET
+      const lmnSupsetRange = this.SUPSET[$rangeIndex]
+      let SUPSET
+      if(lmnSupsetRange.Ref !== undefined) {
+        const lmnSupsetSlice = $row.slice(
+          lmnSupsetRange.Ref.s.c, lmnSupsetRange.Ref.e.c + 1
+        )
+        SUPSET = lmnSupsetSlice[0]
+      } else {
+        SUPSET = lmnSupsetRange.VAL
+      }
+      // SUBSET
+      const lmnSubsetRange = this.SUBSET[$rangeIndex]
+      let SUBSET
+      if(lmnSubsetRange.Ref !== undefined) {
+        const lmnSubsetSlice = $row.slice(
+          lmnSubsetRange.Ref.s.c, lmnSubsetRange.Ref.e.c + 1
+        )
+        SUBSET = lmnSubsetSlice[0] 
+      } else {
+        SUBSET = lmnSubsetRange.VAL
+      }
+      // PAT
+      let PAT
+      if(this.PAT.length > 0) {
+        const lmnPatRange = this.PAT[$rangeIndex].Ref
+        const lmnPatSlice = $row.slice(
+          lmnPatRange.s.c, lmnPatRange.e.c + 1
+        )
+        PAT = lmnPatSlice[0]
+      }
+      Object.assign(parsement, {
+        DEX, VAL, SUPSET, SUBSET, PAT
+      })
     }
     return parsement
   }

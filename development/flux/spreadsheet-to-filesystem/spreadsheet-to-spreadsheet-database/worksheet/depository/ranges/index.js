@@ -38,10 +38,6 @@ export default class Ranges extends EventTarget {
         } else {
           range = Object.assign({
             Name: $rangeName,
-            Ref: {
-              s: { r: null, c: null },
-              e: { r: null, c: null },
-            }
           }, $rangeOptions)
           Array.prototype.push.call(_ranges, range)
         }

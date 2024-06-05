@@ -13,19 +13,39 @@
 							"VINE": {
 								"ranges": {
 									"MOD_0": {
-										"Class": "Filesystem"
-									},
-									"LMN_0": {
-										"aaa": "bbb"
-									},
-									"LMN_0_SUPSET": {
-										"ccc": "ddd"
+										"Class": "FSElement"
+									}
+								}
+							},
+							"VERS": {
+								"ranges": {
+									"MOD_0": {
+										"Class": "Script"
 									},
 									"LMN_0_SUBSET": {
-										"eee": "fff"
+										"VAL": "Script"
 									},
-									"LMN_PAT": {
-										"ggg": "hhh"
+									"LMN_0_SUPSET": {
+										"VAL": "blocks"
+									}
+								}
+							},
+							"VIEW": {
+								"ranges": {
+									"MOD_0": {
+										"Class": "ViewScript"
+									},
+									"LMN_0_SUBSET": {
+										"VAL": "ViewScript"
+									},
+									"LMN_0_SUPSET": {
+										"VAL": "blocks"
+									},
+									"LMN_1_SUBSET": {
+										"VAL": "ViewScript"
+									},
+									"LMN_1_SUPSET": {
+										"VAL": "blocks"
 									}
 								}
 							}

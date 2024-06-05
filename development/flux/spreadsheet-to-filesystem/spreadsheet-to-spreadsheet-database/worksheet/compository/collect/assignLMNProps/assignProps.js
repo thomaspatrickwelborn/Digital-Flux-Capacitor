@@ -18,8 +18,8 @@ async function assignProps($collect, $settings) {
 		while(modComRowsIndex < modComRowsLength) {
 			const collectDoc = $collect[collectDocsIndex]
 			const modComRow = modCom[modComRowsIndex]
-			const modComRowLMNRangeData = lmnRanges.parseRow(modComRow)
-			var meterScopeIndex = modComRowLMNRangeData.LMN_INDEX
+			const modComRowRange = lmnRanges.parseRow(modComRow)
+			var meterScopeIndex = modComRowRange.DEX
 			const subductModsLength = mods.length
 			var subductModsIndex = modsIndex
 			var subductCollectDocsIndex = collectDocsIndex + 1
@@ -40,8 +40,8 @@ async function assignProps($collect, $settings) {
 				while(subductModComRowsIndex < subductModComRowsLength) {
 					const subductCollectDoc = $collect[subductCollectDocsIndex]
 					const subductModComRow = subductModCom[subductModComRowsIndex]
-					const subductModComRowLMNRangeData = lmnRanges.parseRow(subductModComRow)
-					var subductMeterScopeIndex = subductModComRowLMNRangeData.LMN_INDEX
+					const subductModComRowRange = lmnRanges.parseRow(subductModComRow)
+					var subductMeterScopeIndex = subductModComRowRange.DEX
 					if(subductMeterScopeIndex <= meterScopeIndex) {
 						collectDocsIndex++
 						modComRowsIndex++
@@ -52,7 +52,9 @@ async function assignProps($collect, $settings) {
 						subductModComRowsIndex++
 						continue iterateSubductModComRows
 					}
-					collectDoc[subductModComRowLMNRangeData.SUPSET].push(subductCollectDoc._id)
+					try {
+						collectDoc[subductModComRowRange.SUPSET].push(subductCollectDoc._id)
+					} catch($err) { /**/ }
 					subductCollectDocsIndex++
 					subductModComRowsIndex++
 				}

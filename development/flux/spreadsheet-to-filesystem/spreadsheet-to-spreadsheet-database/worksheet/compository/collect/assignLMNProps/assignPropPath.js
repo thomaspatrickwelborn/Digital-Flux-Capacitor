@@ -1,6 +1,6 @@
 function assignPropPath($collect, $settings) {
 	var { mods, lmnRanges, composits } = $settings
-	if(lmnRanges.PAT === undefined) return $collect
+	if(lmnRanges.PAT.length === 0) return $collect
 	const modsLength = mods.length
 	var modsIndex = 0
 	const scopes = []
@@ -19,13 +19,13 @@ function assignPropPath($collect, $settings) {
 		while(modComRowsIndex < modComRowsLength) {
 			const collectDoc = $collect[collectDocsIndex]
 			const modComRow = modCom[modComRowsIndex]
-			const modComRowLMNRangeData = lmnRanges.parseRow(modComRow, lmnRanges)
-			if(modComRowLMNRangeData.LMN === undefined) {
+			const modComRowRange = lmnRanges.parseRow(modComRow, lmnRanges)
+			if(modComRowRange.VAL === undefined) {
 				modComRowsIndex++
 				continue iterateModComRows
 			}
 			preterScopeIndex = meterScopeIndex
-			meterScopeIndex = modComRowLMNRangeData.LMN_INDEX
+			meterScopeIndex = modComRowRange.DEX
 			if(
 				meterScopeIndex === preterScopeIndex ||
 				preterScopeIndex === undefined
@@ -51,14 +51,14 @@ function assignPropPath($collect, $settings) {
 				iterateModSupRows: 
 				while(modSupRowsIndex < modSupRowsLength) {
 					const modSupRow = modSup[modSupRowsIndex]
-					const modSupRowLMNRangeData = lmnRanges.parseRow(modSupRow)
+					const modSupRowRange = lmnRanges.parseRow(modSupRow)
 					const anterModSupRow = modSup[modSupRowsIndex + 1]
 					if(anterModSupRow === undefined) {
 						break iterateModSupRows
 					}
-					const anterModSupRowLMNRangeData = lmnRanges.parseRow(anterModSupRow)
-					propKey = modSupRowLMNRangeData.LMN_VAL
-					if(anterModSupRowLMNRangeData.LMN_INDEX === -1) {
+					const anterModSupRowRange = lmnRanges.parseRow(anterModSupRow)
+					propKey = modSupRowRange.VAL
+					if(anterModSupRowRange.DEX === -1) {
 						path.push(prop[propKey])
 						scopesIndex++
 						continue iterateScopes
@@ -74,13 +74,13 @@ function assignPropPath($collect, $settings) {
 			reiterateModSupRows: 
 			while(modSupRowsIndex < modSupRowsLength) {
 				const modSupRow = modSup[modSupRowsIndex]
-				const modSupRowLMNRangeData = lmnRanges.parseRow(modSupRow)
-				propKey = modSupRowLMNRangeData.PAT
+				const modSupRowRange = lmnRanges.parseRow(modSupRow)
+				propKey = modSupRowRange.PAT
 				if(typeof prop[propKey] !== 'object') break reiterateModSupRows
 				prop = prop[propKey]
 				modSupRowsIndex++
 			}
-			prop[propKey] = path.join(modComRowLMNRangeData.PAT)
+			prop[propKey] = path.join(modComRowRange.PAT)
 			collectDocsIndex++
 			modComRowsIndex++
 		}

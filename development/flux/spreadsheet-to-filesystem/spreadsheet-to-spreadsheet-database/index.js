@@ -59,7 +59,7 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 		}))
 		this.workbook = workbookFile
 		await this.workbook.saveWorksheets()
-		this.emit('output', this)
+		// this.emit('output', this)
 		return this
 	}
 	async #workbookWatchChange($workbookPath) {

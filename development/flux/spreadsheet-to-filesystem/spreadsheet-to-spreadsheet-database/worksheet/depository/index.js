@@ -34,7 +34,7 @@ export default class Depository extends EventTarget {
       new RegExp(/^LMN_/)
     )
     this.rows = this.#settings['!rows']
-    this.cols = this.#settings['!cols']
+    this.cols = this.#settings['!cols']   
     this.merges = this.#settings['!merges']
     this.data = this.#settings['!data']
     this.mods = {
@@ -50,20 +50,28 @@ export default class Depository extends EventTarget {
     }), this.#options.ranges)
   }
   get lmnRanges() { return this.#_lmnRanges }
-  set lmnRanges($lmnRanges) { this.#_lmnRanges = new LMNRanges($lmnRanges) }
+  set lmnRanges($lmnRanges) {
+    this.#_lmnRanges = new LMNRanges($lmnRanges)
+  }
   get merges() { return this.#_merges }
-  set merges($merges) { this.#_merges = new Merges($merges) }
+  set merges($merges) {
+    this.#_merges = new Merges($merges)
+  }
   get hidden() {
     if(this.#_hidden === undefined) {
       const _hidden = this.#_hidden 
-      const rows = this.rows.reduce(($rows, $row, $rowIndex) => {
-        if($row.hidden === true) $rows.push($rowIndex)
-        return $rows
-      }, _hidden.rows).reverse()
-      const cols = this.cols.reduce(($cols, $col, $colIndex) => {
-        if($col.hidden === true) $cols.push($colIndex)
-        return $cols
-      }, _hidden.cols).reverse()
+      const rows = this.rows.reduce(
+        ($rows, $row, $rowIndex) => {
+          if($row.hidden === true) $rows.push($rowIndex)
+          return $rows
+        }, _hidden.rows
+      ).reverse()
+      const cols = this.cols.reduce(
+        ($cols, $col, $colIndex) => {
+          if($col.hidden === true) $cols.push($colIndex)
+          return $cols
+        }, _hidden.cols
+      ).reverse()
     }
     return this.#_hidden
   }
@@ -197,7 +205,9 @@ export default class Depository extends EventTarget {
     const _mods = this.#_mods
     if(Object.isFrozen(_mods) === false) {
       const modRanges = ranges
-      .getRangesByName(new RegExp(Defaults.ModRangeNameRegExp))
+      .getRangesByName(
+        new RegExp(Defaults.ModRangeNameRegExp)
+      )
       .sort(($rangeA, $rangeB) => (
         $rangeA.Ref.s.r < $rangeB.Ref.s.r
       ) ? -1
@@ -212,12 +222,15 @@ export default class Depository extends EventTarget {
         modRangeClassName = modRangeClassName || Class
         var [$key, $index, $val] = Name.split('_', 3)
         $index = Number($index)
-        var mod = (
-          _mods.has($index) === true
-        ) ? _mods.get($index) 
-          : _mods.set($index, {
-          nom: modRangeClassName, sup: Array, com: Array
-        }).get($index)
+        let mod
+        if(_mods.has($index) === true) {
+          mod = _mods.get($index) 
+        } else {
+          _mods.set($index, {
+            nom: modRangeClassName, sup: Array, com: Array
+          })
+          mod = _mods.get($index)
+        }
         if(
           $val === 'SUP' ||
           $val === 'COM'
@@ -225,7 +238,9 @@ export default class Depository extends EventTarget {
           const modRangeRows = data
           .slice(Ref.s.r, Ref.e.r + 1)
           .reduce(($modRangeRows, $modRangeRow) => {
-            const modRangeRow = $modRangeRow.slice(Ref.s.c, Ref.e.c + 1)
+            const modRangeRow = $modRangeRow.slice(
+              Ref.s.c, Ref.e.c + 1
+            )
             $modRangeRows.push(modRangeRow)
             return $modRangeRows
           }, [])

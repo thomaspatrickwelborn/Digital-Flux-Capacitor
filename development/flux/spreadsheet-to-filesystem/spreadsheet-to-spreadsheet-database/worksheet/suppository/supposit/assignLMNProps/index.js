@@ -5,20 +5,19 @@ import { LMNProps } from '#utils/defaults/index.js'
 function assignLMNProps($supposit, $settings) {
 	var { modIndex, mods, lmnRanges, sup, com } = $settings
 	if(lmnRanges.length === 0) return $supposit
-	// Mods
-	const modNom = mods[modIndex][1].nom
-	const modSup = mods[modIndex][1].sup
-	const modCom = mods[modIndex][1].com
-	// Mod Com Rows
+	const mod = mods[modIndex][1]
+	const modNom = mod.nom
+	const modSup = mod.sup
+	const modCom = mod.com
 	const modComRowsLength = modCom.length
 	var modComRowsIndex = 0
+	// Iterate Mod Com Rows
 	iterateModComRows: 
 	while(modComRowsIndex < modComRowsLength) {
 		const modComRow = modCom[modComRowsIndex]
 		const modComRowLMNRangeData = lmnRanges.parseRow(modComRow)
-		const modComRowLMNRangeIndex = modComRowLMNRangeData.LMN_INDEX
-		var meterScopeIndex = modComRowLMNRangeIndex
-		const modLMNRange = modComRowLMNRangeData.LMN
+		var meterScopeIndex = modComRowLMNRangeData['DEX']
+		const modLMNRange = modComRowLMNRangeData['VAL']
 		if(modLMNRange === undefined) {
 			modComRowsIndex++
 			continue iterateModComRows
@@ -26,13 +25,13 @@ function assignLMNProps($supposit, $settings) {
 		// Subduct Mods
 		const subductModsLength = mods.length
 		var subductModsIndex = modIndex
+		// Iterate Subduct Mods
 		iterateSubductMods: 
 		while(subductModsIndex < subductModsLength) {
 			const subductMod = mods[subductModsIndex][1]
 			const subductModNom = subductMod.nom
 			const subductModSup = subductMod.sup
 			const subductModCom = subductMod.com
-			// Subduct Mod Com Rows
 			const subductModComRowsLength = subductModCom.length
 			var subductModComRowsIndex
 			if(modIndex === subductModsIndex) {
@@ -40,46 +39,40 @@ function assignLMNProps($supposit, $settings) {
 			} else {
 				subductModComRowsIndex = 0
 			}
+			// Iterate Subduct Mod Com Rows
 			iterateSubductModComRows: 
 			while(subductModComRowsIndex < subductModComRowsLength) {
 				const subductModComRow = subductModCom[subductModComRowsIndex]
-				const subductModComRowLMNRangeData = lmnRanges.parseRow(subductModComRow)
-				const subductModComRowLMNRangeIndex = subductModComRowLMNRangeData.LMN_INDEX
-				if(subductModComRowLMNRangeIndex === -1) {
+				const subductModComRowRange = lmnRanges.parseRow(subductModComRow)
+				if(subductModComRowRange['DEX'] === -1) {
 					subductModComRowsIndex++
 					continue iterateSubductModComRows
 				}
-				const subductModComRowLMNRange = subductModComRowLMNRangeData.LMN
+				const subductModComRowLMNRange = subductModComRowRange['VAL']
 				if(subductModComRowLMNRange === undefined) {
 					subductModComRowsIndex++
 					continue iterateSubductModComRows
 				}
-				var subductMeterScopeIndex = subductModComRowLMNRangeIndex
-				if(subductMeterScopeIndex <= meterScopeIndex) {
+				if(subductModComRowRange['DEX'] <= meterScopeIndex) {
 					modComRowsIndex++
 					continue iterateModComRows
 				} else
-				if(subductMeterScopeIndex > meterScopeIndex + 1) {
+				if(subductModComRowRange['DEX'] > meterScopeIndex + 1) {
 					subductModComRowsIndex++
 					continue iterateSubductModComRows
 				}
-				// Subduct Mod LMN Subset Range
-				const subductModLMNSubsetRangeVal = subductModComRowLMNRangeData['SUBSET']
-				// Subduct Mod LMN Supset Range
-				const subductModLMNSupsetRangeVal = subductModComRowLMNRangeData['SUPSET']
-				// Supter/Subter Property Assignments
-				if($supposit[subductModLMNSupsetRangeVal] === undefined) {
-					$supposit[subductModLMNSupsetRangeVal] = [{
+				if($supposit[subductModComRowRange['SUPSET']] === undefined) {
+					$supposit[subductModComRowRange['SUPSET']] = [{
 						type: ObjectId,
-						ref: subductModLMNSubsetRangeVal
+						ref: subductModComRowRange['SUBSET']
 					}]
 				} else
-				if($supposit[subductModLMNSupsetRangeVal].findIndex(
-					($propSchema) => $propSchema.Ref === subductModLMNSubsetRangeVal
+				if($supposit[subductModComRowRange['SUPSET']].findIndex(
+					($propSchema) => $propSchema.Ref === subductModComRowRange['SUBSET']
 				) !== -1) { 
-					$supposit[subductModLMNSupsetRangeVal].push({
+					$supposit[subductModComRowRange['SUPSET']].push({
 						type: ObjectId,
-						ref: subductModLMNSubsetRangeVal
+						ref: subductModComRowRange['SUBSET']
 					})
 				}
 				subductModComRowsIndex++
