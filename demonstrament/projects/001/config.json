@@ -55,6 +55,12 @@
 						"uri": "mongodb://127.0.0.1:27017/dfc-demo-001-spreadsheet",
 					  "options": {}
 					}
+				}],
+				["SpreadsheetDatabaseToFilesystemDatabase", {
+					"database": {
+						"uri": "mongodb://127.0.0.1:27017/dfc-demo-001-filesystem",
+					  "options": {}
+					}
 				}]
 			]
 		}]
