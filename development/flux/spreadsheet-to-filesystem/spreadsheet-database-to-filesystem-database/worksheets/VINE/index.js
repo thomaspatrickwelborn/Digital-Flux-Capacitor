@@ -7,6 +7,8 @@ import saveCollectDocs from './saveCollectDocs.js'
 async function VINE($collect, $settings) {
 	const { worksheet, models } = $settings
 	$collect = collectDocsToCollectObjects($collect, worksheet)
+	console.log(worksheet, models)
+	throw new Error("!")
 	$collect = assignPORProps($collect, worksheet)
 	$collect = assignPATProps($collect, worksheet)
 	$collect = transormCollectDocs($collect, worksheet)
