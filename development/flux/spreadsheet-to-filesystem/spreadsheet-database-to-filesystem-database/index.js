@@ -8,24 +8,24 @@ import Worksheets from './worksheets/index.js'
 const Schemata = { FileSchema, FoldSchema }
 
 class SpreadsheetDatabaseToFilesystemDatabase extends Subcycle {
+	#settings
+	#_dbConnection
+	worksheets = new Map()
 	constructor($settings) {
 		super($settings)
+		this.dbConnection = this.settings.database
 	}
-	#settings
-	worksheets = new Map()
-	dbConnection
-	async #startDBConnection() {
-		if(this.dbConnection === undefined) {
-			const { uri, options } = this.#settings.database
-			this.dbConnection = await createConnection(uri, options)
-			.asPromise()
+	get dbConnection() { return this.#_dbConnection }
+	set dbConnection($database) {
+		if(this.#_dbConnection === undefined) {
+			const { uri, options } = $database
+			this.#_dbConnection = createConnection(uri, options)
+			this.#_dbConnection.once(
+				'connected', function databaseConnected($event) {
+					this.#setDBConnectionModels()
+				}.bind(this)
+			)
 		}
-		return this.dbConnection
-	}
-	async #stopDBConnection() {
-		await this.dbConnection.close()
-		this.dbConnection = undefined
-		return this.dbConnection
 	}
 	#getDBConnectionModels() {
 		return this.dbConnection.models
@@ -61,15 +61,6 @@ class SpreadsheetDatabaseToFilesystemDatabase extends Subcycle {
 			fluxModels: models,
 		})
 		// this.emit('output', this)
-	}
-	async start() {
-		await this.#startDBConnection()
-		this.#setDBConnectionModels()
-		return this
-	}
-	async stop() {
-		await this.#stopDBConnection()
-		return this
 	}
 }
 export default SpreadsheetDatabaseToFilesystemDatabase

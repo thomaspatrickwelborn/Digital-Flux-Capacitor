@@ -12,11 +12,6 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 	constructor($settings) {
 		super($settings)
 		this.dbConnection = this.settings.database
-		this.#_dbConnection.once(
-			'connected', function databaseConnected($event) {
-				this.workbookWatch = this.settings.spreadsheet
-			}.bind(this)
-		)
 		return this
 	}
 	get dbConnection() { return this.#_dbConnection }
@@ -24,6 +19,11 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 		if(this.#_dbConnection === undefined) {
 			const { uri, options } = $database
 			this.#_dbConnection = createConnection(uri, options)
+			this.#_dbConnection.once(
+				'connected', function databaseConnected($event) {
+					this.workbookWatch = this.settings.spreadsheet
+				}.bind(this)
+			)
 		}
 	}
 	get workbook() { return this.#_workbook }
