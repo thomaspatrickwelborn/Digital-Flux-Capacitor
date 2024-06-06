@@ -8,7 +8,7 @@ async function saveFileCollect($fileCollect, $models) {
 		const [$fileCollectID, $fileCollect] = $fileCollect[fileCollectIndex]
 		var fileDoc = await FileModel.findOneAndUpdate(
 			{ 'fs.id': $fileCollectID },
-			{ 'data.blocks': $fileCollect },
+			{ 'content.blocks': $fileCollect },
 			{ upsert: true, new: true },
 		)
 		fileCollect.push(fileDoc)

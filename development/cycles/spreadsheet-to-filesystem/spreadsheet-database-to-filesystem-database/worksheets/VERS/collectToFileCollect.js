@@ -1,8 +1,6 @@
 async function collectToFileCollect($collect, $worksheet) {
-	const worksheetLMNRange = $worksheet.ranges.find(
-		($range) => $range.Name.match(/^LMN/)
-	)
-	const worksheetMods = Array.from($worksheet.mods.values())
+	const worksheetLMNRange = $worksheet.depository.lmnRanges
+	const worksheetMods = Array.from($worksheet.depository.mods.values())
 	const worksheetModsLength = worksheetMods.length
 	var worksheetModsIndex = 0
 	const collectDocs = []
@@ -21,14 +19,8 @@ async function collectToFileCollect($collect, $worksheet) {
 			delete collectDoc.__v
 			delete collectDoc.supset
 			const comRow = com[comRowsIndex]
-			const comRowLMNRange = comRow.slice(
-				worksheetLMNRange.Ref.s.c, worksheetLMNRange.Ref.s.c + 1
-			)
-			const comRowLMNRangeNameIndex = comRowLMNRange.findIndex(
-				($comRowLMNRangeCell) => $comRowLMNRangeCell !== undefined
-			)
-			if(comRowLMNRangeNameIndex === 0) {
-				console.log('collectDoc', collectDoc)
+			const comRowLMNRange = worksheetLMNRange.parseRow(comRow)
+			if(comRowLMNRange.DEX === 0) {
 				await collectDoc.populate({
 					path: 'blocks',
 					strictPopulate: false,
