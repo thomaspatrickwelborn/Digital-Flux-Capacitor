@@ -19,7 +19,7 @@ function assignPropPath($collect, $settings) {
 		while(modComRowsIndex < modComRowsLength) {
 			const collectDoc = $collect[collectDocsIndex]
 			const modComRow = modCom[modComRowsIndex]
-			const modComRowRange = lmnRanges.parseRow(modComRow, lmnRanges)
+			const modComRowRange = lmnRanges.parseRow(modComRow)
 			if(modComRowRange.VAL === undefined) {
 				modComRowsIndex++
 				continue iterateModComRows
@@ -58,7 +58,10 @@ function assignPropPath($collect, $settings) {
 					}
 					const anterModSupRowRange = lmnRanges.parseRow(anterModSupRow)
 					propKey = modSupRowRange.VAL
-					if(anterModSupRowRange.DEX === -1) {
+					if(
+						anterModSupRowRange.DEX === -1 || 
+						anterModSupRowRange.DEX === undefined
+					) {
 						path.push(prop[propKey])
 						scopesIndex++
 						continue iterateScopes
