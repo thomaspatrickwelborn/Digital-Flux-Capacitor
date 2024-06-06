@@ -10,8 +10,6 @@ class FilesystemDatabaseToFilesystem extends EventEmitter {
 	#settings
 	filesystem
 	async input($presubcycle) {
-		console.log($presubcycle)
-		throw "Digital Flux Capacitor"
 		const fsDBConnection = $presubcycle.dbConnection
 		const { File, Fold } = fsDBConnection.models
 		const { FSElements, FSElementsContent } = Generators
@@ -19,6 +17,8 @@ class FilesystemDatabaseToFilesystem extends EventEmitter {
 		const foldCollection = await Fold.find({})
 		const fsElements = foldCollection.concat(fileCollection)
 		await FSElements(fsElements, $presubcycle, this)
+		console.log('fsElements', fsElements)
+		throw "Digital Flux Capacitor"
 		await FSElementsContent(fsElements, $presubcycle, this)
 	}
 	async start() {

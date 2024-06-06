@@ -3,9 +3,8 @@ import { rm, rmdir, open, opendir, mkdir, stat } from 'node:fs/promises'
 import { glob, globSync, globStream, globStreamSync, Glob } from 'glob'
 import differentiateFSElements from './differentiateFSElements.js'
 
-async function FSElements($collection, $presubcycle, $flux) {
-	console.log($flux)
-	const fsRootPath = $flux.filesystem.path
+async function FSElements($collection, $presubcycle, $subcycle) {
+	const fsRootPath = $subcycle.filesystem.path
 	var fsRootStat
 	try {
 		fsRootStat = await stat(fsRootPath)
@@ -20,6 +19,8 @@ async function FSElements($collection, $presubcycle, $flux) {
 	)
 	const fsVine = $collection.reduce(
 		($fsVine, $collectionDoc) => {
+			console.log('$collectionDoc', $collectionDoc)
+			throw "Digital Flux Capacitor"
 			$fsVine.push(
 				path.join(fsRootPath, $collectionDoc.fs.path)
 			)
