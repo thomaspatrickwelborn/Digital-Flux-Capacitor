@@ -3,11 +3,9 @@ import transformFileCollects from './transformFileCollects/index.js'
 import saveFileCollect from './saveFileCollect/index.js'
 
 async function VIEW($collect, $settings) {
-	const { worksheet, models, lmnRanges } = $settings
-	console.log('worksheet', worksheet)
-  throw "Digital Flux Capacitor"
+	const { worksheet, models } = $settings
 	var fileCollects = await collectToFileCollects(
-		$collect, { worksheet, lmnRanges }
+		$collect, { worksheet }
 	)
 	fileCollects = transformFileCollects(fileCollects, worksheet)
 	fileCollects = await saveFileCollect(fileCollects, models)

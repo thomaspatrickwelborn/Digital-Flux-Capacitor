@@ -1,27 +1,15 @@
-async function collectDocPopulate($collectDoc) {
-  await $collectDoc.populate({
-    path: 'blocks',
-  })
-  const collectDocBlocks = $collectDoc.blocks
-  if(collectDocBlocks.length === 0) return $collectDoc
-  const collectDocBlocksLength = collectDocBlocks.length
-  var collectDocBlocksIndex = 0
-  while(collectDocBlocksIndex < collectDocBlocksLength) {
-    var collectDocBlock = collectDocBlocks[collectDocBlocksIndex]
-    collectDocBlock = await collectDocPopulate(collectDocBlock)
-    collectDocBlocksIndex++
-  }
-  return $collectDoc
-}
+import collectDocPopulate from './collectDocPopulate/index.js'
 
 async function collectToFileCollects($collect, $settings) {
-  const { worksheet, lmnRanges } = $settings
-  const worksheetMods = Array.from(worksheet.mods.values())
+  const { worksheet } = $settings
+  const lmnRanges = worksheet.depository.lmnRanges
+  const worksheetMods = Array.from(worksheet.depository.mods.values())
   const worksheetModsLength = worksheetMods.length
   var worksheetModsIndex = 0
   const collectDocs = []
   var collectDocsIndex = 0
-  iterateWorksheetModsIndex: while(worksheetModsIndex < worksheetModsLength) {
+  iterateWorksheetModsIndex: 
+  while(worksheetModsIndex < worksheetModsLength) {
     const { nom, sup, com } = worksheetMods[worksheetModsIndex]
     const comRowsLength = com.length
     var comRowsIndex = 0
@@ -33,14 +21,14 @@ async function collectToFileCollects($collect, $settings) {
         collectDoc.fs.path = $collect[collectDocsIndex - 1].fs.path
       }
       const comRow = com[comRowsIndex]
-      const comRowLMNRangeData = rowLMNRangeFromLMNRanges(comRow, lmnRanges)
-      const comRowLMNRangeIndex = comRowLMNRangeData.rowLMNRangeIndex
-      const comRowLMNRange = comRowLMNRangeData.rowLMNRange
-      if(comRowLMNRange === undefined) {
+      const comRowRange = lmnRanges.parseRow(comRow)
+      const comRowRangeDEX = comRowRange.DEX
+      const comRowRangeVAL = comRowRange.VAL
+      if(comRowRangeVAL === undefined) {
         comRowsIndex++
         continue iterateComRows
       }
-      if(comRowLMNRangeIndex === 0) {
+      if(comRowRangeDEX === 0) {
         collectDocs.push(collectDoc)
       }
       collectDocsIndex++

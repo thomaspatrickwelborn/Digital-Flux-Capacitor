@@ -61,6 +61,7 @@ class SpreadsheetDatabaseToFilesystemDatabase extends Subcycle {
 			subcycleModels: models,
 		}))
 		console.log(this.worksheets)
+	  throw "Digital Flux Capacitor"
 		// this.emit('output', this)
 	}
 }
