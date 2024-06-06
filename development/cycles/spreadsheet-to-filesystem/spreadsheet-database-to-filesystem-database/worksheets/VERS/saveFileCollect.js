@@ -1,20 +1,20 @@
-async function saveFileCollect($fileCollects, $models) {
-	$fileCollects = Array.from($fileCollects.entries())
+async function saveFileCollect($fileCollect, $models) {
+	$fileCollect = Array.from($fileCollect.entries())
 	const FileModel = $models.File
-	const fileCollects = []
-	const fileCollectsLength = $fileCollects.length
-	var fileCollectsIndex = 0
-	while(fileCollectsIndex < fileCollectsLength) {
-		const [$fileCollectID, $fileCollect] = $fileCollects[fileCollectsIndex]
+	const fileCollect = []
+	const fileCollectLength = $fileCollect.length
+	var fileCollectIndex = 0
+	while(fileCollectIndex < fileCollectLength) {
+		const [$fileCollectID, $fileCollect] = $fileCollect[fileCollectIndex]
 		var fileDoc = await FileModel.findOneAndUpdate(
 			{ 'fs.id': $fileCollectID },
 			{ 'data.blocks': $fileCollect },
 			{ upsert: true, new: true },
 		)
-		fileCollects.push(fileDoc)
-		fileCollectsIndex++
+		fileCollect.push(fileDoc)
+		fileCollectIndex++
 	}
-	return fileCollects
+	return fileCollect
 }
 
 export default saveFileCollect

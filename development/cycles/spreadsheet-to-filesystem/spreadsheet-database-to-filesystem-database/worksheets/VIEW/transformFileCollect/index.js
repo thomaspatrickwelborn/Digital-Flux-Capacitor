@@ -1,4 +1,4 @@
-function transformFileCollects($collect, $worksheet) {
+function transformFileCollect($collect, $worksheet) {
   const collectEntries = Array.from($collect.entries())
   const collectEntriesLength = collectEntries.length
   var collectEntriesIndex = 0
@@ -36,4 +36,4 @@ function transformFileCollects($collect, $worksheet) {
   return $collect
 }
 
-export default transformFileCollects
+export default transformFileCollect

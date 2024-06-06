@@ -1,6 +1,6 @@
 import collectDocPopulate from './collectDocPopulate/index.js'
 
-async function collectToFileCollects($collect, $settings) {
+async function collectToFileCollect($collect, $settings) {
   const { worksheet } = $settings
   const lmnRanges = worksheet.depository.lmnRanges
   const worksheetMods = Array.from(worksheet.depository.mods.values())
@@ -52,4 +52,4 @@ async function collectToFileCollects($collect, $settings) {
   return files
 }
 
-export default collectToFileCollects
+export default collectToFileCollect

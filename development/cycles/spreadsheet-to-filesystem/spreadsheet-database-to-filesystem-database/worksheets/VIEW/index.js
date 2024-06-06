@@ -1,15 +1,15 @@
-import collectToFileCollects from './collectToFileCollects/index.js'
-import transformFileCollects from './transformFileCollects/index.js'
+import collectToFileCollect from './collectToFileCollect/index.js'
+import transformFileCollect from './transformFileCollect/index.js'
 import saveFileCollect from './saveFileCollect/index.js'
 
 async function VIEW($collect, $settings) {
 	const { worksheet, models } = $settings
-	var fileCollects = await collectToFileCollects(
+	var fileCollect = await collectToFileCollect(
 		$collect, { worksheet }
 	)
-	fileCollects = transformFileCollects(fileCollects, worksheet)
-	fileCollects = await saveFileCollect(fileCollects, models)
-	return fileCollects
+	fileCollect = transformFileCollect(fileCollect, worksheet)
+	fileCollect = await saveFileCollect(fileCollect, models)
+	return fileCollect
 }
 
 export default VIEW

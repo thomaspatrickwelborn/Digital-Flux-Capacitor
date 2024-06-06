@@ -1,4 +1,4 @@
-async function collectToFileCollects($collect, $worksheet) {
+async function collectToFileCollect($collect, $worksheet) {
 	const worksheetLMNRange = $worksheet.ranges.find(
 		($range) => $range.Name.match(/^LMN/)
 	)
@@ -88,4 +88,4 @@ async function collectToFileCollects($collect, $worksheet) {
 	return files
 }
 
-export default collectToFileCollects
+export default collectToFileCollect
