@@ -10,6 +10,8 @@ class FilesystemDatabaseToFilesystem extends EventEmitter {
 	#settings
 	filesystem
 	async input($presubcycle) {
+		console.log($presubcycle)
+		throw "Digital Flux Capacitor"
 		const fsDBConnection = $presubcycle.dbConnection
 		const { File, Fold } = fsDBConnection.models
 		const { FSElements, FSElementsContent } = Generators
