@@ -52,7 +52,7 @@ function transormCollectDocs($collect, $worksheet) {
 				id: collectDoc.fs.id,
 				workspaces: collectDoc.fs.workspaces,
 				name: collectDoc.fs.name,
-				path: collectDoc.path,
+				path: collectDoc.fs.path,
 				template: collectDoc.fs.template,
 				type: collectDoc.fs.type,
 				operations: collectDoc.fs.operations,
