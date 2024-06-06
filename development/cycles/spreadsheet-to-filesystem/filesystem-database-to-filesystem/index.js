@@ -18,14 +18,12 @@ class FilesystemDatabaseToFilesystem extends EventEmitter {
 		const fileCollection = await File.find({})
 		const foldCollection = await Fold.find({})
 		const fsElements = foldCollection.concat(fileCollection)
-		this.fsElements = await FSElements(fsElements, $presubcycle, this)
-		this.fsElementsContent = await FSElementsContent(fsElements, $presubcycle, this)
-	}
-	async start() {
-		return this
-	}
-	async stop() {
-		return this
+		this.fsElements = await FSElements(
+			fsElements, $presubcycle, this
+		)
+		this.fsElementsContent = await FSElementsContent(
+			fsElements, $presubcycle, this
+		)
 	}
 }
 export default FilesystemDatabaseToFilesystem

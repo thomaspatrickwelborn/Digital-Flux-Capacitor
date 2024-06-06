@@ -11,12 +11,9 @@ function transformFileCollect($collect, $worksheet) {
       id: undefined,
       path: undefined,
     }
-    const content = {
-      blocks: []
-    }
     const file = {
       fs: fileFS,
-      content: content,
+      blocks: []
     }
     const collectDocLength = $collectEntry.length
     var collectDocIndex = 0
@@ -27,7 +24,7 @@ function transformFileCollect($collect, $worksheet) {
       delete collectDoc._id
       delete collectDoc.__v
       delete collectDoc.fs
-      content.blocks.push(collectDoc)
+      file.blocks.push(collectDoc)
       collectDocIndex++
     }
     $collect.set($fsID, file)

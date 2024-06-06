@@ -1,5 +1,5 @@
-import collectToFileCollect from './collectToFileCollect.js'
-import saveFileCollect from './saveFileCollect.js'
+import collectToFileCollect from './collectToFileCollect/index.js'
+import saveFileCollect from './saveFileCollect/index.js'
 
 async function VERS($collect, $settings) {
   const { worksheet, models } = $settings

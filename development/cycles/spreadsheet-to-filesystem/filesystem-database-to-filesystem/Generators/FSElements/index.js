@@ -19,8 +19,7 @@ async function FSElements($collection, $presubcycle, $subcycle) {
 	)
 	const fsVine = $collection.reduce(
 		($fsVine, $collectionDoc) => {
-			console.log($collectionDoc)
-			throw "Digital Flux Capacitor"
+			if($collectionDoc.fs.path === undefined) return $fsVine
 			$fsVine.push(
 				path.join(fsRootPath, $collectionDoc.fs.path)
 			)

@@ -9,19 +9,19 @@ async function saveFileCollect($fileCollect, $models) {
     var fileDoc = await FileModel.findOneAndUpdate(
       { 'fs.id': $fileCollectID },
       {
-        'content.blocks': $fileCollect.content.blocks,
+        'blocks': $fileCollect.blocks,
       },
       { upsert: true, new: true },
     )
     await fileDoc.populate({
-      path: 'content.blocks',
+      path: 'blocks',
       strictPopulate: false,
       populate: {
-        path: 'content.blocks',
+        path: 'blocks',
         strictPopulate: false,
       }
     })
-    fileCollect.push(fileDoc.toObject())
+    fileCollect.push(fileDoc/*.toObject()*/)
     fileCollectIndex++
   }
   return fileCollect
