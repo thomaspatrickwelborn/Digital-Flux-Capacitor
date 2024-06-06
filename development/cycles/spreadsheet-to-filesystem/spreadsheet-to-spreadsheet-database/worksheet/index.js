@@ -34,31 +34,31 @@ export default class Worksheet extends EventTarget {
 		} = $settings
 		this.name = worksheetName
 		this.#dbConnection = dbConnection
-		this.#depository = worksheetTable
-		this.#suppository = this.#depository
-		this.#compository = this.#depository
+		this.depository = worksheetTable
+		this.suppository = this.depository
+		this.compository = this.depository
 		return
 	}
-	get #depository() { return this.#_depository }
-	set #depository($depository) {
+	get depository() { return this.#_depository }
+	set depository($depository) {
 		this.#_depository = new Depository($depository, {
 			ranges: this.#options.ranges
 		})
 	}
-	get #suppository() { return this.#_suppository }
-	set #suppository($suppository) {
+	get suppository() { return this.#_suppository }
+	set suppository($suppository) {
 		this.#_suppository = new Suppository($suppository, {
 			dbConnection: this.#dbConnection
 		})
 	}
-	get #compository() { return this.#_compository }
-	set #compository($compository) {
+	get compository() { return this.#_compository }
+	set compository($compository) {
 		this.#_compository = new Compository($compository, {
 			dbConnection: this.#dbConnection
 		})
 	}
 	async saveCompository() {
-		await this.#compository.saveCollects()
+		await this.compository.saveCollects()
 		return this
 	}
 }

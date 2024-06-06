@@ -1,10 +1,10 @@
 import { EventEmitter } from 'node:events'
-import * as Flux from '../../flux/index.js'
+import * as Cycles from '#cycles/index.js'
 class Capacitor extends EventEmitter {
   #_settings = {}
   constructor($settings = {}) {
     super()
-    this.Cycles = Flux
+    this.Cycles = Cycles
     this.settings = $settings
     this.project = this.settings.project
     this.cycles = this.settings.cycles

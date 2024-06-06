@@ -56,10 +56,11 @@ class SpreadsheetDatabaseToFilesystemDatabase extends Subcycle {
 		const models = this.#setDBConnectionModels()
 		const filesystemDBConnection = this.dbConnection
 		const spreadsheetDBConnection = $presubcycle.dbConnection
-		const worksheets = await Worksheets(this.worksheets, {
+		this.worksheets = new Map(await Worksheets({
 			presubcycleWorkbook: $presubcycle.workbook,
-			fluxModels: models,
-		})
+			subcycleModels: models,
+		}))
+		console.log(this.worksheets)
 		// this.emit('output', this)
 	}
 }
