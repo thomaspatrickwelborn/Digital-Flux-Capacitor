@@ -1,6 +1,5 @@
 import { typeOf } from '#utils/index.js'
 import { LMNProps } from '#utils/defaults/index.js'
-import { rowLMNRangeFromLMNRanges } from '#utils/index.js'
 
 async function assignProps($collect, $settings) {
 	var { mods, lmnRanges, composits } = $settings

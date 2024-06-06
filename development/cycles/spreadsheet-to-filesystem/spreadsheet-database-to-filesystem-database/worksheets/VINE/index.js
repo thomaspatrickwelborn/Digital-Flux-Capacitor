@@ -3,17 +3,13 @@ import assignPORProps from './assignPORProps/index.js'
 import transormCollectDocs from './transformCollectDocs/index.js'
 import saveCollectDocs from './saveCollectDocs/index.js'
 
-async function VINE($collects, $settings) {
+async function VINE($collect, $settings) {
 	const { worksheet, models } = $settings
-	var collect = [...$collects.values()]
-	.map(($collect) => {
-		return Array.from($collect)
-	}).flat()
-	collect = collectDocsToCollectObjects(collect, worksheet)
-	collect = assignPORProps(collect, worksheet)
-	collect = transormCollectDocs(collect, worksheet)
-	collect = await saveCollectDocs(collect, models)
-	return collect
+	$collect = collectDocsToCollectObjects($collect, worksheet)
+	$collect = assignPORProps($collect, worksheet)
+	$collect = transormCollectDocs($collect, worksheet)
+	$collect = await saveCollectDocs($collect, models)
+	return $collect
 }
 
 export default VINE

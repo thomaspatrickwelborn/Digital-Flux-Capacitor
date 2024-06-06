@@ -12,23 +12,23 @@ export default async function Worksheets($worksheets) {
 		const WorksheetTranslexis = WorksheetTranslexes[
 			$worksheetClassName
 		]
+		var collect = [...$worksheet.compository.collects.values()]
+		.map(($collect) => {
+			return Array.from($collect)
+		}).flat()
 		var worksheet
 		switch(typeOf(WorksheetTranslexis)) {
 			case 'asyncfunction':
-				worksheet = await WorksheetTranslexis(
-					$worksheet.compository.collects, {
-						worksheet: $worksheet,
-						models: subcycleModels,
-					}
-				)
+				worksheet = await WorksheetTranslexis(collect, {
+					worksheet: $worksheet,
+					models: subcycleModels,
+				})
 				break
 			case 'function':
-				worksheet = WorksheetTranslexis(
-					$worksheet.compository.collects, {
-						worksheet: $worksheet,
-						models: subcycleModels,
-					}
-				)
+				worksheet = WorksheetTranslexis(collect, {
+					worksheet: $worksheet,
+					models: subcycleModels,
+				})
 				break
 		}
 		worksheets.push([$worksheetClassName, worksheet])
