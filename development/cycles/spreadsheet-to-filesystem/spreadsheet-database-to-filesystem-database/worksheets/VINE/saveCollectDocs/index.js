@@ -14,7 +14,8 @@ async function saveCollectDocs($collect, $models) {
 				fsDoc = await new Fold(collectDoc)
 				break
 		}
-		collectDocs.push(await fsDoc.save())
+		fsDoc = await fsDoc.save()
+		collectDocs.push(fsDoc.toObject())
 		collectDocsIndex++
 	}
 	return collectDocs
