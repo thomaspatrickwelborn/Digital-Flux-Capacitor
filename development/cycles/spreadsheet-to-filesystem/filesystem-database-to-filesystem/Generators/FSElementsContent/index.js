@@ -3,6 +3,7 @@ import path from 'node:path'
 import url from 'node:url'
 import ejs from 'ejs'
 import operators from './operators/index.js'
+import { writeFile } from 'node:fs/promises'
 
 const projectPath = process.env.PWD
 const modulePath = path.dirname(
@@ -61,15 +62,13 @@ async function FSElementsContent(
 				indent_char: ' ',
 				preserve_newlines: false,
 			})
-			console.log(beautifiedFileData)
-			/*
 			const filePath = path.join(
 				projectPath,
 				$subcycle.filesystem.path,
 				collectDoc.fs.path
 			)
-			await asyncWriteFile(filePath, beautifiedFileData)
-			*/
+			await writeFile(filePath, beautifiedFileData)
+			throw "digital flux capacitor"
 		}
 		collectionIndex++
 	}

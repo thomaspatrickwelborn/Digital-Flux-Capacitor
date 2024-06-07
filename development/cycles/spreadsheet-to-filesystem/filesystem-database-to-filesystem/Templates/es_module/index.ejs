@@ -1,1 +1,14 @@
-<% console.log('es_module', $data) %>
+<%
+const { coutils, content } = $data
+const { blocks } = content
+-%>
+
+<%# IMPORTS -%>
+
+<%# BLOCKS -%>
+<%- await include('blocks/index.ejs', {
+	content: blocks,
+	coutils: coutils,
+}) -%>
+
+<%# EXPORTS -%>

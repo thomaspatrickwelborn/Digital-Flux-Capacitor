@@ -6,7 +6,7 @@ const { blocks } = content
 <%# IMPORTS -%>
 
 <%# BLOCKS -%>
-<%= await include('blocks/index.ejs', {
+<%- await include('blocks/index.ejs', {
 	content: blocks,
 	coutils: coutils,
 }) -%>

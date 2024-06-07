@@ -14,7 +14,10 @@ const { lexter, dexter } = statement
     ten.slice(0, 2) !== '#:') {
   -%>
 		<%= ser %> <%- ten %> <%= per %>
-  <% } -%>
+  <% } else {
+  -%>
+  	<%= ser %> <%= per %>
+  <% }-%>
   <% if(pos !== undefined) { -%>
 	  <% const [inpos, expos] = pos || [] -%>
 	  <%# INPOS %>
