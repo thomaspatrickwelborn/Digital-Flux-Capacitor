@@ -62,6 +62,7 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 		return this
 	}
 	async #workbookWatchChange($workbookPath) {
+		console.clear()
 		await this.dbConnection.dropDatabase()
 		const modelNames = this.dbConnection.modelNames()
 		const modelNamesLength = modelNames.length

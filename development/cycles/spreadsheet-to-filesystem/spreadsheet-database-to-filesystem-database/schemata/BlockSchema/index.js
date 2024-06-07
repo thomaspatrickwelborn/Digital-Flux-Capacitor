@@ -4,12 +4,14 @@ const BlockStatementSchema = new Schema({
     ser: String,
     ten: String,
     per: String,
+    pos: String,
     ple: String,
   },
   dexter: {
     ser: String,
     ten: String,
     per: String,
+    pos: String,
     ple: String,
   }
 }, {

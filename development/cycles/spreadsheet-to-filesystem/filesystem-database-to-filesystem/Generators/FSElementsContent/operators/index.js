@@ -1,9 +1,23 @@
 const operators = {
-  closure: ["{}", "[]", "()", "<>"],
-  assignment: [":", "?", "=", "+=", "-=", "++", "--"],
-  mathematical: ["+", "-", "*", "/", "%"],
-  comparison: ["<", ">", "<=", "=>", "==", "!=","===", "!=="],
-  operatorTypes: ['closure', 'assignment', 'mathematical', 'comparison'],
+  scope: [
+    "{}", "[]", "()", "<>"
+  ],
+  assignment: [
+    ":", "?", "=", "+=", "-=", "++", "--"
+  ],
+  mathematical: [
+    "+", "-", "*", "/", "%"
+  ],
+  comparison: [
+    "<", ">", "<=", "=>", "==", "!=","===", "!=="
+  ],
+  comment: [
+    "//", "/*", "*/"
+  ],
+  operatorTypes: [
+    "scope", "assignment", "mathematical", "comparison"
+  ],
+
   getType: function($operator) {
     var operatorType
     for(const $operatorType of this.operatorTypes) {

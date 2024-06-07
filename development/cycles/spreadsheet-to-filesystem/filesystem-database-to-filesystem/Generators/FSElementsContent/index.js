@@ -43,8 +43,10 @@ async function FSElementsContent(
 			)
 			const templateModel = {
 				content: collectDoc,
-				operators: operators,
-				reserved: reserved,
+				coutils: {
+					operators: operators,
+					reserved: reserved,
+				},
 			}
 			const fileData = await ejs.renderFile(
 				templatePath, templateModel, {
@@ -54,7 +56,6 @@ async function FSElementsContent(
 					filename: true,
 				}
 			)
-			console.log(fileData)
 			/*
 			const beautifiedFileData = beautify.js(fileData, {
 				indent_size: 2, 
