@@ -56,13 +56,13 @@ async function FSElementsContent(
 					filename: true,
 				}
 			)
-			console.log('fileData', fileData)
-			/*
 			const beautifiedFileData = beautify.js(fileData, {
 				indent_size: 2, 
 				indent_char: ' ',
 				preserve_newlines: false,
 			})
+			console.log(beautifiedFileData)
+			/*
 			const filePath = path.join(
 				projectPath,
 				$subcycle.filesystem.path,

@@ -1,6 +1,23 @@
-<%# BLOCK %>
+<%# BLOCK -%>
 <%
-const block = $data.content
-console.log('json_file/block', block)
 const { coutils } = $data
-%>
+const { blocks, statement } = $data.content
+const { lexter, dexter } = statement
+console.log('lexter', lexter.toObject())
+console.log('dexter', dexter.toObject())
+-%>
+
+<% if(
+	coutils.operators.scope.includes(lexter.pos)
+) { -%>
+	<%= inpos -%>
+		<% if(blocks.length) { %>
+			<% for(const $block of blocks) { %>
+				<%= await include('index.ejs', {
+					content: $block,
+					coutils: coutils,
+				}) %>
+			<% } %>
+		<% } %>
+	<%= expos -%>
+<% } -%>

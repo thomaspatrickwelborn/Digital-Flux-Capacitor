@@ -1,12 +1,14 @@
-<%# IMPORTS %>
+<%
+const { coutils, content } = $data
+const { blocks } = content
+-%>
 
+<%# IMPORTS -%>
 
-<%# BLOCKS %>
-<% for(let $block of $data.content.blocks) { %>
-	<%= await include('block/index.ejs', {
-		content: $block,
-		coutils: $data.coutils,
-	}) %>
-<% } %>
+<%# BLOCKS -%>
+<%= await include('blocks/index.ejs', {
+	content: blocks,
+	coutils: coutils,
+}) -%>
 
-<%# EXPORTS %>
+<%# EXPORTS -%>
