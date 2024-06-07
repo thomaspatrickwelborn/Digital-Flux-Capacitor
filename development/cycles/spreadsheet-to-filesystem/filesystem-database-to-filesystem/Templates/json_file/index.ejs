@@ -3,11 +3,10 @@
 
 <%# BLOCKS %>
 <% for(let $block of $data.content.blocks) { %>
-	<%= include('block/index.ejs', {
+	<%= await include('block/index.ejs', {
 		content: $block,
 		coutils: $data.coutils,
 	}) %>
 <% } %>
-
 
 <%# EXPORTS %>
