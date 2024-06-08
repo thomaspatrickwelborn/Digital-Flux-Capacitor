@@ -7,10 +7,11 @@ export default async function Worksheets($worksheets) {
 	const worksheets = []
 	const { presubcycleWorkbook, subcycleModels } = $worksheets
 	for(const [
-		$worksheetClassName, $worksheet
+		$worksheetName, $worksheet
 	] of Array.from(presubcycleWorkbook.worksheets.entries())) {
+		const  worksheetClassName = $worksheet.className
 		const WorksheetTranslexis = WorksheetTranslexes[
-			$worksheetClassName
+			worksheetClassName
 		]
 		var collect = [...$worksheet.compository.collects.values()]
 		.map(($collect) => {
@@ -31,7 +32,7 @@ export default async function Worksheets($worksheets) {
 				})
 				break
 		}
-		worksheets.push([$worksheetClassName, worksheet])
+		worksheets.push([worksheetClassName, worksheet])
 	}
 	return worksheets
 }
