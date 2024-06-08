@@ -1,9 +1,10 @@
+import { EventEmitter } from 'node:events'
 import assignLMNProps from './assignLMNProps/index.js'
 const Translexes = [
 	["assignLMNProps", assignLMNProps],
 ]
 
-export default class Collect extends EventTarget {
+export default class Collect extends EventEmitter {
 	length = 0
 	#settings = {}
 	constructor($settings) {

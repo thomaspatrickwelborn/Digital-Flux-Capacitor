@@ -1,3 +1,4 @@
+import { EventEmitter } from 'node:events'
 import { Schema, Types } from 'mongoose'
 import Depository from './depository/index.js'
 import Suppository from './suppository/index.js'
@@ -17,10 +18,11 @@ const Defaults = {
 	OmitRangeNameRegExp: /^OMIT/,
 }
 
-export default class Worksheet extends EventTarget {
+export default class Worksheet extends EventEmitter {
 	#settings
 	#options
 	name
+	className
 	#dbConnection
 	#_suppository
 	#_compository
@@ -30,9 +32,10 @@ export default class Worksheet extends EventTarget {
 		this.#settings = $settings
 		this.#options = $options
 		const {
-			worksheetName, worksheetTable, dbConnection
+			worksheetClassName, worksheetName, worksheetTable, dbConnection
 		} = $settings
 		this.name = worksheetName
+		this.className = worksheetClassName
 		this.#dbConnection = dbConnection
 		this.depository = worksheetTable
 		this.suppository = this.depository

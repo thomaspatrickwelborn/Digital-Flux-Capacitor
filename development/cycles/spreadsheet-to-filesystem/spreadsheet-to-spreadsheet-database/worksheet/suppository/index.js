@@ -1,8 +1,9 @@
+import { EventEmitter } from 'node:events'
 import { Schema } from 'mongoose'
 import deepmerge from 'deepmerge'
 import { combineMerge } from '#utils/index.js'
 import Supposit from './supposit/index.js'
-export default class Suppository extends EventTarget {
+export default class Suppository extends EventEmitter {
   #settings
   #options
   #dbConnection

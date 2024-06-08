@@ -1,10 +1,11 @@
+import { EventEmitter } from 'node:events'
 import { typeOf } from '#utils/index.js'
 import * as XLSX from 'xlsx'
 const Defaults = {
   GetRangesOptions: { includeHidden: true },
 }
 
-export default class Ranges extends EventTarget {
+export default class Ranges extends EventEmitter {
   length = 0
   #settings = {}
   #options = {}

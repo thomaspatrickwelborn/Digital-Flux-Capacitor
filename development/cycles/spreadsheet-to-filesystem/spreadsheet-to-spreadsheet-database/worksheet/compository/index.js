@@ -1,6 +1,7 @@
+import { EventEmitter } from 'node:events'
 import Composit from './composit/index.js'
 import Collect from './collect/index.js'
-export default class Compository extends EventTarget {
+export default class Compository extends EventEmitter {
   #dbConnection
   #_settings = {}
   #_options = {}

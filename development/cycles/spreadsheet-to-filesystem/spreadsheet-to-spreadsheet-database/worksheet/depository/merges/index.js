@@ -1,4 +1,5 @@
-export default class Merges extends EventTarget {
+import { EventEmitter } from 'node:events'
+export default class Merges extends EventEmitter {
   length = 0
   #settings = {}
   #options = {}

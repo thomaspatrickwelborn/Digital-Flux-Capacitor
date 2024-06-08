@@ -7,5 +7,6 @@ class Subcycle extends EventEmitter {
   }
   get settings() { return this.#_settings }
   set settings($settings) { this.#_settings = $settings }
+  input($presubcycle) {}
 }
 export default Subcycle

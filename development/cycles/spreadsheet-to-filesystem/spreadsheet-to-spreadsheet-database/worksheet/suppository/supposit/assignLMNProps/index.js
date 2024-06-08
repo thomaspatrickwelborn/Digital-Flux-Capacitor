@@ -15,9 +15,9 @@ function assignLMNProps($supposit, $settings) {
 	iterateModComRows: 
 	while(modComRowsIndex < modComRowsLength) {
 		const modComRow = modCom[modComRowsIndex]
-		const modComRowLMNRangeData = lmnRanges.parseRow(modComRow)
-		var meterScopeIndex = modComRowLMNRangeData['DEX']
-		const modLMNRange = modComRowLMNRangeData['VAL']
+		const modComRowRange = lmnRanges.parseRow(modComRow)
+		var meterScopeIndex = modComRowRange['DEX']
+		const modLMNRange = modComRowRange['VAL']
 		if(modLMNRange === undefined) {
 			modComRowsIndex++
 			continue iterateModComRows

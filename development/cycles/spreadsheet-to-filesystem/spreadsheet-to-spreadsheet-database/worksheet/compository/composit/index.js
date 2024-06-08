@@ -1,3 +1,4 @@
+import { EventEmitter } from 'node:events'
 import { fillEmptyCells } from '#utils/index.js'
 import assignProps from './assignProps/index.js'
 import assignLMNProps from './assignLMNProps/index.js'
@@ -6,7 +7,7 @@ const translexes = [
 	["assignLMNProps", assignLMNProps],
 ]
 
-export default class Composit extends EventTarget {
+export default class Composit extends EventEmitter {
 	length = 0
 	#settings = {}
 	name

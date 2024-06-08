@@ -1,3 +1,4 @@
+import { EventEmitter } from 'node:events'
 import {
   typeOf, parseCell, tem
 } from '#utils/index.js'
@@ -14,7 +15,7 @@ const Defaults = {
   OmitRangeNameRegExp: /^OMIT/,
 }
 const { Row, Col, Range, Cell } = tem
-export default class Depository extends EventTarget {
+export default class Depository extends EventEmitter {
   #settings = {}
   #options = {}
   #_hidden = { rows: [], cols: [] }

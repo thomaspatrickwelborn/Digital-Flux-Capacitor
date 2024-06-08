@@ -1,7 +1,8 @@
+import { EventEmitter } from 'node:events'
 import path from 'path'
 import Worksheet from '../worksheet/index.js'
 
-class Workbook extends EventTarget {
+class Workbook extends EventEmitter {
 	#workbookPath
 	name
 	#settings
@@ -59,19 +60,19 @@ class Workbook extends EventTarget {
 				) $worksheetRanges.push($worksheetRange)
 				return $worksheetRanges
 			}, [])
-			const workbookWorksheetOptions = $worksheets[workbookWorksheetName] || {}
+			const workbookWorksheetOptions = $worksheets[workbookWorksheetClassName] || {}
 			workbookWorksheetTable['!rows'] = workbookWorksheetRows
 			workbookWorksheetTable['!cols'] = workbookWorksheetCols
 			workbookWorksheetTable['!merges'] = workbookWorksheetMerges
 			workbookWorksheetTable['!ranges'] = workbookWorksheetRanges
 			const worksheet = new Worksheet({
+				worksheetClassName: workbookWorksheetClassName,
 				worksheetName: workbookWorksheetName,
 				worksheetTable: workbookWorksheetTable,
 				dbConnection: this.#dbConnection,
 			}, workbookWorksheetOptions)
-			console.log(workbookWorksheetClassName, workbookWorksheetName)
 			_worksheets
-			.set(workbookWorksheetClassName, worksheet)
+			.set(workbookWorksheetName, worksheet)
 			workbookWorksheetsIndex++
 		}
 		return this

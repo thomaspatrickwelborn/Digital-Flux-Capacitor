@@ -1,3 +1,4 @@
+import { EventEmitter } from 'node:events'
 const LMNRangeDefaults = {
   DEX: Number,
   VAL: String,
@@ -5,7 +6,7 @@ const LMNRangeDefaults = {
   SUPSET: String,
   PAT: String,
 }
-export default class LMNRanges extends EventTarget {
+export default class LMNRanges extends EventEmitter {
   length = 0
   constructor($settings) {
     super()

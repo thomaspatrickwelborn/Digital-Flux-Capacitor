@@ -1,3 +1,4 @@
+import { EventEmitter } from 'node:events'
 import { fillEmptyCells } from '#utils/index.js'
 import assignProps from './assignProps/index.js'
 import assignLMNProps from './assignLMNProps/index.js'
@@ -6,7 +7,7 @@ const translexes = [
 	["assignLMNProps", assignLMNProps],
 ]
 
-export default class Supposit extends EventTarget {
+export default class Supposit extends EventEmitter {
 	#settings
 	content = {}
 	constructor($settings = {}) {
@@ -15,7 +16,7 @@ export default class Supposit extends EventTarget {
 		let {
 			nom, sup, com, modIndex, mods, lmnRanges
 		} = this.#settings
-		sup = fillEmptyCells($settings.sup)
+		sup = fillEmptyCells(sup)
 		const translexesLength = translexes.length
 		var translexesIndex = 0
 		while(translexesIndex < translexesLength) {
@@ -24,7 +25,7 @@ export default class Supposit extends EventTarget {
 			] = translexes[translexesIndex]
 			const translexisMethodType = $translexisMethod.constructor.name
 			$translexisMethod(this.content, {
-				modIndex, mods, sup, com, lmnRanges
+				modIndex, mods, nom, sup, com, lmnRanges
 			})
 			translexesIndex++
 		}
