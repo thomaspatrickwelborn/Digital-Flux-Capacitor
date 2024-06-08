@@ -69,6 +69,7 @@ class Workbook extends EventTarget {
 				worksheetTable: workbookWorksheetTable,
 				dbConnection: this.#dbConnection,
 			}, workbookWorksheetOptions)
+			console.log(workbookWorksheetClassName, workbookWorksheetName)
 			_worksheets
 			.set(workbookWorksheetClassName, worksheet)
 			workbookWorksheetsIndex++

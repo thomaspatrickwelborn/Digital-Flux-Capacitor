@@ -62,16 +62,17 @@ async function FSElementsContent(
 				indent_char: ' ',
 				preserve_newlines: false,
 			})
+			console.log(collectDoc.fs.path, '\n', beautifiedFileData)
 			const filePath = path.join(
 				projectPath,
 				$subcycle.filesystem.path,
 				collectDoc.fs.path
 			)
 			await writeFile(filePath, beautifiedFileData)
-			throw "digital flux capacitor"
 		}
 		collectionIndex++
 	}
+	console.log("digital flux capacitor")
 }
 
 export default FSElementsContent

@@ -72,7 +72,8 @@ export default class Suppository extends EventTarget {
       var { nom, sup, com } = $mod
       var schema = schemata.get(nom)
       if(_models[nom] === undefined) {
-        var model = this.#dbConnection.model(nom, schema)
+        var model = this.#dbConnection.models[nom] ||
+        this.#dbConnection.model(nom, schema)
         _models.set(nom, model)
       }
       modsIndex++
