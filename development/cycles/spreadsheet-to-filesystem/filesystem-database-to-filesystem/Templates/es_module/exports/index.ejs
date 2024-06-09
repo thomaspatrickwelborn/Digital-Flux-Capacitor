@@ -1,1 +1,6 @@
-<% console.log('exports', $data.content.toObject()) %>
+<%
+const exports = $data.content
+%>
+<% for(const $export of exports) { -%>
+  <% console.log($export) %>
+<% } -%>

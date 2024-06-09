@@ -1,1 +1,24 @@
-<% console.log('imports', $data.content.toObject()) %>
+<%
+const imports = $data.content
+%>
+<% for(const $import of imports) { -%>
+  <% if($import.default === false) { -%>
+    import {
+    	<% for(const $namedImport of $import.name) { -%>
+    	  <%= $namedImport.name -%>
+    	  <% if($namedImport.alias !== undefined) { -%>
+    	    as <%= $namedImport.alias %>,
+    	  <% } -%>
+    	<% } -%>
+    } from "<%= $import.path -%>"
+  <% } else if($import.default === true) { -%>
+	  <% const namedImport = $import.name[0] -%>
+	  <% if(namedImport !== undefined) { -%>
+	    import <%= namedImport.name -%> 
+	    <% if($namedImport.alias !== undefined) { -%>
+  	    as <%= $namedImport.alias %>,
+  	  <% } -%>
+  	  from "<%= $import.path -%>"
+	  <% } -%>
+  <% } -%>
+<% } -%>
