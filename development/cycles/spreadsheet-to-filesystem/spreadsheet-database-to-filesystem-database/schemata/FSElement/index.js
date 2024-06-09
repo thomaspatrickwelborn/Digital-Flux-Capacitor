@@ -2,6 +2,7 @@ import { Schema } from 'mongoose'
 const defaultSchemataOptions = {
   strict: false,
   validateBeforeSave: false,
+  _id: false,
 }
 const ImportNameSchema = new Schema({
   name: String,

@@ -15,7 +15,7 @@ const File = new Schema({
 	fs: FSSettingsSchema,
 	imports: [ImportSchema],
 	blocks: [BlockSchema],
-	export: [ExportSchema],
+	exports: [ExportSchema],
 }, defaultSchemataOptions)
 
 export { File, Fold }

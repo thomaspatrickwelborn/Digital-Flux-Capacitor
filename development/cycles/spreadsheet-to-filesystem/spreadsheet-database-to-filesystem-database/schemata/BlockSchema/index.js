@@ -15,6 +15,7 @@ const BlockStatementSchema = new Schema({
     ple: String,
   }
 }, {
+  _id: false, 
   strict: false,
   validateBeforeSave: false,
 })
@@ -40,10 +41,12 @@ const BlockElementSchema = new Schema({
     per: String,
   }],
 }, {
+  _id: false, 
   strict: false,
   validateBeforeSave: false,
 })
 const BlockSchema = new Schema({}, {
+  _id: false, 
   strict: true,
   validateBeforeSave: false,
 })
