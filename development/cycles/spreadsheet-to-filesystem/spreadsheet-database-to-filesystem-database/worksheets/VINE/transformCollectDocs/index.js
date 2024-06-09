@@ -50,7 +50,7 @@ function transormCollectDocs($collect, $worksheet) {
 		const element = {
 			fs: {
 				id: collectDoc.fs.id,
-				workspaces: collectDoc.fs.workspaces,
+				workspace: collectDoc.fs.workspace,
 				name: collectDoc.fs.name,
 				path: collectDoc.fs.path,
 				template: collectDoc.fs.template,

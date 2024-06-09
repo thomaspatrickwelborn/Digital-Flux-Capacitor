@@ -26,18 +26,23 @@ function assignPropPath($collect, $settings) {
 			}
 			preterScopeIndex = meterScopeIndex
 			meterScopeIndex = modComRowRange.DEX
-			if(
-				meterScopeIndex === preterScopeIndex ||
-				preterScopeIndex === undefined
-			) {
-				scopes[meterScopeIndex] = collectDoc
-			}
+			if(preterScopeIndex === undefined) {
+				scopes.splice(0, 0, collectDoc)
+			} else
+			if(meterScopeIndex === preterScopeIndex) {
+				scopes.splice(
+					meterScopeIndex, 1, collectDoc
+				)
+			} else
 			if(meterScopeIndex < preterScopeIndex) {
-				scopes.pop()
-				scopes[meterScopeIndex] = collectDoc
-			}
+				scopes.splice(
+					meterScopeIndex, preterScopeIndex - meterScopeIndex + 1, collectDoc
+				)
+			} else
 			if(meterScopeIndex > preterScopeIndex) {
-				scopes[meterScopeIndex] = collectDoc
+				scopes.splice(
+					meterScopeIndex, 0, collectDoc
+				)
 			}
 			const path = []
 			const scopesLength = scopes.length

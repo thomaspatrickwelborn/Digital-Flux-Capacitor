@@ -71,7 +71,6 @@ async function FSElementsContent(
 		}
 		collectionIndex++
 	}
-	throw "digital flux capacitor"
 }
 
 export default FSElementsContent

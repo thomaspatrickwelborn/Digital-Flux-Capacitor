@@ -1,9 +1,13 @@
 <%
 const { coutils, content } = $data
-const { blocks } = content
+const { blocks, import } = content
 -%>
 
 <%# IMPORTS -%>
+<%- await include('imports/index.ejs', {
+	content: import,
+	coutils: coutils,
+}) -%>
 
 <%# BLOCKS -%>
 <%- await include('blocks/index.ejs', {

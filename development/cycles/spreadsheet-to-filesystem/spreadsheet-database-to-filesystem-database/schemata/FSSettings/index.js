@@ -13,7 +13,7 @@ const FSSettingsSchema = new Schema({
   },
   encoding: String,
   template: String,
-  workspaces: [String],
+  workspace: String,
   type: String,
 }, {
   strict: false,
