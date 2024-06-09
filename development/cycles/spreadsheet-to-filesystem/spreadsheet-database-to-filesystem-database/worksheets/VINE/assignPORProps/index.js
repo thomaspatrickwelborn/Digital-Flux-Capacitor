@@ -103,7 +103,7 @@ function assignPORProps($collect, $worksheet) {
 			}
 			collectDocPortalsIndex++
 		}
-		collectDoc.import = collectDocImports
+		collectDoc.imports = collectDocImports
 		collectDoc.export = collectDocExports
 		// delete collectDoc.portal
 		collectDocsIndex++

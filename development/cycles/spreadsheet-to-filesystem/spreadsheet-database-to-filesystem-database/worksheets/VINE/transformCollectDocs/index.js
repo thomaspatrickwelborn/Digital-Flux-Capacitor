@@ -61,7 +61,7 @@ function transormCollectDocs($collect, $worksheet) {
 			},
 			files: collectDoc.files,
 			folds: collectDoc.folds,
-			import: transformCollectDocPort(collectDoc.import),
+			imports: transformCollectDocPort(collectDoc.imports),
 			export: transformCollectDocPort(collectDoc.export),
 		}
 		collect.push(element)

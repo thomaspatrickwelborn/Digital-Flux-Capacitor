@@ -13,7 +13,7 @@ const Fold = new Schema({
 // File Schema
 const File = new Schema({
 	fs: FSSettingsSchema,
-	import: [ImportSchema],
+	imports: [ImportSchema],
 	blocks: [BlockSchema],
 	export: [ExportSchema],
 }, defaultSchemataOptions)
