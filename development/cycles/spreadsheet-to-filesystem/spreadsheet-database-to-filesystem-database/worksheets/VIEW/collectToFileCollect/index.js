@@ -1,9 +1,8 @@
 import collectDocPopulate from './collectDocPopulate/index.js'
 
-async function collectToFileCollect($collect, $settings) {
-  const { worksheet } = $settings
-  const lmnRanges = worksheet.depository.lmnRanges
-  const worksheetMods = Array.from(worksheet.depository.mods.values())
+async function collectToFileCollect($collect, $worksheet) {
+  const lmnRanges = $worksheet.depository.lmnRanges
+  const worksheetMods = Array.from($worksheet.depository.mods.values())
   const worksheetModsLength = worksheetMods.length
   var worksheetModsIndex = 0
   const collectDocs = []
@@ -43,7 +42,7 @@ async function collectToFileCollect($collect, $settings) {
       files.set(collectDoc.fs.id, [])
     }
     files.get(collectDoc.fs.id).push(collectDoc.toObject({
-      minimize: true,
+      // minimize: true,
     }))
     collectDocsIndex++
   }

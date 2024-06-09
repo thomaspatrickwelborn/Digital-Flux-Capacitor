@@ -1,4 +1,4 @@
-async function saveFileCollect($fileCollect, $models) {
+async function saveFileCollect($fileCollect, $worksheet, $models) {
   const collectEntries = Array.from($fileCollect.entries())
   const FileModel = $models.File
   const fileCollect = []
@@ -13,14 +13,14 @@ async function saveFileCollect($fileCollect, $models) {
       },
       { upsert: true, new: true },
     )
-    await fileDoc.populate({
-      path: 'blocks',
-      strictPopulate: false,
-      populate: {
-        path: 'blocks',
-        strictPopulate: false,
-      }
-    })
+    // await fileDoc.populate({
+    //   path: 'blocks',
+    //   strictPopulate: false,
+    //   populate: {
+    //     path: 'blocks',
+    //     strictPopulate: false,
+    //   }
+    // })
     fileCollect.push(fileDoc/*.toObject()*/)
     fileCollectIndex++
   }

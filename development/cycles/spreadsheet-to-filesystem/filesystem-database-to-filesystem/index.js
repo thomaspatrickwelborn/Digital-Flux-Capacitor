@@ -15,8 +15,10 @@ class FilesystemDatabaseToFilesystem extends EventEmitter {
 		const fsDBConnection = $presubcycle.dbConnection
 		const { File, Fold } = fsDBConnection.models
 		const { FSElements, FSElementsContent } = Generators
-		const fileCollection = await File.find({})
-		const foldCollection = await Fold.find({})
+		const fileCollection = await File
+		.find({})
+		const foldCollection = await Fold
+		.find({})
 		const fsElements = foldCollection.concat(fileCollection)
 		this.fsElements = await FSElements(
 			fsElements, $presubcycle, this

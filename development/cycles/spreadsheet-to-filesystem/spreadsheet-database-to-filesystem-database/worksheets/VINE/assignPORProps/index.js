@@ -22,25 +22,25 @@ function assignPORProps($collect, $worksheet) {
 			}
 			// Collect Doc Import Flow
 			if(collectDocPortal.flow === 'I') {
-				// Collect Doc Import Preduct Flow
-				var preductCollectDocsIndex = collectDocsIndex - 1
-				iteratePreductCollectDocs:
-				while(preductCollectDocsIndex >= 0) {
-					// Preduct Collect Doc
-					const preductCollectDoc = $collect[preductCollectDocsIndex]
-					const preductCollectDocPortal = preductCollectDoc.portal[collectDocPortalsIndex]
-					if(preductCollectDocPortal.flow === undefined) {
-						break iteratePreductCollectDocs
+				// Collect Doc Import Preterduct Flow
+				var preterductCollectDocsIndex = collectDocsIndex - 1
+				iteratePreterductCollectDocs:
+				while(preterductCollectDocsIndex >= 0) {
+					// Preterduct Collect Doc
+					const preterductCollectDoc = $collect[preterductCollectDocsIndex]
+					const preterductCollectDocPortal = preterductCollectDoc.portal[collectDocPortalsIndex]
+					if(preterductCollectDocPortal.flow === undefined) {
+						break iteratePreterductCollectDocs
 					} else if(
-						preductCollectDocPortal.flow === '|'
+						preterductCollectDocPortal.flow === '|'
 					) {
-						preductCollectDocsIndex--
-						continue iteratePreductCollectDocs
+						preterductCollectDocsIndex--
+						continue iteratePreterductCollectDocs
 					} else if(
-						preductCollectDocPortal.flow === 'O'
+						preterductCollectDocPortal.flow === 'O'
 					) {
-						var collectDocImportPath = preductCollectDoc.fs.path
-						.replace(new RegExp(`^${preductCollectDoc.fs.workspace}/`), '')
+						var collectDocImportPath = preterductCollectDoc.fs.path
+						.replace(new RegExp(`^${preterductCollectDoc.fs.workspace}/`), '')
 						collectDocImportPath = collectDocImportPath
 						.replace(new RegExp(`^node_modules/`), '')
 						// Collect Doc Import
@@ -55,25 +55,25 @@ function assignPORProps($collect, $worksheet) {
 						collectDocImport.path = collectDocImportPath
 						collectDocImports.push(collectDocImport)
 					}
-					preductCollectDocsIndex--
+					preterductCollectDocsIndex--
 				}
-				// Collect Doc Import Antduct Flow
-				var antductCollectDocsIndex = collectDocsIndex + 1
-				iterateAntductCollectDocs: while(antductCollectDocsIndex < $collect.length) {
-					// Antduct Collect Doc
-					const antductCollectDoc = $collect[antductCollectDocsIndex]
-					const antductCollectDocPortal = antductCollectDoc.portal[collectDocPortalsIndex]
-					if(antductCollectDocPortal.flow === undefined) {
-						break iterateAntductCollectDocs
+				// Collect Doc Import Anterduct Flow
+				var anterductCollectDocsIndex = collectDocsIndex + 1
+				iterateAnterductCollectDocs: while(anterductCollectDocsIndex < $collect.length) {
+					// Anterduct Collect Doc
+					const anterductCollectDoc = $collect[anterductCollectDocsIndex]
+					const anterductCollectDocPortal = anterductCollectDoc.portal[collectDocPortalsIndex]
+					if(anterductCollectDocPortal.flow === undefined) {
+						break iterateAnterductCollectDocs
 					} else if(
-						antductCollectDocPortal.flow === '|'
+						anterductCollectDocPortal.flow === '|'
 					) {
-						antductCollectDocsIndex++
-						continue iterateAntductCollectDocs
+						anterductCollectDocsIndex++
+						continue iterateAnterductCollectDocs
 					} else if(
-						antductCollectDocPortal.flow === 'O'
+						anterductCollectDocPortal.flow === 'O'
 					) {
-						const collectDocImportPath = antductCollectDoc.fs.path
+						const collectDocImportPath = anterductCollectDoc.fs.path
 						// Collect Doc Import
 						const collectDocImport = {}
 						// Import Name
@@ -86,7 +86,7 @@ function assignPORProps($collect, $worksheet) {
 						collectDocImport.path = collectDocImportPath
 						collectDocImports.push(collectDocImport)
 					}
-					antductCollectDocsIndex++
+					anterductCollectDocsIndex++
 				}
 			}
 			// Collect Doc Export Flow

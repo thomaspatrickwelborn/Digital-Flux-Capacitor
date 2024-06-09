@@ -1,7 +1,7 @@
 export default async function collectDocPopulate($collectDoc) {
-  await $collectDoc.populate({
-    path: 'blocks',
-  })
+  // await $collectDoc.populate({
+  //   path: 'blocks',
+  // })
   const collectDocBlocks = $collectDoc.blocks
   if(collectDocBlocks.length === 0) return $collectDoc
   const collectDocBlocksLength = collectDocBlocks.length

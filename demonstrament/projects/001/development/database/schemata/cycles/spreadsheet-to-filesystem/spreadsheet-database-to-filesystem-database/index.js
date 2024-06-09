@@ -1,3 +1,3 @@
 import {
   Schema
-} from "mongoose"
+} from 'mongoose'

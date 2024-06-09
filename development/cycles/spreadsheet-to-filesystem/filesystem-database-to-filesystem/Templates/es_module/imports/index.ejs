@@ -4,21 +4,22 @@ const imports = $data.content
 <% for(const $import of imports) { -%>
   <% if($import.default === false) { -%>
     import {
-    	<% for(const $namedImport of $import.name) { -%>
-    	  <%= $namedImport.name -%>
-    	  <% if($namedImport.alias !== undefined) { -%>
-    	    as <%= $namedImport.alias %>,
-    	  <% } -%>
-    	<% } -%>
-    } from "<%= $import.path -%>"
+      <% for(const $namedImport of $import.name) { -%>
+        <% if($namedImport.alias !== undefined) { -%>
+          <%= $namedImport.name -%> as <%= $namedImport.alias -%>,
+        <% } else { -%>
+	        <%= $namedImport.name -%>
+        <% } -%>
+      <% } -%>
+    } from '<%= $import.path -%>'
   <% } else if($import.default === true) { -%>
-	  <% const namedImport = $import.name[0] -%>
-	  <% if(namedImport !== undefined) { -%>
-	    import <%= namedImport.name -%> 
-	    <% if($namedImport.alias !== undefined) { -%>
-  	    as <%= $namedImport.alias %>,
-  	  <% } -%>
-  	  from "<%= $import.path -%>"
-	  <% } -%>
+    <% const namedImport = $import.name[0] -%>
+    <% if(namedImport !== undefined) { -%>
+      <% if(namedImport.alias !== undefined) { -%>
+        import <%= namedImport.name -%> as <%= namedImport.alias -%> from '<%= $import.path -%>'
+      <% } else { -%>
+        import <%= namedImport.name -%> from '<%= $import.path -%>'
+      <% } -%>
+    <% } -%>
   <% } -%>
 <% } -%>
