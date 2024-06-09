@@ -5,6 +5,23 @@ async function collectToFileCollect($collect, $worksheet) {
   var worksheetModsIndex = 0
   const collectDocs = []
   var collectDocsIndex = 0
+  const collectDocBlocksPopulateDepth = $worksheet.depository.lmnRanges.WIDTH
+  const collectDocBlocksPopulateOptions = {}
+  let collectDocBlocksPopulateOptionsProps = collectDocBlocksPopulateOptions
+  let collectDocBlocksPopulateDepthIndex = 0
+  iterateCollectDocBlocksPopulateDepth:
+  while(collectDocBlocksPopulateDepthIndex < collectDocBlocksPopulateDepth) {
+    Object.assign(collectDocBlocksPopulateOptionsProps, {
+      path: 'blocks',
+      strictPopulate: false,
+    })
+    if(collectDocBlocksPopulateDepthIndex < collectDocBlocksPopulateDepth - 2) {
+      collectDocBlocksPopulateOptionsProps.populate = {}
+      collectDocBlocksPopulateOptionsProps = collectDocBlocksPopulateOptionsProps.populate
+    }
+    collectDocBlocksPopulateDepthIndex++
+  }
+  iterateWorksheetMods: 
   while(worksheetModsIndex < worksheetModsLength) {
     const { nom, sup, com } = worksheetMods[worksheetModsIndex]
     const comRowsLength = com.length
@@ -20,14 +37,7 @@ async function collectToFileCollect($collect, $worksheet) {
       const comRow = com[comRowsIndex]
       const comRowLMNRange = worksheetLMNRange.parseRow(comRow)
       if(comRowLMNRange.DEX === 0) {
-        await collectDoc.populate({
-          path: 'blocks',
-          strictPopulate: false,
-          populate: {
-            path: 'blocks',
-            strictPopulate: false,
-          }
-        })
+        await collectDoc.populate(collectDocBlocksPopulateOptions)
         collectDocs.push(collectDoc.toObject({
           minimize: true,
         }))

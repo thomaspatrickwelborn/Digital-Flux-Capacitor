@@ -14,6 +14,16 @@ export default class LMNRanges extends EventEmitter {
       Array.prototype.push.call(this, $lmnRange)
     }
   }
+  #_WIDTH
+  get WIDTH() {  if(this.#_WIDTH === undefined) {
+    const LMN = this.LMN
+    this.#_WIDTH = LMN.reduce((
+      $WIDTH, $LMN, $LMN_DEX
+    ) => {
+      return $WIDTH + ($LMN.Ref.e.c - $LMN.Ref.s.c) + 1
+    }, 0)}
+    return this.#_WIDTH
+  }
   #_LMN
   get LMN() { if(this.#_LMN === undefined) {
     this.#_LMN = Array.prototype.filter.call(

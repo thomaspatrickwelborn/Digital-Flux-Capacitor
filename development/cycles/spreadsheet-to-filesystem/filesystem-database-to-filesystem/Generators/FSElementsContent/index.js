@@ -67,6 +67,7 @@ async function FSElementsContent(
 				$subcycle.filesystem.path,
 				collectDoc.fs.path
 			)
+			console.log('=====')
 			console.log(filePath, beautifiedFileData)
 			await writeFile(filePath, beautifiedFileData)
 		}
