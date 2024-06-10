@@ -51,9 +51,6 @@ function assignPORProps($collect, $worksheet) {
 							collectDocImport.default = collectDocPortal.default
 						}
 						// Import Path
-						console.log('collectDocPortal.lat', collectDocPortal.lat)
-						console.log('collectDoc.fs.path', collectDoc.fs.path)
-						console.log('preterductCollectDoc.fs.path', preterductCollectDoc.fs.path)
 						if(collectDocPortal.lat === 're') {
 							collectDocImport.path = path.relative(collectDoc.fs.path, preterductCollectDoc.fs.path)
 						} else {
@@ -89,9 +86,6 @@ function assignPORProps($collect, $worksheet) {
 							collectDocImport.default = collectDocPortal.default
 						}
 						// Import Path
-						console.log('collectDocPortal.lat', collectDocPortal.lat)
-						console.log('collectDoc.fs.path', collectDoc.fs.path)
-						console.log('anterductCollectDoc.fs.path', anterductCollectDoc.fs.path)
 						if(collectDocPortal.lat === 're') {
 							collectDocImport.path = path.relative(collectDoc.fs.path, anterductCollectDoc.fs.path)
 						} else {

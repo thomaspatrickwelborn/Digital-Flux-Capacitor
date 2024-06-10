@@ -1,6 +1,7 @@
 {
 	"project": {
-		"name": "dfc-demo-001"
+		"name": "dfc-demo-001",
+		"path": ""
 	},
 	"cycles": [
 		["SpreadsheetToFilesystem", {
