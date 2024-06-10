@@ -34,6 +34,8 @@ async function FSElements($collection, $presubcycle, $subcycle) {
 	while(addedFSElementsIndex < addedFSElementsLength) {
 		const addedFSElement = addedFSElements[addedFSElementsIndex]
 		const addedFSElementDoc = $collection.find(($collectionDoc) => {
+			console.log($collectionDoc)
+			// const collectionDocFSPath = $collectionDoc.fs
 			return $collectionDoc.fs.path === addedFSElement.replace(fsRootPath.concat('/'), '')
 		})
 		if(addedFSElementDoc.fs.operations.add === false) {
