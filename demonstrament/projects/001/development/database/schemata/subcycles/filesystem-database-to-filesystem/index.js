@@ -1,4 +1,4 @@
 import {
   Schema
 } from 'mongoose'
-export default SpreadsheetDatabaseToFilesystemDatabase
+import Subcycle from '../../project/cycle/subcycle/index.js'
