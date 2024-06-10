@@ -1,8 +1,7 @@
 import {
   Schema
 } from 'mongoose'
-import WorksheetRange as WorksheetRangeSchema from '../worksheet/range/index.js'
-import Worksheet as WorksheetSchema from '../worksheet/index.js'
+import Worksheet from 'worksheet/index.js'
 const SpreadsheetToSpreadsheetDatabase = new Schema({
   spreadsheet: {
     path: String,
@@ -16,3 +15,4 @@ const SpreadsheetToSpreadsheetDatabase = new Schema({
     options: {},
   },
 }, {})
+export default SpreadsheetToSpreadsheetDatabase

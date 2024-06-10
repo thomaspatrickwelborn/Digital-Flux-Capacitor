@@ -52,7 +52,9 @@ function assignPORProps($collect, $worksheet) {
 						}
 						// Import Path
 						if(collectDocPortal.lat === 're') {
-							collectDocImport.path = path.relative(collectDoc.fs.path, preterductCollectDoc.fs.path)
+							collectDocImport.path = path.relative(
+								path.dirname(collectDoc.fs.path), preterductCollectDoc.fs.path
+							)
 						} else {
 							collectDocImport.path = collectDocImportPath
 						}
@@ -87,7 +89,9 @@ function assignPORProps($collect, $worksheet) {
 						}
 						// Import Path
 						if(collectDocPortal.lat === 're') {
-							collectDocImport.path = path.relative(collectDoc.fs.path, anterductCollectDoc.fs.path)
+							collectDocImport.path = path.relative(
+								path.dirname(collectDoc.fs.path), anterductCollectDoc.fs.path
+							)
 						} else {
 							collectDocImport.path = collectDocImportPath
 						}
