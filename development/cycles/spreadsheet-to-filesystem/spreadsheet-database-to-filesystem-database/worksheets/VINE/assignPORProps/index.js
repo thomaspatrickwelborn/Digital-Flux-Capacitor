@@ -1,7 +1,6 @@
+import path from 'node:path'
 import { typeOf, isNamedRange } from '#utils/index.js'
-
 const portalPropKeys = ['flow', 'name', 'default']
-
 function assignPORProps($collect, $worksheet) {
 	const collectDocsLength = $collect.length
 	var collectDocsIndex = 0
@@ -52,7 +51,14 @@ function assignPORProps($collect, $worksheet) {
 							collectDocImport.default = collectDocPortal.default
 						}
 						// Import Path
-						collectDocImport.path = collectDocImportPath
+						console.log('collectDocPortal.lat', collectDocPortal.lat)
+						console.log('collectDoc.fs.path', collectDoc.fs.path)
+						console.log('preterductCollectDoc.fs.path', preterductCollectDoc.fs.path)
+						if(collectDocPortal.lat === 're') {
+							collectDocImport.path = path.relative(collectDoc.fs.path, preterductCollectDoc.fs.path)
+						} else {
+							collectDocImport.path = collectDocImportPath
+						}
 						collectDocImports.push(collectDocImport)
 					}
 					preterductCollectDocsIndex--
@@ -83,7 +89,14 @@ function assignPORProps($collect, $worksheet) {
 							collectDocImport.default = collectDocPortal.default
 						}
 						// Import Path
-						collectDocImport.path = collectDocImportPath
+						console.log('collectDocPortal.lat', collectDocPortal.lat)
+						console.log('collectDoc.fs.path', collectDoc.fs.path)
+						console.log('anterductCollectDoc.fs.path', anterductCollectDoc.fs.path)
+						if(collectDocPortal.lat === 're') {
+							collectDocImport.path = path.relative(collectDoc.fs.path, anterductCollectDoc.fs.path)
+						} else {
+							collectDocImport.path = collectDocImportPath
+						}
 						collectDocImports.push(collectDocImport)
 					}
 					anterductCollectDocsIndex++
@@ -105,7 +118,6 @@ function assignPORProps($collect, $worksheet) {
 		}
 		collectDoc.imports = collectDocImports
 		collectDoc.exports = collectDocExports
-		// delete collectDoc.portal
 		collectDocsIndex++
 	}
 	return $collect
