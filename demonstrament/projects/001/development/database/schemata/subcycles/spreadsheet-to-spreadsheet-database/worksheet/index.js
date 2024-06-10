@@ -7,3 +7,4 @@ const Worksheet = new Schema({
     of: WorksheetRangeSchema
   }
 }, {})
+export default Worksheet
