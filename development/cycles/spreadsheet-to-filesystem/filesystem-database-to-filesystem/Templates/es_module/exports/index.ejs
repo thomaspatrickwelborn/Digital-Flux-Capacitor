@@ -10,7 +10,7 @@ const exports = $data.content
     export {
     <% for(const $name of $export.name ) { -%>
       <% const name = $name.name %>
-      <% if(nameIndex < nameLength - 2) { -%>
+      <% if(nameIndex < nameLength - 1) { -%>
         <%= name %>,
       <% } else { -%>
         <%= name %>

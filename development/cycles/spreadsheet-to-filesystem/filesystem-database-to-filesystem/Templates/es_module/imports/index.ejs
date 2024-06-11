@@ -4,12 +4,22 @@ const imports = $data.content
 <% for(const $import of imports) { -%>
   <% if($import.default === false) { -%>
     import {
+      <% var namedImportIndex = 0 -%>
       <% for(const $namedImport of $import.name) { -%>
         <% if($namedImport.alias !== undefined) { -%>
-          <%= $namedImport.name -%> as <%= $namedImport.alias -%>,
+          <% if(namedImportIndex < $import.name.length - 1) { -%>
+            <%= $namedImport.name -%> as <%= $namedImport.alias -%>,
+          <% } else { -%>
+            <%= $namedImport.name -%> as <%= $namedImport.alias -%>
+          <% } -%>
         <% } else { -%>
-	        <%= $namedImport.name -%>
+          <% if(namedImportIndex < $import.name.length - 1) { -%>
+  	        <%= $namedImport.name -%>,
+          <% } else { -%>
+            <%= $namedImport.name -%>
+          <% } -%>
         <% } -%>
+        <% namedImportIndex++ %>
       <% } -%>
     } from '<%= $import.path -%>'
   <% } else if($import.default === true) { -%>

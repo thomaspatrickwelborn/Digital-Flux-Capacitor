@@ -1,6 +1,5 @@
 import {
   Model,
   View,
-  Control,
-  Router
+  Control
 } from 'mvc-framework'
