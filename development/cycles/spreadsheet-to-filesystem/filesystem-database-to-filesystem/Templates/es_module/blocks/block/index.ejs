@@ -4,47 +4,46 @@ const { coutils, content } = $data
 const { blocks, statement } = content
 const { lexter, dexter } = statement
 -%>
-<%# STATEMENT MEXTER SCOPE -%>
+<%# STATEMENT EXPRESSIONS -%>
 <%
-const commexter = [lexter, dexter]
-var commexterIndex = 0
+const expressions = [lexter, dexter]
+var expressionsIndex = 0
 -%>
-<% while(commexterIndex < commexter.length) { -%>
+<% while(expressionsIndex < expressions.length) { -%>
   <%
-  const mexter = commexter[commexterIndex]
-  var { ser, ten, per, pos } = mexter
+  const expression = expressions[expressionsIndex]
+  var { ser, ten, per, pos, par } = expression
   -%>
   <% if(
-    ten &&
-    ten.slice(0, 2) !== '#:') {
-  -%>
-		<%= ser %> <%- ten %> <%= per %>
+  	ten !== undefined &&
+  	ten.slice(0, 2) !== '#:'
+	) { -%>
+    <%= ser %> <%- ten %> <%= per %>
   <% } else { -%>
-  	<%= ser %> <%= per %>
+    <%= ser %> <%= per %>
   <% } -%>
   <% if(pos !== undefined) { -%>
-  	<% if(
-	  	commexterIndex === 0 &&
-	  	commexter[1].pos !== undefined
-  	) { -%>
-  		<%= pos -%>
-  		<%
-  		pos = commexter[1].pos
-  		commexterIndex++
-  		-%>
-  	<% } -%>
-	  <% const [inpos, expos] = pos || [] -%>
-	  <%# INPOS %>
-		<%= inpos -%>
-		<%# BLOCKS %>
-		<% if(blocks.length) { -%>
-			<%- await include('../index.ejs', {
-				content: blocks,
-				coutils: coutils,
-			}) %>
-		<% } -%>
-	  <%# EXPOS -%>
-		<%= expos -%>
+  		<% if(
+  			expressionsIndex === 0 &&
+  			expressions[1].pos !== undefined
+			) { -%>
+				<%= pos %> <%= par %>
+  		<% } else { -%> 
+  		  <%
+				const [inpos, expos] = pos || ''
+				-%>
+				<%# INPOS %>
+				<%= inpos -%>
+				<%# BLOCKS %>
+				<% if(blocks.length) { -%>
+					<%- await include('../index.ejs', {
+						content: blocks,
+						coutils: coutils,
+					}) %>
+				<% } -%>
+				<%# EXPOS %>
+				<%= expos -%><%= par %>
+  		<% } -%>
   <% } -%>
-  <% commexterIndex++ -%>
+  <% expressionsIndex++ -%>
 <% } -%>

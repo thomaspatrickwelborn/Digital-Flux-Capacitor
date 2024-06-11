@@ -54,7 +54,13 @@ export default class Suppository extends EventEmitter {
       const supposit = supposits.get(nom)
       if(schemata.has(nom) === false) {
         var schema = new Schema(supposit.content)
-        schemata.set(nom, schema)
+        if(schemata.has(nom)) {
+          schemata.set(nom, merge(
+            schemata.get(nom), schema
+          ))
+        } else {
+          schemata.set(nom, schema)
+        }
       }
       modsIndex++
     }
