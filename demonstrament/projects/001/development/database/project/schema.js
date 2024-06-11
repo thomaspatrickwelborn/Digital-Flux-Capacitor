@@ -1,4 +1,4 @@
 import {
   Schema
 } from 'mongoose'
-export default WorksheetRange
+export default ProjectSchema
