@@ -1,6 +1,6 @@
 const ApplicationStaticRouter = [{
   routes: {
-    '/': {
+    '': {
       className: 'Index'
     },
   }

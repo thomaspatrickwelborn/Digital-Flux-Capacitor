@@ -6,4 +6,7 @@ import {
   StaticRouter
 } from 'mvc-framework'
 import ApplicationControl from 'control.js'
-const applicationControl = new Control(...ApplicationControl)
+import Index from 'index/index.js'
+const application = new Control {
+  ...ApplicationControl
+}

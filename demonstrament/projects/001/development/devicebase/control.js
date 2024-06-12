@@ -11,7 +11,7 @@ const ApplicationControl = [{
   },
   routers: {
     static
-    static
+    fetch
   }
 }, {}]
 export default ApplicationControl
