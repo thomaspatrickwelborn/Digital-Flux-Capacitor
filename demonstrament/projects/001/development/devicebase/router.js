@@ -1,4 +1,2 @@
-import {
-  Router
-} from 'mvc-framework'
-export default DefaultRouter
+const ApplicationRouter = [{}, {}]
+export default ApplicationRouter

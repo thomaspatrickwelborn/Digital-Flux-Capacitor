@@ -1,4 +1,2 @@
-import {
-  View
-} from 'mvc-framework'
-export default DefaultView
+const ApplicationView = [{}, {}]
+export default ApplicationView

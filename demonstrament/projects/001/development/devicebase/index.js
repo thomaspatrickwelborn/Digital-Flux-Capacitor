@@ -1,18 +1,8 @@
 import {
-  Control
+  Model,
+  View,
+  Control,
+  Router
 } from 'mvc-framework'
-import DefaultView from 'view.js'
-import DefaultRouter from 'router.js'
-class ApplicationControl
-extends Control {
-  constructor() {
-    super({
-      views: {
-        default: new DefaultView(),
-      },
-      routers: {
-        default: new DefaultRouter(),
-      }
-    }, {})
-  }
-};
+import ApplicationControl from 'control.js'
+const applicationControl = new Control(...ApplicationControl)
