@@ -1,6 +1,7 @@
 import ApplicationView from 'view.js'
 import ApplicationModel from 'model.js'
-import ApplicationRouter from 'router.js'
+import ApplicationFetchRouter from 'fetch-router.js'
+import ApplicationStaticRouter from 'static-router.js'
 const ApplicationControl = [{
   models: {
     default: new Model(...ApplicationModel)
@@ -9,7 +10,8 @@ const ApplicationControl = [{
     default: new View(...ApplicationView)
   },
   routers: {
-    default: new Router(...ApplicationRouter)
+    static
+    static
   }
 }, {}]
 export default ApplicationControl
