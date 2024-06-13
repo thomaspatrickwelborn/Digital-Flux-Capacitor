@@ -52,7 +52,18 @@ async function assignProps($collect, $settings) {
 						continue iterateSubductModComRows
 					}
 					try {
-						collectDoc[subductModComRowRange.SUPSET].push(subductCollectDoc._id)
+						collectDoc.fs.populateOptions = collectDoc.fs.populateOptions || []
+						if(
+							subductModComRowRange.SUPSET !== undefined &&
+							collectDoc.fs.populateOptions.findIndex(($populateOptions) => {
+								return $populateOptions.path
+							}) === -1
+						) {
+							collectDoc.fs.populateOptions.push({
+								path: subductModComRowRange.SUPSET
+							})
+						}
+						collectDoc[collectDoc.fs.segset].push(subductCollectDoc._id)
 					} catch($err) { /**/ }
 					subductCollectDocsIndex++
 					subductModComRowsIndex++
