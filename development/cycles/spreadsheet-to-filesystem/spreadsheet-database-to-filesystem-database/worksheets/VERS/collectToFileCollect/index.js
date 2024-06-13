@@ -1,31 +1,18 @@
+import blocksPopulateOptions from '../../coutil/blocksPopulateOptions.js'
 async function collectToFileCollect($collect, $worksheet) {
   const worksheetLMNRange = $worksheet.depository.lmnRanges
   const worksheetMods = Array.from($worksheet.depository.mods.values())
   const worksheetModsLength = worksheetMods.length
   var worksheetModsIndex = 0
+  const collectDocBlocksPopulateOptions = blocksPopulateOptions($worksheet)
   const collectDocs = []
   var collectDocsIndex = 0
-  const collectDocBlocksPopulateDepth = $worksheet.depository.lmnRanges.WIDTH
-  const collectDocBlocksPopulateOptions = {}
-  let collectDocBlocksPopulateOptionsProps = collectDocBlocksPopulateOptions
-  let collectDocBlocksPopulateDepthIndex = 0
-  iterateCollectDocBlocksPopulateDepth:
-  while(collectDocBlocksPopulateDepthIndex < collectDocBlocksPopulateDepth) {
-    Object.assign(collectDocBlocksPopulateOptionsProps, {
-      path: 'blocks',
-      strictPopulate: false,
-    })
-    if(collectDocBlocksPopulateDepthIndex < collectDocBlocksPopulateDepth - 2) {
-      collectDocBlocksPopulateOptionsProps.populate = {}
-      collectDocBlocksPopulateOptionsProps = collectDocBlocksPopulateOptionsProps.populate
-    }
-    collectDocBlocksPopulateDepthIndex++
-  }
   iterateWorksheetMods: 
   while(worksheetModsIndex < worksheetModsLength) {
     const { nom, sup, com } = worksheetMods[worksheetModsIndex]
     const comRowsLength = com.length
     var comRowsIndex = 0
+    iterateComRows:
     while(comRowsIndex < comRowsLength) {
       const collectDoc = $collect[collectDocsIndex]
       if(collectDoc.fs.id === undefined) {
@@ -50,6 +37,7 @@ async function collectToFileCollect($collect, $worksheet) {
   const files = new Map()
   const collectDocsLength = collectDocs.length
   collectDocsIndex = 0
+  reiterateCollectDocs: 
   while(collectDocsIndex < collectDocsLength) {
     const collectDoc = collectDocs[collectDocsIndex]
     if(files.has(collectDoc.fs.id) === false) {
