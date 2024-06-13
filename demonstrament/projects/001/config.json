@@ -27,6 +27,12 @@
 									},
 									"LMN_0_SUPSET": {
 										"VAL": "blocks"
+									},
+									"LMN_1_SUBSET": {
+										"VAL": "Script"
+									},
+									"LMN_1_SUPSET": {
+										"VAL": "blocks"
 									}
 								}
 							},

@@ -18,7 +18,7 @@ async function assignProps($collect, $settings) {
 			const collectDoc = $collect[collectDocsIndex]
 			const modComRow = modCom[modComRowsIndex]
 			const modComRowRange = lmnRanges.parseRow(modComRow)
-			var meterScopeIndex = modComRowRange.DEX
+			var meterScopeIndex = modComRowRange.COMDEX
 			const subductModsLength = mods.length
 			var subductModsIndex = modsIndex
 			var subductCollectDocsIndex = collectDocsIndex + 1
@@ -40,7 +40,7 @@ async function assignProps($collect, $settings) {
 					const subductCollectDoc = $collect[subductCollectDocsIndex]
 					const subductModComRow = subductModCom[subductModComRowsIndex]
 					const subductModComRowRange = lmnRanges.parseRow(subductModComRow)
-					var subductMeterScopeIndex = subductModComRowRange.DEX
+					var subductMeterScopeIndex = subductModComRowRange.COMDEX
 					if(subductMeterScopeIndex <= meterScopeIndex) {
 						collectDocsIndex++
 						modComRowsIndex++

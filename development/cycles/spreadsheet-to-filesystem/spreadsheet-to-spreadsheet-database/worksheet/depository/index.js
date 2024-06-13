@@ -12,13 +12,12 @@ const Defaults = {
   GetRangesOptions: { includeHidden: true },
   GetDataOptions: { includeHidden: false, condensed: true },
   ModRangeNameRegExp: /^MOD_[0-9]/,
-  OmitRangeNameRegExp: /^OMIT/,
 }
 const { Row, Col, Range, Cell } = tem
 export default class Depository extends EventEmitter {
   #settings = {}
   #options = {}
-  #_hidden = { rows: [], cols: [] }
+  #_hidden
   #_rows = []
   #_cols = []
   #_data = []
@@ -30,13 +29,13 @@ export default class Depository extends EventEmitter {
     super()
     this.#settings = $settings
     this.#options = $options
+    this.rows = this.#settings['!rows']
+    this.cols = this.#settings['!cols']   
+    this.merges = this.#settings['!merges']
     this.ranges = this.#settings['!ranges']
     this.lmnRanges = this.ranges.getRangesByName(
       new RegExp(/^LMN_/)
     )
-    this.rows = this.#settings['!rows']
-    this.cols = this.#settings['!cols']   
-    this.merges = this.#settings['!merges']
     this.data = this.#settings['!data']
     this.mods = {
       data: this.data,
@@ -60,7 +59,7 @@ export default class Depository extends EventEmitter {
   }
   get hidden() {
     if(this.#_hidden === undefined) {
-      const _hidden = this.#_hidden 
+      const _hidden = { rows: [], cols: [] }
       const rows = this.rows.reduce(
         ($rows, $row, $rowIndex) => {
           if($row.hidden === true) $rows.push($rowIndex)
@@ -73,6 +72,7 @@ export default class Depository extends EventEmitter {
           return $cols
         }, _hidden.cols
       ).reverse()
+      this.#_hidden = _hidden
     }
     return this.#_hidden
   }
@@ -118,9 +118,11 @@ export default class Depository extends EventEmitter {
   }
   get data() {
     const _data = this.#_data
-    const {
-      includeHidden, condensed
-    } = Defaults.GetDataOptions
+    // const {
+    //   includeHidden, condensed
+    // } = Defaults.GetDataOptions
+    const includeHidden = false
+    const condensed = true
     const hidden = this.hidden
     const hiddenRows = hidden.rows
     const hiddenCols = hidden.cols

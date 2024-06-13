@@ -1,4 +1,4 @@
-import { EventEmitter } from 'node:events'
+  import { EventEmitter } from 'node:events'
 const LMNRangeDefaults = {
   DEX: Number,
   VAL: String,
@@ -18,7 +18,7 @@ export default class LMNRanges extends EventEmitter {
   get WIDTH() {  if(this.#_WIDTH === undefined) {
     const LMN = this.LMN
     this.#_WIDTH = LMN.reduce((
-      $WIDTH, $LMN, $LMN_DEX
+      $WIDTH, $LMN
     ) => {
       return $WIDTH + ($LMN.Ref.e.c - $LMN.Ref.s.c) + 1
     }, 0)}
@@ -58,6 +58,8 @@ export default class LMNRanges extends EventEmitter {
   }
   parseRow($row) {
     const parsement = {}
+    let COMDEX = 0
+    let COMWIDTH = 0
     iterateLMNRanges: 
     for(const $LMN of this.LMN) {
       const [$rangeName, $rangeIndex] = $LMN.Name.split('_')
@@ -70,6 +72,14 @@ export default class LMNRanges extends EventEmitter {
         return $rowCellLMNRange !== undefined
       })
       if(DEX === -1) continue iterateLMNRanges
+      // COMDEX
+      if(COMWIDTH === 0) {
+        COMDEX += (COMWIDTH + DEX)
+      } else {
+        COMDEX += ((COMWIDTH - 1) + DEX)
+      }
+      // COMWIDTH
+      COMWIDTH += lmnRangeSlice.length
       const VAL = lmnRangeSlice[DEX]
       // SUPSET
       const lmnSupsetRange = this.SUPSET[$rangeIndex]
@@ -103,7 +113,7 @@ export default class LMNRanges extends EventEmitter {
         PAT = lmnPatSlice[0]
       }
       Object.assign(parsement, {
-        DEX, VAL, SUPSET, SUBSET, PAT
+        DEX, COMDEX, VAL, SUPSET, SUBSET, PAT
       })
     }
     return parsement
