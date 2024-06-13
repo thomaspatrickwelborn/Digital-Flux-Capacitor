@@ -1,4 +1,0 @@
-const ApplicationTemplate = ($data = & gt;) {
-  < app >
-}
-export default ApplicationTemplate

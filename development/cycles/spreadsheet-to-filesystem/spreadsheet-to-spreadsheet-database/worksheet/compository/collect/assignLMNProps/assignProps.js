@@ -60,7 +60,7 @@ async function assignProps($collect, $settings) {
 							}) === -1
 						) {
 							collectDoc.fs.populateOptions.push({
-								path: subductModComRowRange.SUPSET
+								path: subductModComRowRange.SUPSET,
 							})
 						}
 						collectDoc[collectDoc.fs.segset].push(subductCollectDoc._id)

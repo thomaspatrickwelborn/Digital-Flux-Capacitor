@@ -13,14 +13,6 @@ async function saveFileCollect($fileCollect, $worksheet, $models) {
       },
       { upsert: true, new: true },
     )
-    // await fileDoc.populate({
-    //   path: 'blocks',
-    //   strictPopulate: false,
-    //   populate: {
-    //     path: 'blocks',
-    //     strictPopulate: false,
-    //   }
-    // })
     fileCollect.push(fileDoc/*.toObject()*/)
     fileCollectIndex++
   }

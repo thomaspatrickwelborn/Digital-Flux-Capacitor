@@ -1,5 +1,5 @@
 async function collectToFileCollect($collect, $worksheet) {
-  const worksheetLMNRange = $worksheet.depository.lmnRanges
+  const lmnRanges = $worksheet.depository.lmnRanges
   const worksheetMods = Array.from($worksheet.depository.mods.values())
   const worksheetModsLength = worksheetMods.length
   var worksheetModsIndex = 0
@@ -20,9 +20,8 @@ async function collectToFileCollect($collect, $worksheet) {
       delete collectDoc._id
       delete collectDoc.__v
       const comRow = com[comRowsIndex]
-      const comRowLMNRange = worksheetLMNRange.parseRow(comRow)
+      const comRowLMNRange = lmnRanges.parseRow(comRow)
       if(comRowLMNRange.DEX === 0) {
-        console.log(collectDoc.fs.populateOptions)
         await collectDoc.populate(collectDoc.fs.populateOptions)
         collectDocs.push(collectDoc.toObject({
           minimize: true,

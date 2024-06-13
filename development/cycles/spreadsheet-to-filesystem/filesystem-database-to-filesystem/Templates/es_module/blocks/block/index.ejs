@@ -18,22 +18,22 @@ var expressionsIndex = 0
   	ten !== undefined &&
   	ten.slice(0, 2) !== '#:'
 	) { -%>
-    <%= ser %> <%- ten %> <%= per %>
+    <%- ser %> <%- ten %> <%- per %>
   <% } else { -%>
-    <%= ser %> <%= per %>
+    <%- ser %> <%- per %>
   <% } -%>
   <% if(pos !== undefined) { -%>
   		<% if(
   			expressionsIndex === 0 &&
   			expressions[1].pos !== undefined
 			) { -%>
-				<%= pos %> <%= par %>
+				<%- pos %> <%- par %>
   		<% } else { -%> 
   		  <%
 				const [inpos, expos] = pos || ''
 				-%>
 				<%# INPOS %>
-				<%= inpos -%>
+				<%- inpos -%>
 				<%# BLOCKS %>
 				<% if(blocks.length) { -%>
 					<%- await include('../index.ejs', {
@@ -42,7 +42,7 @@ var expressionsIndex = 0
 					}) %>
 				<% } -%>
 				<%# EXPOS %>
-				<%= expos -%><%= par %>
+				<%- expos -%><%- par %>
   		<% } -%>
   <% } -%>
   <% expressionsIndex++ -%>
