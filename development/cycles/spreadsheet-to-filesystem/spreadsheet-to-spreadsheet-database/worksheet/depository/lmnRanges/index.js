@@ -20,7 +20,11 @@ export default class LMNRanges extends EventEmitter {
     this.#_WIDTH = LMN.reduce((
       $WIDTH, $LMN
     ) => {
-      return $WIDTH + ($LMN.Ref.e.c - $LMN.Ref.s.c) + 1
+      const WIDTH = ($LMN.Ref.e.c - $LMN.Ref.s.c) + 1
+      return (
+        $WIDTH < WIDTH
+      ) ? WIDTH
+        : $WIDTH
     }, 0)}
     return this.#_WIDTH
   }

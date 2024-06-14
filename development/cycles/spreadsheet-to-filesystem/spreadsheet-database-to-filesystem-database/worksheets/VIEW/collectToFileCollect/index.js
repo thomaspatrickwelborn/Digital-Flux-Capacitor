@@ -1,3 +1,4 @@
+import populateOptions from '../../../coutil/populateOptions.js'
 async function collectToFileCollect($collect, $worksheet) {
   const lmnRanges = $worksheet.depository.lmnRanges
   const worksheetMods = Array.from($worksheet.depository.mods.values())
@@ -13,6 +14,9 @@ async function collectToFileCollect($collect, $worksheet) {
     iterateComRows:
     while(comRowsIndex < comRowsLength) {
       let collectDoc = $collect[collectDocsIndex]
+      const collectDocPopulateOptions = populateOptions(
+        lmnRanges.WIDTH, collectDoc.fs.populatePaths
+      )
       if(collectDoc.fs.id === undefined) {
         collectDoc.fs.id = $collect[collectDocsIndex - 1].fs.id
         collectDoc.fs.path = $collect[collectDocsIndex - 1].fs.path
@@ -22,7 +26,7 @@ async function collectToFileCollect($collect, $worksheet) {
       const comRow = com[comRowsIndex]
       const comRowLMNRange = lmnRanges.parseRow(comRow)
       if(comRowLMNRange.DEX === 0) {
-        collectDoc = await collectDoc.populate(collectDoc.fs.populateOptions)
+        await collectDoc.populate(collectDocPopulateOptions)
         collectDocs.push(collectDoc.toObject({
           minimize: true,
         }))

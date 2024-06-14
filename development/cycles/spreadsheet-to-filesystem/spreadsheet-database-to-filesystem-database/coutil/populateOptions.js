@@ -1,17 +1,25 @@
-export default function populateOptions($depth, $path, $options = {
-    strictPopulate: false,
-}) {
-  let populateDepthIndex = 0
-  iteratePopulateDepth:
-  while(populateDepthIndex < $depth) {
-    Object.assign($options, {
-      path: $path,
-    })
-    if(populateDepthIndex < $depth - 2) {
-      $options.populate = {}
-      $options = $options.populate
+export default function populateOptions(
+  $depth, $paths = []
+) {
+  const _populateOptionsArray = []
+  iteratePaths: 
+  for(const $path of $paths) {
+    const _populateOptions = {}
+    let populateOptionsScope = _populateOptions
+    let populateDepthIndex = 0
+    iteratePopulateDepth:
+    while(populateDepthIndex < $depth) {
+      Object.assign(populateOptionsScope, {
+        path: $path,
+        strictPopulate: false,
+      })
+      if(populateDepthIndex < $depth - 2) {
+        populateOptionsScope.populate = {}
+        populateOptionsScope = populateOptionsScope.populate
+      }
+      populateDepthIndex++
     }
-    populateDepthIndex++
+    _populateOptionsArray.push(_populateOptions)
   }
-  return populateOptions
+  return _populateOptionsArray
 }

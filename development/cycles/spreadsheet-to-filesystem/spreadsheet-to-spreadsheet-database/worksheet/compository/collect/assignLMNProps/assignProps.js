@@ -19,11 +19,6 @@ async function assignProps($collect, $settings) {
 			const modComRow = modCom[modComRowsIndex]
 			const modComRowRange = lmnRanges.parseRow(modComRow)
 			var meterScopeIndex = modComRowRange.DEX
-			console.log(
-				'\n', '-----',
-				// '\n', 'modComRowRange', modComRowRange,
-				'\n', 'meterScopeIndex', meterScopeIndex
-			)
 			const subductModsLength = mods.length
 			var subductModsIndex = modsIndex
 			var subductCollectDocsIndex = collectDocsIndex + 1
@@ -42,11 +37,6 @@ async function assignProps($collect, $settings) {
 				}
 				iterateSubductModComRows: 
 				while(subductModComRowsIndex < subductModComRowsLength) {
-					console.log(
-						'\n', '-----',
-						// '\n', 'modComRowRange', modComRowRange,
-						'\n', 'meterScopeIndex', meterScopeIndex
-					)
 					const subductCollectDoc = $collect[subductCollectDocsIndex]
 					const subductModComRow = subductModCom[subductModComRowsIndex]
 					const subductModComRowRange = lmnRanges.parseRow(subductModComRow)
@@ -62,16 +52,15 @@ async function assignProps($collect, $settings) {
 						continue iterateSubductModComRows
 					}
 					try {
-						collectDoc.fs.populateOptions = collectDoc.fs.populateOptions || []
+						collectDoc.fs.populatePaths = collectDoc.fs.populatePaths || []
 						if(
 							subductModComRowRange.SUPSET !== undefined &&
-							collectDoc.fs.populateOptions.includes(
+							collectDoc.fs.populatePaths.includes(
 								subductModComRowRange.SUPSET
 							) === false
 						) {
-							collectDoc.fs.populateOptions.push(subductModComRowRange.SUPSET)
+							collectDoc.fs.populatePaths.push(subductModComRowRange.SUPSET)
 						}
-						// throw "DIGITAL FLUX CAPACITOR"
 						collectDoc[subductModComRowRange.SUPSET].push(subductCollectDoc._id)
 					} catch($err) { /**/ }
 					subductCollectDocsIndex++
