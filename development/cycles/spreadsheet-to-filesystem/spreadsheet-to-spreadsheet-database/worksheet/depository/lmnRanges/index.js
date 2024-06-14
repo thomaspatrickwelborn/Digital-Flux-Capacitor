@@ -58,8 +58,6 @@ export default class LMNRanges extends EventEmitter {
   }
   parseRow($row) {
     const parsement = {}
-    let COMDEX = 0
-    let COMWIDTH = 0
     iterateLMNRanges: 
     for(const $LMN of this.LMN) {
       const [$rangeName, $rangeIndex] = $LMN.Name.split('_')
@@ -72,14 +70,6 @@ export default class LMNRanges extends EventEmitter {
         return $rowCellLMNRange !== undefined
       })
       if(DEX === -1) continue iterateLMNRanges
-      // COMDEX
-      if(COMWIDTH === 0) {
-        COMDEX += (COMWIDTH + DEX)
-      } else {
-        COMDEX += ((COMWIDTH - 1) + DEX)
-      }
-      // COMWIDTH
-      COMWIDTH += lmnRangeSlice.length
       const VAL = lmnRangeSlice[DEX]
       // SUPSET
       const lmnSupsetRange = this.SUPSET[$rangeIndex]
@@ -113,7 +103,7 @@ export default class LMNRanges extends EventEmitter {
         PAT = lmnPatSlice[0]
       }
       Object.assign(parsement, {
-        DEX, COMDEX, COMWIDTH, VAL, SUPSET, SUBSET, PAT
+        DEX, VAL, SUPSET, SUBSET, PAT
       })
     }
     return parsement

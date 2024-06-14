@@ -22,23 +22,22 @@ const BlockStatementSchema = new Schema({
 // Block Element Schema
 const BlockElementSchema = new Schema({
   tag: {
-    per: String,
     name: String,
+    pos: String,
   },
   attribute: [{
     key: String,
+    pos: String,
     ten: String,
-    per: String,
   }],
   data: [{
     key: String,
+    pos: String,
     ten: String,
-    per: String,
   }],
   text: [{
-    key: String,
+    pos: String,
     ten: String,
-    per: String,
   }],
 }, {
   _id: false, 

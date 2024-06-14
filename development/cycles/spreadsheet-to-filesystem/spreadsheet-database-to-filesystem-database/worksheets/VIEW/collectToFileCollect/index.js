@@ -12,8 +12,7 @@ async function collectToFileCollect($collect, $worksheet) {
     var comRowsIndex = 0
     iterateComRows:
     while(comRowsIndex < comRowsLength) {
-      const collectDoc = $collect[collectDocsIndex]
-      console.log(collectDoc.toObject())
+      let collectDoc = $collect[collectDocsIndex]
       if(collectDoc.fs.id === undefined) {
         collectDoc.fs.id = $collect[collectDocsIndex - 1].fs.id
         collectDoc.fs.path = $collect[collectDocsIndex - 1].fs.path
@@ -23,7 +22,7 @@ async function collectToFileCollect($collect, $worksheet) {
       const comRow = com[comRowsIndex]
       const comRowLMNRange = lmnRanges.parseRow(comRow)
       if(comRowLMNRange.DEX === 0) {
-        await collectDoc.populate(collectDoc.fs.populateOptions)
+        collectDoc = await collectDoc.populate(collectDoc.fs.populateOptions)
         collectDocs.push(collectDoc.toObject({
           minimize: true,
         }))

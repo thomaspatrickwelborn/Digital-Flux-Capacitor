@@ -18,7 +18,7 @@ async function assignProps($collect, $settings) {
 			const collectDoc = $collect[collectDocsIndex]
 			const modComRow = modCom[modComRowsIndex]
 			const modComRowRange = lmnRanges.parseRow(modComRow)
-			var meterScopeIndex = modComRowRange.COMDEX
+			var meterScopeIndex = modComRowRange.DEX
 			console.log(
 				'\n', '-----',
 				// '\n', 'modComRowRange', modComRowRange,
@@ -42,10 +42,15 @@ async function assignProps($collect, $settings) {
 				}
 				iterateSubductModComRows: 
 				while(subductModComRowsIndex < subductModComRowsLength) {
+					console.log(
+						'\n', '-----',
+						// '\n', 'modComRowRange', modComRowRange,
+						'\n', 'meterScopeIndex', meterScopeIndex
+					)
 					const subductCollectDoc = $collect[subductCollectDocsIndex]
 					const subductModComRow = subductModCom[subductModComRowsIndex]
 					const subductModComRowRange = lmnRanges.parseRow(subductModComRow)
-					var subductMeterScopeIndex = subductModComRowRange.COMDEX
+					var subductMeterScopeIndex = subductModComRowRange.DEX
 					if(subductMeterScopeIndex <= meterScopeIndex) {
 						collectDocsIndex++
 						modComRowsIndex++
@@ -60,15 +65,14 @@ async function assignProps($collect, $settings) {
 						collectDoc.fs.populateOptions = collectDoc.fs.populateOptions || []
 						if(
 							subductModComRowRange.SUPSET !== undefined &&
-							collectDoc.fs.populateOptions.findIndex(($populateOptions) => {
-								return $populateOptions.path
-							}) === -1
+							collectDoc.fs.populateOptions.includes(
+								subductModComRowRange.SUPSET
+							) === false
 						) {
-							collectDoc.fs.populateOptions.push({
-								path: subductModComRowRange.SUPSET,
-							})
+							collectDoc.fs.populateOptions.push(subductModComRowRange.SUPSET)
 						}
-						collectDoc[collectDoc.fs.segset].push(subductCollectDoc._id)
+						// throw "DIGITAL FLUX CAPACITOR"
+						collectDoc[subductModComRowRange.SUPSET].push(subductCollectDoc._id)
 					} catch($err) { /**/ }
 					subductCollectDocsIndex++
 					subductModComRowsIndex++
