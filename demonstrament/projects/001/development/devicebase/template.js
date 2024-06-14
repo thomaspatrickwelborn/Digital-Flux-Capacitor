@@ -18,6 +18,7 @@ const ApplicationTemplate = ($data = {}) => {
   </main>
 </div>
                 
+        
         `
 }
 export default ApplicationTemplate

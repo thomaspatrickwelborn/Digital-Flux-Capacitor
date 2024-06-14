@@ -9,12 +9,12 @@ const {
   renderFileOptions, beautifyFileOptions,
   templateDir
 } = coutils
-const templatePath = path.join(
+const elementTemplatePath = path.join(
 	templateDir, 'blocks/block/element/index.ejs'
 )
-const templateRender = await ejs.renderFile(
-	templatePath, $data, renderFileOptions
+const elementTemplateRender = await ejs.renderFile(
+	elementTemplatePath, $data, renderFileOptions
 )
-const beautifiedTemplateRender = beautify.html(templateRender, beautifyFileOptions)
+const beautifiedElementTemplateRender = beautify.html(elementTemplateRender, beautifyFileOptions)
 -%>
-<%- beautifiedTemplateRender %>
+<%- beautifiedElementTemplateRender _%>

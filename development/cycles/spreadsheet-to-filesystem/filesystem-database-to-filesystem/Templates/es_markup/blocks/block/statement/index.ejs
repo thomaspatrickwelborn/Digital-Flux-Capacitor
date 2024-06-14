@@ -35,6 +35,7 @@ while(expressionsIndex < expressions.length) { -%>
         const [inpos, expos] = pos || ''
         -%>
         <%# INPOS %>
+        <% console.log('inpos', inpos) %>
         <%- inpos -%>
         <%# BLOCKS %>
         <% if(blocks.length) { -%>
@@ -44,6 +45,7 @@ while(expressionsIndex < expressions.length) { -%>
           }) %>
         <% } -%>
         <%# EXPOS %>
+        <% console.log('expos', expos) %>
         <%- expos -%><%- par %>
       <% } -%>
   <% } -%>
