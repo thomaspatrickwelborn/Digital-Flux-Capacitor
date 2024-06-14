@@ -1,7 +1,20 @@
 <%# BLOCK -%>
+<%# BLOCK STATEMENT -%>
+<%- await include('statement/index.ejs', $data) -%>
+<%# BLOCK ELEMENT -%>
 <%
-console.log($data.content)
-const { coutils, content } = $data
-const { blocks, statement } = content
-const { lexter, dexter } = statement
+const { coutils } = $data
+const {
+  beautify, ejs, path,
+  renderFileOptions, beautifyFileOptions,
+  templateDir
+} = coutils
+const templatePath = path.join(
+	templateDir, 'blocks/block/element/index.ejs'
+)
+const templateRender = await ejs.renderFile(
+	templatePath, $data, renderFileOptions
+)
+const beautifiedTemplateRender = beautify.html(templateRender, beautifyFileOptions)
 -%>
+<%- beautifiedTemplateRender %>

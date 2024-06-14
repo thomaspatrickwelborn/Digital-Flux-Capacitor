@@ -1,7 +1,7 @@
-import beautify from 'js-beautify'
 import path from 'node:path'
-import url from 'node:url'
+import beautify from 'js-beautify'
 import ejs from 'ejs'
+import url from 'node:url'
 import operators from './operators/index.js'
 import { writeFile } from 'node:fs/promises'
 
@@ -32,36 +32,44 @@ async function FSElementsContent(
 				collectionIndex++
 				continue
 			}
-			const templatePath = path.join(
+			const templateDir = path.join(
 				modulePath,
 				'../../Templates',
-				path.join(
-					path.basename(
-						collectDoc.fs.template, '.ejs'
-					),
-					'index.ejs'
+				path.basename(
+					collectDoc.fs.template, '.ejs'
 				)
 			)
-			const templateModel = {
-				content: collectDoc,
-				coutils: {
-					operators: operators,
-					reserved: reserved,
-				},
-			}
-			const fileData = await ejs.renderFile(
-				templatePath, templateModel, {
-					async: true,
-					localsName: '$data',
-					rmWhitespace: false,
-					filename: true,
-				}
+			const templatePath = path.join(
+				templateDir, 'index.ejs'
 			)
-			const beautifiedFileData = beautify.js(fileData, {
+			const renderFileOptions = {
+				async: true,
+				localsName: '$data',
+				rmWhitespace: false,
+				filename: true,
+			}
+			const beautifyFileOptions = {
 				indent_size: 2, 
 				indent_char: ' ',
 				preserve_newlines: false,
-			})
+			}
+			const templateModel = {
+				content: collectDoc.toObject(),
+				coutils: {
+					renderFileOptions,
+					beautifyFileOptions,
+					templateDir,
+					operators,
+					reserved,
+					beautify,
+					path,
+					ejs,
+				}
+			}
+			const fileData = await ejs.renderFile(
+				templatePath, templateModel, renderFileOptions
+			)
+			const beautifiedFileData = beautify.js(fileData, beautifyFileOptions)
 			const filePath = path.join(
 				projectPath,
 				$subcycle.filesystem.path,
