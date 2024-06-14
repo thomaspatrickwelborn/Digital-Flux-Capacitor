@@ -113,7 +113,7 @@ export default class LMNRanges extends EventEmitter {
         PAT = lmnPatSlice[0]
       }
       Object.assign(parsement, {
-        DEX, COMDEX, VAL, SUPSET, SUBSET, PAT
+        DEX, COMDEX, COMWIDTH, VAL, SUPSET, SUBSET, PAT
       })
     }
     return parsement

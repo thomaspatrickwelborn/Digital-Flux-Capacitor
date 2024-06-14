@@ -19,6 +19,11 @@ async function assignProps($collect, $settings) {
 			const modComRow = modCom[modComRowsIndex]
 			const modComRowRange = lmnRanges.parseRow(modComRow)
 			var meterScopeIndex = modComRowRange.COMDEX
+			console.log(
+				'\n', '-----',
+				// '\n', 'modComRowRange', modComRowRange,
+				'\n', 'meterScopeIndex', meterScopeIndex
+			)
 			const subductModsLength = mods.length
 			var subductModsIndex = modsIndex
 			var subductCollectDocsIndex = collectDocsIndex + 1
