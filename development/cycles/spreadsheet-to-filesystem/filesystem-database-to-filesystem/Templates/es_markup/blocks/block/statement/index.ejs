@@ -1,5 +1,5 @@
-<%# STATEMENT -%>
-<%
+<%# STATEMENT _%>
+<%_
 const { coutils, content } = $data
 const { blocks, statement } = content
 if(statement === undefined) return
@@ -7,47 +7,45 @@ const { lexter, dexter } = statement
 const expressions = [lexter, dexter]
 var expressionsIndex = 0
 iterateExpressions:
-while(expressionsIndex < expressions.length) { -%>
-  <%
+while(expressionsIndex < expressions.length) { _%>
+  <%_
   const expression = expressions[expressionsIndex]
   if(expression === undefined) {
     expressionsIndex++
     continue iterateExpressions
   }
   var { ser, ten, per, pos, par } = expression
-  -%>
-  <% if(
+  _%>
+  <%_ if(
     ten !== undefined &&
     ten.slice(0, 2) !== '#:'
-  ) { -%>
+  ) { _%>
     <%- ser %> <%- ten %> <%- per %>
-  <% } else { -%>
+  <%_ } else { _%>
     <%- ser %> <%- per %>
-  <% } -%>
-  <% if(pos !== undefined) { -%>
-      <% if(
+  <%_ } _%>
+  <%_ if(pos !== undefined) { _%>
+      <%_ if(
         expressionsIndex === 0 &&
         expressions[1]?.pos !== undefined
-      ) { -%>
+      ) { _%>
         <%- pos %> <%- par %>
-      <% } else { -%> 
-        <%
+      <%_ } else { _%>
+        <%_
         const [inpos, expos] = pos || ''
-        -%>
-        <%# INPOS %>
-        <% console.log('inpos', inpos) %>
-        <%- inpos -%>
-        <%# BLOCKS %>
-        <% if(blocks.length) { -%>
+        _%>
+        <%# INPOS _%>
+        <%- inpos _%>
+        <%# BLOCKS _%>
+        <%_ if(blocks.length) { _%>
           <%- await include('../../index.ejs', {
             content: blocks,
             coutils: coutils,
-          }) %>
-        <% } -%>
-        <%# EXPOS %>
-        <% console.log('expos', expos) %>
-        <%- expos -%><%- par %>
-      <% } -%>
-  <% } -%>
-  <% expressionsIndex++ -%>
-<% } -%>
+          }) _%>
+        <%_ } _%>
+        <%# EXPOS _%>
+        <%- expos _%><%- par %>
+      <%_ } _%>
+  <%_ } _%>
+  <%_ expressionsIndex++ _%>
+<%_ } _%>

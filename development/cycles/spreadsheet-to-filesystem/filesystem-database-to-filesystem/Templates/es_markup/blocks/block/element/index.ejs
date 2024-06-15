@@ -1,4 +1,4 @@
-<%# ELEMENT %>
+<%# ELEMENT _%>
 <%_
 const { coutils, content } = $data
 const { blocks, element } = content
@@ -11,7 +11,7 @@ const [inpos, expos] = tag.pos
 _%>
 <%- inpos %><%- tag.name %>
 <%_
-iterateAttributes: 
+iterateAttributes:
 for(const $attribute of attribute) {
 _%>
   <%_ if($attribute.key === undefined) {
@@ -24,14 +24,12 @@ _%>
   <%_ } _%>
 <%_ } _%>
 <%- expos _%>
-
-<%# BLOCKS %>
-<% if(blocks.length) { -%>
+<%# BLOCKS _%>
+<% if(blocks.length) { _%>
   <%- await include('../../index.ejs', {
     content: blocks,
     coutils: coutils,
   }) %>
-<% } -%>
-
-<%# EXPOS %>
+<% } _%>
+<%# EXPOS _%>
 <%- inpos %>/<%- tag.name %><%- expos %>

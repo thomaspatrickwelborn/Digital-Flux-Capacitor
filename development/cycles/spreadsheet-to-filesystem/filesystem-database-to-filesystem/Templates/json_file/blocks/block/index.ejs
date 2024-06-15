@@ -13,22 +13,22 @@ const { lexter, dexter } = statement
     ten &&
     ten.slice(0, 2) !== '#:') {
   -%>
-		<%= ser %> <%- ten %> <%= per %>
+    <%= ser %> <%- ten %> <%= per %>
   <% } -%>
   <% if(pos !== undefined) { -%>
-	  <% const [inpos, expos] = pos || [] -%>
-	  <%# INPOS %>
-		<%= inpos -%>
+    <% const [inpos, expos] = pos || [] -%>
+    <%# INPOS %>
+    <%= inpos -%>
 
-		<%# BLOCKS %>
-		<% if(blocks.length) { -%>
-			<%- await include('../index.ejs', {
-				content: blocks,
-				coutils: coutils,
-			}) %>
-		<% } -%>
+    <%# BLOCKS %>
+    <% if(blocks.length) { -%>
+      <%- await include('../index.ejs', {
+        content: blocks,
+        coutils: coutils,
+      }) %>
+    <% } -%>
 
-	  <%# EXPOS %>
-		<%= expos -%>
+    <%# EXPOS %>
+    <%= expos -%>
   <% } -%>
 <% } -%>

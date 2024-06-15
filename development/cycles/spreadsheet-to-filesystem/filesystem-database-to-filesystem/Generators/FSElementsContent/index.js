@@ -52,6 +52,8 @@ async function FSElementsContent(
 				indent_size: 2, 
 				indent_char: ' ',
 				preserve_newlines: false,
+				space_in_empty_paren: false,
+				space_in_paren: false,
 			}
 			const templateModel = {
 				content: collectDoc.toObject(),
