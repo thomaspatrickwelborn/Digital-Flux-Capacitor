@@ -1,6 +1,6 @@
 const operators = {
   scope: [
-    "{}", "[]", "()", "<>", "<></>", "``"
+    "{}", "[]", "()", "<>", "``"
   ],
   assignment: [
     ":", "?", "=", "+=", "-=", "++", "--"
@@ -17,7 +17,13 @@ const operators = {
   operatorTypes: [
     "scope", "assignment", "mathematical", "comparison"
   ],
+  void: [
+    'area', 'base', 'br', 'col',
+    'embed','hr','img','input',
+    'link', 'meta', 'param', 'source',
+    'track', 'wbr',
 
+  ],
   getType: function($operator) {
     var operatorType
     for(const $operatorType of this.operatorTypes) {

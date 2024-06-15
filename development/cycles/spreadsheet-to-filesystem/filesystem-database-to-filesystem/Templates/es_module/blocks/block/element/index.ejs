@@ -2,6 +2,7 @@
 <%_
 const { coutils, content } = $data
 const { blocks, element } = content
+const { operators } = coutils
 if(element === undefined) return
 const {
   tag, attribute, text, data
@@ -32,4 +33,6 @@ _%>
   }) %>
 <% } _%>
 <%# EXPOS _%>
-<%- inpos %>/<%- tag.name %><%- expos %>
+<%_ if(operators.void.includes(tag) === false) { _%>
+  <%- inpos %>/<%- tag.name %><%- expos %>
+<%_ } _%>
