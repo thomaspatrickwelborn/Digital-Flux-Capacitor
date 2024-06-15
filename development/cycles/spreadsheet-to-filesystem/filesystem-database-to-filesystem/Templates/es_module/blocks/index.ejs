@@ -1,10 +1,10 @@
-<%# BLOCKS -%>
-<%
+<%# BLOCKS _%>
+<%_
 const { coutils, content } = $data
--%>
-<% for(let $block of content) { -%>
+iterateBlocks:
+for(let $block of content) { _%>
   <%- await include('block/index.ejs', {
     content: $block,
     coutils: coutils,
-  }) -%>
-<% } -%>
+  }) _%>
+<%_ } _%>

@@ -1,49 +1,33 @@
-<%# BLOCK -%>
-<%
-const { coutils, content } = $data
-const { blocks, statement } = content
-const { lexter, dexter } = statement
--%>
-<%# STATEMENT EXPRESSIONS -%>
-<%
-const expressions = [lexter, dexter]
-var expressionsIndex = 0
--%>
-<% while(expressionsIndex < expressions.length) { -%>
-  <%
-  const expression = expressions[expressionsIndex]
-  var { ser, ten, per, pos, par } = expression
-  -%>
-  <% if(
-    ten !== undefined &&
-    ten.slice(0, 2) !== '#:'
-  ) { -%>
-    <%- ser %> <%- ten %> <%- per %>
-  <% } else { -%>
-    <%- ser %> <%- per %>
-  <% } -%>
-  <% if(pos !== undefined) { -%>
-      <% if(
-        expressionsIndex === 0 &&
-        expressions[1].pos !== undefined
-      ) { -%>
-        <%- pos %> <%- par %>
-      <% } else { -%>
-        <%
-        const [inpos, expos] = pos || ''
-        -%>
-        <%# INPOS %>
-        <%- inpos -%>
-        <%# BLOCKS %>
-        <% if(blocks.length) { -%>
-          <%- await include('../index.ejs', {
-            content: blocks,
-            coutils: coutils,
-          }) %>
-        <% } -%>
-        <%# EXPOS %>
-        <%- expos -%><%- par %>
-      <% } -%>
-  <% } -%>
-  <% expressionsIndex++ -%>
-<% } -%>
+<%_
+// BLOCK
+const { coutils } = $data
+const {
+  beautify, ejs, path,
+  renderFileOptions, beautifyFileOptions,
+  templateDir
+} = coutils
+// BLOCK STATEMENT
+const statementTemplatePath = path.join(
+  templateDir, 'blocks/block/statement/index.ejs'
+)
+const statementTemplateRender = await ejs.renderFile(
+  statementTemplatePath, $data, renderFileOptions
+)
+const beautifiedStatementTemplateRender = beautify.html(
+  statementTemplateRender, beautifyFileOptions
+).trim()
+_%>
+<%- beautifiedStatementTemplateRender _%>
+<%_
+// BLOCK ELEMENT
+const elementTemplatePath = path.join(
+  templateDir, 'blocks/block/element/index.ejs'
+)
+const elementTemplateRender = await ejs.renderFile(
+  elementTemplatePath, $data, renderFileOptions
+)
+const beautifiedElementTemplateRender = beautify.html(
+  elementTemplateRender, beautifyFileOptions
+).trim()
+_%>
+<%- beautifiedElementTemplateRender _%>

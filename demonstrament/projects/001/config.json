@@ -35,25 +35,6 @@
 										"VAL": "blocks"
 									}
 								}
-							},
-							"VIEW": {
-								"ranges": {
-									"MOD_0": {
-										"Class": "ViewScript"
-									},
-									"LMN_0_SUBSET": {
-										"VAL": "ViewScript"
-									},
-									"LMN_0_SUPSET": {
-										"VAL": "blocks"
-									},
-									"LMN_1_SUBSET": {
-										"VAL": "ViewScript"
-									},
-									"LMN_1_SUPSET": {
-										"VAL": "blocks"
-									}
-								}
 							}
 						}
 					},

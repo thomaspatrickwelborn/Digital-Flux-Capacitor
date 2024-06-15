@@ -1,0 +1,49 @@
+<%# BLOCK -%>
+<%
+const { coutils, content } = $data
+const { blocks, statement } = content
+const { lexter, dexter } = statement
+-%>
+<%# STATEMENT EXPRESSIONS -%>
+<%
+const expressions = [lexter, dexter]
+var expressionsIndex = 0
+-%>
+<% while(expressionsIndex < expressions.length) { -%>
+  <%
+  const expression = expressions[expressionsIndex]
+  var { ser, ten, per, pos, par } = expression
+  -%>
+  <% if(
+    ten !== undefined &&
+    ten.slice(0, 2) !== '#:'
+  ) { -%>
+    <%- ser %> <%- ten %> <%- per %>
+  <% } else { -%>
+    <%- ser %> <%- per %>
+  <% } -%>
+  <% if(pos !== undefined) { -%>
+      <% if(
+        expressionsIndex === 0 &&
+        expressions[1].pos !== undefined
+      ) { -%>
+        <%- pos %> <%- par %>
+      <% } else { -%>
+        <%
+        const [inpos, expos] = pos || ''
+        -%>
+        <%# INPOS %>
+        <%- inpos -%>
+        <%# BLOCKS %>
+        <% if(blocks.length) { -%>
+          <%- await include('../index.ejs', {
+            content: blocks,
+            coutils: coutils,
+          }) %>
+        <% } -%>
+        <%# EXPOS %>
+        <%- expos -%><%- par %>
+      <% } -%>
+  <% } -%>
+  <% expressionsIndex++ -%>
+<% } -%>
