@@ -1,24 +1,23 @@
-<%# STATEMENT _%>
 <%_
+// STATEMENT
 const { coutils, content } = $data
+const { operators } = coutils
 const { blocks, statement } = content
 if(statement === undefined) return
 const { lexter, dexter } = statement
 const expressions = [lexter, dexter]
 var expressionsIndex = 0
 iterateExpressions:
-while(expressionsIndex < expressions.length) { _%>
-  <%_
+while(expressionsIndex < expressions.length) {
   const expression = expressions[expressionsIndex]
   if(expression === undefined) {
     expressionsIndex++
     continue iterateExpressions
   }
   var { ser, ten, per, pos, par } = expression
-  _%>
-  <%_ if(
+  if(
     ten !== undefined &&
-    ten.slice(0, 2) !== '#:'
+    ten.slice(0, 2) !== operators.tenSlug
   ) { _%>
     <%- ser %> <%- ten %> <%- per %>
   <%_ } else { _%>
@@ -32,7 +31,9 @@ while(expressionsIndex < expressions.length) { _%>
         <%- pos %> <%- par %>
       <%_ } else { _%>
         <%_
-        const [inpos, expos] = pos || ''
+        pos = pos || ''
+        const [inpos, expos] = pos.split(' ')
+        console.log('inpos, expos', inpos, expos)
         _%>
         <%# INPOS _%>
         <%- inpos _%>
@@ -46,6 +47,8 @@ while(expressionsIndex < expressions.length) { _%>
         <%# EXPOS _%>
         <%- expos _%><%- par %>
       <%_ } _%>
+  <%_ } else { _%>
+    <%- par _%>
   <%_ } _%>
   <%_ expressionsIndex++ _%>
 <%_ } _%>

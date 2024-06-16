@@ -6,19 +6,6 @@ const {
   renderFileOptions, beautifyFileOptions,
   templateDir
 } = coutils
-// BLOCK STATEMENT
-const statementTemplatePath = path.join(
-  templateDir, 'blocks/block/statement/index.ejs'
-)
-const statementTemplateRender = await ejs.renderFile(
-  statementTemplatePath, $data, renderFileOptions
-)
-const beautifiedStatementTemplateRender = beautify.html(
-  statementTemplateRender, beautifyFileOptions
-).trim()
-_%>
-<%- beautifiedStatementTemplateRender _%>
-<%_
 // BLOCK ELEMENT
 const elementTemplatePath = path.join(
   templateDir, 'blocks/block/element/index.ejs'
@@ -29,5 +16,18 @@ const elementTemplateRender = await ejs.renderFile(
 const beautifiedElementTemplateRender = beautify.html(
   elementTemplateRender, beautifyFileOptions
 ).trim()
+// BLOCK STATEMENT
+const statementTemplatePath = path.join(
+  templateDir, 'blocks/block/statement/index.ejs'
+)
+const statementTemplateRender = await ejs.renderFile(
+  statementTemplatePath, $data, renderFileOptions
+)
+const beautifiedStatementTemplateRender = beautify.js(
+  statementTemplateRender, beautifyFileOptions
+).trim()
 _%>
-<%- beautifiedElementTemplateRender _%>
+<%- elementTemplateRender _%>
+<%- statementTemplateRender _%>
+<%# beautifiedElementTemplateRender _%>
+<%# beautifiedStatementTemplateRender _%>

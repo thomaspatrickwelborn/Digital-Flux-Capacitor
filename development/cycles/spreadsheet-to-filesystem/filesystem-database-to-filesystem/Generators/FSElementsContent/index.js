@@ -45,7 +45,7 @@ async function FSElementsContent(
 			const renderFileOptions = {
 				async: true,
 				localsName: '$data',
-				rmWhitespace: false,
+				rmWhitespace: true,
 				filename: true,
 			}
 			const beautifyFileOptions = {
@@ -68,24 +68,30 @@ async function FSElementsContent(
 					ejs,
 				}
 			}
-			const fileData = await ejs.renderFile(
-				templatePath, templateModel, renderFileOptions
-			)
-			const beautifiedFileData = beautify.js(fileData, beautifyFileOptions)
 			const filePath = path.join(
 				projectPath,
 				$subcycle.filesystem.path,
 				collectDoc.fs.path
 			)
-			console.log(
-				'\n', '=====', 
-				'\n', filePath, 
-				'\n', '-----',
-				'\n', 'beautifiedFileData', 
-				'\n', beautifiedFileData, 
+			const fileData = await ejs.renderFile(
+				templatePath, templateModel, renderFileOptions
 			)
-			// await writeFile(filePath, beautifiedFileData)
-			await writeFile(filePath, fileData)
+			let beautifiedFileData
+			if(collectDoc.fs.template === 'es_markup') {
+				beautifiedFileData = beautify.html(fileData, beautifyFileOptions)
+				console.log(
+					'\n', '=====', 
+					'\n', collectDoc.fs.template, filePath, 
+					'\n', '-----',
+					'\n', fileData, 
+					'\n', '^^^^^',
+					'\n', beautifiedFileData, 
+				)
+			} else
+			if(collectDoc.fs.template === 'es_module') {
+				beautifiedFileData = beautify.js(fileData, beautifyFileOptions)
+			}
+			await writeFile(filePath, beautifiedFileData)
 		}
 		collectionIndex++
 	}
