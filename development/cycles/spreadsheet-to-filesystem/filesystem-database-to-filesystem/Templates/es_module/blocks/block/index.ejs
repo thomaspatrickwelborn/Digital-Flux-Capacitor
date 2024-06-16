@@ -13,10 +13,11 @@ const statementTemplatePath = path.join(
 const statementTemplateRender = await ejs.renderFile(
   statementTemplatePath, $data, renderFileOptions
 )
-const beautifiedStatementTemplateRender = beautify.html(
+const beautifiedStatementTemplateRender = beautify.js(
   statementTemplateRender, beautifyFileOptions
 ).trim()
 _%>
+<% console.log('beautifiedStatementTemplateRender', beautifiedStatementTemplateRender) %>
 <%- beautifiedStatementTemplateRender _%>
 <%_
 // BLOCK ELEMENT

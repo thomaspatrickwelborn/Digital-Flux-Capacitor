@@ -78,11 +78,14 @@ async function FSElementsContent(
 				collectDoc.fs.path
 			)
 			console.log(
-				'=====', '\n',
-				filePath, '\n', 
-				beautifiedFileData
+				'\n', '=====', 
+				'\n', filePath, 
+				'\n', '-----',
+				'\n', 'beautifiedFileData', 
+				'\n', beautifiedFileData, 
 			)
-			await writeFile(filePath, beautifiedFileData)
+			// await writeFile(filePath, beautifiedFileData)
+			await writeFile(filePath, fileData)
 		}
 		collectionIndex++
 	}
