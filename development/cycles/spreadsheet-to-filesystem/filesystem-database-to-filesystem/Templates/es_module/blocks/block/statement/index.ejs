@@ -1,6 +1,7 @@
 <%# STATEMENT _%>
 <%_
 const { coutils, content } = $data
+const { operators } = coutils
 const { blocks, statement } = content
 if(statement === undefined) return
 const { lexter, dexter } = statement
@@ -18,7 +19,7 @@ while(expressionsIndex < expressions.length) { _%>
   _%>
   <%_ if(
     ten !== undefined &&
-    ten.slice(0, 2) !== '#:'
+    ten.slice(0, 2) !== operators.tenSlug
   ) { _%>
     <%- ser %> <%- ten %> <%- per %>
   <%_ } else { _%>
@@ -32,7 +33,9 @@ while(expressionsIndex < expressions.length) { _%>
         <%- pos %> <%- par %>
       <%_ } else { _%>
         <%_
-        const [inpos, expos] = pos || ''
+        pos = pos || ''
+        const [inpos, expos] = pos.split(' ')
+        console.log('STATEMENT', inpos, expos)
         _%>
         <%# INPOS _%>
         <%- inpos _%>

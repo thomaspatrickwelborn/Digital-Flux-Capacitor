@@ -1,29 +1,38 @@
 const operators = {
   scope: [
-    "{}", "[]", "()", "<>", "``"
+    '{', '}', '[', ']', 
+    '(', ')', '<', '>', 
+    '`'
+  ],
+  ejsTags: [
+    '<%', '%>',
+    '<%_', '_%>',
+    '<%-', '-%>',
+    '<%=', '<%%', '<%#' 
   ],
   assignment: [
-    ":", "?", "=", "+=", "-=", "++", "--"
+    ':', '?', '=', '+=', '-=', '++', '--'
   ],
   mathematical: [
-    "+", "-", "*", "/", "%"
+    '+', '-', '*', '/', '%'
   ],
   comparison: [
-    "<", ">", "<=", "=>", "==", "!=","===", "!=="
+    '<', '>', '<=', '=>', '==', '!=','===', '!=='
   ],
   comment: [
-    "//", "/*", "*/"
+    '//', '/*', '*/'
   ],
   operatorTypes: [
-    "scope", "assignment", "mathematical", "comparison"
+    'scope', 'assignment', 'mathematical', 'comparison'
   ],
   void: [
     'area', 'base', 'br', 'col',
     'embed','hr','img','input',
     'link', 'meta', 'param', 'source',
-    'track', 'wbr',
+    'track', 'wbr', '!DOCTYPE'
 
   ],
+  tenSlug: ':#',
   getType: function($operator) {
     var operatorType
     for(const $operatorType of this.operatorTypes) {
