@@ -53,17 +53,23 @@ async function FSElementsContent(
 				indent_size: 2, 
 				indent_char: ' ',
 				preserve_newlines: false,
-				space_before_conditional: false,
+				space_after_conditional: false,
+				max_preserve_newlines: 0,
+				end_with_newline: false,
+				templating: ["erb"],
 			}
 			const beautifyJSFileOptions = {
 				indent_size: 2, 
 				indent_char: ' ',
 				preserve_newlines: false,
-				space_before_conditional: false,
+				space_after_conditional: false,
+				max_preserve_newlines: 0,
+				end_with_newline: false,
+				templating: ["erb"],
 			}
-			// const prettierFileOptions = {
-			// 	parser: "babel"
-			// }
+			const prettierFileOptions = {
+				parser: "babel"
+			}
 			const templateModel = {
 				content: collectDoc.toObject(),
 				coutils: {
@@ -88,24 +94,32 @@ async function FSElementsContent(
 			)
 			let beautifiedFileData
 			if(collectDoc.fs.template === 'es_markup') {
+				// beautifiedFileData = beautify.js(fileData, beautifyJSFileOptions)
 				beautifiedFileData = beautify.html(fileData, beautifyHTMLFileOptions)
+				// console.log('beautifiedFileData', beautifiedFileData)
+				// const regExp = /(?=<%)[\s\S]*?(?<=%>)/g
+				// console.log(beautifiedFileData.match(
+				// 	new RegExp(regExp)
+				// ))
 			} else
 			if(collectDoc.fs.template === 'es_module') {
 				beautifiedFileData = beautify.js(fileData, beautifyJSFileOptions)
+				// beautifiedFileData = beautify.html(fileData, beautifyJSFileOptions)
 			}
-			// const prettifiedFileData = await prettier.format(fileData, prettierFileOptions)
+			// const prettierFileData = await prettier.format(fileData, {})
 			console.log(
 				'\n', '=====', 
 				'\n', collectDoc.fs.template, filePath, 
-				'\n', '-----',
-				'\n', fileData, 
-				// '\n', '#####',
+				// '\n', '-----',
+				// '\n', fileData, 
+				'\n', '#####',
 				'\n', beautifiedFileData, 
-				// '\n', prettifiedFileData
+				// '\n', '#####',
+			// 	// '\n', prettierFileData
 			)
-			await writeFile(filePath, beautifiedFileData)
-
-			// await writeFile(filePath, prettifiedFileData)
+			// await writeFile(filePath, fileData)
+			// await writeFile(filePath, beautifiedFileData)
+			// await writeFile(filePath, prettierFileData)
 		}
 		collectionIndex++
 	}

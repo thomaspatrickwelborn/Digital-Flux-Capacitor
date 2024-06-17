@@ -29,7 +29,7 @@ const beautifiedStatementTemplateRender = beautify.js(
   statementTemplateRender, beautifyJSFileOptions
 ).trim()
 -%>
-<%# beautifiedElementTemplateRender %>
-<%# beautifiedStatementTemplateRender %>
-<%- elementTemplateRender %>
-<%- statementTemplateRender %>
+<%- beautifiedElementTemplateRender -%>
+<%# elementTemplateRender %>
+<%- beautifiedStatementTemplateRender %>
+<%# statementTemplateRender -%>

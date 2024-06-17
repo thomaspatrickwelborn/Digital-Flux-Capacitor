@@ -15,6 +15,8 @@ while(expressionsIndex < expressions.length) {
     continue iterateExpressions
   }
   var { ser, ten, per, pos, par } = expression
+  pos = pos || ''
+  const [inpos, expos] = pos.split(' ')
   if(
     ten !== undefined &&
     ten.slice(0, 2) !== operators.tenSlug
@@ -23,31 +25,25 @@ while(expressionsIndex < expressions.length) {
   <% } else { -%>
     <%- ser %> <%- per %>
   <% } -%>
-  <% if(pos !== undefined) { -%>
-    <% if(
-      expressionsIndex === 0 &&
-      expressions[1]?.pos !== undefined
-    ) { -%>
-      <%- pos %> <%- par %>
-    <% } else { -%>
-      <%
-      pos = pos || ''
-      const [inpos, expos] = pos.split(' ')
-      -%>
-      <%# INPOS -%>
-      <%- inpos %>
-      <%# BLOCKS -%>
-      <% if(blocks.length) { -%>
-        <%- await include('../../index.ejs', {
-          content: blocks,
-          coutils: coutils,
-        }) -%>
-      <% } -%>
-      <%# EXPOS -%>
-      <%- expos -%><%- par %>
-    <% } -%>
+  <% if(
+    expressionsIndex === 0 &&
+    expressions[1]?.pos !== undefined
+  ) { -%>
+    <%- impos -%><%- expos -%><%- par %>
   <% } else { -%>
-    <%- par -%>
+    <%
+    -%>
+    <%# INPOS -%>
+    <%- inpos -%>
+    <%# BLOCKS -%>
+    <% if(blocks.length) { -%>
+      <%- await include('../../index.ejs', {
+        content: blocks,
+        coutils: coutils,
+      }) -%>
+    <% } -%>
+    <%# EXPOS -%>
+    <%- expos -%><%- par -%>
   <% } -%>
   <% expressionsIndex++ -%>
 <% } -%>
