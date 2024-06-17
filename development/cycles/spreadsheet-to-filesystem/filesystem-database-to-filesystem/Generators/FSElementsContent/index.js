@@ -110,7 +110,7 @@ async function FSElementsContent(
 				'\n', beautifiedFileData, 
 			)
 			// await writeFile(filePath, fileData)
-			// await writeFile(filePath, beautifiedFileData)
+			await writeFile(filePath, beautifiedFileData)
 		}
 		collectionIndex++
 	}

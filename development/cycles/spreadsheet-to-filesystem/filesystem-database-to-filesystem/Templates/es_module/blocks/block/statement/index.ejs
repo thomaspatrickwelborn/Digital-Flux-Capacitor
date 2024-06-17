@@ -8,46 +8,29 @@ const { lexter, dexter } = statement
 const expressions = [lexter, dexter]
 var expressionsIndex = 0
 iterateExpressions:
-while(expressionsIndex < expressions.length) { -%>
-  <%
+while(expressionsIndex < expressions.length) {
   const expression = expressions[expressionsIndex]
   if(expression === undefined) {
     expressionsIndex++
     continue iterateExpressions
   }
   var { ser, ten, per, pos, par } = expression
-  -%>
-  <% if(
+  pos = pos || ''
+  const [inpos, expos] = pos.split(' ')
+  console.log('inpos, expos', inpos, expos)
+  if(
     ten !== undefined &&
     ten.slice(0, 2) !== operators.tenSlug
   ) { -%>
-    <%- ser %> <%- ten %> <%- per %>
+    <%- ser %> <%- ten %> <%- per %> 
   <% } else { -%>
     <%- ser %> <%- per %>
   <% } -%>
-  <% if(pos !== undefined) { -%>
-      <% if(
-        expressionsIndex === 0 &&
-        expressions[1]?.pos !== undefined
-      ) { -%>
-        <%- pos %> <%- par %>
-      <% } else { -%>
-        <%
-        pos = pos || ''
-        const [inpos, expos] = pos.split(' ')
-        -%>
-        <%# INPOS -%>
-        <%- inpos -%>
-        <%# BLOCKS -%>
-        <% if(blocks.length) { -%>
-          <%- await include('../../index.ejs', {
-            content: blocks,
-            coutils: coutils,
-          }) -%>
-        <% } -%>
-        <%# EXPOS -%>
-        <%- expos -%><%- par %>
-      <% } -%>
-  <% } -%>
+  <%- inpos %>
+    <%- await include('../../index.ejs', {
+        content: blocks,
+        coutils: coutils,
+    }) %>
+  <%- expos %><%- par %>
   <% expressionsIndex++ -%>
 <% } -%>
