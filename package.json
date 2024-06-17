@@ -11,6 +11,7 @@
     "glob": "^10.3.10",
     "js-beautify": "^1.15.1",
     "mongoose": "^8.0.3",
+    "prettier": "^3.3.2",
     "xlsx": "https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz",
     "yargs": "^17.7.2"
   },

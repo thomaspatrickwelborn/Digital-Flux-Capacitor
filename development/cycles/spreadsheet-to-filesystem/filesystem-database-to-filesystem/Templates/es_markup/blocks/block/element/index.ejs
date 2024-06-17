@@ -52,7 +52,8 @@ for(const $attribute of attribute) {
   }) %>
 <% } -%>
 <% if(
-  operators.void.includes(tag.name) === false
+  operators.void.includes(tag.name) === false &&
+  tag.name !== operators.tenSlug
 ) { -%>
   <%- inpos %>/<%- tag.name %><%- expos %>
 <% } -%>

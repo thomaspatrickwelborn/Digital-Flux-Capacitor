@@ -24,29 +24,28 @@ while(expressionsIndex < expressions.length) {
     <%- ser %> <%- per %>
   <% } -%>
   <% if(pos !== undefined) { -%>
-      <% if(
-        expressionsIndex === 0 &&
-        expressions[1]?.pos !== undefined
-      ) { -%>
-        <%- pos %> <%- par %>
-      <% } else { -%>
-        <%
-        pos = pos || ''
-        const [inpos, expos] = pos.split(' ')
-        console.log('inpos, expos', inpos, expos)
-        -%>
-        <%# INPOS -%>
-        <%- inpos %>
-        <%# BLOCKS -%>
-        <% if(blocks.length) { -%>
-          <%- await include('../../index.ejs', {
-            content: blocks,
-            coutils: coutils,
-          }) -%>
-        <% } -%>
-        <%# EXPOS -%>
-        <%- expos -%><%- par %>
+    <% if(
+      expressionsIndex === 0 &&
+      expressions[1]?.pos !== undefined
+    ) { -%>
+      <%- pos %> <%- par %>
+    <% } else { -%>
+      <%
+      pos = pos || ''
+      const [inpos, expos] = pos.split(' ')
+      -%>
+      <%# INPOS -%>
+      <%- inpos %>
+      <%# BLOCKS -%>
+      <% if(blocks.length) { -%>
+        <%- await include('../../index.ejs', {
+          content: blocks,
+          coutils: coutils,
+        }) -%>
       <% } -%>
+      <%# EXPOS -%>
+      <%- expos -%><%- par %>
+    <% } -%>
   <% } else { -%>
     <%- par -%>
   <% } -%>
