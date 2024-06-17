@@ -1,5 +1,5 @@
-<%# ELEMENT _%>
-<%_
+<%
+// ELEMENT
 const { coutils, content } = $data
 const { blocks, element } = content
 const { operators } = coutils
@@ -11,48 +11,48 @@ if(tag === undefined) return
 var { pos } = tag
 pos = pos || ''
 const [inpos, expos] = pos.split(' ')
-_%>
-<%_ if(tag.name !== operators.tenSlug) { _%>
+-%>
+<% if(tag.name !== operators.tenSlug) { -%>
   <%- inpos %><%- tag.name %>
-<%_ } else { _%>
+<% } else { -%>
   <%- inpos %>
-<%_ } _%>
-<%_
+<% } -%>
+<%
 iterateAttributes:
 for(const $attribute of attribute) {
-_%>
-  <%_
+-%>
+  <%
   if(
     $attribute.key !== undefined &&
     $attribute.ten !== undefined &&
     $attribute.ten !== operators.tenSlug
-  ) { _%>
-    <%- $attribute.key %>="<%- $attribute.ten _%>"
-  <%_ } else
+  ) { -%>
+    <%- $attribute.key %>="<%- $attribute.ten -%>"
+  <% } else
   if(
     $attribute.key !== undefined &&
     $attribute.ten === undefined
-  ) { _%>
-    <%- $attribute.key _%>
-  <%_ } else
+  ) { -%>
+    <%- $attribute.key -%>
+  <% } else
   if(
     $attribute.key === undefined &&
     $attribute.ten !== undefined &&
     $attribute.ten !== operators.tenSlug
-  ) { _%>
-    <%- $attribute.ten _%>
-  <%_ } _%>
-<%_ } _%>
-<%- expos _%>
-<%# BLOCKS _%>
-<% if(blocks.length) { _%>
+  ) { -%>
+    <%- $attribute.ten -%>
+  <% } -%>
+<% } -%>
+<%- expos -%>
+<%# BLOCKS -%>
+<% if(blocks.length) { -%>
   <%- await include('../../index.ejs', {
     content: blocks,
     coutils: coutils,
   }) %>
-<% } _%>
-<%_ if(
+<% } -%>
+<% if(
   operators.void.includes(tag.name) === false
-) { _%>
+) { -%>
   <%- inpos %>/<%- tag.name %><%- expos %>
-<%_ } _%>
+<% } -%>

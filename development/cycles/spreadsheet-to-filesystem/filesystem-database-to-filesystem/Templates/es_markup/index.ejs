@@ -1,19 +1,19 @@
-<%_
+<%
 const { coutils, content } = $data
 const { blocks, imports, exports } = content
-_%>
-<%# IMPORTS _%>
+-%>
+<%# IMPORTS -%>
 <%- await include('../coutil/es/imports/index.ejs', {
   content: imports,
   coutils: coutils,
-}) _%>
-<%# BLOCKS _%>
+}) -%>
+<%# BLOCKS -%>
 <%- await include('blocks/index.ejs', {
   content: blocks,
   coutils: coutils,
-}) _%>
-<%# EXPORTS _%>
+}) -%>
+<%# EXPORTS -%>
 <%- await include('../coutil/es/exports/index.ejs', {
   content: exports,
   coutils: coutils,
-}) _%>
+}) -%>

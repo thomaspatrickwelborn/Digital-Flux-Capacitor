@@ -48,10 +48,19 @@ async function FSElementsContent(
 				rmWhitespace: true,
 				filename: true,
 			}
-			const beautifyFileOptions = {
+			const beautifyHTMLFileOptions = {
 				indent_size: 2, 
 				indent_char: ' ',
 				preserve_newlines: false,
+				space_before_conditional: false,
+				space_in_empty_paren: false,
+				space_in_paren: false,
+			}
+			const beautifyJSFileOptions = {
+				indent_size: 2, 
+				indent_char: ' ',
+				preserve_newlines: false,
+				space_before_conditional: false,
 				space_in_empty_paren: false,
 				space_in_paren: false,
 			}
@@ -59,7 +68,8 @@ async function FSElementsContent(
 				content: collectDoc.toObject(),
 				coutils: {
 					renderFileOptions,
-					beautifyFileOptions,
+					beautifyHTMLFileOptions,
+					beautifyJSFileOptions,
 					templateDir,
 					operators,
 					reserved,
@@ -78,7 +88,7 @@ async function FSElementsContent(
 			)
 			let beautifiedFileData
 			if(collectDoc.fs.template === 'es_markup') {
-				beautifiedFileData = beautify.html(fileData, beautifyFileOptions)
+				beautifiedFileData = beautify.html(fileData, beautifyHTMLFileOptions)
 				console.log(
 					'\n', '=====', 
 					'\n', collectDoc.fs.template, filePath, 
@@ -89,7 +99,7 @@ async function FSElementsContent(
 				)
 			} else
 			if(collectDoc.fs.template === 'es_module') {
-				beautifiedFileData = beautify.js(fileData, beautifyFileOptions)
+				beautifiedFileData = beautify.js(fileData, beautifyJSFileOptions)
 			}
 			await writeFile(filePath, beautifiedFileData)
 		}

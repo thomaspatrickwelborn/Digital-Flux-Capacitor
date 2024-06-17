@@ -1,4 +1,4 @@
-<%_
+<%
 // STATEMENT
 const { coutils, content } = $data
 const { operators } = coutils
@@ -18,37 +18,37 @@ while(expressionsIndex < expressions.length) {
   if(
     ten !== undefined &&
     ten.slice(0, 2) !== operators.tenSlug
-  ) { _%>
+  ) { -%>
     <%- ser %> <%- ten %> <%- per %>
-  <%_ } else { _%>
+  <% } else { -%>
     <%- ser %> <%- per %>
-  <%_ } _%>
-  <%_ if(pos !== undefined) { _%>
-      <%_ if(
+  <% } -%>
+  <% if(pos !== undefined) { -%>
+      <% if(
         expressionsIndex === 0 &&
         expressions[1]?.pos !== undefined
-      ) { _%>
+      ) { -%>
         <%- pos %> <%- par %>
-      <%_ } else { _%>
-        <%_
+      <% } else { -%>
+        <%
         pos = pos || ''
         const [inpos, expos] = pos.split(' ')
         console.log('inpos, expos', inpos, expos)
-        _%>
-        <%# INPOS _%>
-        <%- inpos _%>
-        <%# BLOCKS _%>
-        <%_ if(blocks.length) { _%>
+        -%>
+        <%# INPOS -%>
+        <%- inpos %>
+        <%# BLOCKS -%>
+        <% if(blocks.length) { -%>
           <%- await include('../../index.ejs', {
             content: blocks,
             coutils: coutils,
-          }) _%>
-        <%_ } _%>
-        <%# EXPOS _%>
-        <%- expos _%><%- par %>
-      <%_ } _%>
-  <%_ } else { _%>
-    <%- par _%>
-  <%_ } _%>
-  <%_ expressionsIndex++ _%>
-<%_ } _%>
+          }) -%>
+        <% } -%>
+        <%# EXPOS -%>
+        <%- expos -%><%- par %>
+      <% } -%>
+  <% } else { -%>
+    <%- par -%>
+  <% } -%>
+  <% expressionsIndex++ -%>
+<% } -%>

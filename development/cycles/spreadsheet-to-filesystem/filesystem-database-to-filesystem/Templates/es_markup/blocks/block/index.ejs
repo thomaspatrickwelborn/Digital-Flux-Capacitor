@@ -1,9 +1,11 @@
-<%_
+<%
 // BLOCK
 const { coutils } = $data
 const {
   beautify, ejs, path,
-  renderFileOptions, beautifyFileOptions,
+  renderFileOptions, 
+  beautifyHTMLFileOptions, 
+  beautifyJSFileOptions,
   templateDir
 } = coutils
 // BLOCK ELEMENT
@@ -14,7 +16,7 @@ const elementTemplateRender = await ejs.renderFile(
   elementTemplatePath, $data, renderFileOptions
 )
 const beautifiedElementTemplateRender = beautify.html(
-  elementTemplateRender, beautifyFileOptions
+  elementTemplateRender, beautifyHTMLFileOptions
 ).trim()
 // BLOCK STATEMENT
 const statementTemplatePath = path.join(
@@ -24,10 +26,10 @@ const statementTemplateRender = await ejs.renderFile(
   statementTemplatePath, $data, renderFileOptions
 )
 const beautifiedStatementTemplateRender = beautify.js(
-  statementTemplateRender, beautifyFileOptions
+  statementTemplateRender, beautifyJSFileOptions
 ).trim()
-_%>
-<%- elementTemplateRender _%>
-<%- statementTemplateRender _%>
-<%# beautifiedElementTemplateRender _%>
-<%# beautifiedStatementTemplateRender _%>
+-%>
+<%- beautifiedElementTemplateRender %>
+<%- beautifiedStatementTemplateRender %>
+<%# elementTemplateRender %>
+<%# statementTemplateRender %>
