@@ -54,7 +54,10 @@ async function FSElementsContent(
 				indent_char: ' ',
 				preserve_newlines: false,
 				space_after_conditional: false,
+				space_after_anon_function: false,
+				space_after_function: false,
 				max_preserve_newlines: 0,
+				// operator_position: 'preserve-newline',
 				end_with_newline: false,
 				templating: ["erb"],
 			}
@@ -63,7 +66,10 @@ async function FSElementsContent(
 				indent_char: ' ',
 				preserve_newlines: false,
 				space_after_conditional: false,
+				space_after_anon_function: false,
+				space_after_function: false,
 				max_preserve_newlines: 0,
+				// operator_position: 'preserve-newline',
 				end_with_newline: false,
 				templating: ["erb"],
 			}

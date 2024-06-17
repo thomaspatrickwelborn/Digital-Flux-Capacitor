@@ -27,23 +27,23 @@ for(const $attribute of attribute) {
     $attribute.ten !== undefined &&
     $attribute.ten !== operators.tenSlug
   ) { -%>
-    <%- $attribute.key %>="<%- $attribute.ten -%>"
+    <%- $attribute.key %>="<%- $attribute.ten %>"
   <% } else
   if(
     $attribute.key !== undefined &&
     $attribute.ten === undefined
   ) { -%>
-    <%- $attribute.key -%>
+    <%- $attribute.key %>
   <% } else
   if(
     $attribute.key === undefined &&
     $attribute.ten !== undefined &&
     $attribute.ten !== operators.tenSlug
   ) { -%>
-    <%- $attribute.ten -%>
+    <%- $attribute.ten %>
   <% } -%>
 <% } -%>
-<%- expos -%>
+<%- expos %>
 <%# BLOCKS -%>
 <% if(blocks.length) { -%>
   <%- await include('../../index.ejs', {

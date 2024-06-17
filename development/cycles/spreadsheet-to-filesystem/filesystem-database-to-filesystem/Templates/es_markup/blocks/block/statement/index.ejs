@@ -23,27 +23,13 @@ while(expressionsIndex < expressions.length) {
   ) { -%>
     <%- ser %> <%- ten %> <%- per %>
   <% } else { -%>
-    <%- ser %> <%- per %>
+    <%- ser %><%- per %>
   <% } -%>
-  <% if(
-    expressionsIndex === 0 &&
-    expressions[1]?.pos !== undefined
-  ) { -%>
-    <%- impos -%><%- expos -%><%- par %>
-  <% } else { -%>
-    <%
-    -%>
-    <%# INPOS -%>
-    <%- inpos -%>
-    <%# BLOCKS -%>
-    <% if(blocks.length) { -%>
-      <%- await include('../../index.ejs', {
-        content: blocks,
-        coutils: coutils,
-      }) -%>
-    <% } -%>
-    <%# EXPOS -%>
-    <%- expos -%><%- par -%>
-  <% } -%>
+  <%- inpos %>
+  <%- await include('../../index.ejs', {
+      content: blocks,
+      coutils: coutils,
+  }) %>
+  <%- expos %><%- par %>
   <% expressionsIndex++ -%>
 <% } -%>
