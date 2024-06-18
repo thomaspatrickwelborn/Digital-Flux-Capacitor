@@ -1,5 +1,6 @@
 import path from 'node:path'
 import beautify from 'js-beautify'
+import prettier from 'prettier'
 import ejs from 'ejs'
 import url from 'node:url'
 import operators from './operators/index.js'
@@ -108,23 +109,24 @@ async function FSElementsContent(
 			const fileData = await ejs.renderFile(
 				templatePath, templateModel, renderFileOptions
 			)
-			let beautifiedFileData
+			let prettierFileData
 			if(collectDoc.fs.template === 'es_markup') {
-				beautifiedFileData = beautify.html(fileData, beautifyHTMLFileOptions)
+				prettierFileData = await prettier.format(fileData, {
+					parser: 'html'
+				})
 			} else
 			if(collectDoc.fs.template === 'es_module') {
-				beautifiedFileData = beautify.js(fileData, beautifyJSFileOptions)
+				prettierFileData = await prettier.format(fileData, {
+					parser: 'babel'
+				})
 			}
 			console.log(
 				'\n', '=====', 
 				'\n', collectDoc.fs.template, filePath, 
-				'\n', '-----',
-				'\n', fileData, 
 				'\n', '#####',
-				'\n', beautifiedFileData, 
+				'\n', prettierFileData,
 			)
-			// await writeFile(filePath, fileData)
-			await writeFile(filePath, beautifiedFileData)
+			await writeFile(filePath, prettierFileData)
 		}
 		collectionIndex++
 	}

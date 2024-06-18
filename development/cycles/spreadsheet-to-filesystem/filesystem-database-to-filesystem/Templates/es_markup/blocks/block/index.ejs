@@ -15,9 +15,6 @@ const elementTemplatePath = path.join(
 const elementTemplateRender = await ejs.renderFile(
   elementTemplatePath, $data, renderFileOptions
 )
-const beautifiedElementTemplateRender = beautify.html(
-  elementTemplateRender, beautifyHTMLFileOptions
-).trim()
 // BLOCK STATEMENT
 const statementTemplatePath = path.join(
   templateDir, 'blocks/block/statement/index.ejs'
@@ -25,11 +22,6 @@ const statementTemplatePath = path.join(
 const statementTemplateRender = await ejs.renderFile(
   statementTemplatePath, $data, renderFileOptions
 )
-const beautifiedStatementTemplateRender = beautify.js(
-  statementTemplateRender, beautifyJSFileOptions
-).trim()
 -%>
-<%# beautifiedElementTemplateRender %>
-<%# beautifiedStatementTemplateRender %>
 <%- elementTemplateRender %>
 <%- statementTemplateRender %>

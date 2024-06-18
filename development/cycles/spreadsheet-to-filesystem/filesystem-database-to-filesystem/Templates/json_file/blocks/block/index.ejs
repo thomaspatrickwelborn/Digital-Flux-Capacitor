@@ -1,34 +1,22 @@
-<%# BLOCK -%>
 <%
-const { coutils, content } = $data
-const { blocks, statement } = content
-const { lexter, dexter } = statement
+// BLOCK
+const { coutils } = $data
+const {
+  beautify, ejs, path,
+  renderFileOptions, 
+  beautifyHTMLFileOptions, 
+  beautifyJSFileOptions,
+  templateDir
+} = coutils
+// BLOCK STATEMENT
+const statementTemplatePath = path.join(
+  templateDir, 'blocks/block/statement/index.ejs'
+)
+const statementTemplateRender = await ejs.renderFile(
+  statementTemplatePath, $data, renderFileOptions
+)
+const beautifiedStatementTemplateRender = beautify.js(
+  statementTemplateRender, beautifyJSFileOptions
+).trim()
 -%>
-
-<%# STATEMENT MEXTER SCOPE %>
-<% const commexter = [lexter, dexter] -%>
-<% for(const $mexter of commexter) { -%>
-  <% const { ser, ten, per, pos } = $mexter -%>
-  <% if(
-    ten &&
-    ten.slice(0, 2) !== '#:') {
-  -%>
-    <%= ser %> <%- ten %> <%= per %>
-  <% } -%>
-  <% if(pos !== undefined) { -%>
-    <% const [inpos, expos] = pos || [] -%>
-    <%# INPOS %>
-    <%= inpos -%>
-
-    <%# BLOCKS %>
-    <% if(blocks.length) { -%>
-      <%- await include('../index.ejs', {
-        content: blocks,
-        coutils: coutils,
-      }) %>
-    <% } -%>
-
-    <%# EXPOS %>
-    <%= expos -%>
-  <% } -%>
-<% } -%>
+<%- beautifiedStatementTemplateRender %>

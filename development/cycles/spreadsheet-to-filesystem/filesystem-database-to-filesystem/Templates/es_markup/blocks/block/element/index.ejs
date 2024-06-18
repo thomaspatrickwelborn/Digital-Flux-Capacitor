@@ -9,7 +9,9 @@ const {
 } = element
 if(tag === undefined) return
 var { pos } = tag
-const [inpos, expos] = pos.split(' ')
+pos = pos || {}
+const inpos = pos.in
+const expos = pos.ex
 -%>
 <%- inpos %><%- parseTen(tag.name) %>
 <%

@@ -4,14 +4,20 @@ const BlockStatementSchema = new Schema({
     ser: String,
     ten: String,
     per: String,
-    pos: String,
+    pos: {
+      in: String,
+      ex: String,
+    },
     par: String,
   },
   dexter: {
     ser: String,
     ten: String,
     per: String,
-    pos: String,
+    pos: {
+      in: String,
+      ex: String,
+    },
     par: String,
   }
 }, {
@@ -23,7 +29,10 @@ const BlockStatementSchema = new Schema({
 const BlockElementSchema = new Schema({
   tag: {
     name: String,
-    pos: String,
+    pos: {
+      in: String,
+      ex: String,
+    },
   },
   attribute: [{
     key: String,

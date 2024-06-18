@@ -15,8 +15,9 @@ while(expressionsIndex < expressions.length) {
     continue iterateExpressions
   }
   var { ser, ten, per, pos, par } = expression
-  pos = pos || ''
-  const [inpos, expos] = pos.split(' ')
+  pos = pos || {}
+  const inpos = pos.in
+  const expos = pos.ex
   -%>
   <%- ser %> <%- parseTen(ten) %> <%- per %> <%- inpos %>
   <%- await include('../../index.ejs', {

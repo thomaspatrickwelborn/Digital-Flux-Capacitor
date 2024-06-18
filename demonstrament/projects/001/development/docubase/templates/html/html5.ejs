@@ -1,65 +1,16 @@
-<%
-
-
-
-const   {
-
-
-
- content  
-
-,
-
-
-
- coutils  
-
-
-
-}
-
-
-
-  = 
-
-
- $data  
-
-
-
-%>
 <!DOCTYPE html5>
+
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
 
-<head>
-  <meta charset="utf-8">
-  <title>
-  </title> <%
+    <title> </title>
 
+    <% for ( const $link of $data.content.links ) { %>
+    <link rel="stylesheet" href="<%= $link.href %>" />
 
+    <% } %>
+  </head>
 
-for   (
-
-
-
-const $link  
-
-
-of $links  
-
-
-
-)
-
-
-
-   {%>
-  <link rel="stylesheet" href="<%= $link.href %>"> <%}
-
-%>
-</head>
-
-<body>
-</body>
-
+  <body></body>
 </html>
