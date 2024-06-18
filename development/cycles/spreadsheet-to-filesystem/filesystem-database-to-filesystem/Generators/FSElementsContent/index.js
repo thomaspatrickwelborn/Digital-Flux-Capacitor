@@ -14,6 +14,18 @@ const reserved = {
 	ignore: ['constructor', 'super']
 }
 
+const isSlug = function($ten) { return (
+	typeof $ten === 'string' &&
+	$ten.slice(0, 2) === operators.tenSlug
+) }
+
+const parseTen = function($ten) {
+	return (
+		isSlug($ten)
+	) ? ''
+	  : $ten
+}
+
 async function FSElementsContent(
 	$collection, $presubcycle, $subcycle
 ) {
@@ -58,7 +70,7 @@ async function FSElementsContent(
 				max_preserve_newlines: 0,
 				// operator_position: 'preserve-newline',
 				end_with_newline: false,
-				templating: ["erb"],
+				// templating: ["erb"],
 			}
 			const beautifyJSFileOptions = {
 				indent_size: 2, 
@@ -70,11 +82,13 @@ async function FSElementsContent(
 				max_preserve_newlines: 0,
 				// operator_position: 'preserve-newline',
 				end_with_newline: false,
-				templating: ["erb"],
+				// templating: ["erb"],
 			}
 			const templateModel = {
 				content: collectDoc.toObject(),
 				coutils: {
+					isSlug,
+					parseTen,
 					renderFileOptions,
 					beautifyHTMLFileOptions,
 					beautifyJSFileOptions,
@@ -104,8 +118,8 @@ async function FSElementsContent(
 			console.log(
 				'\n', '=====', 
 				'\n', collectDoc.fs.template, filePath, 
-				// '\n', '-----',
-				// '\n', fileData, 
+				'\n', '-----',
+				'\n', fileData, 
 				'\n', '#####',
 				'\n', beautifiedFileData, 
 			)

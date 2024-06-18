@@ -1,9 +1,0 @@
-{
-  "name": "dfc-configurator",
-  "author": "Thomas Patrick Welborn",
-  "workspaces": ["devicebase", "database", "docubase"],
-  "devDependencies": {
-    "yargs": "^17.7.2"
-  },
-  "main": "index.js"
-}
