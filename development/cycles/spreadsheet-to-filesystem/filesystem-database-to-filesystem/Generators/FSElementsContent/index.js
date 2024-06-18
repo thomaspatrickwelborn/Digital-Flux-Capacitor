@@ -1,5 +1,4 @@
 import path from 'node:path'
-import beautify from 'js-beautify'
 import prettier from 'prettier'
 import ejs from 'ejs'
 import url from 'node:url'
@@ -61,42 +60,15 @@ async function FSElementsContent(
 				rmWhitespace: true,
 				filename: true,
 			}
-			const beautifyHTMLFileOptions = {
-				indent_size: 2, 
-				indent_char: ' ',
-				preserve_newlines: false,
-				space_after_conditional: false,
-				space_after_anon_function: false,
-				space_after_function: false,
-				max_preserve_newlines: 0,
-				// operator_position: 'preserve-newline',
-				end_with_newline: false,
-				// templating: ["erb"],
-			}
-			const beautifyJSFileOptions = {
-				indent_size: 2, 
-				indent_char: ' ',
-				preserve_newlines: false,
-				space_after_conditional: false,
-				space_after_anon_function: false,
-				space_after_function: false,
-				max_preserve_newlines: 0,
-				// operator_position: 'preserve-newline',
-				end_with_newline: false,
-				// templating: ["erb"],
-			}
 			const templateModel = {
 				content: collectDoc.toObject(),
 				coutils: {
 					isSlug,
 					parseTen,
 					renderFileOptions,
-					beautifyHTMLFileOptions,
-					beautifyJSFileOptions,
 					templateDir,
 					operators,
 					reserved,
-					beautify,
 					path,
 					ejs,
 				}
@@ -108,6 +80,13 @@ async function FSElementsContent(
 			)
 			const fileData = await ejs.renderFile(
 				templatePath, templateModel, renderFileOptions
+			)
+			console.log(
+				'\n', '=====', 
+				'\n', collectDoc.fs.template, filePath, 
+				'\n', '#####',
+				'\n', 'fileData',
+				'\n', fileData,
 			)
 			let prettierFileData
 			if(collectDoc.fs.template === 'es_markup') {
@@ -124,6 +103,7 @@ async function FSElementsContent(
 				'\n', '=====', 
 				'\n', collectDoc.fs.template, filePath, 
 				'\n', '#####',
+				'\n', 'prettierFileData',
 				'\n', prettierFileData,
 			)
 			await writeFile(filePath, prettierFileData)
