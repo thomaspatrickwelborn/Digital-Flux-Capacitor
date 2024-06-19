@@ -57,7 +57,8 @@ async function FSElementsContent(
 				$subcycle.filesystem.path,
 				collectDoc.fs.path
 			)
-			console.log(collectDoc.fs.template, Templates[collectDoc.fs.template])
+			const Template = Templates[collectDoc.fs.template]
+			console.log(collectDoc.fs.template, Template(templateModel))
 			throw "Digital Flux Capacitor"
 			// const fileData = await ejs.renderFile(
 			// 	templatePath, templateModel, renderFileOptions

@@ -2,6 +2,7 @@ export default function Statement($data) {
   const { coutils, content } = $data
   const { operators, parseTen } = coutils
   const { blocks, statement } = content
+  const _statement = []
   // if(statement === undefined) return
   // const { lexter, dexter } = statement
   // const expressions = [lexter, dexter]
@@ -26,4 +27,5 @@ export default function Statement($data) {
   //   <%- expos %><%- par %>
   //   <% expressionsIndex++ -%>
   // <% } -%>
+  return _statement
 }

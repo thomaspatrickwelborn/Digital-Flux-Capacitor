@@ -1,4 +1,4 @@
-import * as ES from './es/index.js'
+import * as ES from './ES/index.js'
 export {
   ES
 }

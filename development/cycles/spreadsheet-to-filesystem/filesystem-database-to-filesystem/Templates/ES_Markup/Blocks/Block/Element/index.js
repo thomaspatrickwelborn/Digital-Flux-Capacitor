@@ -2,6 +2,7 @@ export default function Element($data) {
   const { coutils, content } = $data
   const { blocks, element } = content
   const { operators, parseTen } = coutils
+  const _element = []
   // if(element === undefined) return
   // const {
   //   tag, attribute, text, data
@@ -51,4 +52,5 @@ export default function Element($data) {
   // ) { -%>
   //   <%- inpos %>/<%- parseTen(tag.name) %><%- expos %>
   // <% } -%>
+  return _element
 }
