@@ -1,5 +1,6 @@
 import path from 'node:path'
-import beautify from 'js-beautify'
+import prettier from 'prettier'
+import * as PrettierPluginEJS from 'prettier-plugin-ejs'
 import ejs from 'ejs'
 import url from 'node:url'
 import operators from './operators/index.js'
@@ -12,6 +13,18 @@ const modulePath = path.dirname(
 
 const reserved = {
 	ignore: ['constructor', 'super']
+}
+
+const isSlug = function($ten) { return (
+	typeof $ten === 'string' &&
+	$ten.slice(0, 2) === operators.tenSlug
+) }
+
+const parseTen = function($ten) {
+	return (
+		isSlug($ten)
+	) ? ''
+	  : $ten
 }
 
 async function FSElementsContent(
@@ -48,40 +61,15 @@ async function FSElementsContent(
 				rmWhitespace: true,
 				filename: true,
 			}
-			const beautifyHTMLFileOptions = {
-				indent_size: 2, 
-				indent_char: ' ',
-				preserve_newlines: false,
-				space_after_conditional: false,
-				space_after_anon_function: false,
-				space_after_function: false,
-				max_preserve_newlines: 0,
-				// operator_position: 'preserve-newline',
-				end_with_newline: false,
-				templating: ["erb"],
-			}
-			const beautifyJSFileOptions = {
-				indent_size: 2, 
-				indent_char: ' ',
-				preserve_newlines: false,
-				space_after_conditional: false,
-				space_after_anon_function: false,
-				space_after_function: false,
-				max_preserve_newlines: 0,
-				// operator_position: 'preserve-newline',
-				end_with_newline: false,
-				templating: ["erb"],
-			}
 			const templateModel = {
 				content: collectDoc.toObject(),
 				coutils: {
+					isSlug,
+					parseTen,
 					renderFileOptions,
-					beautifyHTMLFileOptions,
-					beautifyJSFileOptions,
 					templateDir,
 					operators,
 					reserved,
-					beautify,
 					path,
 					ejs,
 				}
@@ -94,23 +82,40 @@ async function FSElementsContent(
 			const fileData = await ejs.renderFile(
 				templatePath, templateModel, renderFileOptions
 			)
-			let beautifiedFileData
+			console.log(
+				'\n', '=====', 
+				'\n', collectDoc.fs.template, filePath, 
+				'\n', '#####',
+				'\n', 'fileData',
+				'\n', fileData,
+			)
+			let prettierFileData
+			prettier.clearConfigCache()
 			if(collectDoc.fs.template === 'es_markup') {
-				beautifiedFileData = beautify.html(fileData, beautifyHTMLFileOptions)
+				console.log(await prettier.format(`<td <% if (styleData) { %>
+  style="<%= styleData %>" <% } %>>
+  <%= data %>
+  <%= data %>
+</td>`, { parser: 'html', semi: false, plugins: [PrettierPluginEJS]}))
+				prettierFileData = await prettier.format(fileData, {
+					semi: false,
+					parser: 'html',
+				})
 			} else
 			if(collectDoc.fs.template === 'es_module') {
-				beautifiedFileData = beautify.js(fileData, beautifyJSFileOptions)
+				prettierFileData = await prettier.format(fileData, {
+					semi: false,
+					parser: 'babel',
+				})
 			}
 			console.log(
 				'\n', '=====', 
 				'\n', collectDoc.fs.template, filePath, 
-				// '\n', '-----',
-				// '\n', fileData, 
 				'\n', '#####',
-				'\n', beautifiedFileData, 
+				'\n', 'prettierFileData',
+				'\n', prettierFileData,
 			)
-			// await writeFile(filePath, fileData)
-			await writeFile(filePath, beautifiedFileData)
+			await writeFile(filePath, prettierFileData)
 		}
 		collectionIndex++
 	}

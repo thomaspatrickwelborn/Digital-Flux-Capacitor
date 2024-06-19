@@ -1,19 +1,14 @@
-<%
- const {
-  content,
-  coutils
-} = $data
-%>
 <!DOCTYPE html5>
+
 <html lang="en">
+  <head>
+    <title> </title>
 
-<head>
-  <meta charset="utf-8">
-  <title>
-  </title>
-</head>
+    <% for ( const $link of $data.content.link ) { %>
+    <link rel="stylesheet" href="<%= $link.href %>" />
 
-<body>
-</body>
+    <% } %>
+  </head>
 
+  <body></body>
 </html>

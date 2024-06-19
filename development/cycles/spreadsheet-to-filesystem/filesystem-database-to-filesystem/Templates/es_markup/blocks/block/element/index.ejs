@@ -2,21 +2,18 @@
 // ELEMENT
 const { coutils, content } = $data
 const { blocks, element } = content
-const { operators } = coutils
+const { operators, parseTen } = coutils
 if(element === undefined) return
 const {
   tag, attribute, text, data
 } = element
 if(tag === undefined) return
 var { pos } = tag
-pos = pos || ''
-const [inpos, expos] = pos.split(' ')
+pos = pos || {}
+const inpos = pos.in
+const expos = pos.ex
 -%>
-<% if(tag.name !== operators.tenSlug) { -%>
-  <%- inpos %><%- tag.name %>
-<% } else { -%>
-  <%- inpos %>
-<% } -%>
+<%- inpos %><%- parseTen(tag.name) %>
 <%
 iterateAttributes:
 for(const $attribute of attribute) {
@@ -44,7 +41,6 @@ for(const $attribute of attribute) {
   <% } -%>
 <% } -%>
 <%- expos %>
-<%# BLOCKS -%>
 <% if(blocks.length) { -%>
   <%- await include('../../index.ejs', {
     content: blocks,
@@ -52,8 +48,7 @@ for(const $attribute of attribute) {
   }) %>
 <% } -%>
 <% if(
-  operators.void.includes(tag.name) === false &&
-  tag.name !== operators.tenSlug
+  !operators.void.includes(tag.name)
 ) { -%>
-  <%- inpos %>/<%- tag.name %><%- expos %>
+  <%- inpos %>/<%- parseTen(tag.name) %><%- expos %>
 <% } -%>

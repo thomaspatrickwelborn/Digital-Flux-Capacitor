@@ -4,7 +4,7 @@ const { coutils } = $data
 const {
   beautify, ejs, path,
   renderFileOptions, 
-  beautifyHTMLFileOptions,
+  beautifyHTMLFileOptions, 
   beautifyJSFileOptions,
   templateDir
 } = coutils
@@ -16,7 +16,7 @@ const statementTemplateRender = await ejs.renderFile(
   statementTemplatePath, $data, renderFileOptions
 )
 const beautifiedStatementTemplateRender = beautify.js(
-  statementTemplateRender, beautifyJSFileOptions,
+  statementTemplateRender, beautifyJSFileOptions
 ).trim()
 -%>
-<%- beautifiedStatementTemplateRender -%>
+<%- beautifiedStatementTemplateRender %>

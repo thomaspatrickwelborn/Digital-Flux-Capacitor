@@ -1,8 +1,8 @@
 <%# BLOCKS -%>
 <%
 const { coutils, content } = $data
--%>
-<% for(let $block of content) { -%>
+iterateBlocks:
+for(let $block of content) { -%>
   <%- await include('block/index.ejs', {
     content: $block,
     coutils: coutils,
