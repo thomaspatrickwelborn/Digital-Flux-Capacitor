@@ -92,10 +92,14 @@ async function FSElementsContent(
 			let prettierFileData
 			prettier.clearConfigCache()
 			if(collectDoc.fs.template === 'es_markup') {
+				console.log(await prettier.format(`<td <% if (styleData) { %>
+  style="<%= styleData %>" <% } %>>
+  <%= data %>
+  <%= data %>
+</td>`, { parser: 'html', semi: false, plugins: [PrettierPluginEJS]}))
 				prettierFileData = await prettier.format(fileData, {
 					semi: false,
 					parser: 'html',
-					plugins: [PrettierPluginEJS.default],
 				})
 			} else
 			if(collectDoc.fs.template === 'es_module') {

@@ -4,19 +4,7 @@
   <head>
     <title> </title>
 
-    <% for ( const $meta of $data.content.meta ) { %>
-    <meta />
-
-    <% for ( const $metaAttribute of $meta.attributes ) { %>
-    <%= $metaAttr.key
-    %>
-    ="
-    <%= $metaAttr.val %>
-    " /
-    <% } %>
-    <% } %>
-    <% for ( const $link of
-    $data.content.link ) { %>
+    <% for ( const $link of $data.content.link ) { %>
     <link rel="stylesheet" href="<%= $link.href %>" />
 
     <% } %>
