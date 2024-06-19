@@ -1,19 +1,18 @@
-
 export default function ES_Markup($data) {
   const { coutils, content } = $data
-  const { blocks, imports, exports } = content
+  console.log(this.name, content)
   // <%- await include('../coutil/es/imports/index.ejs', {
-  //   content: imports,
+  //   content: content.imports,
   //   coutils: coutils,
   // }) -%>
-  // <%# BLOCKS -%>
+  // // <%# BLOCKS -%>
   // <%- await include('blocks/index.ejs', {
-  //   content: blocks,
+  //   content: content.blocks,
   //   coutils: coutils,
   // }) -%>
-  // <%# EXPORTS -%>
+  // // <%# EXPORTS -%>
   // <%- await include('../coutil/es/exports/index.ejs', {
-  //   content: exports,
+  //   content: content.exports,
   //   coutils: coutils,
   // }) -%>
 }
