@@ -1,19 +1,14 @@
 import path from 'node:path'
-import prettier from 'prettier'
-import * as PrettierPluginEJS from 'prettier-plugin-ejs'
 import ejs from 'ejs'
 import url from 'node:url'
 import operators from './operators/index.js'
 import { writeFile } from 'node:fs/promises'
+import * as Templates from '../../Templates/index.js'
 
 const projectPath = process.env.PWD
 const modulePath = path.dirname(
 	url.fileURLToPath(import.meta.url)
 )
-
-const reserved = {
-	ignore: ['constructor', 'super']
-}
 
 const isSlug = function($ten) { return (
 	typeof $ten === 'string' &&
@@ -45,31 +40,14 @@ async function FSElementsContent(
 				collectionIndex++
 				continue
 			}
-			const templateDir = path.join(
-				modulePath,
-				'../../Templates',
-				path.basename(
-					collectDoc.fs.template, '.ejs'
-				)
-			)
-			const templatePath = path.join(
-				templateDir, 'index.ejs'
-			)
-			const renderFileOptions = {
-				async: true,
-				localsName: '$data',
-				rmWhitespace: true,
-				filename: true,
-			}
 			const templateModel = {
 				content: collectDoc.toObject(),
 				coutils: {
 					isSlug,
 					parseTen,
-					renderFileOptions,
-					templateDir,
+					// renderFileOptions,
+					// templateDir,
 					operators,
-					reserved,
 					path,
 					ejs,
 				}
@@ -79,9 +57,11 @@ async function FSElementsContent(
 				$subcycle.filesystem.path,
 				collectDoc.fs.path
 			)
-			const fileData = await ejs.renderFile(
-				templatePath, templateModel, renderFileOptions
-			)
+			console.log(collectDoc.fs.template, Templates[collectDoc.fs.template])
+			throw "Digital Flux Capacitor"
+			// const fileData = await ejs.renderFile(
+			// 	templatePath, templateModel, renderFileOptions
+			// )
 			console.log(
 				'\n', '=====', 
 				'\n', collectDoc.fs.template, filePath, 
@@ -89,33 +69,28 @@ async function FSElementsContent(
 				'\n', 'fileData',
 				'\n', fileData,
 			)
-			let prettierFileData
-			prettier.clearConfigCache()
+			// let prettierFileData
+			// prettier.clearConfigCache()
 			if(collectDoc.fs.template === 'es_markup') {
-				console.log(await prettier.format(`<td <% if (styleData) { %>
-  style="<%= styleData %>" <% } %>>
-  <%= data %>
-  <%= data %>
-</td>`, { parser: 'html', semi: false, plugins: [PrettierPluginEJS]}))
-				prettierFileData = await prettier.format(fileData, {
-					semi: false,
-					parser: 'html',
-				})
+				// prettierFileData = await prettier.format(fileData, {
+				// 	semi: false,
+				// 	parser: 'html',
+				// })
 			} else
 			if(collectDoc.fs.template === 'es_module') {
-				prettierFileData = await prettier.format(fileData, {
-					semi: false,
-					parser: 'babel',
-				})
+				// prettierFileData = await prettier.format(fileData, {
+				// 	semi: false,
+				// 	parser: 'babel',
+				// })
 			}
-			console.log(
-				'\n', '=====', 
-				'\n', collectDoc.fs.template, filePath, 
-				'\n', '#####',
-				'\n', 'prettierFileData',
-				'\n', prettierFileData,
-			)
-			await writeFile(filePath, prettierFileData)
+			// console.log(
+			// 	'\n', '=====', 
+			// 	'\n', collectDoc.fs.template, filePath, 
+			// 	'\n', '#####',
+			// 	'\n', 'prettierFileData',
+			// 	'\n', prettierFileData,
+			// )
+			// await writeFile(filePath, prettierFileData)
 		}
 		collectionIndex++
 	}

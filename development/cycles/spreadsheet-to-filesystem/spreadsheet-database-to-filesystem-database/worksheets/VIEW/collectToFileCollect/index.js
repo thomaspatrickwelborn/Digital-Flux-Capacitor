@@ -21,6 +21,20 @@ async function collectToFileCollect($collect, $worksheet) {
         collectDoc.fs.id = $collect[collectDocsIndex - 1].fs.id
         collectDoc.fs.path = $collect[collectDocsIndex - 1].fs.path
       }
+      if(collectDoc.element.attribute !== undefined) {
+        collectDoc.element.attributes = collectDoc.element.attributes || []
+        collectDoc.element.attributes.push(
+          collectDoc.element.attribute
+        )
+        delete collectDoc.element.attribute
+      }
+      if(collectDoc.element.text !== undefined) {
+        collectDoc.element.texts = collectDoc.element.texts || []
+        collectDoc.element.texts.push(
+          collectDoc.element.text
+        )
+        delete collectDoc.element.text
+      }
       delete collectDoc._id
       delete collectDoc.__v
       const comRow = com[comRowsIndex]

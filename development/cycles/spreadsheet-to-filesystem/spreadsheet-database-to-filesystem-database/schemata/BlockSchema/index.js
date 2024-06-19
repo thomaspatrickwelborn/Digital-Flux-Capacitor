@@ -34,15 +34,11 @@ const BlockElementSchema = new Schema({
       ex: String,
     },
   },
-  attribute: [{
+  attributes: [{
     key: String,
     ten: String,
   }],
-  data: [{
-    key: String,
-    ten: String,
-  }],
-  text: [{
+  texts: [{
     ten: String,
   }],
 }, {
