@@ -1,5 +1,6 @@
 import path from 'node:path'
 import prettier from 'prettier'
+import * as PrettierPluginEJS from 'prettier-plugin-ejs'
 import ejs from 'ejs'
 import url from 'node:url'
 import operators from './operators/index.js'
@@ -89,14 +90,18 @@ async function FSElementsContent(
 				'\n', fileData,
 			)
 			let prettierFileData
+			prettier.clearConfigCache()
 			if(collectDoc.fs.template === 'es_markup') {
 				prettierFileData = await prettier.format(fileData, {
-					parser: 'html'
+					semi: false,
+					parser: 'html',
+					plugins: [PrettierPluginEJS.default],
 				})
 			} else
 			if(collectDoc.fs.template === 'es_module') {
 				prettierFileData = await prettier.format(fileData, {
-					parser: 'babel'
+					semi: false,
+					parser: 'babel',
 				})
 			}
 			console.log(
