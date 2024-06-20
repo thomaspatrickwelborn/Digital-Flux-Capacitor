@@ -2,7 +2,7 @@ import Blocks from '../../index.js'
 export default function Element($data) {
   const { coutils, content } = $data
   const { blocks, element } = content
-  const { operators, parseTen } = coutils
+  const { operators, parseTen, parse } = coutils
   const _element = []
   if(element === undefined) return _element
   const {
@@ -45,7 +45,9 @@ export default function Element($data) {
       )
      } 
    } 
-   _element.push(expos)
+   _element.push([
+    expos
+  ])
   if(blocks.length) { 
     _element.push(
       Blocks({

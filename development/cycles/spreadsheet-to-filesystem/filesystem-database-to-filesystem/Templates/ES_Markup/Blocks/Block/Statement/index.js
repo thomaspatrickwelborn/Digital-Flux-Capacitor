@@ -1,7 +1,7 @@
 import Blocks from '../../index.js'
 export default function Statement($data) {
   const { coutils, content } = $data
-  const { operators, parseTen } = coutils
+  const { operators, parseTen, parse } = coutils
   const { blocks, statement } = content
   const _statement = []
   if(statement === undefined) return
@@ -33,5 +33,6 @@ export default function Statement($data) {
     )
     expressionsIndex++
   }
+  console.log('_statement', _statement)
   return _statement
 }

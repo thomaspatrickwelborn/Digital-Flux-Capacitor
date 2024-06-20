@@ -4,24 +4,26 @@ import url from 'node:url'
 import operators from './operators/index.js'
 import { writeFile } from 'node:fs/promises'
 import * as Templates from '../../Templates/index.js'
-
 const projectPath = process.env.PWD
 const modulePath = path.dirname(
 	url.fileURLToPath(import.meta.url)
 )
-
 const isSlug = function($ten) { return (
 	typeof $ten === 'string' &&
 	$ten.slice(0, 2) === operators.tenSlug
 ) }
-
 const parseTen = function($ten) {
 	return (
 		isSlug($ten)
 	) ? ''
 	  : $ten
 }
-
+const parse = function($string) {
+	return (
+		typeof parse === 'string'
+	) ? $string
+	  : ''
+}
 async function FSElementsContent(
 	$collection, $presubcycle, $subcycle
 ) {
@@ -45,8 +47,7 @@ async function FSElementsContent(
 				coutils: {
 					isSlug,
 					parseTen,
-					// renderFileOptions,
-					// templateDir,
+					parse,
 					operators,
 					path,
 					ejs,
@@ -58,11 +59,9 @@ async function FSElementsContent(
 				collectDoc.fs.path
 			)
 			const Template = Templates[collectDoc.fs.template]
-			console.log(collectDoc.fs.template, Template(templateModel))
+			const fileData = Template(templateModel)
+			console.log(collectDoc.fs.template, JSON.stringify(fileData))
 			throw "Digital Flux Capacitor"
-			// const fileData = await ejs.renderFile(
-			// 	templatePath, templateModel, renderFileOptions
-			// )
 			console.log(
 				'\n', '=====', 
 				'\n', collectDoc.fs.template, filePath, 
@@ -70,27 +69,6 @@ async function FSElementsContent(
 				'\n', 'fileData',
 				'\n', fileData,
 			)
-			// let prettierFileData
-			// prettier.clearConfigCache()
-			if(collectDoc.fs.template === 'es_markup') {
-				// prettierFileData = await prettier.format(fileData, {
-				// 	semi: false,
-				// 	parser: 'html',
-				// })
-			} else
-			if(collectDoc.fs.template === 'es_module') {
-				// prettierFileData = await prettier.format(fileData, {
-				// 	semi: false,
-				// 	parser: 'babel',
-				// })
-			}
-			// console.log(
-			// 	'\n', '=====', 
-			// 	'\n', collectDoc.fs.template, filePath, 
-			// 	'\n', '#####',
-			// 	'\n', 'prettierFileData',
-			// 	'\n', prettierFileData,
-			// )
 			// await writeFile(filePath, prettierFileData)
 		}
 		collectionIndex++

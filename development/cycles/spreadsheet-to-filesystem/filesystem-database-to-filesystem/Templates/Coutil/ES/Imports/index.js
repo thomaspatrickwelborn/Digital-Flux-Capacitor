@@ -1,6 +1,5 @@
 export default function Imports($data) {
   const _imports = []
-  console.log('$data.content', $data.content)
   for(const $import of $data.content) {
     if($import.default === false) {
       _imports.push(
@@ -50,6 +49,5 @@ export default function Imports($data) {
       }
     }
   }
-  console.log(_imports)
   return _imports
 }
