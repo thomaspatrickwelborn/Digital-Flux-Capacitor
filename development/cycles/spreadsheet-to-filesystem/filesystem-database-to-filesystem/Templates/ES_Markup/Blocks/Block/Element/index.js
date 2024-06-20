@@ -17,7 +17,6 @@ export default function Element($data) {
   .push(
     [inpos, parseTen(tag.name)]
   )
-  console.log('attributes', attributes)
   iterateAttributes:
   for(const $attribute of attributes) {
     if(
@@ -71,5 +70,5 @@ export default function Element($data) {
       [inpos, '/', parseTen(tag.name),  expos]
     )
   } 
-  return _element.flat()
+  return _element//.flat()
 }

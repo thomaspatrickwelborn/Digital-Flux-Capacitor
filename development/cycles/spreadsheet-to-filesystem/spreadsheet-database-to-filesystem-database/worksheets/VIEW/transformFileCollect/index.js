@@ -21,8 +21,6 @@ function transformFileCollect($collect, $worksheet) {
       const collectDoc = $collectEntry[collectDocIndex]
       if(fileFS.id === undefined) fileFS.id = collectDoc.fs.id
       if(fileFS.path === undefined) fileFS.path = collectDoc.fs.path
-      delete collectDoc._id
-      delete collectDoc.__v
       delete collectDoc.fs
       file.blocks.push(collectDoc)
       collectDocIndex++

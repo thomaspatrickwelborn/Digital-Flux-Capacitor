@@ -14,6 +14,8 @@ async function collectToFileCollect($collect, $worksheet) {
     iterateComRows:
     while(comRowsIndex < comRowsLength) {
       let collectDoc = $collect[collectDocsIndex]
+      delete collectDoc._id
+      delete collectDoc.__v
       const collectDocPopulateOptions = populateOptions(
         lmnRanges.WIDTH, collectDoc.fs.populatePaths
       )
@@ -21,29 +23,27 @@ async function collectToFileCollect($collect, $worksheet) {
         collectDoc.fs.id = $collect[collectDocsIndex - 1].fs.id
         collectDoc.fs.path = $collect[collectDocsIndex - 1].fs.path
       }
-      if(collectDoc.element.attribute !== undefined) {
+      collectDoc = await collectDoc.populate(collectDocPopulateOptions)
+      collectDoc = collectDoc.toObject({ minimize: true, id: false, _id: false })
+      if(collectDoc?.element?.attribute !== undefined) {
         collectDoc.element.attributes = collectDoc.element.attributes || []
         collectDoc.element.attributes.push(
           collectDoc.element.attribute
         )
         delete collectDoc.element.attribute
       }
-      if(collectDoc.element.text !== undefined) {
+      if(collectDoc?.element?.text !== undefined) {
         collectDoc.element.texts = collectDoc.element.texts || []
         collectDoc.element.texts.push(
           collectDoc.element.text
         )
         delete collectDoc.element.text
       }
-      delete collectDoc._id
-      delete collectDoc.__v
+      console.log('collectDoc', collectDoc)
       const comRow = com[comRowsIndex]
       const comRowLMNRange = lmnRanges.parseRow(comRow)
       if(comRowLMNRange.DEX === 0) {
-        await collectDoc.populate(collectDocPopulateOptions)
-        collectDocs.push(collectDoc.toObject({
-          minimize: true,
-        }))
+        collectDocs.push(collectDoc)
       }
       collectDocsIndex++
       comRowsIndex++
