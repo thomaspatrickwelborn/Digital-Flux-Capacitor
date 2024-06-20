@@ -17,6 +17,7 @@ export default function Element($data) {
   .push(
     [inpos, parseTen(tag.name)]
   )
+  console.log('attributes', attributes)
   iterateAttributes:
   for(const $attribute of attributes) {
     if(
