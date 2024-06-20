@@ -1,29 +1,13 @@
 import path from 'node:path'
-import ejs from 'ejs'
 import url from 'node:url'
-import operators from './operators/index.js'
+import { parse, isSlug, parseTen, operators } from '../Coutils/index.js'
 import { writeFile } from 'node:fs/promises'
 import * as Templates from '../../Templates/index.js'
 const projectPath = process.env.PWD
 const modulePath = path.dirname(
 	url.fileURLToPath(import.meta.url)
 )
-const isSlug = function($ten) { return (
-	typeof $ten === 'string' &&
-	$ten.slice(0, 2) === operators.tenSlug
-) }
-const parseTen = function($ten) {
-	return (
-		isSlug($ten)
-	) ? ''
-	  : $ten
-}
-const parse = function($string) {
-	return (
-		typeof parse === 'string'
-	) ? $string
-	  : ''
-}
+
 async function FSElementsContent(
 	$collection, $presubcycle, $subcycle
 ) {
@@ -50,7 +34,6 @@ async function FSElementsContent(
 					parse,
 					operators,
 					path,
-					ejs,
 				}
 			}
 			const filePath = path.join(
@@ -60,15 +43,14 @@ async function FSElementsContent(
 			)
 			const Template = Templates[collectDoc.fs.template]
 			const fileData = Template(templateModel)
-			console.log(collectDoc.fs.template, JSON.stringify(fileData))
-			throw "Digital Flux Capacitor"
 			console.log(
 				'\n', '=====', 
 				'\n', collectDoc.fs.template, filePath, 
 				'\n', '#####',
 				'\n', 'fileData',
-				'\n', fileData,
+				'\n', fileData.flat(100),
 			)
+			throw "Digital Flux Capacitor"
 			// await writeFile(filePath, prettierFileData)
 		}
 		collectionIndex++

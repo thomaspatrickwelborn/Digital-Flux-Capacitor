@@ -13,9 +13,11 @@ export default function Element($data) {
   pos = pos || {}
   const inpos = pos.in
   const expos = pos.ex
-  _element.push(
+  _element
+  .push(
     [inpos, parseTen(tag.name)]
   )
+  console.log('attributes', attributes)
   iterateAttributes:
   for(const $attribute of attributes) {
     if(
@@ -23,15 +25,17 @@ export default function Element($data) {
       $attribute.ten !== undefined &&
       $attribute.ten !== operators.tenSlug
     ) { 
-      _element.push(
-        [$attribute.key, '=', '"$attribute.ten"']
+      _element
+      .push(
+        [$attribute.key, '=', '"', $attribute.ten, '"']
       )
      } else
     if(
       $attribute.key !== undefined &&
       $attribute.ten === undefined
     ) { 
-      _element.push(
+      _element
+      .push(
         [$attribute.key]
       )
      } else
@@ -40,16 +44,19 @@ export default function Element($data) {
       $attribute.ten !== undefined &&
       $attribute.ten !== operators.tenSlug
     ) { 
-      _element.push(
+      _element
+      .push(
         [$attribute.ten]
       )
      } 
    } 
-   _element.push([
-    expos
-  ])
+   _element
+   .push(
+      [expos]
+    )
   if(blocks.length) { 
-    _element.push(
+    _element
+    .push(
       Blocks({
         content: blocks,
         coutils: coutils,
@@ -59,9 +66,10 @@ export default function Element($data) {
    if(
     !operators.void.includes(tag.name)
   ) { 
-    _element.push(
+    _element
+    .push(
       [inpos, '/', parseTen(tag.name),  expos]
     )
-   } 
-  return _element
+  } 
+  return _element.flat()
 }

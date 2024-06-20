@@ -20,19 +20,20 @@ export default function Statement($data) {
     const inpos = pos.in
     const expos = pos.ex
     _statement.push(
-      [ser, parseTen(ten), per, inpos] 
+      [ser, parseTen(ten), per, inpos]
     )
-    _statement.push(
-      Blocks({
-        content: blocks,
-        coutils: coutils,
-      })
-    ) 
+    if(blocks.length) {
+      _statement.push(
+        Blocks({
+          content: blocks,
+          coutils: coutils,
+        })
+      ) 
+    }
     _statement.push(
       [expos, par]
     )
     expressionsIndex++
   }
-  console.log('_statement', _statement)
-  return _statement
+  return _statement.flat()
 }
