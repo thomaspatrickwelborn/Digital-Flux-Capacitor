@@ -12,62 +12,70 @@ export default function Element($data) {
   var { pos } = tag
   pos = pos || {}
   const inpos = pos.in
+  console.log('inpos', inpos)
   const expos = pos.ex
+  console.log('expos', expos)
   _element
   .push(
     [inpos, parseTen(tag.name)]
   )
   const attribute = element?.attribute || {}
-  if(
-    attribute.key !== undefined &&
-    attribute.ten !== undefined &&
-    attribute.ten !== operators.tenSlug
-  ) { 
+  if(Object.keys(attribute).length) {
+    if(
+      attribute.key !== undefined &&
+      attribute.val !== undefined &&
+      attribute.val !== operators.tenSlug
+    ) { 
+      _element
+      .push(
+        [attribute.key, '=', `"${attribute.val}"`]
+      )
+     } else
+    if(
+      attribute.key !== undefined &&
+      attribute.val === undefined
+    ) { 
+      _element
+      .push(
+        [attribute.key]
+      )
+     } else
+    if(
+      attribute.key === undefined &&
+      attribute.val !== undefined &&
+      attribute.val !== operators.tenSlug
+    ) { 
+      _element
+      .push(
+        [attribute.val]
+      )
+    }
     _element
     .push(
-      [attribute.key, '=', '"', attribute.ten, '"']
-    )
-   } else
-  if(
-    attribute.key !== undefined &&
-    attribute.ten === undefined
-  ) { 
-    _element
-    .push(
-      [attribute.key]
-    )
-   } else
-  if(
-    attribute.key === undefined &&
-    attribute.ten !== undefined &&
-    attribute.ten !== operators.tenSlug
-  ) { 
-    _element
-    .push(
-      [attribute.ten]
-    )
-   }
-   // }
-   _element
-   .push(
       [expos]
     )
-  if(blocks.length) { 
+  } else {
     _element
     .push(
-      Blocks({
-        content: blocks,
-        coutils: coutils,
-      })
+      [expos]
     )
-  } 
-   if(
-    !operators.void.includes(tag.name)
-  ) { 
-    _element
-    .push(
-      [inpos, '/', parseTen(tag.name),  expos]
-    )
-  } 
+    if(blocks.length) { 
+      _element
+      .push(
+        Blocks({
+          content: blocks,
+          coutils: coutils,
+        })
+      )
+    }
+    if(
+      !operators.void.includes(tag.name)
+    ) {
+      _element
+      .push(
+        [inpos, '/', parseTen(tag.name),  expos]
+      )
+    }
+  }
   return _element//.flat()
 }

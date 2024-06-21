@@ -48,7 +48,10 @@ async function FSElementsContent(
 				'\n', collectDoc.fs.template, filePath, 
 				'\n', '#####',
 				'\n', 'fileData',
-				'\n', fileData.flat(100),
+				'\n', fileData
+				      .flat(100)
+				      .filter(($fileData) => $fileData)
+				      // .join(''),
 			)
 			throw "Digital Flux Capacitor"
 			// await writeFile(filePath, prettierFileData)
