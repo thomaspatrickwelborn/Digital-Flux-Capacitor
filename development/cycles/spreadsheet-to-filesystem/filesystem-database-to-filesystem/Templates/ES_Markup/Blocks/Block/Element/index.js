@@ -6,7 +6,7 @@ export default function Element($data) {
   const _element = []
   if(element === undefined) return _element
   const {
-    tag, attributes, text, data
+    tag, text, data
   } = element
   if(tag === undefined) return _element
   var { pos } = tag
@@ -17,39 +17,37 @@ export default function Element($data) {
   .push(
     [inpos, parseTen(tag.name)]
   )
-  console.log('attributes', attributes)
-  iterateAttributes:
-  for(const $attribute of attributes) {
-    if(
-      $attribute.key !== undefined &&
-      $attribute.ten !== undefined &&
-      $attribute.ten !== operators.tenSlug
-    ) { 
-      _element
-      .push(
-        [$attribute.key, '=', '"', $attribute.ten, '"']
-      )
-     } else
-    if(
-      $attribute.key !== undefined &&
-      $attribute.ten === undefined
-    ) { 
-      _element
-      .push(
-        [$attribute.key]
-      )
-     } else
-    if(
-      $attribute.key === undefined &&
-      $attribute.ten !== undefined &&
-      $attribute.ten !== operators.tenSlug
-    ) { 
-      _element
-      .push(
-        [$attribute.ten]
-      )
-     } 
-   } 
+  const attribute = element?.attribute || {}
+  if(
+    attribute.key !== undefined &&
+    attribute.ten !== undefined &&
+    attribute.ten !== operators.tenSlug
+  ) { 
+    _element
+    .push(
+      [attribute.key, '=', '"', attribute.ten, '"']
+    )
+   } else
+  if(
+    attribute.key !== undefined &&
+    attribute.ten === undefined
+  ) { 
+    _element
+    .push(
+      [attribute.key]
+    )
+   } else
+  if(
+    attribute.key === undefined &&
+    attribute.ten !== undefined &&
+    attribute.ten !== operators.tenSlug
+  ) { 
+    _element
+    .push(
+      [attribute.ten]
+    )
+   }
+   // }
    _element
    .push(
       [expos]

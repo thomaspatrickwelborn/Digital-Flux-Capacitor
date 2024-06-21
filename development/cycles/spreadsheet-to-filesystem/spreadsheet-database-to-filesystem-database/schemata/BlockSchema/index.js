@@ -34,10 +34,11 @@ const BlockElementSchema = new Schema({
       ex: String,
     },
   },
-  attributes: [{
+  attribute: {
     key: String,
-    ten: String,
-  }],
+    per: String, 
+    val: String,
+  },
   texts: [{
     ten: String,
   }],
@@ -55,5 +56,6 @@ BlockSchema.add({
   element: BlockElementSchema,
   statement: BlockStatementSchema,
   blocks: [BlockSchema],
+
 })
 export default BlockSchema

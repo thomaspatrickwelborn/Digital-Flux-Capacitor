@@ -6,6 +6,7 @@ async function collectToFileCollect($collect, $worksheet) {
   var worksheetModsIndex = 0
   const collectDocs = []
   var collectDocsIndex = 0
+  var preterElement
   iterateWorksheetMods: 
   while(worksheetModsIndex < worksheetModsLength) {
     const { nom, sup, com } = worksheetMods[worksheetModsIndex]
@@ -14,37 +15,22 @@ async function collectToFileCollect($collect, $worksheet) {
     iterateComRows:
     while(comRowsIndex < comRowsLength) {
       let collectDoc = $collect[collectDocsIndex]
-      delete collectDoc._id
-      delete collectDoc.__v
+      const collectDocPopulateOptions = populateOptions(
+        lmnRanges.WIDTH, collectDoc.fs.populatePaths
+      )
       if(collectDoc.fs.id === undefined) {
         collectDoc.fs.id = $collect[collectDocsIndex - 1].fs.id
         collectDoc.fs.path = $collect[collectDocsIndex - 1].fs.path
       }
-      if(collectDoc?.element?.attribute !== undefined) {
-        collectDoc.element.attributes = collectDoc.element.attributes || []
-        collectDoc.element.attributes.push(
-          collectDoc.element.attribute//.toObject()
-        )
-        delete collectDoc.element.attribute
-      }
-      if(collectDoc?.element?.text !== undefined) {
-        collectDoc.element.texts = collectDoc.element.texts || []
-        collectDoc.element.texts.push(
-          collectDoc.element.text//.toObject()
-        )
-        delete collectDoc.element.text
-      }
-      await collectDoc.save()
       const comRow = com[comRowsIndex]
       const comRowLMNRange = lmnRanges.parseRow(comRow)
       if(comRowLMNRange.DEX === 0) {
-        const collectDocPopulateOptions = populateOptions(
-          lmnRanges.WIDTH, collectDoc.fs.populatePaths
-        )
         collectDoc = await collectDoc.populate(collectDocPopulateOptions)
         collectDoc = collectDoc.toObject({ minimize: true, id: false, _id: false })
         collectDocs.push(collectDoc)
       }
+      delete collectDoc.__v
+      delete collectDoc._id
       collectDocsIndex++
       comRowsIndex++
     }
