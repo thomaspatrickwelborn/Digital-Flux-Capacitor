@@ -1,4 +1,4 @@
-const operators = {
+const Operators = {
   scope: [
     '{', '}', '[', ']', 
     '(', ')', '<', '>', 
@@ -47,4 +47,4 @@ const operators = {
     return operatorType
   },
 }
-export default operators
+export default Operators
