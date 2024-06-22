@@ -6,31 +6,34 @@ async function collectToFileCollect($collect, $worksheet) {
   var worksheetModsIndex = 0
   const collectDocs = []
   var collectDocsIndex = 0
+  // var preterElement
+  // Iterate Worksheet Mods
   iterateWorksheetMods: 
   while(worksheetModsIndex < worksheetModsLength) {
     const { nom, sup, com } = worksheetMods[worksheetModsIndex]
     const comRowsLength = com.length
     var comRowsIndex = 0
+    // Iterate Com Rows
     iterateComRows:
     while(comRowsIndex < comRowsLength) {
-      const collectDoc = $collect[collectDocsIndex]
+      let collectDoc = $collect[collectDocsIndex]
       const collectDocPopulateOptions = populateOptions(
         lmnRanges.WIDTH, collectDoc.fs.populatePaths
       )
+      console.log('collectDoc', collectDoc)
       if(collectDoc.fs.id === undefined) {
         collectDoc.fs.id = $collect[collectDocsIndex - 1].fs.id
         collectDoc.fs.path = $collect[collectDocsIndex - 1].fs.path
       }
-      delete collectDoc._id
-      delete collectDoc.__v
       const comRow = com[comRowsIndex]
       const comRowLMNRange = lmnRanges.parseRow(comRow)
       if(comRowLMNRange.DEX === 0) {
-        await collectDoc.populate(collectDocPopulateOptions)
-        collectDocs.push(collectDoc.toObject({
-          minimize: true,
-        }))
+        collectDoc = await collectDoc.populate(collectDocPopulateOptions)
+        collectDoc = collectDoc.toObject({ minimize: true, id: false, _id: false })
+        collectDocs.push(collectDoc)
       }
+      delete collectDoc.__v
+      delete collectDoc._id
       collectDocsIndex++
       comRowsIndex++
     }

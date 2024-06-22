@@ -15,16 +15,17 @@ async function FSElementsContent(
 	const File = fsDBConnection.models['File']
 	const collectionLength = $collection.length
 	var collectionIndex = 0
+	iterateCollection: 
 	while(collectionIndex < collectionLength) {
 		var collectDoc = $collection[collectionIndex]
 		if(collectDoc.fs.operations.update === false) {
 			collectionIndex++
-			continue
+			continue iterateCollection
 		}
 		if(collectDoc.fs.type === 'File') {
 			if(collectDoc.fs.template === undefined) {
 				collectionIndex++
-				continue
+				continue iterateCollection
 			}
 			const templateModel = {
 				content: collectDoc.toObject(),
@@ -53,8 +54,8 @@ async function FSElementsContent(
 				      .filter(($fileData) => $fileData)
 				      // .join(''),
 			)
-			throw "Digital Flux Capacitor"
-			// await writeFile(filePath, prettierFileData)
+			// throw "Digital Flux Capacitor"
+			// await writeFile(filePath, fileData)
 		}
 		collectionIndex++
 	}
