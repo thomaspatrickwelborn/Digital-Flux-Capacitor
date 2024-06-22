@@ -9,16 +9,18 @@ export default function Element($data) {
     tag, text, data
   } = element
   if(tag === undefined) return _element
-  var { pos } = tag
-  pos = pos || {}
-  const inpos = pos.in
-  console.log('inpos', inpos)
-  const expos = pos.ex
-  console.log('expos', expos)
+  var { name } = tag
+  name = parseTen(name)
+  var inapos = tag?.apos?.in || ''
+  var exapos = tag?.apos?.ex || ''
+  var indepos = tag?.depos?.in || ''
+  var exdepos = tag?.depos?.ex || ''
+  // ELEMENT TAG START OPEN
   _element
   .push(
-    [inpos, parseTen(tag.name)]
+    [inapos, name]
   )
+  // ELEMENT ATTRIBUTE
   const attribute = element?.attribute || {}
   if(Object.keys(attribute).length) {
     if(
@@ -30,7 +32,7 @@ export default function Element($data) {
       .push(
         [attribute.key, '=', `"${attribute.val}"`]
       )
-     } else
+    } else
     if(
       attribute.key !== undefined &&
       attribute.val === undefined
@@ -39,7 +41,7 @@ export default function Element($data) {
       .push(
         [attribute.key]
       )
-     } else
+    } else
     if(
       attribute.key === undefined &&
       attribute.val !== undefined &&
@@ -50,32 +52,30 @@ export default function Element($data) {
         [attribute.val]
       )
     }
+    // return _element
+  }
+  _element
+  .push(
+    [exapos]
+  )
+  // ELEMENT BLOCKS
+  if(blocks.length) { 
     _element
     .push(
-      [expos]
+      Blocks({
+        content: blocks,
+        coutils: coutils,
+      })
     )
-  } else {
+  }
+  // ELEMENT TAG END
+  if(
+    !operators.void.includes(name)
+  ) {
     _element
     .push(
-      [expos]
+      [indepos, name, exdepos]
     )
-    if(blocks.length) { 
-      _element
-      .push(
-        Blocks({
-          content: blocks,
-          coutils: coutils,
-        })
-      )
-    }
-    if(
-      !operators.void.includes(tag.name)
-    ) {
-      _element
-      .push(
-        [inpos, '/', parseTen(tag.name),  expos]
-      )
-    }
   }
   return _element//.flat()
 }

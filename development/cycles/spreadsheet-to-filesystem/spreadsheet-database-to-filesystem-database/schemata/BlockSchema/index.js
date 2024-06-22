@@ -29,7 +29,11 @@ const BlockStatementSchema = new Schema({
 const BlockElementSchema = new Schema({
   tag: {
     name: String,
-    pos: {
+    apos: {
+      in: String,
+      ex: String,
+    },
+    depos: {
       in: String,
       ex: String,
     },
