@@ -1,10 +1,7 @@
 import Element from './Element/index.js'
 import Statement from './Statement/index.js'
-const Parsers = {
-  Block: ($block) => $block
-  .flat()
-}
 export default function Block($data) {
+  const { Parsers } = $data.coutils
   const _block = []
   if($data.content.element !== undefined) {
     const _element = Element($data)

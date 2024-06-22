@@ -1,16 +1,7 @@
 import Blocks from '../../index.js'
-const Parsers = {
-  Statement: ($statement) => $statement
-  .flat()
-  .filter(($expressionFrag) => $expressionFrag),
-  Per: ($per) => (
-    $per
-  ) ? String.prototype.concat(' ', $per, ' ')
-    : $per
-}
 export default function Statement($data) {
   const { coutils, content } = $data
-  const { operators, parseTen, parse } = coutils
+  const { operators, Parsers } = coutils
   const { blocks, statement } = content
   const _statement = []
   if(statement === undefined) return
@@ -29,7 +20,7 @@ export default function Statement($data) {
     const inpos = pos.in
     const expos = pos.ex
     _statement.push(
-      [ser, parseTen(ten), Parsers.Per(per), inpos]
+      [ser, Parsers.Ten(ten), Parsers.Per(per), inpos]
     )
     if(blocks.length) {
       const _blocks = Blocks({
@@ -45,6 +36,5 @@ export default function Statement($data) {
     )
     expressionsIndex++
   }
-  // return _statement//.flat()
   return Parsers.Statement(_statement)
 }

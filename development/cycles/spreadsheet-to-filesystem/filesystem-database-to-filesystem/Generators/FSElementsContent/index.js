@@ -1,6 +1,6 @@
 import path from 'node:path'
 import url from 'node:url'
-import { parse, isSlug, parseTen, operators } from '../Coutils/index.js'
+import { Parsers, isSlug, operators } from '../Coutils/index.js'
 import { writeFile } from 'node:fs/promises'
 import * as Templates from '../../Templates/index.js'
 const projectPath = process.env.PWD
@@ -31,8 +31,7 @@ async function FSElementsContent(
 				content: collectDoc.toObject(),
 				coutils: {
 					isSlug,
-					parseTen,
-					parse,
+					Parsers,
 					operators,
 					path,
 				}
@@ -50,12 +49,8 @@ async function FSElementsContent(
 				'\n', '#####',
 				'\n', 'fileData',
 				'\n', fileData,
-				      // .flat(100)
-				      // .filter(($fileData) => $fileData)
-				      // .join(''),
 			)
-			// throw "Digital Flux Capacitor"h
-			// await writeFile(filePath, fileData)
+			await writeFile(filePath, fileData)
 		}
 		collectionIndex++
 	}

@@ -2,7 +2,7 @@ import Blocks from '../../index.js'
 export default function Element($data) {
   const { coutils, content } = $data
   const { blocks, element } = content
-  const { operators, parseTen, parse } = coutils
+  const { operators, Parsers } = coutils
   const _element = []
   if(element === undefined) return _element
   const {
@@ -10,7 +10,7 @@ export default function Element($data) {
   } = element
   if(tag === undefined) return _element
   var { name } = tag
-  name = parseTen(name)
+  name = Parsers.Ten(name)
   var inapos = tag?.apos?.in || ''
   var exapos = tag?.apos?.ex || ''
   var indepos = tag?.depos?.in || ''
@@ -76,5 +76,5 @@ export default function Element($data) {
       [indepos, name, exdepos]
     )
   }
-  return _element
+  return Parsers.Element(_element)
 }
