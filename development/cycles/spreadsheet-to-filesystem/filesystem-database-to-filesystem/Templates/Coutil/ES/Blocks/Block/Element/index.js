@@ -52,7 +52,6 @@ export default function Element($data) {
         [attribute.val]
       )
     }
-    // return _element
   }
   _element
   .push(
@@ -77,5 +76,5 @@ export default function Element($data) {
       [indepos, name, exdepos]
     )
   }
-  return _element//.flat()
+  return _element
 }
