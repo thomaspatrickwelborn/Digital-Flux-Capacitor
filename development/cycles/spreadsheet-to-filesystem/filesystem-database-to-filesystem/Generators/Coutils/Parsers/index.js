@@ -4,10 +4,18 @@ const isSlug = function($ten) { return (
   $ten.slice(0, 2) === Operators.tenSlug
 ) }
 const Parsers = {
+  JSONFile: ($jsonFile) => JSON.stringify(
+    JSON.parse(
+     $jsonFile
+     .join('')
+  ), null, 2),
   Blocks: ($blocks) => $blocks
-  .flat(),
+  .flat()
+  .filter(($expressionFrag) => $expressionFrag),
   Block: ($block) => $block
-  .flat(),
+  .flat()
+  .filter(($expressionFrag) => $expressionFrag)
+  .join(''),
   Statement: ($statement) => $statement
   .flat()
   .filter(($expressionFrag) => $expressionFrag),
