@@ -5,5 +5,5 @@ import Exports from './Exports/index.js'
 export {
   Imports,
   Blocks,
-  Exports,
+  Exports
 }

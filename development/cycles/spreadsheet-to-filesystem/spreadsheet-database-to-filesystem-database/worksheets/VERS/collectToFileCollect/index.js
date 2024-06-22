@@ -20,7 +20,6 @@ async function collectToFileCollect($collect, $worksheet) {
       const collectDocPopulateOptions = populateOptions(
         lmnRanges.WIDTH, collectDoc.fs.populatePaths
       )
-      console.log('collectDoc', collectDoc)
       if(collectDoc.fs.id === undefined) {
         collectDoc.fs.id = $collect[collectDocsIndex - 1].fs.id
         collectDoc.fs.path = $collect[collectDocsIndex - 1].fs.path

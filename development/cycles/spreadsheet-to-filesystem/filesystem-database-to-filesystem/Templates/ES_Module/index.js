@@ -1,6 +1,8 @@
-import Imports from '../Coutil/ES/Imports/index.js'
-import Blocks from '../Coutil/ES/Blocks/index.js'
-import Exports from '../Coutil/ES/Exports/index.js'
+import {
+  Imports,
+  Blocks,
+  Exports,
+} from '../Coutil/ES/index.js'
 export default function ES_Markup($data) {
   const { coutils, content } = $data
   const _es_markup = []

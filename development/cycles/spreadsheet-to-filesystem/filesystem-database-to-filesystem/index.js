@@ -17,8 +17,6 @@ class FilesystemDatabaseToFilesystem extends EventEmitter {
 		const { FSElements, FSElementsContent } = Generators
 		const fileCollection = await File
 		.find({})
-		console.log("fileCollection", fileCollection)
-		throw "Digital Flux Capacitor"
 		const foldCollection = await Fold
 		.find({})
 		const fsElements = foldCollection.concat(fileCollection)
