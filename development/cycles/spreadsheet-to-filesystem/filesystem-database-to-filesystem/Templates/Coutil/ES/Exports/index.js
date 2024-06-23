@@ -1,6 +1,10 @@
 export default function Exports($data) {
-  const _exports = $data.content
-  // <% for(const $export of _exports) { -%>
+  const { coindex } = $data
+  const _exports = []
+  // const _exports = $data.content
+  for(const $export of $data.content) {
+    
+  }
   //   <% if($export.default !== true) { -%>
   //     <%
   //     let nameIndex = 0
@@ -20,5 +24,5 @@ export default function Exports($data) {
   //   <% } else { -%>
   //     export default <%= $export.name[0].name -%>
   //   <% } -%>
-  // <% } -%>
+  return _exports
 }
