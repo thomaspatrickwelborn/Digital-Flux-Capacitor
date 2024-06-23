@@ -3,25 +3,32 @@ const isSlug = function($ten) { return (
   typeof $ten === 'string' &&
   $ten.slice(0, 2) === Operators.tenSlug
 ) }
+const filterUndefined = ($expressionFrag) => $expressionFrag
 const Parsers = {
-  JSONFile: ($jsonFile) => JSON.stringify(
-    JSON.parse(
-     $jsonFile
-     .join('')
-  ), null, 2),
+  JSONFile: ($jsonFile) => {
+    let jsonFile = $jsonFile
+   .join('')
+   return jsonFile
+  },
   Blocks: ($blocks) => $blocks
   .flat()
-  .filter(($expressionFrag) => $expressionFrag),
-  Block: ($block) => $block
-  .flat()
-  .filter(($expressionFrag) => $expressionFrag)
-  .join(''),
-  Statement: ($statement) => $statement
-  .flat()
-  .filter(($expressionFrag) => $expressionFrag),
+  .filter(filterUndefined),
+  Block: ($block) => {
+    let block = $block
+    .flat()
+    .filter(filterUndefined)
+    .join('')
+    return block
+  },
+  Statement: ($statement) => {
+    const statement = $statement
+    .flat()
+    .filter(filterUndefined)
+    return statement
+  },
   Element: ($element) => $statement
   .flat()
-  .filter(($expressionFrag) => $expressionFrag),
+  .filter(filterUndefined),
   Per: ($per) => (
     $per
   ) ? String.prototype.concat(' ', $per, ' ')

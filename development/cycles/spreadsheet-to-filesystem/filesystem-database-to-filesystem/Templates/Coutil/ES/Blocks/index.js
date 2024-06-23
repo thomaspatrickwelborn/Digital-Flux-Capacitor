@@ -1,15 +1,19 @@
 import Block from './Block/index.js'
 export default function Blocks($data) {
-  const { coutils, content } = $data
+  const { coutils, content, coindex } = $data
+  console.log(coindex)
   const { Parsers } = coutils
-  const _blocks = []
+  const blocks = []
+  coindex.scope++
   iterateBlocks:
   for(let $block of content) {
-    const _block = Block({
+    coindex.block++
+    const block = Block({
+      coindex: coindex,
       content: $block,
       coutils: coutils,
     })
-    _blocks.push(_block)
+    blocks.push(block)
   }
-  return Parsers.Blocks(_blocks)
+  return Parsers.Blocks(blocks)
 }
