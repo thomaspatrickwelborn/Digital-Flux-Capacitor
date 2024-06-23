@@ -23,7 +23,7 @@ export default function Statement($data, $options = {}) {
     const inpos = pos.in
     const expos = pos.ex
     _statement.push(
-      [ser, Parsers.Ten(ten), Parsers.Per(per), inpos]
+      [Parsers.Ser(ser), Parsers.Ten(ten, ' '), Parsers.Per(per), inpos]
     )
     if(blocks.length) {
       const _blocks = Blocks({

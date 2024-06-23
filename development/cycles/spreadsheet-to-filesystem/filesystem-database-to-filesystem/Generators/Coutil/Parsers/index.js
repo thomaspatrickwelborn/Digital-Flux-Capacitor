@@ -78,13 +78,26 @@ const Parsers = {
     }
     return element
   },
-  Per: ($per) => (
-    $per
-  ) ? String.prototype.concat(' ', $per, ' ')
-    : $per,
-  Ten: ($ten) => (
-    Functions.isSlug($ten)
-  ) ? ''
-    : $ten,
+  Ser: ($ser) => {
+    const ser = (
+      $ser
+    ) ? String.prototype.concat($ser, ' ')
+      : $ser
+    return ser
+  },
+  Per: ($per) => {
+    const per = (
+      $per
+    ) ? String.prototype.concat(' ', $per, ' ')
+      : $per
+    return per
+  },
+  Ten: ($ten, $space = '') => {
+    let ten = (
+      Functions.isSlug($ten)
+    ) ? ''
+      : String.prototype.concat($ten, $space)
+    return ten
+  },
 }
 export default Parsers
