@@ -5,6 +5,7 @@ export default function Statement($data) {
   } = $data
   const { operators, Parsers } = coutils
   const { blocks, statement, coindex } = content
+  console.log('coindex', coindex)
   const _statement = []
   if(statement === undefined) return
   const { lexter, dexter } = statement

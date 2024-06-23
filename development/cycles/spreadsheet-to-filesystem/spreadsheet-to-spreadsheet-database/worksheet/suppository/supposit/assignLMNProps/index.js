@@ -6,6 +6,8 @@ function assignLMNProps($supposit, $settings) {
 	$supposit.coindex = {
 		type: {
 			scope: Number,
+			block: Number,
+			blockLen: Number,
 		}
 	}
 	var { modIndex, mods, lmnRanges, sup, com } = $settings
