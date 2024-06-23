@@ -1,8 +1,8 @@
 import Blocks from '../../index.js'
-export default function Element($data, $options) {
-  const { coutils, content } = $data
+export default function Element($data, $options = {}) {
+  const { coutils, content, coindex } = $data
   const { blocks, element } = content
-  const { operators, Parsers } = coutils
+  const { Operators, Parsers } = coutils
   const _element = []
   if(element === undefined) return _element
   const {
@@ -26,7 +26,7 @@ export default function Element($data, $options) {
     if(
       attribute.key !== undefined &&
       attribute.val !== undefined &&
-      attribute.val !== operators.tenSlug
+      attribute.val !== Operators.tenSlug
     ) { 
       _element
       .push(
@@ -45,7 +45,7 @@ export default function Element($data, $options) {
     if(
       attribute.key === undefined &&
       attribute.val !== undefined &&
-      attribute.val !== operators.tenSlug
+      attribute.val !== Operators.tenSlug
     ) { 
       _element
       .push(
@@ -63,18 +63,21 @@ export default function Element($data, $options) {
     .push(
       Blocks({
         content: blocks,
+        coindex: coindex, 
         coutils: coutils,
       }, $options)
     )
   }
   // ELEMENT TAG END
   if(
-    !operators.void.includes(name)
+    !Operators.void.includes(name)
   ) {
     _element
     .push(
       [indepos, name, exdepos]
     )
   }
-  return Parsers.Element(_element, $options)
+  return Parsers.Element(_element, Object.assign($options, {
+    coindex
+  }))
 }

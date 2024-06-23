@@ -3,7 +3,8 @@ import {
   Blocks,
   Exports,
 } from '../Coutil/ES/index.js'
-export default function ES_Markup($data, $options) {
+export default function ES_Markup($data, $options = {}) {
+  console.log($options)
   const { coutils, content } = $data
   const _es_markup = []
   const _imports = Imports({
@@ -11,6 +12,11 @@ export default function ES_Markup($data, $options) {
     coutils: coutils,
   }, $options)
   const _blocks = Blocks({
+    coindex: {
+      block: -1,
+      scope: -1,
+      blockLength: content.blocks.length,
+    },
     content: content.blocks,
     coutils: coutils,
   }, $options)

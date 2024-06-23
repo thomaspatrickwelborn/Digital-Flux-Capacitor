@@ -82,6 +82,16 @@
 									"char": "\n"
 								}
 							}
+						},
+						"ES_Markup": {
+							"space": {
+								"horizon": {
+									"char": "  "
+								},
+								"verizon": {
+									"char": "\n"
+								}
+							}
 						}
 					}
 				}]

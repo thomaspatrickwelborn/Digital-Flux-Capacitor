@@ -17,7 +17,6 @@ const Parsers = {
     return block
   },
   Statement: ($statement, $options) => {
-    console.log('Parsers.Statement', '$options', $options)
     const { coindex, space } = $options
     const { horizon, verizon } = space
     const statement = $statement
@@ -42,7 +41,7 @@ const Parsers = {
     }
     return statement
   },
-  Element: ($element) => $statement
+  Element: ($element) => $element
   .flat()
   .filter(Functions.filterUndefined),
   Per: ($per) => (
