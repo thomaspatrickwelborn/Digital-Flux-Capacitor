@@ -3,7 +3,6 @@ export default function Statement($data) {
   const { coutils, content, coindex } = $data
   const { operators, Parsers } = coutils
   const { blocks, statement } = content
-  console.log('Statement', 'coindex', coindex)
   const _statement = []
   if(statement === undefined) return
   const { lexter, dexter } = statement

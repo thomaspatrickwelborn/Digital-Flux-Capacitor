@@ -1,4 +1,5 @@
 import Functions from '../Functions/index.js'
+
 const Parsers = {
   JSONFile: ($jsonFile) => {
     let jsonFile = $jsonFile
@@ -16,19 +17,27 @@ const Parsers = {
     return block
   },
   Statement: ($statement, $options) => {
-    console.log($options.coindex)
-    const matrizonSpace = Functions.matrizonSpace({
-      len: $options.coindex.scope, 
-      char: '  ',
-    }, {
-      len: 1,
-      char: '\n',
-    })
+    const { coindex } = $options
     const statement = $statement
     .flat()
     .filter(Functions.filterUndefined)
     statement
-    .unshift(matrizonSpace)
+    .unshift(Functions.matrizonSpace({
+      len: 1,
+      char: '\n',
+    }, {
+      len: coindex.scope, 
+      char: '  ',
+    }))
+    if(coindex.block === coindex.blockLength - 1) {
+      statement.push(Functions.matrizonSpace({
+        len: 1,
+        char: '\n',
+      }, {
+        len: coindex.scope - 1, 
+        char: '  ',
+      }))
+    }
     return statement
   },
   Element: ($element) => $statement

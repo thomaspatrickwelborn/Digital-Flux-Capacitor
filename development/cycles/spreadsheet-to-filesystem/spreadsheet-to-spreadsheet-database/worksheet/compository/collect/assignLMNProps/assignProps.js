@@ -19,9 +19,6 @@ async function assignProps($collect, $settings) {
 			const modComRow = modCom[modComRowsIndex]
 			const modComRowRange = lmnRanges.parseRow(modComRow)
 			var meterScopeIndex = modComRowRange.DEX
-			// collectDoc.coindex = Object.assign(collectDoc.coindex || {}, {
-			// 	scope: meterScopeIndex
-			// })
 			const subductModsLength = mods.length
 			var subductModsIndex = modsIndex
 			var subductCollectDocsIndex = collectDocsIndex + 1
@@ -41,11 +38,6 @@ async function assignProps($collect, $settings) {
 				iterateSubductModComRows: 
 				while(subductModComRowsIndex < subductModComRowsLength) {
 					const subductCollectDoc = $collect[subductCollectDocsIndex]
-					// subductCollectDoc.coindex  = Object.assign(subductCollectDoc.coindex || {}, {
-					// 	block: subductModComRowsIndex,
-					// 	blockLen: subductModComRowsLength,
-					// })
-					// console.log('subductCollectDoc.coindex', subductCollectDoc.coindex)
 					const subductModComRow = subductModCom[subductModComRowsIndex]
 					const subductModComRowRange = lmnRanges.parseRow(subductModComRow)
 					var subductMeterScopeIndex = subductModComRowRange.DEX

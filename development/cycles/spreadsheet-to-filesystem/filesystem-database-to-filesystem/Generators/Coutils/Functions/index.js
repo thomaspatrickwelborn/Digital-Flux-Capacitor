@@ -22,14 +22,11 @@ const zonSpace = ($horizon, $space) => {
   }
   return _zonSpace
 }
-const matrizonSpace = (
-  $horizon = ZonSettings, 
-  $verizon = ZonSettings
-) => {
-  const horizonSpace = zonSpace($horizon.len, $horizon.char)
-  const verizonSpace = zonSpace($verizon.len, $verizon.char) 
+const matrizonSpace = ($zoneA, $zoneB) => {
+  const zoneASpace = zonSpace($zoneA.len, $zoneA.char)
+  const zoneBSpace = zonSpace($zoneB.len, $zoneB.char) 
   return String.prototype.concat(
-    verizonSpace, horizonSpace
+    zoneASpace, zoneBSpace
   )
 }
 const Functions = {
