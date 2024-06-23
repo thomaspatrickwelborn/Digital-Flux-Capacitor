@@ -57,11 +57,11 @@ const BlockSchema = new Schema({}, {
   validateBeforeSave: false,
 })
 BlockSchema.add({
-  coindex: {
-    scope: Number,
-    block: Number,
-    blockLen: Number,
-  },
+  // coindex: {
+  //   scope: Number,
+  //   block: Number,
+  //   blockLen: Number,
+  // },
   element: BlockElementSchema,
   statement: BlockStatementSchema,
   blocks: [BlockSchema],

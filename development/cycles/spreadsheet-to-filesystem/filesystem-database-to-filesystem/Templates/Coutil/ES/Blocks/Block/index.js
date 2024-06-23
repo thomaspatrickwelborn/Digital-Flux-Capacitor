@@ -1,7 +1,9 @@
 import Element from './Element/index.js'
 import Statement from './Statement/index.js'
 export default function Block($data) {
-  const { Parsers } = $data.coutils
+  const { coutils, coindex } = $data
+  const { Parsers } = coutils
+  // console.log('Block', 'coindex', coindex)
   const _block = []
   if($data.content.element !== undefined) {
     const _element = Element($data)

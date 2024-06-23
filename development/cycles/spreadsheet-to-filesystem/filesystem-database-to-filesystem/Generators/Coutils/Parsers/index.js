@@ -16,6 +16,7 @@ const Parsers = {
     return block
   },
   Statement: ($statement, $options) => {
+    console.log($options.coindex)
     const matrizonSpace = Functions.matrizonSpace({
       len: $options.coindex.scope, 
       char: '  ',

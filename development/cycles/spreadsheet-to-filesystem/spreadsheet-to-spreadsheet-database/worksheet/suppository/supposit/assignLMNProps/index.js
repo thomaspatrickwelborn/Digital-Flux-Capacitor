@@ -3,13 +3,13 @@ import { typeOf } from '#utils/index.js'
 import { LMNProps } from '#utils/defaults/index.js'
 
 function assignLMNProps($supposit, $settings) {
-	$supposit.coindex = {
-		type: {
-			scope: Number,
-			block: Number,
-			blockLen: Number,
-		}
-	}
+	// $supposit.coindex = {
+	// 	type: {
+	// 		scope: Number,
+	// 		block: Number,
+	// 		blockLen: Number,
+	// 	}
+	// }
 	var { modIndex, mods, lmnRanges, sup, com } = $settings
 	if(lmnRanges.length === 0) return $supposit
 	const mod = mods[modIndex][1]

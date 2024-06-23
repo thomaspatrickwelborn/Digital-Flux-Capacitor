@@ -1,11 +1,9 @@
 import Blocks from '../../index.js'
 export default function Statement($data) {
-  const {
-    coutils, content,
-  } = $data
+  const { coutils, content, coindex } = $data
   const { operators, Parsers } = coutils
-  const { blocks, statement, coindex } = content
-  console.log('coindex', coindex)
+  const { blocks, statement } = content
+  console.log('Statement', 'coindex', coindex)
   const _statement = []
   if(statement === undefined) return
   const { lexter, dexter } = statement
@@ -28,6 +26,7 @@ export default function Statement($data) {
     if(blocks.length) {
       const _blocks = Blocks({
         content: blocks,
+        coindex: coindex,
         coutils: coutils,
       })
       _statement.push(
