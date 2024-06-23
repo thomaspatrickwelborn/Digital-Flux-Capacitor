@@ -3,6 +3,8 @@ export default function Element($data, $options = {}) {
   const { coutils, content, coindex } = $data
   const { blocks, element } = content
   const { Operators, Parsers } = coutils
+  const { space } = $options
+  const { horizon } = space
   const _element = []
   if(element === undefined) return _element
   const {
@@ -30,7 +32,8 @@ export default function Element($data, $options = {}) {
     ) { 
       _element
       .push(
-        [attribute.key, '=', `"${attribute.val}"`]
+        [horizon.char, attribute.key, '=', `"${attribute.val}"`]
+        // [attribute.key, '=', `"${attribute.val}"`]
       )
     } else
     if(
@@ -39,7 +42,8 @@ export default function Element($data, $options = {}) {
     ) { 
       _element
       .push(
-        [attribute.key]
+        // [attribute.key]
+        [horizon.char, attribute.key]
       )
     } else
     if(
@@ -49,7 +53,8 @@ export default function Element($data, $options = {}) {
     ) { 
       _element
       .push(
-        [attribute.val]
+        // [attribute.val]
+        [horizon.char, attribute.val]
       )
     }
   }
@@ -59,13 +64,14 @@ export default function Element($data, $options = {}) {
   )
   // ELEMENT BLOCKS
   if(blocks.length) { 
+    const _blocks = Blocks({
+      content: blocks,
+      coindex: coindex, 
+      coutils: coutils,
+    }, $options)
     _element
     .push(
-      Blocks({
-        content: blocks,
-        coindex: coindex, 
-        coutils: coutils,
-      }, $options)
+      _blocks
     )
   }
   // ELEMENT TAG END

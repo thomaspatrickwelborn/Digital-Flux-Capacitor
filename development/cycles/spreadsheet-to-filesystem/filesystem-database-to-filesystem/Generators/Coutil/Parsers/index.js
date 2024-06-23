@@ -1,14 +1,26 @@
 import Functions from '../Functions/index.js'
 
 const Parsers = {
+  ESMarkup: ($esMarkup) => {
+    let esMarkup = $esMarkup
+    .flat()
+    .filter(Functions.filterUndefined)
+    .join('\n')
+    return esMarkup
+  },
   JSONFile: ($jsonFile) => {
     let jsonFile = $jsonFile
-   .join('')
+    .flat()
+    .filter(Functions.filterUndefined)
+    .join('\n')
    return jsonFile
   },
-  Blocks: ($blocks) => $blocks
-  .flat()
-  .filter(Functions.filterUndefined),
+  Blocks: ($blocks) => {
+    let blocks = $blocks
+    .flat()
+    .filter(Functions.filterUndefined)
+    return blocks
+  },
   Block: ($block) => {
     let block = $block
     .flat()
@@ -41,9 +53,31 @@ const Parsers = {
     }
     return statement
   },
-  Element: ($element) => $element
-  .flat()
-  .filter(Functions.filterUndefined),
+  Element: ($element, $options) => {
+    const { coindex, space } = $options
+    const { horizon, verizon } = space
+    const element = $element
+    .flat()
+    .filter(Functions.filterUndefined)
+    element
+    .unshift(Functions.matrizonSpace({
+      len: 1,
+      char: verizon.char,
+    }, {
+      len: coindex.scope, 
+      char: horizon.char,
+    }))
+    if(coindex.block === coindex.blockLength - 1) {
+      element.push(Functions.matrizonSpace({
+        len: 1,
+        char: verizon.char,
+      }, {
+        len: coindex.scope - 1, 
+        char: horizon.char,
+      }))
+    }
+    return element
+  },
   Per: ($per) => (
     $per
   ) ? String.prototype.concat(' ', $per, ' ')

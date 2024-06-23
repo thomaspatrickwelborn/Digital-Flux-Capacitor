@@ -17,7 +17,7 @@ const Operators = {
     '+', '-', '*', '/', '%'
   ],
   comparison: [
-    '<', '>', '<=', '=>', '==', '!=','===', '!=='
+    '<', '>', '<=', '=>', '==', '!=', '===', '!=='
   ],
   comment: [
     '//', '/*', '*/'
@@ -27,7 +27,7 @@ const Operators = {
   ],
   void: [
     'area', 'base', 'br', 'col',
-    'embed','hr','img','input',
+    'embed', 'hr', 'img', 'input',
     'link', 'meta', 'param', 'source',
     'track', 'wbr', '!DOCTYPE'
 
