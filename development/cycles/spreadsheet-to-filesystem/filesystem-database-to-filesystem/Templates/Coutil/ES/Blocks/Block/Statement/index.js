@@ -1,9 +1,8 @@
 import Blocks from '../../index.js'
 export default function Statement($data) {
   const {
-    coutils, content, coindex,
+    coutils, content,
   } = $data
-  console.log(coindex)
   const { operators, Parsers } = coutils
   const { blocks, statement } = content
   const _statement = []
@@ -27,7 +26,6 @@ export default function Statement($data) {
     )
     if(blocks.length) {
       const _blocks = Blocks({
-        coindex: coindex,
         content: blocks,
         coutils: coutils,
       })

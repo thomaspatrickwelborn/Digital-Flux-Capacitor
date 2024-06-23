@@ -28,10 +28,6 @@ async function FSElementsContent(
 				continue iterateCollection
 			}
 			const templateModel = {
-				coindex: {
-					scope: -1,
-					block: -1,
-				},
 				content: collectDoc.toObject(),
 				coutils: {
 					Parsers,
