@@ -17,25 +17,27 @@ const Parsers = {
     return block
   },
   Statement: ($statement, $options) => {
-    const { coindex } = $options
+    console.log('Parsers.Statement', '$options', $options)
+    const { coindex, space } = $options
+    const { horizon, verizon } = space
     const statement = $statement
     .flat()
     .filter(Functions.filterUndefined)
     statement
     .unshift(Functions.matrizonSpace({
       len: 1,
-      char: '\n',
+      char: verizon.char,
     }, {
       len: coindex.scope, 
-      char: '  ',
+      char: horizon.char,
     }))
     if(coindex.block === coindex.blockLength - 1) {
       statement.push(Functions.matrizonSpace({
         len: 1,
-        char: '\n',
+        char: verizon.char,
       }, {
         len: coindex.scope - 1, 
-        char: '  ',
+        char: horizon.char,
       }))
     }
     return statement

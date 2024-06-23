@@ -71,6 +71,18 @@
 				["FilesystemDatabaseToFilesystem", {
 					"filesystem": {
 						"path": "development"
+					},
+					"filesystemContent": {
+						"JSON_File": {
+							"space": {
+								"horizon": {
+									"char": "  "
+								},
+								"verizon": {
+									"char": "\n"
+								}
+							}
+						}
 					}
 				}]
 			]

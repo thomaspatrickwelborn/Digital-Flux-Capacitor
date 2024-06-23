@@ -1,6 +1,6 @@
 import path from 'node:path'
 import url from 'node:url'
-import { Parsers, Operators } from '../Coutils/index.js'
+import { Parsers, Operators } from '../Coutil/index.js'
 import { writeFile } from 'node:fs/promises'
 import * as Templates from '../../Templates/index.js'
 const projectPath = process.env.PWD
@@ -11,6 +11,9 @@ const modulePath = path.dirname(
 async function FSElementsContent(
 	$collection, $presubcycle, $subcycle
 ) {
+	const {
+		filesystem, filesystemContent
+	} = $subcycle
 	const fsDBConnection = $presubcycle.dbConnection
 	const File = fsDBConnection.models['File']
 	const collectionLength = $collection.length
@@ -37,11 +40,16 @@ async function FSElementsContent(
 			}
 			const filePath = path.join(
 				projectPath,
-				$subcycle.filesystem.path,
+				filesystem.path,
 				collectDoc.fs.path
 			)
-			const Template = Templates[collectDoc.fs.template]
-			const fileData = Template(templateModel)
+			const Template = Templates[
+				collectDoc.fs.template
+			]
+			const TemplateOptions = filesystemContent[
+				collectDoc.fs.template
+			]
+			const fileData = Template(templateModel, TemplateOptions)
 			console.log(
 				'\n', '=====', 
 				'\n', collectDoc.fs.template, filePath, 

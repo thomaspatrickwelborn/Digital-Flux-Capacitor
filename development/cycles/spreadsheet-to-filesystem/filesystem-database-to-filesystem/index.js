@@ -3,12 +3,17 @@ import * as Generators from './Generators/index.js'
 class FilesystemDatabaseToFilesystem extends EventEmitter {
 	#settings
 	filesystem
+	filesystemContent
 	fsElements
 	fsElementsContent
 	constructor($settings) {
 		super()
 		this.#settings = $settings
-		this.filesystem = this.#settings.filesystem
+		const {
+			filesystem, filesystemContent
+		} = this.#settings
+		this.filesystem = filesystem
+		this.filesystemContent = filesystemContent
 		return this
 	}
 	async input($presubcycle) {

@@ -1,5 +1,5 @@
 import Block from './Block/index.js'
-export default function Blocks($data) {
+export default function Blocks($data, $options) {
   const { coutils, content, coindex } = $data
   const { Parsers } = coutils
   const blocks = []
@@ -17,7 +17,7 @@ export default function Blocks($data) {
         },
         content: $block,
         coutils: coutils,
-      })
+      }, $options)
       blocks.push(block)
       blockIndex++
     }

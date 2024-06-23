@@ -1,5 +1,5 @@
 import Blocks from '../../index.js'
-export default function Element($data) {
+export default function Element($data, $options) {
   const { coutils, content } = $data
   const { blocks, element } = content
   const { operators, Parsers } = coutils
@@ -64,7 +64,7 @@ export default function Element($data) {
       Blocks({
         content: blocks,
         coutils: coutils,
-      })
+      }, $options)
     )
   }
   // ELEMENT TAG END
@@ -76,5 +76,5 @@ export default function Element($data) {
       [indepos, name, exdepos]
     )
   }
-  return Parsers.Element(_element)
+  return Parsers.Element(_element, $options)
 }

@@ -1,4 +1,5 @@
 export default function Imports($data) {
+  const { coindex } = $data
   const _imports = []
   for(const $import of $data.content) {
     if($import.default === false) {
@@ -10,21 +11,21 @@ export default function Imports($data) {
         if($namedImport.alias !== undefined) {
           if(namedImportIndex < $import.name.length - 1) {
             _imports.push(
-              [$namedImport.name, 'as', $namedImport.alias,]
+              ['  ', $namedImport.name, 'as', $namedImport.alias, ',']
             )
           } else {
             _imports.push(
-              [$namedImport.name, 'as', $namedImport.alias]
+              ['  ', $namedImport.name, 'as', $namedImport.alias]
             )
           }
         } else {
           if(namedImportIndex < $import.name.length - 1) {
             _imports.push(
-              [$namedImport.name, ',']
+              ['  ', $namedImport.name, ',']
             )
           } else {
             _imports.push(
-              [$namedImport.name]
+              ['  ', $namedImport.name]
             )
           }
         }

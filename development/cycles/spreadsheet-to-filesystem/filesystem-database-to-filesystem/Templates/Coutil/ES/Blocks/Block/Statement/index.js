@@ -1,5 +1,5 @@
 import Blocks from '../../index.js'
-export default function Statement($data) {
+export default function Statement($data, $options = {}) {
   const { coutils, content, coindex } = $data
   const { operators, Parsers } = coutils
   const { blocks, statement } = content
@@ -27,7 +27,7 @@ export default function Statement($data) {
         content: blocks,
         coindex: coindex,
         coutils: coutils,
-      })
+      }, $options)
       _statement.push(
         _blocks
       )
@@ -37,7 +37,7 @@ export default function Statement($data) {
     )
     expressionsIndex++
   }
-  return Parsers.Statement(_statement, {
+  return Parsers.Statement(_statement, Object.assign($options, {
     coindex
-  })
+  }))
 }
