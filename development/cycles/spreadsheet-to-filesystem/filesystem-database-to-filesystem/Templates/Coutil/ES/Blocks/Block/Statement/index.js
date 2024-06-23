@@ -4,7 +4,7 @@ export default function Statement($data) {
     coutils, content,
   } = $data
   const { operators, Parsers } = coutils
-  const { blocks, statement } = content
+  const { blocks, statement, coindex } = content
   const _statement = []
   if(statement === undefined) return
   const { lexter, dexter } = statement
@@ -38,5 +38,7 @@ export default function Statement($data) {
     )
     expressionsIndex++
   }
-  return Parsers.Statement(_statement)
+  return Parsers.Statement(_statement, {
+    coindex
+  })
 }

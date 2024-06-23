@@ -57,6 +57,7 @@ const BlockSchema = new Schema({}, {
   validateBeforeSave: false,
 })
 BlockSchema.add({
+  coindex: { scope: Number },
   element: BlockElementSchema,
   statement: BlockStatementSchema,
   blocks: [BlockSchema],

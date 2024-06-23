@@ -20,7 +20,8 @@ const Parsers = {
     .join('')
     return block
   },
-  Statement: ($statement) => {
+  Statement: ($statement, $options) => {
+    console.log($options.coindex.scope)
     const statement = $statement
     .flat()
     .filter(filterUndefined)

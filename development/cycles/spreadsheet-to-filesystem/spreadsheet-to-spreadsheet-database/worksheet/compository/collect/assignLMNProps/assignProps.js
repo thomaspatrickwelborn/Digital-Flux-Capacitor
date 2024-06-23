@@ -16,9 +16,11 @@ async function assignProps($collect, $settings) {
 		iterateModComRows: 
 		while(modComRowsIndex < modComRowsLength) {
 			const collectDoc = $collect[collectDocsIndex]
+			collectDoc.coindex = { scope: undefined }
 			const modComRow = modCom[modComRowsIndex]
 			const modComRowRange = lmnRanges.parseRow(modComRow)
 			var meterScopeIndex = modComRowRange.DEX
+			collectDoc.coindex.scope = meterScopeIndex
 			const subductModsLength = mods.length
 			var subductModsIndex = modsIndex
 			var subductCollectDocsIndex = collectDocsIndex + 1
