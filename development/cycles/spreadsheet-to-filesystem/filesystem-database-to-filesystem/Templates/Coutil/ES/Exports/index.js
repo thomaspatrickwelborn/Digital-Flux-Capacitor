@@ -6,8 +6,9 @@ export default function Exports($data, $options) {
     if($export.default !== true) {
       let nameIndex = 0
       const nameLength = $export.nameLength
-     
-      export {
+      _exports.push(
+        ['export', ' ', '{']
+      )
       for(const $name of $export.name ) {
         const name = $name.name
         if(nameIndex < nameLength - 1) {
