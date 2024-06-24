@@ -1,6 +1,7 @@
 import Functions from '../Functions/index.js'
 
 const Parsers = {
+  // File Parsers
   ESMarkup: ($esMarkup) => {
     let esMarkup = $esMarkup
     .flat()
@@ -22,6 +23,7 @@ const Parsers = {
     .join('\n')
     return esModule
   },
+  // Block Parsers
   Blocks: ($blocks) => {
     let blocks = $blocks
     .flat()
@@ -35,6 +37,7 @@ const Parsers = {
     .join('')
     return block
   },
+  // Port Parsers
   Imports: ($imports) => {
     let imports = $imports
     .map(Functions.mapImports)
@@ -42,6 +45,14 @@ const Parsers = {
     .join('\n')
     return imports
   },
+  Exports: ($exports) => {
+    let exports = $exports
+    .map(Functions.mapExports)
+    .filter(Functions.filterUndefined)
+    .join('\n')
+    return exports
+  },
+  // Statement Parser
   Statement: ($statement, $options) => {
     const { coindex, space } = $options
     const { horizon, verizon } = space
@@ -67,6 +78,7 @@ const Parsers = {
     }
     return statement
   },
+  // Element Parser
   Element: ($element, $options) => {
     const { coindex, space } = $options
     const { horizon, verizon } = space
@@ -92,6 +104,7 @@ const Parsers = {
     }
     return element
   },
+  // Expression Fragment Parsers
   Ser: ($ser) => {
     const ser = (
       $ser
