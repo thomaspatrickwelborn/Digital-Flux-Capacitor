@@ -1,6 +1,6 @@
 import path from 'node:path'
 import url from 'node:url'
-import { Parsers, Operators } from '../Coutil/index.js'
+import { Functions, Parsers, Operators } from '../Coutil/index.js'
 import { writeFile } from 'node:fs/promises'
 import * as Templates from '../../Templates/index.js'
 const projectPath = process.env.PWD
@@ -33,6 +33,7 @@ async function FSElementsContent(
 			const templateModel = {
 				content: collectDoc.toObject(),
 				coutils: {
+					Functions,
 					Parsers,
 					Operators,
 					path,

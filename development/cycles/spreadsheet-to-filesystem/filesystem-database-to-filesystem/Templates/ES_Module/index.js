@@ -5,7 +5,7 @@ import {
 } from '../Coutil/ES/index.js'
 export default function ESModule($data, $options = {}) {
   const { coutils, content } = $data
-  const { Parsers } = coutils
+  const { Functions, Parsers } = coutils
   const _es_module = []
   const _imports = Imports({
     content: content.imports,
@@ -27,5 +27,7 @@ export default function ESModule($data, $options = {}) {
   _es_module.push(
     _imports, _blocks, _exports
   )
-  return Parsers.ESModule(_es_module, $options)
+  // return Parsers.ESModule(_es_module, $options)
+  return _es_module
+  .filter(Functions.filterUndefined)
 }

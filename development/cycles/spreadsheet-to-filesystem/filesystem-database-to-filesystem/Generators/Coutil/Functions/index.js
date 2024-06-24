@@ -7,7 +7,10 @@ const isSlug = function($ten) { return (
   typeof $ten === 'string' &&
   $ten.slice(0, 2) === Operators.tenSlug
 ) }
-const filterUndefined = ($expressionFrag) => $expressionFrag
+const filterUndefined = ($fragment) => (
+  typeof $fragment === 'object'
+) ? Object.keys($fragment).length
+  : $fragment
 const zonSpace = ($horizon, $space) => {
   let zonSpaceIndex = 0
   let _zonSpace = ''

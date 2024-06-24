@@ -2,7 +2,7 @@ import Element from './Element/index.js'
 import Statement from './Statement/index.js'
 export default function Block($data, $options = {}) {
   const { coutils, coindex } = $data
-  const { Parsers } = coutils
+  const { Functions, Parsers } = coutils
   const _block = []
   if($data.content.element !== undefined) {
     const _element = Element($data, $options)
@@ -12,5 +12,7 @@ export default function Block($data, $options = {}) {
     const _statement = Statement($data, $options)
     _block.push(_statement)
   }
-  return Parsers.Block(_block, $options)
+  // return Parsers.Block(_block, $options)
+  return _block
+  .filter(Functions.filterUndefined)
 }

@@ -1,7 +1,7 @@
 import Blocks from '../../index.js'
 export default function Statement($data, $options = {}) {
   const { coutils, content, coindex } = $data
-  const { Operators, Parsers } = coutils
+  const { Functions, Operators, Parsers } = coutils
   const { blocks, statement } = content
   const { space } = $options
   const { horizon } = space
@@ -18,44 +18,41 @@ export default function Statement($data, $options = {}) {
       continue iterateExpressions
     }
     // Expression Fragments
-    var { ser, ten, per, pos, par } = expression
+    let { ser, ten, per, pos, par } = expression
     pos = pos || {}
+    ten = (
+      Functions.isSlug(ten)
+    ) ? undefined
+      : ten
     const inpos = pos.in || ''
     const expos = pos.ex || ''
-    const inposParse = Parsers.Inpos(inpos)
-    const serParse = Parsers.Ser(ser, '', ' ')
-    const tenParse = Parsers.Ten(ten, '', '')
-    const perParse = (
-      [':'].includes(per)
-    ) ? Parsers.Per(per, '', ' ')
-      : Parsers.Per(per, ' ', ' ')
-    _statement.push(
-      [
-        serParse,
-        tenParse,
-        perParse,
-        inpos,
-      ]
-    )
+    let _blocks
     if(blocks.length) {
-      const _blocks = Blocks({
+      _blocks = Blocks({
         content: blocks,
         coindex: coindex,
         coutils: coutils,
       }, $options)
-      _statement.push(
-        _blocks
-      )
     }
+    const expressionFragments = [
+      ser, ten, per, inpos, _blocks, expos, par
+    ].filter(Functions.filterUndefined)
     _statement.push(
-      [expos, par]
+      expressionFragments
     )
     expressionsIndex++
   }
-  return Parsers.Statement(
-    _statement, 
-    Object.assign($options, {
-      coindex
-    })
-  )
+  // console.log(
+  //   '_statement', 
+    return _statement
+    // .flat()
+    .filter(Functions.filterUndefined)
+  // )
+  // return _statement
+  // return Parsers.Statement(
+  //   _statement, 
+  //   Object.assign($options, {
+  //     coindex
+  //   })
+  // )
 }

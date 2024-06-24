@@ -1,7 +1,7 @@
 import { Blocks } from '../Coutil/ES/index.js'
 export default function JSON_File($data, $options = {}) {
   const { coutils, content } = $data
-  const { Parsers } = coutils
+  const { Functions, Parsers } = coutils
   const _json_file = []
   const _blocks = Blocks({
     coindex: {
@@ -15,5 +15,7 @@ export default function JSON_File($data, $options = {}) {
   _json_file.push(
     _blocks
   )
-  return Parsers.JSONFile(_json_file, $options)
+  // return Parsers.JSONFile(_json_file, $options)
+  return _blocks
+  .filter(Functions.filterUndefined)
 }

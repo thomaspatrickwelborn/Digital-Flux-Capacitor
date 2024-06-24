@@ -46,13 +46,16 @@ const Parsers = {
     return imports
   },
   Exports: ($exports) => {
-    let exports = $exports
+    let _exports = $exports
     .map(Functions.mapExports)
     .filter(Functions.filterUndefined)
     .join('\n')
-    return exports
+    return _exports
   },
   // Statement Parser
+  Expression: ($expression, $options) => {
+    // let
+  },
   Statement: ($statement, $options) => {
     const { coindex, space } = $options
     const { horizon, verizon } = space
@@ -138,6 +141,14 @@ const Parsers = {
       $prespace, $inpos, $anspace
     ) : $inpos
     return inpos
+  },
+  Expos: ($expos = '', $prespace = '', $anspace = '') => {
+    let expos = (
+      $expos.length
+    ) ? String.prototype.concat(
+      $prespace, $expos, $anspace
+    ) : $expos
+    return expos
   },
   Par: ($par = '', $prespace = '', $anspace = '') => {
     let par = (

@@ -1,6 +1,6 @@
 export default function Imports($data, $options = {}) {
   const { coutils, coindex } = $data
-  const { Parsers } = coutils
+  const { Functions, Parsers } = coutils
   const _imports = []
   for(const $import of $data.content) {
     if($import.default === false) {
@@ -51,5 +51,7 @@ export default function Imports($data, $options = {}) {
       }
     }
   }
-  return Parsers.Imports(_imports, $options)
+  // return Parsers.Imports(_imports, $options)
+  return _imports
+  .filter(Functions.filterUndefined)
 }

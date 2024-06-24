@@ -1,6 +1,6 @@
 export default function Exports($data, $options) {
   const { coutils, coindex } = $data
-  const { Parsers } = coutils
+  const { Functions, Parsers } = coutils
   const _exports = []
   for(const $export of $data.content) {
     if($export.default !== true) {
@@ -26,5 +26,7 @@ export default function Exports($data, $options) {
       ['export', ' ', 'default', ' ', $export.name[0].name]
     }
   }
-  return Parsers.Exports(_exports, $options)
+  // return Parsers.Exports(_exports, $options)
+  return _exports
+  .filter(Functions.filterUndefined)
 }

@@ -1,7 +1,7 @@
 import Block from './Block/index.js'
 export default function Blocks($data, $options) {
   const { coutils, content, coindex } = $data
-  const { Parsers } = coutils
+  const { Functions, Parsers } = coutils
   const blocks = []
   if(content.length) {
     const scopeIndex = coindex.scope + 1
@@ -22,5 +22,7 @@ export default function Blocks($data, $options) {
       blockIndex++
     }
   }
-  return Parsers.Blocks(blocks)
+  // return Parsers.Blocks(blocks)
+  return blocks
+  .filter(Functions.filterUndefined)
 }

@@ -5,7 +5,7 @@ import {
 } from '../Coutil/ES/index.js'
 export default function ES_Markup($data, $options = {}) {
   const { coutils, content } = $data
-  const { Parsers } = coutils
+  const { Functions, Parsers } = coutils
   const _es_markup = []
   const _imports = Imports({
     content: content.imports,
@@ -27,5 +27,7 @@ export default function ES_Markup($data, $options = {}) {
   _es_markup.push(
     _imports, _blocks, _exports
   )
-  return Parsers.ESMarkup(_es_markup, $options)
+  // return Parsers.ESMarkup(_es_markup, $options)
+  return _es_markup
+  .filter(Functions.filterUndefined)
 }
