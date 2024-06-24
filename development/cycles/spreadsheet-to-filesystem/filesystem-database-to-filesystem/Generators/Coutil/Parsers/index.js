@@ -6,21 +6,21 @@ const Parsers = {
     let esMarkup = $esMarkup
     .flat()
     .filter(Functions.filterUndefined)
-    .join('\n')
+    .join('')
     return esMarkup
   },
   JSONFile: ($jsonFile) => {
     let jsonFile = $jsonFile
     .flat()
     .filter(Functions.filterUndefined)
-    .join('\n')
+    .join('')
    return jsonFile
   },
   ESModule: ($esModule) => {
     let esModule = $esModule
     .flat()
     .filter(Functions.filterUndefined)
-    .join('\n')
+    .join('')
     return esModule
   },
   // Block Parsers
@@ -105,26 +105,38 @@ const Parsers = {
     return element
   },
   // Expression Fragment Parsers
-  Ser: ($ser) => {
+  Ser: ($ser = '', $prespace = '', $anspace = '') => {
     const ser = (
-      $ser
-    ) ? String.prototype.concat($ser, ' ')
-      : $ser
+      $ser.length
+    ) ? String.prototype.concat(
+      $ser, ' '
+    ) : $ser
     return ser
   },
-  Per: ($per) => {
+  Per: ($per = '', $prespace = '', $anspace = '') => {
     const per = (
-      $per
-    ) ? String.prototype.concat(' ', $per, ' ')
-      : $per
+      $per.length
+    ) ? String.prototype.concat(
+      $prespace, $per, $anspace
+    ) : $per
     return per
   },
-  Ten: ($ten, $space = '') => {
+  Ten: ($ten = '', $prespace = '', $anspace = '') => {
     let ten = (
-      Functions.isSlug($ten)
+      Functions.isSlug($ten) ||
+      $ten.length === 0
     ) ? ''
-      : String.prototype.concat($ten, $space)
+      : String.prototype.concat(
+        $prespace, $ten, $anspace
+      )
     return ten
+  },
+  Par: ($par = '', $prespace = '', $anspace = '') => {
+    let par = (
+      $par.length
+    ) ? String.prototype.concat(
+        $prespace, $par, $anspace
+    ) : $par
   },
 }
 export default Parsers

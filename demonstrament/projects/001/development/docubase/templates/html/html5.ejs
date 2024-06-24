@@ -2,20 +2,19 @@
 <!DOCTYPE
     html5>
 
-
 <html
     lang="en">
   <head>
     <title></title>
     <%
       for (
-        const $meta of $data.content.meta 
+        const $metaof $data.content.meta
       )
       { %>
         <meta
           <%
             for (
-              const $metaAttribute of $meta.attributes 
+              const $metaAttributeof $meta.attributes
             )
             { %>
                 <%= $metaAttr.key %>="<%= $metaAttr.val %>">
@@ -26,7 +25,7 @@
     %>
     <%
       for (
-        const $link of $data.content.link 
+        const $linkof $data.content.link
       )
       { %>
         <link

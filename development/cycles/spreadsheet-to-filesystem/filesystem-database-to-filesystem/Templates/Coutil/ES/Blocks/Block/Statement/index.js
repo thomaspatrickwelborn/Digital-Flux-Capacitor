@@ -1,7 +1,7 @@
 import Blocks from '../../index.js'
 export default function Statement($data, $options = {}) {
   const { coutils, content, coindex } = $data
-  const { operators, Parsers } = coutils
+  const { Operators, Parsers } = coutils
   const { blocks, statement } = content
   const { space } = $options
   const { horizon } = space
@@ -21,8 +21,19 @@ export default function Statement($data, $options = {}) {
     pos = pos || {}
     const inpos = pos.in
     const expos = pos.ex
+    const serParse = Parsers.Ser(ser, ' ')
+    const tenParse = Parsers.Ten(ten)
+    const perParse = (
+      [':'].includes(per)
+    ) ? Parsers.Ten(per, '', ' ')
+      : Parsers.Ten(per, ' ', ' ')
     _statement.push(
-      [Parsers.Ser(ser), Parsers.Ten(ten, ' '), Parsers.Per(per), inpos]
+      [
+        serParse,
+        tenParse,
+        perParse,
+        inpos,
+      ]
     )
     if(blocks.length) {
       const _blocks = Blocks({
@@ -39,7 +50,10 @@ export default function Statement($data, $options = {}) {
     )
     expressionsIndex++
   }
-  return Parsers.Statement(_statement, Object.assign($options, {
-    coindex
-  }))
+  return Parsers.Statement(
+    _statement, 
+    Object.assign($options, {
+      coindex
+    })
+  )
 }
