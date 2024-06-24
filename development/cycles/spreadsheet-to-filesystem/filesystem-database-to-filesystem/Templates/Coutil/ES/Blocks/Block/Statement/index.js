@@ -17,16 +17,18 @@ export default function Statement($data, $options = {}) {
       expressionsIndex++
       continue iterateExpressions
     }
+    // Expression Fragments
     var { ser, ten, per, pos, par } = expression
     pos = pos || {}
-    const inpos = pos.in
-    const expos = pos.ex
-    const serParse = Parsers.Ser(ser, ' ')
-    const tenParse = Parsers.Ten(ten)
+    const inpos = pos.in || ''
+    const expos = pos.ex || ''
+    const inposParse = Parsers.Inpos(inpos)
+    const serParse = Parsers.Ser(ser, '', ' ')
+    const tenParse = Parsers.Ten(ten, '', '')
     const perParse = (
       [':'].includes(per)
-    ) ? Parsers.Ten(per, '', ' ')
-      : Parsers.Ten(per, ' ', ' ')
+    ) ? Parsers.Per(per, '', ' ')
+      : Parsers.Per(per, ' ', ' ')
     _statement.push(
       [
         serParse,

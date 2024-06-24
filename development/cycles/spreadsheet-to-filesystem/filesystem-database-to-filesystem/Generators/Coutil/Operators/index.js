@@ -4,6 +4,12 @@ const Operators = {
     '(', ')', '<', '>', 
     '`'
   ],
+  scriptInscope: [
+    '{', '[', '('
+  ],
+  scriptExscope: [
+    '}', ']', ')'
+  ],
   ejsTags: [
     '<%', '%>',
     '<%_', '_%>',
@@ -12,6 +18,9 @@ const Operators = {
   ],
   assignment: [
     ':', '?', '=', '+=', '-=', '++', '--'
+  ],
+  assignmentShort: [
+    ':'
   ],
   mathematical: [
     '+', '-', '*', '/', '%'

@@ -131,11 +131,19 @@ const Parsers = {
       )
     return ten
   },
+  Inpos: ($inpos = '', $prespace = '', $anspace = '') => {
+    let inpos = (
+      $inpos.length
+    ) ? String.prototype.concat(
+      $prespace, $inpos, $anspace
+    ) : $inpos
+    return inpos
+  },
   Par: ($par = '', $prespace = '', $anspace = '') => {
     let par = (
       $par.length
     ) ? String.prototype.concat(
-        $prespace, $par, $anspace
+      $prespace, $par, $anspace
     ) : $par
   },
 }

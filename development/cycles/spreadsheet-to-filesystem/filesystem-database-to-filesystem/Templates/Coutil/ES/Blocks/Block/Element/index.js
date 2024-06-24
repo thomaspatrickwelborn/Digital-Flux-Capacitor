@@ -12,15 +12,14 @@ export default function Element($data, $options = {}) {
   } = element
   if(tag === undefined) return _element
   var { name } = tag
-  name = Parsers.Ten(name)
+  var nameParse = Parsers.Ten(name, '', '')
   var inapos = tag?.apos?.in || ''
   var exapos = tag?.apos?.ex || ''
   var indepos = tag?.depos?.in || ''
   var exdepos = tag?.depos?.ex || ''
   // ELEMENT TAG START OPEN
-  _element
-  .push(
-    [inapos, name]
+  _element.push(
+    [inapos, nameParse]
   )
   // ELEMENT ATTRIBUTE
   const attribute = element?.attribute || {}
@@ -30,19 +29,15 @@ export default function Element($data, $options = {}) {
       attribute.val !== undefined &&
       attribute.val !== Operators.tenSlug
     ) { 
-      _element
-      .push(
+      _element.push(
         [horizon.char, attribute.key, '=', `"${attribute.val}"`]
-        // [attribute.key, '=', `"${attribute.val}"`]
       )
     } else
     if(
       attribute.key !== undefined &&
       attribute.val === undefined
     ) { 
-      _element
-      .push(
-        // [attribute.key]
+      _element.push(
         [horizon.char, attribute.key]
       )
     } else
@@ -51,15 +46,12 @@ export default function Element($data, $options = {}) {
       attribute.val !== undefined &&
       attribute.val !== Operators.tenSlug
     ) { 
-      _element
-      .push(
-        // [attribute.val]
+      _element.push(
         [horizon.char, attribute.val]
       )
     }
   }
-  _element
-  .push(
+  _element.push(
     [exapos]
   )
   // ELEMENT BLOCKS
@@ -69,18 +61,16 @@ export default function Element($data, $options = {}) {
       coindex: coindex, 
       coutils: coutils,
     }, $options)
-    _element
-    .push(
+    _element.push(
       _blocks
     )
   }
   // ELEMENT TAG END
   if(
-    !Operators.void.includes(name)
+    !Operators.void.includes(nameParse)
   ) {
-    _element
-    .push(
-      [indepos, name, exdepos]
+    _element.push(
+      [indepos, nameParse, exdepos]
     )
   }
   return Parsers.Element(_element, Object.assign($options, {
