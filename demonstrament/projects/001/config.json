@@ -92,6 +92,16 @@
 									"char": "\n"
 								}
 							}
+						},
+						"ES_Module": {
+							"space": {
+								"horizon": {
+									"char": "  "
+								},
+								"verizon": {
+									"char": "\n"
+								}
+							}
 						}
 					}
 				}]

@@ -1,6 +1,6 @@
 import Element from './Element/index.js'
 import Statement from './Statement/index.js'
-export default function Block($data, $options) {
+export default function Block($data, $options = {}) {
   const { coutils, coindex } = $data
   const { Parsers } = coutils
   const _block = []
@@ -12,5 +12,5 @@ export default function Block($data, $options) {
     const _statement = Statement($data, $options)
     _block.push(_statement)
   }
-  return Parsers.Block(_block)
+  return Parsers.Block(_block, $options)
 }

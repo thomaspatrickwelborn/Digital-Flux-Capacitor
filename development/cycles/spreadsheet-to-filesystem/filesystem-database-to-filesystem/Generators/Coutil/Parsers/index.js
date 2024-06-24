@@ -15,6 +15,13 @@ const Parsers = {
     .join('\n')
    return jsonFile
   },
+  ESModule: ($esModule) => {
+    let esModule = $esModule
+    .flat()
+    .filter(Functions.filterUndefined)
+    .join('\n')
+    return esModule
+  },
   Blocks: ($blocks) => {
     let blocks = $blocks
     .flat()
@@ -27,6 +34,13 @@ const Parsers = {
     .filter(Functions.filterUndefined)
     .join('')
     return block
+  },
+  Imports: ($imports) => {
+    let imports = $imports
+    .map(Functions.mapImports)
+    .filter(Functions.filterUndefined)
+    .join('\n')
+    return imports
   },
   Statement: ($statement, $options) => {
     const { coindex, space } = $options

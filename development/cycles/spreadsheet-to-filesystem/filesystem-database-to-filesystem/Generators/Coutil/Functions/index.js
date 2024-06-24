@@ -29,9 +29,13 @@ const matrizonSpace = ($zoneA, $zoneB) => {
     zoneASpace, zoneBSpace
   )
 }
+const mapImports = ($import) => {
+  return $import.join('')
+}
 const Functions = {
   filterUndefined,
   matrizonSpace,
   isSlug,
+  mapImports,
 }
 export default Functions

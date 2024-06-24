@@ -1,5 +1,5 @@
 import { Blocks } from '../Coutil/ES/index.js'
-export default function ES_Markup($data, $options = {}) {
+export default function JSON_File($data, $options = {}) {
   const { coutils, content } = $data
   const { Parsers } = coutils
   const _json_file = []
@@ -15,5 +15,5 @@ export default function ES_Markup($data, $options = {}) {
   _json_file.push(
     _blocks
   )
-  return Parsers.JSONFile(_json_file)
+  return Parsers.JSONFile(_json_file, $options)
 }

@@ -5,7 +5,6 @@ export default function Statement($data, $options = {}) {
   const { blocks, statement } = content
   const { space } = $options
   const { horizon } = space
-  // console.log('space', space)
   const _statement = []
   if(statement === undefined) return
   const { lexter, dexter } = statement
