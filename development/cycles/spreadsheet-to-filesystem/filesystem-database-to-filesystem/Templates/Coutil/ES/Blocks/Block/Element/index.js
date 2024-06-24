@@ -17,7 +17,6 @@ export default function Element($data, $options = {}) {
     Functions.isSlug(name)
   ) ? undefined
     : name
-  // var nameParse = Parsers.Ten(name, '', '')
   var inapos = tag?.apos?.in
   var exapos = tag?.apos?.ex
   var indepos = tag?.depos?.in
@@ -57,14 +56,6 @@ export default function Element($data, $options = {}) {
       indepos, name, exdepos
     )
   }
-  // console.log(
-  //   '_element', 
-    return _element
-    // .flat()
-    .filter(Functions.filterUndefined)
-  // )
-  // return _element
-  // return Parsers.Element(_element, Object.assign($options, {
-  //   coindex
-  // }))
+  return _element
+  .filter(Functions.filterUndefined)
 }

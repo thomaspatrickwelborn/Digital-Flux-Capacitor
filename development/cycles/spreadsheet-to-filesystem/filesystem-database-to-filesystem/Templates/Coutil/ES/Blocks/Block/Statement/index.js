@@ -42,17 +42,6 @@ export default function Statement($data, $options = {}) {
     )
     expressionsIndex++
   }
-  // console.log(
-  //   '_statement', 
-    return _statement
-    // .flat()
-    .filter(Functions.filterUndefined)
-  // )
-  // return _statement
-  // return Parsers.Statement(
-  //   _statement, 
-  //   Object.assign($options, {
-  //     coindex
-  //   })
-  // )
+  return _statement
+  .filter(Functions.filterUndefined)
 }

@@ -12,7 +12,6 @@ export default function Block($data, $options = {}) {
     const _statement = Statement($data, $options)
     _block.push(_statement)
   }
-  // return Parsers.Block(_block, $options)
   return _block
   .filter(Functions.filterUndefined)
 }

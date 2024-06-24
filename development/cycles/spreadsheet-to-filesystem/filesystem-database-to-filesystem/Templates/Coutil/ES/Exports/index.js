@@ -22,11 +22,13 @@ export default function Exports($data, $options) {
         }
         nameIndex++
       }
+      _exports.push(['}'])
     } else {
-      ['export', ' ', 'default', ' ', $export.name[0].name]
+      _exports.push(
+        ['export', ' ', 'default', ' ', $export.name[0].name]
+      )
     }
   }
-  // return Parsers.Exports(_exports, $options)
   return _exports
   .filter(Functions.filterUndefined)
 }
