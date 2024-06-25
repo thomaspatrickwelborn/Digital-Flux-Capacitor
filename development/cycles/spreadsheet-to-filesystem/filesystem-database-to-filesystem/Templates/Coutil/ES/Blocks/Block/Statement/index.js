@@ -9,6 +9,7 @@ export default function Statement($data, $options = {}) {
   if(statement === undefined) return
   const { lexter, dexter } = statement
   const expressions = [lexter, dexter]
+  const prespace = Parsers.Space('  ', coindex.scope)
   var expressionsIndex = 0
   iterateExpressions:
   while(expressionsIndex < expressions.length) {
@@ -34,7 +35,6 @@ export default function Statement($data, $options = {}) {
         coutils: coutils,
       }, $options)
     }
-    const prespace = Parsers.Space('  ', coindex.scope)
     const expressionFragments = [
       // SER
       (ser)

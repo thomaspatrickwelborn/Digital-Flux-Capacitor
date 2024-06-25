@@ -26,6 +26,11 @@ const BlockStatementSchema = new Schema({
   validateBeforeSave: false,
 })
 // Block Element Schema
+const ElementAttributeSchema = new Schema({
+  key: String,
+  per: String, 
+  val: String,
+})
 const BlockElementSchema = new Schema({
   tag: {
     name: String,
@@ -38,11 +43,7 @@ const BlockElementSchema = new Schema({
       ex: String,
     },
   },
-  attribute: {
-    key: String,
-    per: String, 
-    val: String,
-  },
+  attribute: ElementAttributeSchema,
   texts: [{
     ten: String,
   }],
@@ -65,6 +66,7 @@ BlockSchema.add({
   element: BlockElementSchema,
   statement: BlockStatementSchema,
   blocks: [BlockSchema],
+  attributes: [ElementAttributeSchema],
 
 })
 export default BlockSchema

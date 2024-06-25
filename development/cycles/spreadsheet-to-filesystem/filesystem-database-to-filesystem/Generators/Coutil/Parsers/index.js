@@ -1,7 +1,12 @@
 import Functions from '../Functions/index.js'
 
 const Parsers = {
-    // Space Parser
+  // Space Parser
+  SpaceInsert: (
+    $string = '', $prespace = '', $antspace = ''
+  ) => {
+    return String.prototype.concat(...arguments)
+  },
   Space: ($char = '', $length = 0) => {
     let space = []
     space.length = $length
@@ -14,7 +19,7 @@ const Parsers = {
   ESMarkup: ($esMarkup) => {
     let esMarkup = $esMarkup
     .flat()
-    .filter(Functions.filterUndefined)
+    .join('')
     return esMarkup
   },
   JSONFile: ($jsonFile) => {
@@ -78,29 +83,8 @@ const Parsers = {
   },
   // Element Parser
   Element: ($element, $options) => {
-    const { coindex, space } = $options
-    const { horizon, verizon } = space
-    const element = $element
+    return $element
     .flat()
-    .filter(Functions.filterUndefined)
-    element
-    .unshift(Functions.matrizonSpace({
-      len: 1,
-      char: verizon.char,
-    }, {
-      len: coindex.scope, 
-      char: horizon.char,
-    }))
-    if(coindex.block === coindex.blockLength - 1) {
-      element.push(Functions.matrizonSpace({
-        len: 1,
-        char: verizon.char,
-      }, {
-        len: coindex.scope - 1, 
-        char: horizon.char,
-      }))
-    }
-    return element
   },
   // Expression Fragment Parsers
   Ser: ($ser = '', $prespace = '', $anspace = '') => {

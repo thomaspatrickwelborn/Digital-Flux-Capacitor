@@ -6,6 +6,7 @@ export default function Element($data, $options = {}) {
   const { Functions, Operators, Parsers } = coutils
   const { space } = $options
   const { horizon } = space
+  const prespace = Parsers.Space('  ', coindex.scope)
   const _element = []
   if(element === undefined) return _element
   const {
@@ -56,9 +57,5 @@ export default function Element($data, $options = {}) {
       indepos, name, exdepos
     )
   }
-  const renderElement = _element
-  .filter(Functions.filterUndefined)
-  .flat()
-  // console.log('renderElement', renderElement)
-  return renderElement
+  return Parsers.Element(_element)
 }
