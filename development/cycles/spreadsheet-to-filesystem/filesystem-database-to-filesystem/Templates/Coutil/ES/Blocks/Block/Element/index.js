@@ -56,6 +56,9 @@ export default function Element($data, $options = {}) {
       indepos, name, exdepos
     )
   }
-  return _element
+  const renderElement = _element
   .filter(Functions.filterUndefined)
+  .flat()
+  // console.log('renderElement', renderElement)
+  return renderElement
 }

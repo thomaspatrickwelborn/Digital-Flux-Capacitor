@@ -112,7 +112,7 @@ const Parsers = {
     const ser = (
       $ser.length
     ) ? String.prototype.concat(
-      $ser, ' '
+      $prespace, $ser, $anspace
     ) : $ser
     return ser
   },
