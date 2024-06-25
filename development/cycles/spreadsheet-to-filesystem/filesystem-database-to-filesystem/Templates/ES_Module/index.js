@@ -27,7 +27,5 @@ export default function ESModule($data, $options = {}) {
   _es_module.push(
     _imports, _blocks, _exports
   )
-  // return Parsers.ESModule(_es_module, $options)
-  return _es_module
-  .filter(Functions.filterUndefined)
+  return Parsers.ESModule(_es_module, $options)
 }

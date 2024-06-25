@@ -15,7 +15,5 @@ export default function JSON_File($data, $options = {}) {
   _json_file.push(
     _blocks
   )
-  // return Parsers.JSONFile(_json_file, $options)
-  return _blocks
-  .filter(Functions.filterUndefined)
+  return Parsers.JSONFile(_json_file)
 }

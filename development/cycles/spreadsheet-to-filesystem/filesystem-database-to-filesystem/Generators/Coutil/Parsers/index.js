@@ -1,40 +1,59 @@
 import Functions from '../Functions/index.js'
 
 const Parsers = {
+    // Space Parser
+  Space: ($char = '', $length = 0) => {
+    let space = []
+    space.length = $length
+    space = space
+    .fill('  ', 0, $length)
+    .join('')
+    return space
+  },
   // File Parsers
   ESMarkup: ($esMarkup) => {
     let esMarkup = $esMarkup
     .flat()
     .filter(Functions.filterUndefined)
-    .join('')
     return esMarkup
   },
   JSONFile: ($jsonFile) => {
     let jsonFile = $jsonFile
     .flat()
-    .filter(Functions.filterUndefined)
     .join('')
    return jsonFile
   },
   ESModule: ($esModule) => {
     let esModule = $esModule
     .flat()
-    .filter(Functions.filterUndefined)
     .join('')
     return esModule
   },
   // Block Parsers
-  Blocks: ($blocks) => {
-    let blocks = $blocks
+  Blocks: ($blocks = [], $options = {}) => {
+  const { coindex } = $options
+  let blocks = $blocks
+  .map((
+      $block, $blockIndex
+    ) => {
+      const prespace = Parsers.Space(
+        '  ', coindex.scope + 1
+      )
+      if(prespace.length) {
+        $block.unshift(prespace)
+      }
+      if($blockIndex < $blocks.length - 1) {
+        $block.push('\n')
+      }
+      return $block
+    })
     .flat()
-    .filter(Functions.filterUndefined)
+    .join('')
     return blocks
   },
   Block: ($block) => {
     let block = $block
     .flat()
-    .filter(Functions.filterUndefined)
-    .join('')
     return block
   },
   // Port Parsers
@@ -53,33 +72,9 @@ const Parsers = {
     return _exports
   },
   // Statement Parser
-  Expression: ($expression, $options) => {
-    // let
-  },
-  Statement: ($statement, $options) => {
-    const { coindex, space } = $options
-    const { horizon, verizon } = space
-    const statement = $statement
+  Statement: ($statement) => {
+    return $statement
     .flat()
-    .filter(Functions.filterUndefined)
-    statement
-    .unshift(Functions.matrizonSpace({
-      len: 1,
-      char: verizon.char,
-    }, {
-      len: coindex.scope, 
-      char: horizon.char,
-    }))
-    if(coindex.block === coindex.blockLength - 1) {
-      statement.push(Functions.matrizonSpace({
-        len: 1,
-        char: verizon.char,
-      }, {
-        len: coindex.scope - 1, 
-        char: horizon.char,
-      }))
-    }
-    return statement
   },
   // Element Parser
   Element: ($element, $options) => {
@@ -156,6 +151,7 @@ const Parsers = {
     ) ? String.prototype.concat(
       $prespace, $par, $anspace
     ) : $par
+    return par
   },
 }
 export default Parsers

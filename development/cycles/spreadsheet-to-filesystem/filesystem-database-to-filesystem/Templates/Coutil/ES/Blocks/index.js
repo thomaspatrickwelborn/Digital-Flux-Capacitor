@@ -22,6 +22,7 @@ export default function Blocks($data, $options) {
       blockIndex++
     }
   }
-  return blocks
-  .filter(Functions.filterUndefined)
+  return Parsers.Blocks(blocks, {
+    coindex
+  })
 }
