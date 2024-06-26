@@ -25,7 +25,9 @@ async function collectToFileCollect($collect, $worksheet) {
       const comRow = com[comRowsIndex]
       const comRowLMNRange = lmnRanges.parseRow(comRow)
       if(comRowLMNRange.DEX === 0) {
-        collectDoc = await collectDoc.populate(collectDocPopulateOptions)
+        for(const $collectDocPopulateOptions of collectDocPopulateOptions) {
+          collectDoc = await collectDoc.populate($collectDocPopulateOptions)
+        }
         collectDoc = collectDoc.toObject({ minimize: true, id: false, _id: false })
         collectDocs.push(collectDoc)
       }

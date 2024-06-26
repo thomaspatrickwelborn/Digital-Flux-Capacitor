@@ -66,7 +66,7 @@ BlockSchema.add({
   element: BlockElementSchema,
   statement: BlockStatementSchema,
   blocks: [BlockSchema],
-  attributes: [ElementAttributeSchema],
+  attributes: [BlockSchema],
 
 })
 export default BlockSchema

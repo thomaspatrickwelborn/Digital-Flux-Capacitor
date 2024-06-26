@@ -1,13 +1,16 @@
-<!DOCTYPE   
-<html   <head >    <title ></title>
+<!DOCTYPE html5>
+<html lang="en">
+  <head>
+      <title></title>
     <%
       for (
-        const $metaof $data.content.meta
+        const $meta of $data.content.meta
       )
       { %>
-        <meta           <%
+        <meta>
+                  <%
             for (
-              const $metaAttributeof $meta.attributes
+              const $metaAttribute of $meta.attributes
             )
             { %><% }
           %>
@@ -15,12 +18,13 @@
     %>
     <%
       for (
-        const $linkof $data.content.link
+        const $link of $data.content.link
       )
       { %>
         <link
           
           
+        >
       <% }
     %></head>
-  <body ></body></html>
+  <body></body></html>

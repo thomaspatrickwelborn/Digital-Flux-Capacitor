@@ -38,7 +38,13 @@ export default function Statement($data, $options = {}) {
     const expressionFragments = [
       // SER
       (ser)
-        ? Parsers.Ser(ser, '', ' ')
+        ? (
+          expressionsIndex === 1 &&
+          Object.keys(
+            expressions[expressionsIndex - 1]
+          ).length
+        ) ? Parsers.SpaceInsert(ser, ' ', ' ')
+          : Parsers.SpaceInsert(ser, '', ' ')
         : ser,
       // TEN
       (ten)

@@ -2,17 +2,15 @@ import Blocks from '../../index.js'
 export default function Element($data, $options = {}) {
   const { coutils, content, coindex } = $data
   const { blocks, element, attributes } = content
-  console.log('-----')
-  console.log('attributes', attributes.length, attributes)
   const attribute = element?.attribute || {}
   const { Functions, Operators, Parsers } = coutils
   const prespace = Parsers.Space('  ', coindex.scope)
-  const _element = []
-  if(element === undefined) return _element
+  // const _element = []
+  // if(element === undefined) return _element
   const {
     tag, text, data
   } = element
-  if(tag === undefined) return _element
+  // if(tag === undefined) return _element
   let { name } = tag
   name = (
     Functions.isSlug(name)
@@ -25,9 +23,13 @@ export default function Element($data, $options = {}) {
   var exdepos = tag?.depos?.ex
   // ELEMENT ATTRIBUTE
   const { key, per, val } = attribute
+  // console.log('-----')
+  // console.log('$data.content', $data.content)
+  // console.log('key, per, val', key, per, val)
   const _attribute = [key, per, val]
   .filter(($attributeFragment) => $attributeFragment)
   .join('')
+  // console.log('__attribute', _attribute)
   // ELEMENT TAG START CLOSE
   // ELEMENT BLOCKS
   let _blocks
@@ -37,32 +39,50 @@ export default function Element($data, $options = {}) {
       coindex: coindex, 
       coutils: coutils,
     }, $options)
-  } else
-  if(attributes.length) {
-    _blocks = Blocks({
-      content: attributes,
-      coindex: coindex,
-      coutils, coutils,
-    })
   }
   // ELEMENT TAG END OPEN/CLOSE
-  _element.push(
+  const _element = [
     // INAPOS
     (inapos) ? inapos : '', 
     // NAME
-    (name)
-    ? Parsers.SpaceInsert(name, '', (
-        attributes?.length > 1
-      ) ? '\n'
-        : ' '
-    ) : name,
+    (name) ? name : '',
     // ATTRIBUTE
-    (_attribute)
-    ? Parsers.SpaceInsert(_attribute, prespace, '')
-    : _attribute,
-    (exapos) ? exapos : '', 
+    (attributes?.length)
+    ? attributes.map(($attribute, $attributeIndex) => {
+        let { key, per, val } = $attribute?.element?.attribute || {}
+        let attribute = [key, per, val]
+        .filter(($attributeFragment) => $attributeFragment)
+        .join('')
+        if(attributes.length > 1) {
+          attribute = Parsers.SpaceInsert(
+            attribute, 
+            '\n'.concat(Parsers.Space('  ', coindex.scope + 1)),
+          )
+          if($attributeIndex === attributes.length - 1) {
+            attribute = Parsers.SpaceInsert(
+              attribute,
+              '',
+              '\n'.concat(Parsers.Space('  ', coindex.scope)),
+            )
+          }
+        } else {
+          attribute = Parsers.SpaceInsert(attribute, ' ', '')
+        }
+        return attribute
+      })
+    : attributes,
+    // EXAPOS
+    (exapos)
+    ? (blocks?.length)
+      ? Parsers.SpaceInsert(
+        exapos,
+        '',
+        '\n'.concat(Parsers.Space('  ', coindex.scope)),
+      )
+      : exapos
+    : exapos, 
     (_blocks) ? _blocks : '', 
-    // 
+    // DEPOS
     (!Operators.void.includes(name))
     ? [
       (indepos) ? indepos : '', 
@@ -70,7 +90,8 @@ export default function Element($data, $options = {}) {
       (exdepos) ? exdepos : ''
     ].join('')
     : ''
-  )
-  console.log('_element', _element)
+  ]
+  .filter(($element) => $element)
+  // console.log('_element', Parsers.Element(_element))
   return Parsers.Element(_element)
 }
