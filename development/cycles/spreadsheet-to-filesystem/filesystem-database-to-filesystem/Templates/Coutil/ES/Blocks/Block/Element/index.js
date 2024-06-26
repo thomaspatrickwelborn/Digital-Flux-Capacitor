@@ -1,11 +1,11 @@
 import Blocks from '../../index.js'
 export default function Element($data, $options = {}) {
   const { coutils, content, coindex } = $data
-  const { blocks, element } = content
+  const { blocks, element, attributes } = content
+  console.log('-----')
+  console.log('attributes', attributes.length, attributes)
   const attribute = element?.attribute || {}
   const { Functions, Operators, Parsers } = coutils
-  const { space } = $options
-  const { horizon } = space
   const prespace = Parsers.Space('  ', coindex.scope)
   const _element = []
   if(element === undefined) return _element
@@ -13,49 +13,64 @@ export default function Element($data, $options = {}) {
     tag, text, data
   } = element
   if(tag === undefined) return _element
-  var { name } = tag
+  let { name } = tag
   name = (
     Functions.isSlug(name)
   ) ? undefined
     : name
+  // ELEMENT TAG START OPEN
   var inapos = tag?.apos?.in
   var exapos = tag?.apos?.ex
   var indepos = tag?.depos?.in
   var exdepos = tag?.depos?.ex
-  // ELEMENT TAG START OPEN
-  _element.push(
-    inapos, name,
-  )
   // ELEMENT ATTRIBUTE
-  if(Object.keys(attribute).length) {
-    const { key, per, val } = attribute
-    // ELEMENT ATTRIBUTE
-    _element.push(
-      key, per, val
-    )
-  }
+  const { key, per, val } = attribute
+  const _attribute = [key, per, val]
+  .filter(($attributeFragment) => $attributeFragment)
+  .join('')
   // ELEMENT TAG START CLOSE
-  _element.push(
-    exapos
-  )
   // ELEMENT BLOCKS
+  let _blocks
   if(blocks.length) { 
-    const _blocks = Blocks({
+    _blocks = Blocks({
       content: blocks,
       coindex: coindex, 
       coutils: coutils,
     }, $options)
-    _element.push(
-      _blocks
-    )
+  } else
+  if(attributes.length) {
+    _blocks = Blocks({
+      content: attributes,
+      coindex: coindex,
+      coutils, coutils,
+    })
   }
   // ELEMENT TAG END OPEN/CLOSE
-  if(
-    !Operators.void.includes(name)
-  ) {
-    _element.push(
-      indepos, name, exdepos
-    )
-  }
+  _element.push(
+    // INAPOS
+    (inapos) ? inapos : '', 
+    // NAME
+    (name)
+    ? Parsers.SpaceInsert(name, '', (
+        attributes?.length > 1
+      ) ? '\n'
+        : ' '
+    ) : name,
+    // ATTRIBUTE
+    (_attribute)
+    ? Parsers.SpaceInsert(_attribute, prespace, '')
+    : _attribute,
+    (exapos) ? exapos : '', 
+    (_blocks) ? _blocks : '', 
+    // 
+    (!Operators.void.includes(name))
+    ? [
+      (indepos) ? indepos : '', 
+      (name) ? name : '', 
+      (exdepos) ? exdepos : ''
+    ].join('')
+    : ''
+  )
+  console.log('_element', _element)
   return Parsers.Element(_element)
 }

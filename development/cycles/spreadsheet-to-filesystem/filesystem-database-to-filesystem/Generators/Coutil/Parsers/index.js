@@ -5,7 +5,9 @@ const Parsers = {
   SpaceInsert: (
     $string = '', $prespace = '', $antspace = ''
   ) => {
-    return String.prototype.concat(...arguments)
+    return String.prototype.concat(
+      $prespace, $string, $antspace
+    )
   },
   Space: ($char = '', $length = 0) => {
     let space = []
