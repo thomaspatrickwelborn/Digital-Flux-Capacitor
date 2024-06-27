@@ -1,97 +1,62 @@
 import Blocks from '../../index.js'
 export default function Element($data, $options = {}) {
   const { coutils, content, coindex } = $data
-  const { blocks, element, attributes } = content
-  const attribute = element?.attribute || {}
+  const { blocks, element } = content
   const { Functions, Operators, Parsers } = coutils
   const prespace = Parsers.Space('  ', coindex.scope)
-  // const _element = []
-  // if(element === undefined) return _element
-  const {
-    tag, text, data
-  } = element
-  // if(tag === undefined) return _element
-  let { name } = tag
+  const { tag, text } = element
+  let _element = []
+  // INAPOS
+  let inapos = tag?.apos?.in
+  _element.push(inapos)
+  // NAME
+  let name = tag?.name
   name = (
-    Functions.isSlug(name)
-  ) ? undefined
-    : name
-  // ELEMENT TAG START OPEN
-  var inapos = tag?.apos?.in
-  var exapos = tag?.apos?.ex
-  var indepos = tag?.depos?.in
-  var exdepos = tag?.depos?.ex
-  // ELEMENT ATTRIBUTE
-  const { key, per, val } = attribute
-  // console.log('-----')
-  // console.log('$data.content', $data.content)
-  // console.log('key, per, val', key, per, val)
-  const _attribute = [key, per, val]
-  .filter(($attributeFragment) => $attributeFragment)
-  .join('')
-  // console.log('__attribute', _attribute)
-  // ELEMENT TAG START CLOSE
-  // ELEMENT BLOCKS
+    !Functions.isSlug(name)
+  ) ? name
+    : undefined
+  _element.push(name)
+  // ATTRIBUTE
+  let attribute = (
+    Object.keys(_element?.attribute || {}).length
+  ) ? attribute
+    : undefined
+  _element.push(attribute)
+  // EXAPOS
+  let exapos = tag?.apos?.ex
+  if(!blocks.length && exapos) {
+    _element.push(exapos)
+  }
+  // BLOCKS
   let _blocks
   if(blocks.length) { 
     _blocks = Blocks({
       content: blocks,
-      coindex: coindex, 
+      coindex: coindex,
       coutils: coutils,
     }, $options)
+    _element.push(_blocks)
   }
-  // ELEMENT TAG END OPEN/CLOSE
-  const _element = [
-    // INAPOS
-    (inapos) ? inapos : '', 
-    // NAME
-    (name) ? name : '',
-    // ATTRIBUTE
-    (attributes?.length)
-    ? attributes.map(($attribute, $attributeIndex) => {
-        let { key, per, val } = $attribute?.element?.attribute || {}
-        let attribute = [key, per, val]
-        .filter(($attributeFragment) => $attributeFragment)
-        .join('')
-        if(attributes.length > 1) {
-          attribute = Parsers.SpaceInsert(
-            attribute, 
-            '\n'.concat(Parsers.Space('  ', coindex.scope + 1)),
-          )
-          if($attributeIndex === attributes.length - 1) {
-            attribute = Parsers.SpaceInsert(
-              attribute,
-              '',
-              '\n'.concat(Parsers.Space('  ', coindex.scope)),
-            )
-          }
-        } else {
-          attribute = Parsers.SpaceInsert(attribute, ' ', '')
-        }
-        return attribute
-      })
-    : attributes,
-    // EXAPOS
-    (exapos)
-    ? (blocks?.length)
-      ? Parsers.SpaceInsert(
-        exapos,
-        '',
-        '\n'.concat(Parsers.Space('  ', coindex.scope)),
-      )
-      : exapos
-    : exapos, 
-    (_blocks) ? _blocks : '', 
-    // DEPOS
-    (!Operators.void.includes(name))
-    ? [
-      (indepos) ? indepos : '', 
-      (name) ? name : '', 
-      (exdepos) ? exdepos : ''
-    ].join('')
-    : ''
-  ]
-  .filter(($element) => $element)
-  // console.log('_element', Parsers.Element(_element))
+  if(blocks.length && exapos) {
+    _element.push(exapos)
+  } 
+  // EXTRAPOSEBLOCKS
+  if(!Operators.void.includes(name)) {
+    // INDEPOS
+    let indepos = tag?.depos?.in
+    _element.push(indepos)
+    _element.push(name)
+    // EXDEPOS
+    let exdepos = tag?.depos?.ex
+    _element.push(exdepos)
+  }
+  _element = _element
+  .filter(($fragment) => $fragment)
+  console.log(
+    '\n', '-----',
+    '\n', '_element', 
+    // '\n', _element,
+    '\n', Parsers.Element(_element),
+  )
   return Parsers.Element(_element)
 }

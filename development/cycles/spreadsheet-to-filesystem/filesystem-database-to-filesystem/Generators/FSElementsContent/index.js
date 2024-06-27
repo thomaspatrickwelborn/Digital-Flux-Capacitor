@@ -21,6 +21,7 @@ async function FSElementsContent(
 	iterateCollection: 
 	while(collectionIndex < collectionLength) {
 		var collectDoc = $collection[collectionIndex]
+		console.log('collectDoc.toObject()', collectDoc.toObject())
 		if(collectDoc.fs.operations.update === false) {
 			collectionIndex++
 			continue iterateCollection

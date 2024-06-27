@@ -4,13 +4,8 @@ import {
 } from '#utils/index.js'
 import Ranges from './ranges/index.js'
 import LMNRanges from './lmnRanges/index.js'
-import Merges from './merges/index.js'
 
 const Defaults = {
-  GetModsOptions: { includeHidden: true, condensed: false },
-  GetMergesOptions: { includeHidden: true },
-  GetRangesOptions: { includeHidden: true },
-  GetDataOptions: { includeHidden: false, condensed: true },
   ModRangeNameRegExp: /^MOD_[0-9]/,
 }
 const { Row, Col, Range, Cell } = tem
@@ -23,7 +18,6 @@ export default class Depository extends EventEmitter {
   #_data = []
   #_ranges
   #_lmnRanges
-  #_merges
   #_mods = new Map()
   constructor($settings, $options) {
     super()
@@ -31,7 +25,6 @@ export default class Depository extends EventEmitter {
     this.#options = $options
     this.rows = this.#settings['!rows']
     this.cols = this.#settings['!cols']   
-    this.merges = this.#settings['!merges']
     this.ranges = this.#settings['!ranges']
     this.lmnRanges = this.ranges.getRangesByName(
       new RegExp(/^LMN_/)
@@ -40,22 +33,20 @@ export default class Depository extends EventEmitter {
     this.mods = {
       data: this.data,
       ranges: this.ranges,
-      merges: this.merges,
     }
+    console.log(this)
   }
   get ranges() { return this.#_ranges }
   set ranges($ranges) {
-    this.#_ranges = new Ranges(Object.assign($ranges, {
-      hidden: this.hidden
-    }), this.#options.ranges)
+    const hidden = this.hidden
+    this.#_ranges = new Ranges(
+      Object.assign($ranges, { hidden }), 
+      this.#options.ranges
+    )
   }
   get lmnRanges() { return this.#_lmnRanges }
   set lmnRanges($lmnRanges) {
     this.#_lmnRanges = new LMNRanges($lmnRanges)
-  }
-  get merges() { return this.#_merges }
-  set merges($merges) {
-    this.#_merges = new Merges($merges)
   }
   get hidden() {
     if(this.#_hidden === undefined) {
@@ -118,9 +109,6 @@ export default class Depository extends EventEmitter {
   }
   get data() {
     const _data = this.#_data
-    // const {
-    //   includeHidden, condensed
-    // } = Defaults.GetDataOptions
     const includeHidden = false
     const condensed = true
     const hidden = this.hidden
@@ -174,6 +162,7 @@ export default class Depository extends EventEmitter {
     const _data = this.#_data
     if(Object.isFrozen(_data) === false) {
       const areas = this.ranges.getRangesByName('AREA')
+      console.log('areas,', areas)
       if(areas.length === 0) return
       const area = areas[0]
       const rowsLength = $data.length
@@ -204,7 +193,7 @@ export default class Depository extends EventEmitter {
   }
   get mods() { return this.#_mods }
   set mods($mods) {
-    const { data, ranges, merges } = $mods
+    const { data, ranges } = $mods
     const _mods = this.#_mods
     if(Object.isFrozen(_mods) === false) {
       const modRanges = ranges

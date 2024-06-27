@@ -7,16 +7,7 @@ import {
 	typeOf, parseCell, tem, combineMerge
 } from '#utils/index.js'
 import { LMNProps } from '#utils/defaults/index.js'
-
 const { ObjectId } = Types
-const Defaults = {
-	GetModsOptions: { includeHidden: true, condensed: false },
-	GetMergesOptions: { includeHidden: true },
-	GetRangesOptions: { includeHidden: true },
-	GetDataOptions: {  condensed: true, includeHidden: true },
-	ModRangeNameRegExp: /^MOD_[0-9]/,
-	OmitRangeNameRegExp: /^OMIT/,
-}
 
 export default class Worksheet extends EventEmitter {
 	#settings
