@@ -62,13 +62,13 @@ export default class Depository extends EventEmitter {
       const _hidden = { rows: [], cols: [] }
       const rows = this.rows.reduce(
         ($rows, $row, $rowIndex) => {
-          if($row.hidden === true) $rows.push($rowIndex)
+          if($row.hidden) $rows.push($rowIndex)
           return $rows
         }, _hidden.rows
       ).reverse()
       const cols = this.cols.reduce(
         ($cols, $col, $colIndex) => {
-          if($col.hidden === true) $cols.push($colIndex)
+          if($col.hidden) $cols.push($colIndex)
           return $cols
         }, _hidden.cols
       ).reverse()
