@@ -21,7 +21,6 @@ async function FSElementsContent(
 	iterateCollection: 
 	while(collectionIndex < collectionLength) {
 		var collectDoc = $collection[collectionIndex]
-		console.log('collectDoc.toObject()', collectDoc.toObject())
 		if(collectDoc.fs.operations.update === false) {
 			collectionIndex++
 			continue iterateCollection
@@ -45,21 +44,25 @@ async function FSElementsContent(
 				filesystem.path,
 				collectDoc.fs.path
 			)
+			console.log(collectDoc.fs.template)
 			const Template = Templates[
 				collectDoc.fs.template
 			]
-			const TemplateOptions = filesystemContent[
-				collectDoc.fs.template
-			]
-			const fileData = Template(templateModel, TemplateOptions)
-			console.log(
-				'\n', '=====', 
-				'\n', collectDoc.fs.template, filePath, 
-				'\n', '#####',
-				'\n', 'fileData',
-				'\n', fileData,
-			)
-			await writeFile(filePath, fileData)
+			if(Template) {
+				const TemplateOptions = filesystemContent[
+					collectDoc.fs.template
+				]
+				const fileData = Template(templateModel, TemplateOptions)
+				console
+				.log(
+					'\n', '=====', 
+					'\n', collectDoc.fs.template, filePath, 
+					'\n', '#####',
+					'\n', 'fileData',
+					'\n', fileData,
+				)
+				await writeFile(filePath, fileData)
+			}
 		}
 		collectionIndex++
 	}

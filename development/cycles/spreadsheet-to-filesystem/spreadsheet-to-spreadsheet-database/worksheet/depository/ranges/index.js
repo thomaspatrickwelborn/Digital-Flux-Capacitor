@@ -7,7 +7,7 @@ export default class Ranges extends EventEmitter {
   #settings = {}
   #options = {}
   #hidden = {}
-  raw = []
+  get raw() { return this.#settings }
   #parseRangeRef($rangeRef) {
     const rangeRefFrags = $rangeRef.split('!')
     const rangeRefFragsIndex = rangeRefFrags.length - 1
@@ -23,7 +23,6 @@ export default class Ranges extends EventEmitter {
     let rangesIndex = 0
     for(let $range of $settings) {
       $range.Ref = this.#parseRangeRef($range.Ref)      
-      this.raw.push($range)
       $range = structuredClone($range)
       const hidden = this.#hidden
       const hiddenRows = hidden.rows
@@ -74,7 +73,7 @@ export default class Ranges extends EventEmitter {
     Object.freeze(this)
   }
   getRangesByName($rangeName, $raw = false) {
-    const targetRanges = ($raw) ? this.raw : this
+    const targetRanges = ($raw) ? this.#settings : this
     var ranges
     if(typeOf($rangeName) === 'string') {
       ranges = Array.prototype.filter.call(

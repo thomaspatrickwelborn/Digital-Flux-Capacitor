@@ -4,11 +4,11 @@ import {
 } from '#utils/index.js'
 import Merges from './merges/index.js'
 import Ranges from './ranges/index.js'
+import Data from './data/index.js'
 import LMNRanges from './lmnRanges/index.js'
+import Mods from './mods/index.js'
 
-const Defaults = {
-  ModRangeNameRegExp: /^MOD_[0-9]/,
-}
+
 const { Row, Col, Range, Cell } = tem
 export default class Depository extends EventEmitter {
   #settings = {}
@@ -16,64 +16,50 @@ export default class Depository extends EventEmitter {
   #_hidden
   #_rows = []
   #_cols = []
-  #_data = []
+  #_data
   #_ranges
   #_lmnRanges
   #_merges
-  #_mods = new Map()
+  #_mods
   constructor($settings, $options) {
     super()
     this.#settings = $settings
     this.#options = $options
     this.rows = this.#settings['!rows']
     this.cols = this.#settings['!cols']   
-    this.merges = this.#settings['!merges']
-    this.ranges = this.#settings['!ranges']
-    this.lmnRanges = this.ranges.getRangesByName(
-      new RegExp(/^LMN_/)
+    this.hidden = {
+      rows: this.rows,
+      cols: this.cols,
+    }
+    this.#_merges = new Merges(this.#settings['!merges'])
+    this.#_ranges = new Ranges(
+      Object.assign(
+        this.#settings['!ranges'], { hidden: this.hidden }
+      ), 
+      this.#options.ranges
     )
-    this.data = this.#settings['!data']
-    this.mods = {
+    this.#_lmnRanges = new LMNRanges(
+      this.ranges.getRangesByName(
+        new RegExp(/^LMN_/)
+      )
+    )
+    this.#_data = new Data({
+      data: this.#settings['!data'],
+      ranges: this.ranges,
+      hidden: this.hidden,
+    })
+    this.#_mods = new Mods({
       data: this.data,
       ranges: this.ranges,
       merges: this.merges,
-    }
+    })
+    console.log(this)
   }
+  get data() { return this.#_data }
   get ranges() { return this.#_ranges }
-  set ranges($ranges) {
-    const hidden = this.hidden
-    this.#_ranges = new Ranges(
-      Object.assign($ranges, { hidden }), 
-      this.#options.ranges
-    )
-  }
   get lmnRanges() { return this.#_lmnRanges }
-  set lmnRanges($lmnRanges) {
-    this.#_lmnRanges = new LMNRanges($lmnRanges)
-  }
   get merges() { return this.#_merges }
-  set merges($merges) {
-    this.#_merges = new Merges($merges)
-  }
-  get hidden() {
-    if(this.#_hidden === undefined) {
-      const _hidden = { rows: [], cols: [] }
-      const rows = this.rows.reduce(
-        ($rows, $row, $rowIndex) => {
-          if($row.hidden) $rows.push($rowIndex)
-          return $rows
-        }, _hidden.rows
-      ).reverse()
-      const cols = this.cols.reduce(
-        ($cols, $col, $colIndex) => {
-          if($col.hidden) $cols.push($colIndex)
-          return $cols
-        }, _hidden.cols
-      ).reverse()
-      this.#_hidden = _hidden
-    }
-    return this.#_hidden
-  }
+  get mods() { return this.#_mods }
   get rows() { return this.#_rows }
   set rows($rows = []) {
     const _rows = this.#_rows
@@ -114,95 +100,23 @@ export default class Depository extends EventEmitter {
     }
     return _cols
   }
-  get data() { return this.#_data }
-  set data($data = []) {
-    const hidden = this.hidden
-    const _data = this.#_data
-    const areas = this.ranges.getRangesByName('AREA', true)
-    if(areas.length === 0) return
-    const area = areas[0]
-    const rowsLength = $data.length
-    const maxRowsLength = area.Ref.e.r
-    var rowsIndex = 0
-    iterateRows: 
-    while(rowsIndex < rowsLength) {
-      if(rowsIndex > maxRowsLength) break
-      if(hidden.rows.includes(rowsIndex)) {
-        rowsIndex++
-        continue iterateRows
-      }
-      const row = []
-      const colsLength = (
-        $data[rowsIndex] !== undefined
-      ) ? $data[rowsIndex].length
-        : 0
-      const maxColsLength = area.Ref.e.c
-      var colsIndex = 0
-      iterateCols: 
-      while(colsIndex < colsLength) {
-        if(colsIndex > maxColsLength) break
-        if(hidden.cols.includes(colsIndex)) {
-          colsIndex++
-          continue iterateCols
-        }
-        const cell = $data[rowsIndex][colsIndex]
-        Object.freeze(cell)
-        row.push(cell.v)
-        colsIndex++
-      }
-      Object.freeze(row)
-      _data.push(row)
-      rowsIndex++
-    }
-  }
-  get mods() { return this.#_mods }
-  set mods($mods) {
-    const { data, ranges, merges } = $mods
-    const _mods = this.#_mods
-    if(Object.isFrozen(_mods) === false) {
-      const modRanges = ranges
-      .getRangesByName(
-        new RegExp(Defaults.ModRangeNameRegExp)
-      )
-      .sort(($rangeA, $rangeB) => (
-        $rangeA.Ref.s.r < $rangeB.Ref.s.r
-      ) ? -1
-        : 1
-      )
-      var modRangeClassName
-      for(const $modRange of modRanges) {
-        const { Name, Ref, Class } = $modRange
-        modRangeClassName = Class
-        var [$key, $index, $val] = Name.split('_', 3)
-        $index = Number($index)
-        let mod
-        if(_mods.has($index) === true) {
-          mod = _mods.get($index) 
-        } else {
-          _mods.set($index, {
-            nom: modRangeClassName, sup: Array, com: Array
-          })
-          mod = _mods.get($index)
-        }
-        if(
-          $val === 'SUP' ||
-          $val === 'COM'
-        ) {
-          const modRangeRows = data
-          .slice(Ref.s.r, Ref.e.r + 1)
-          .reduce(($modRangeRows, $modRangeRow) => {
-            const modRangeRow = $modRangeRow.slice(
-              Ref.s.c, Ref.e.c + 1
-            )
-            $modRangeRows.push(modRangeRow)
-            return $modRangeRows
-          }, [])
-          var modKey = $val.toLowerCase() 
-          mod[modKey] = modRangeRows
-        }
-        _mods.set($index, mod)
-      }
-      Object.freeze(_mods)
+  get hidden() { return this.#_hidden }
+  set hidden($hidden) {
+    if(this.#_hidden === undefined) {
+      const _hidden = { rows: [], cols: [] }
+      const rows = $hidden.rows.reduce(
+        ($rows, $row, $rowIndex) => {
+          if($row.hidden) $rows.push($rowIndex)
+          return $rows
+        }, _hidden.rows
+      ).reverse()
+      const cols = $hidden.cols.reduce(
+        ($cols, $col, $colIndex) => {
+          if($col.hidden) $cols.push($colIndex)
+          return $cols
+        }, _hidden.cols
+      ).reverse()
+      this.#_hidden = _hidden
     }
   }
 }
