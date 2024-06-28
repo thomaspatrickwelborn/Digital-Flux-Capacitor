@@ -8,6 +8,7 @@ function assignPORProps($collect, $worksheet) {
 	while(collectDocsIndex < collectDocsLength) {
 		const collectDoc = $collect[collectDocsIndex]
 		const collectDocPortals = collectDoc.portal
+		if(!collectDocPortals) return $collect
 		const collectDocImports = []
 		const collectDocExports = []
 		const collectDocPortalsLength = collectDocPortals.length

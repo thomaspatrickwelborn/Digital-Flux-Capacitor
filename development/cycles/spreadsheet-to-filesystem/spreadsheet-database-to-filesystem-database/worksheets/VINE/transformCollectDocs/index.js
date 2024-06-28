@@ -1,8 +1,8 @@
 import path from 'node:path'
 
 function transformCollectDocPort($ports) {
-	const portsLength = $ports.length
-	if(portsLength === 0) return $ports
+	const portsLength = $ports?.length
+	if(!portsLength) return $ports
 	var portsIndex = 0
 	iteratePorts:
 	while(portsIndex < portsLength) {

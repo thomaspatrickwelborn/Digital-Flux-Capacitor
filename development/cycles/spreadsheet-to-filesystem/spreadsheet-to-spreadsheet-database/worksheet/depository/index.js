@@ -2,6 +2,7 @@ import { EventEmitter } from 'node:events'
 import {
   typeOf, parseCell, tem
 } from '#utils/index.js'
+import Merges from './merges/index.js'
 import Ranges from './ranges/index.js'
 import LMNRanges from './lmnRanges/index.js'
 
@@ -18,6 +19,7 @@ export default class Depository extends EventEmitter {
   #_data = []
   #_ranges
   #_lmnRanges
+  #_merges
   #_mods = new Map()
   constructor($settings, $options) {
     super()
@@ -25,6 +27,7 @@ export default class Depository extends EventEmitter {
     this.#options = $options
     this.rows = this.#settings['!rows']
     this.cols = this.#settings['!cols']   
+    this.merges = this.#settings['!merges']
     this.ranges = this.#settings['!ranges']
     this.lmnRanges = this.ranges.getRangesByName(
       new RegExp(/^LMN_/)
@@ -33,8 +36,8 @@ export default class Depository extends EventEmitter {
     this.mods = {
       data: this.data,
       ranges: this.ranges,
+      merges: this.merges,
     }
-    console.log(this)
   }
   get ranges() { return this.#_ranges }
   set ranges($ranges) {
@@ -47,6 +50,10 @@ export default class Depository extends EventEmitter {
   get lmnRanges() { return this.#_lmnRanges }
   set lmnRanges($lmnRanges) {
     this.#_lmnRanges = new LMNRanges($lmnRanges)
+  }
+  get merges() { return this.#_merges }
+  set merges($merges) {
+    this.#_merges = new Merges($merges)
   }
   get hidden() {
     if(this.#_hidden === undefined) {
@@ -107,93 +114,50 @@ export default class Depository extends EventEmitter {
     }
     return _cols
   }
-  get data() {
-    const _data = this.#_data
-    const includeHidden = false
-    const condensed = true
+  get data() { return this.#_data }
+  set data($data = []) {
     const hidden = this.hidden
-    const hiddenRows = hidden.rows
-    const hiddenCols = hidden.cols
-    const rows = []
-    const rowsLength = _data.length
+    const _data = this.#_data
+    const areas = this.ranges.getRangesByName('AREA', true)
+    if(areas.length === 0) return
+    const area = areas[0]
+    const rowsLength = $data.length
+    const maxRowsLength = area.Ref.e.r
     var rowsIndex = 0
+    iterateRows: 
     while(rowsIndex < rowsLength) {
-      if(
-        includeHidden === false &&
-        hiddenRows.includes(rowsIndex) === true
-      ) {
+      if(rowsIndex > maxRowsLength) break
+      if(hidden.rows.includes(rowsIndex)) {
         rowsIndex++
-        continue
+        continue iterateRows
       }
-      var row = []
-      const colsLength = _data[rowsIndex].length
+      const row = []
+      const colsLength = (
+        $data[rowsIndex] !== undefined
+      ) ? $data[rowsIndex].length
+        : 0
+      const maxColsLength = area.Ref.e.c
       var colsIndex = 0
+      iterateCols: 
       while(colsIndex < colsLength) {
-        if(
-          includeHidden === false &&
-          hiddenCols.includes(colsIndex) === true
-        ) {
+        if(colsIndex > maxColsLength) break
+        if(hidden.cols.includes(colsIndex)) {
           colsIndex++
-          continue
+          continue iterateCols
         }
-        var cell = (
-          _data[rowsIndex][colsIndex] !== undefined
-        ) ? _data[rowsIndex][colsIndex]
-          : new Cell()
-        if(condensed === true) {
-          if(
-            cell.w === 'TRUE' ||
-            cell.w === 'FALSE'
-          ) {
-            cell = parseCell(cell.w)
-          } else {
-            cell = parseCell(cell.v)
-          }
-        }
-        row.push(cell)
+        const cell = $data[rowsIndex][colsIndex]
+        Object.freeze(cell)
+        row.push(cell.v)
         colsIndex++
       }
-      rows.push(row)
+      Object.freeze(row)
+      _data.push(row)
       rowsIndex++
-    }
-    return rows
-  }
-  set data($data = []) {
-    const _data = this.#_data
-    if(Object.isFrozen(_data) === false) {
-      const areas = this.ranges.getRangesByName('AREA')
-      console.log('areas,', areas)
-      if(areas.length === 0) return
-      const area = areas[0]
-      const rowsLength = $data.length
-      const maxRowsLength = area.Ref.e.r
-      var rowsIndex = 0
-      while(rowsIndex < rowsLength) {
-        if(rowsIndex > maxRowsLength) break
-        const row = []
-        const colsLength = (
-          $data[rowsIndex] !== undefined
-        ) ? $data[rowsIndex].length
-          : 0
-        const maxColsLength = area.Ref.e.c
-        var colsIndex = 0
-        while(colsIndex < colsLength) {
-          if(colsIndex > maxColsLength) break
-          const cell = $data[rowsIndex][colsIndex]
-          Object.freeze(cell)
-          row.push(cell)
-          colsIndex++
-        }
-        Object.freeze(row)
-        _data.push(row)
-        rowsIndex++
-      }
-      Object.freeze(_data)
     }
   }
   get mods() { return this.#_mods }
   set mods($mods) {
-    const { data, ranges } = $mods
+    const { data, ranges, merges } = $mods
     const _mods = this.#_mods
     if(Object.isFrozen(_mods) === false) {
       const modRanges = ranges
@@ -205,13 +169,10 @@ export default class Depository extends EventEmitter {
       ) ? -1
         : 1
       )
-      const modRangesLength = modRanges.length
-      var modRangesIndex = 0
       var modRangeClassName
-      while(modRangesIndex < modRangesLength) {
-        var modRange = modRanges[modRangesIndex]
-        const { Name, Ref, Class } = modRange
-        modRangeClassName = modRangeClassName || Class
+      for(const $modRange of modRanges) {
+        const { Name, Ref, Class } = $modRange
+        modRangeClassName = Class
         var [$key, $index, $val] = Name.split('_', 3)
         $index = Number($index)
         let mod
@@ -240,7 +201,6 @@ export default class Depository extends EventEmitter {
           mod[modKey] = modRangeRows
         }
         _mods.set($index, mod)
-        modRangesIndex++
       }
       Object.freeze(_mods)
     }
