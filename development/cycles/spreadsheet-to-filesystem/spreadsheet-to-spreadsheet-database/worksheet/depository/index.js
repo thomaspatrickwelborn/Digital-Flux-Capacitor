@@ -14,14 +14,22 @@ import Mods from './mods/index.js'
 export default class Depository extends EventEmitter {
   #settings = {}
   #options = {}
-  #_hidden
   #_rows = []
   #_cols = []
-  #_data
+  #_hidden
+  #_merges
   #_ranges
   #_lmnRanges
-  #_merges
+  #_data
   #_mods
+  get rows() { return this.#_rows }
+  get cols() { return this.#_cols }
+  get hidden() { return this.#_hidden }
+  get merges() { return this.#_merges }
+  get ranges() { return this.#_ranges }
+  get lmnRanges() { return this.#_lmnRanges }
+  get data() { return this.#_data }
+  get mods() { return this.#_mods }
   constructor($settings, $options) {
     super()
     this.#settings = $settings
@@ -60,13 +68,6 @@ export default class Depository extends EventEmitter {
       ranges: this.ranges,
       merges: this.merges,
     })
+    console.log(this)
   }
-  get data() { return this.#_data }
-  get ranges() { return this.#_ranges }
-  get lmnRanges() { return this.#_lmnRanges }
-  get merges() { return this.#_merges }
-  get mods() { return this.#_mods }
-  get rows() { return this.#_rows }
-  get cols() { return this.#_cols }
-  get hidden() { return this.#_hidden }
 }

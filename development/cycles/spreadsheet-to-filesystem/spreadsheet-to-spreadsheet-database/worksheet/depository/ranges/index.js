@@ -20,10 +20,14 @@ export default class Ranges extends EventEmitter {
     this.#settings = $settings
     this.#options = $options
     let rangesIndex = 0
+    const hidden = this.#hidden
+    hidden.rows.reverse()
+    hidden.cols.reverse()
+    // Iterate Ranges
+    iterateRanges: 
     for(let $range of this.raw) {
       $range.Ref = this.#parseRangeRef($range.Ref)      
       $range = structuredClone($range)
-      const hidden = this.#hidden
       const hiddenRows = hidden.rows
       const hiddenRowsLength = hiddenRows.length
       const hiddenCols = hidden.cols
@@ -31,9 +35,13 @@ export default class Ranges extends EventEmitter {
       var hiddenRowsIndex = 0
       Object.assign($range, this.#options[$range.Name])
       const { Name, Ref, Class } = $range
+      // Iterate Hidden Rows
+      iterateHiddenRows: 
       while(hiddenRowsIndex < hiddenRowsLength) {
         const $hiddenRowIndex = hiddenRows[hiddenRowsIndex]
-        if($hiddenRowIndex < Ref.s.r) {
+        if(
+          $hiddenRowIndex < Ref.s.r
+        ) {
           Ref.s.r -= 1
           Ref.e.r -= 1
         } else if(
@@ -45,9 +53,13 @@ export default class Ranges extends EventEmitter {
         hiddenRowsIndex++
       }
       var hiddenColsIndex = 0
+      // Iterate Hidden Cols
+      iterateHiddenCols: 
       while(hiddenColsIndex < hiddenColsLength) {
         const $hiddenColIndex = hiddenCols[hiddenColsIndex]
-        if($hiddenColIndex < Ref.s.c) {
+        if(
+          $hiddenColIndex < Ref.s.c
+        ) {
           Ref.s.c -= 1
           Ref.e.c -= 1
         } else if(
@@ -69,7 +81,6 @@ export default class Ranges extends EventEmitter {
       }
       rangesIndex++
     }
-    Object.freeze(this)
   }
   getRangesByName($rangeName, $raw = false) {
     const targetRanges = (
