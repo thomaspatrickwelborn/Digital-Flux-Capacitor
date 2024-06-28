@@ -31,13 +31,15 @@ export default class Depository extends EventEmitter {
       rows: this.rows,
       cols: this.cols,
     }
-    this.#_merges = new Merges(this.#settings['!merges'])
-    this.#_ranges = new Ranges(
-      Object.assign(
-        this.#settings['!ranges'], { hidden: this.hidden }
-      ), 
-      this.#options.ranges
-    )
+    this.#_merges = new Merges({
+      merges: this.#settings['!merges'],
+      hidden: this.hidden,
+    })
+    this.#_ranges = new Ranges({
+      ranges: this.#settings['!ranges'],
+      hidden: this.hidden,
+    }, this.#options.ranges)
+
     this.#_lmnRanges = new LMNRanges(
       this.ranges.getRangesByName(
         new RegExp(/^LMN_/)
@@ -53,7 +55,6 @@ export default class Depository extends EventEmitter {
       ranges: this.ranges,
       merges: this.merges,
     })
-    console.log(this)
   }
   get data() { return this.#_data }
   get ranges() { return this.#_ranges }

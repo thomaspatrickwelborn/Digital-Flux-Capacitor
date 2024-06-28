@@ -3,27 +3,26 @@ export default class Merges extends EventEmitter {
   length = 0
   #settings = {}
   #options = {}
-  #hidden = {}
+  get hidden() { return this.#settings.hidden }
+  get raw() { return this.#settings.merges }
   constructor($settings = {}, $options = {}) {
     super()
     this.#settings = $settings
     this.#options = $options
-    this.#hidden = this.#options.hidden
     iterateMerges: 
-    for(const $merge of $settings) {
+    for(const $merge of this.raw) {
+      console.log('$merge', $merge)
       Array.prototype.push.call(this, $merge)
     }
   }
   filterMerges($options = Defaults.GetMergesOptions) {
-    const { includeHidden } = $options
-    if(includeHidden === true) return this.merges
     const merges = []
     const mergesLength = this.merges.length
     var mergesIndex = 0
     while(mergesIndex < mergesLength) {
       const merge = structuredClone(this.merges[mergesIndex])
       if(includeHidden === false) {
-        const hidden = this.#hidden
+        const hidden = this.hidden
         const hiddenRows = hidden.rows
         const hiddenRowsLength = hiddenRows.length
         const hiddenCols = hidden.cols
