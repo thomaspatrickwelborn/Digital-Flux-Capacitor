@@ -6,7 +6,7 @@ export default class Ranges extends EventEmitter {
   length = 0
   #settings = {}
   #options = {}
-  get hidden() { return this.#settings.hidden }
+  get #hidden() { return this.#settings.hidden }
   get raw() { return this.#settings.ranges }
   #parseRangeRef($rangeRef) {
     const rangeRefFrags = $rangeRef.split('!')
@@ -72,20 +72,19 @@ export default class Ranges extends EventEmitter {
     Object.freeze(this)
   }
   getRangesByName($rangeName, $raw = false) {
-    const targetRanges = ($raw) ? this.#settings : this
+    const targetRanges = (
+      $raw
+    ) ? this.raw
+      : Array.from(this)
     var ranges
     if(typeOf($rangeName) === 'string') {
-      ranges = Array.prototype.filter.call(
-        targetRanges,
+      ranges = targetRanges.filter(
         ($range) => $range.Name === $rangeName
       )
     } else
     if($rangeName instanceof RegExp) {
-      ranges = Array.prototype.filter.call(
-        targetRanges,
-        ($modRange) => {
-          return $modRange.Name.match($rangeName)
-        }
+      ranges = targetRanges.filter(
+        ($modRange) => $modRange.Name.match($rangeName)
       )
     }
     return ranges

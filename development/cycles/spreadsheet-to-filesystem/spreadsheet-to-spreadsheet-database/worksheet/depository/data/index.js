@@ -19,6 +19,7 @@ export default class Data extends EventEmitter {
     const rowsLength = $data.length
     const maxRowsLength = area.Ref.e.r
     let rowsIndex = 0
+
     iterateRows: 
     while(rowsIndex < rowsLength) {
       if(rowsIndex > maxRowsLength) break
@@ -41,11 +42,9 @@ export default class Data extends EventEmitter {
           continue iterateCols
         }
         const cell = $data[rowsIndex][colsIndex]
-        Object.freeze(cell)
         row.push(cell.v)
         colsIndex++
       }
-      Object.freeze(row)
       Array.prototype.push.call(_data, row)
       rowsIndex++
     }
