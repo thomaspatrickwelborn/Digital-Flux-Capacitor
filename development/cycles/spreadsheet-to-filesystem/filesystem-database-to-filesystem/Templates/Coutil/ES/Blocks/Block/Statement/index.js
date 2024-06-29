@@ -18,46 +18,63 @@ export default function Statement($data, $options = {}) {
       expressionsIndex++
       continue iterateExpressions
     }
+    // --------------------
     // Expression Fragments
+    // --------------------
     let { ser, ten, per, pos, par } = expression
     pos = pos || {}
     let inpos = pos.in || ''
     let expos = pos.ex || ''
+    // ---
     // SER
+    // ---
     ser = (ser)
       ? (
         expressionsIndex === 1 &&
         Object.keys(
           expressions[expressionsIndex - 1]
         ).length
-      ) ? Parsers.SpaceInsert(ser, ' ', ' ')
-        : Parsers.SpaceInsert(ser, '', ' ')
+      // ) ? Parsers.SpaceInsert(ser, '➍', '➃')
+      ) ? Parsers.SpaceInsert(ser, '', '')
+        // : Parsers.SpaceInsert(ser, '➎', '➄')
+        : Parsers.SpaceInsert(ser, '', '')
       : ser
+    // ---
     // TEN
+    // ---
     ten = (Functions.isSlug(ten))
       ? undefined
       : ten
     ten = (ten)
-      ? Parsers.Ten(ten, '', '')
+      // ? Parsers.SpaceInsert(ten, '➏', '➅')
+    ? Parsers.SpaceInsert(ten, ' ', '➅')
       : ten
+    // ---
     // PER
+    // ---
     per = (
       per && 
       Operators.assignmentShort.includes(per)
-    ) ? Parsers.Per(per, '', ' ')
+    ) ? Parsers.SpaceInsert(per, '➐', '➆')
       : (per)
-        ? Parsers.Per(per, ' ', ' ')
+        ? Parsers.SpaceInsert(per, '➑', '➇')
         : per
     pos = pos || {}
+    // -----
     // INPOS 
+    // -----
     inpos = (
       inpos &&
       blocks?.length > 1
-    ) ? Parsers.Inpos(inpos, '', '\n')
+    // ) ? Parsers.SpaceInsert(inpos, '➒', '➈')
+    ) ? Parsers.SpaceInsert(inpos, '', ' ')
       : (inpos)
-        ? Parsers.Inpos(inpos, '', '')
+        // ? Parsers.SpaceInsert(inpos, '➓', '➉')
+        ? Parsers.SpaceInsert(inpos, '', '')
         : inpos
+    // ------
     // BLOCKS
+    // ------
     let _blocks
     if(blocks.length) {
       _blocks = Blocks({
@@ -71,28 +88,40 @@ export default function Statement($data, $options = {}) {
       ) ? _blocks
         : undefined
     }
+    // -----
     // EXPOS
+    // -----
     expos = (
       expos &&
       _blocks?.length > 1
-    ) ? Parsers.Expos(expos, '\n'.concat(
-      Parsers.Space('  ', coindex.scope)
-    ), '')
+    // ) ? Parsers.SpaceInsert(expos, '(➊➊)', '(➀➀)')
+    ) ? Parsers.SpaceInsert(expos, '', '')
       : (expos)
-        ? Parsers.Expos(expos, '', '')
+        ? Parsers.SpaceInsert(expos, '(➊➋)', '(➀➁)')
         : expos
+    // ---
     // PAR
+    // ---
     par = (par)
-      ? Parsers.Par(par, '', '')
+      ? Parsers.SpaceInsert(par, '(➊➌)', '(➀➂)')
       : par
-    
+    // --------------------
+    // Expression Fragments
+    // --------------------
     const expressionFragments = [
+      // SER
       ser,
+      // TEN
       ten,
+      // PER
       per,
+      // INPOS
       inpos,
+      // _BLOCKS
       _blocks, 
+      // EXPOS
       expos,
+      // PAR
       par,
     ]
     .filter(($fragment) => $fragment)
@@ -101,11 +130,10 @@ export default function Statement($data, $options = {}) {
     )
     expressionsIndex++
   }
-  console.log(
-    '\n', '-----',
-    '\n', '_statement', 
-    // '\n', _statement,
-    '\n', Parsers.Statement(_statement),
-  )
+  // console.log(
+  //   '\n', '-----',
+  //   '\n', '_statement', 
+  //   '\n', Parsers.Statement(_statement),
+  // )
   return Parsers.Statement(_statement)
 }

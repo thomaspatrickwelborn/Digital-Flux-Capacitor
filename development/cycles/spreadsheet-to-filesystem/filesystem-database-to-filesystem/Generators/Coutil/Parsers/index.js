@@ -3,17 +3,30 @@ import Functions from '../Functions/index.js'
 const Parsers = {
   // Space Parser
   SpaceInsert: (
-    $string = '', $prespace = '', $antspace = ''
+    $val = '', $prespace = '', $anspace = ''
   ) => {
-    return String.prototype.concat(
-      $prespace, $string, $antspace
-    )
+    if(Array.isArray($val)) {
+      $val.unshift($prespace)
+      $val.push($anspace)
+    } else
+    if(typeof $val === 'string') {
+      $val = String.prototype.concat(
+        $prespace, $val, $anspace
+      )
+    }
+    return $val
   },
   Space: ($char = '', $length = 0) => {
+    $length = (
+      $length === -1 ||
+      $length === 0 ||
+      $length === undefined
+    ) ? 0
+      : $length
     let space = []
     space.length = $length
     space = space
-    .fill('  ', 0, $length)
+    .fill($char, 0, $length)
     .join('')
     return space
   },
@@ -38,19 +51,32 @@ const Parsers = {
   },
   // Block Parsers
   Blocks: ($blocks = [], $options = {}) => {
-  const { coindex } = $options
-  let blocks = $blocks
-  .map((
+    const { coindex } = $options
+    let blocks = $blocks
+    .map((
       $block, $blockIndex
     ) => {
-      const prespace = Parsers.Space(
-        '  ', coindex.scope + 1
-      )
-      if(prespace.length) {
-        $block.unshift(prespace)
-      }
-      if($blockIndex < $blocks.length - 1) {
-        $block.push('\n')
+      // const prespace = Parsers.Space(
+      //   ' ', coindex.scope + 1
+      // )
+      if($blocks?.length > 1) {
+        // Parsers.SpaceInsert($block, '(➋➊)', '(➁➀)') 
+        Parsers.SpaceInsert(
+          $block, 
+          '', 
+          '\n'.concat(Parsers.Space(
+            '  ', coindex.scope
+          ))
+        )
+      } else {
+        // Parsers.SpaceInsert($block, '(➊➍)', '(➀➃)')
+        Parsers.SpaceInsert(
+          $block, 
+          '\n'.concat(Parsers.Space(
+            '  ', coindex.scope
+          )), 
+          ''
+        )
       }
       return $block
     })
@@ -59,9 +85,8 @@ const Parsers = {
     return blocks
   },
   Block: ($block) => {
-    let block = $block
+    return $block
     .flat()
-    return block
   },
   // Port Parsers
   Imports: ($imports) => {
@@ -87,57 +112,6 @@ const Parsers = {
   Element: ($element, $options) => {
     return $element
     .flat()
-  },
-  // Expression Fragment Parsers
-  Ser: ($ser = '', $prespace = '', $anspace = '') => {
-    const ser = (
-      $ser.length
-    ) ? String.prototype.concat(
-      $prespace, $ser, $anspace
-    ) : $ser
-    return ser
-  },
-  Per: ($per = '', $prespace = '', $anspace = '') => {
-    const per = (
-      $per.length
-    ) ? String.prototype.concat(
-      $prespace, $per, $anspace
-    ) : $per
-    return per
-  },
-  Ten: ($ten = '', $prespace = '', $anspace = '') => {
-    let ten = (
-      Functions.isSlug($ten) ||
-      $ten.length === 0
-    ) ? ''
-      : String.prototype.concat(
-        $prespace, $ten, $anspace
-      )
-    return ten
-  },
-  Inpos: ($inpos = '', $prespace = '', $anspace = '') => {
-    let inpos = (
-      $inpos.length
-    ) ? String.prototype.concat(
-      $prespace, $inpos, $anspace
-    ) : $inpos
-    return inpos
-  },
-  Expos: ($expos = '', $prespace = '', $anspace = '') => {
-    let expos = (
-      $expos.length
-    ) ? String.prototype.concat(
-      $prespace, $expos, $anspace
-    ) : $expos
-    return expos
-  },
-  Par: ($par = '', $prespace = '', $anspace = '') => {
-    let par = (
-      $par.length
-    ) ? String.prototype.concat(
-      $prespace, $par, $anspace
-    ) : $par
-    return par
   },
 }
 export default Parsers

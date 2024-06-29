@@ -1,0 +1,9 @@
+
+{  "name"➅➐:➆ "dfc-configurator-docubase"➅(➊➌),(➀➂)
+ "author"➅➐:➆ "Thomas Patrick Welborn"➅(➊➌),(➀➂)
+ "devDependencies"➅➐:➆{  "ejs"➅➐:➆ "^3.1.10"➅(➊➌),(➀➂)
+   "express"➅➐:➆ "^4.19.2"➅(➊➌),(➀➂)
+   "multer"➅➐:➆ "1.4.5-lts.1"➅
+  }(➊➌),(➀➂)
+ "main"➅➐:➆ "index.js"➅
+}

@@ -27,7 +27,7 @@ export default function ES_Markup($data, $options = {}) {
   _es_markup.push(
     _imports, _blocks, _exports
   )
-  // return Parsers.ESMarkup(_es_markup, $options)
-  return _es_markup
-  .filter(Functions.filterUndefined)
+  return Parsers.ESMarkup(_es_markup, $options)
+  // return _es_markup
+  // .filter(Functions.filterUndefined)
 }

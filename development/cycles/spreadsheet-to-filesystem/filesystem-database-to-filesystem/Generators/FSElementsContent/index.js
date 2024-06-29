@@ -44,7 +44,6 @@ async function FSElementsContent(
 				filesystem.path,
 				collectDoc.fs.path
 			)
-			console.log(collectDoc.fs.template)
 			const Template = Templates[
 				collectDoc.fs.template
 			]
@@ -59,8 +58,8 @@ async function FSElementsContent(
 					'\n', collectDoc.fs.template, filePath, 
 					'\n', '#####',
 					'\n', 'fileData',
-					'\n', fileData,
 				)
+				console.log(fileData)
 				await writeFile(filePath, fileData)
 			}
 		}

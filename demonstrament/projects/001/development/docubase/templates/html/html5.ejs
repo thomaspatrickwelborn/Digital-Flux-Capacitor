@@ -1,22 +1,23 @@
-<!DOCTYPE  [object Object]>
-<html  [object Object]>
-  <head>    <title></title>
-    <%
-      for (        const $meta of $data.content.meta
-      )
-      { %>        <meta          <%
-            for (              const $metaAttribute of $meta.attributes
-            )
-            { %>              [object Object]>
-            <% }
-          %>
-      <% }
+<!DOCTYPE html5>
+<html lang="en"><head><title></title>
+  <% for(
+      const $meta➅of $data.content.meta➅)
+    { %>
+      <meta
+        <% for(
+            const $metaAttribute➅of $meta.attributes➅)
+          { %>
+            <%= $metaAttr.key %>="<%= $metaAttr.val %>"
+            ><% }
+          %><% }
     %>
-    <%
-      for (        const $link of $data.content.link
-      )
-      { %>        <link          [object Object]
-          [object Object]>
-      <% }
-    %></head>
-  <body></body></html>
+  <% for(
+      const $link➅of $data.content.link➅)
+    { %>
+      <link rel="stylesheet"
+         href="<%= $link.href %>">
+        <% }
+    %>
+  </head>
+<body></body>
+</html>

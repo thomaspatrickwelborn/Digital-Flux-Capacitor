@@ -3,7 +3,7 @@ export default function Element($data, $options = {}) {
   const { coutils, content, coindex } = $data
   const { blocks, element } = content
   const { Functions, Operators, Parsers } = coutils
-  const prespace = Parsers.Space('  ', coindex.scope)
+  // const prespace = Parsers.Space('  ', coindex.scope)
   const { tag, text } = element
   let _element = []
   // INAPOS
@@ -19,14 +19,44 @@ export default function Element($data, $options = {}) {
   // ATTRIBUTE
   let attribute = (
     Object.keys(element?.attribute || {}).length
-  ) ? element.attribute
+  ) ? [
+    element.attribute.key,
+    element.attribute.per,
+    element.attribute.val,
+  ].join('')
     : undefined
-  console.log('attribute', attribute)
+  if(attribute) {
+    if(coindex.blockLength > 1) {
+      // attribute = Parsers.SpaceInsert(attribute, '(➁➁)', '(➋➋)')
+      attribute = Parsers.SpaceInsert(attribute, ' ', '')
+    } else {
+      // attribute = Parsers.SpaceInsert(attribute, '(➁➂)', '(➋➌)')
+      attribute = Parsers.SpaceInsert(
+        attribute, 
+        '',
+        '\n'.concat(Parsers.Space('  ', coindex.scope - 1)), 
+      )
+    }
+  }
   _element.push(attribute)
   // EXAPOS
   let exapos = tag?.apos?.ex
-  if(blocks.length) {
-    _element.push(exapos)
+  if(
+    exapos &&
+    blocks.length
+  ) {
+    if(blocks.length === 1) {
+      _element.push(
+        // Parsers.SpaceInsert(exapos, '➊', '➀')
+        Parsers.SpaceInsert(exapos, '➊', '➀')
+      )
+    } else
+    if(blocks.length > 1) {
+      _element.push(
+        // Parsers.SpaceInsert(exapos, '➋', '➁')
+        Parsers.SpaceInsert(exapos, '', '')
+      )
+    }
   }
   // BLOCKS
   let _blocks
@@ -38,8 +68,15 @@ export default function Element($data, $options = {}) {
     }, $options)
     _element.push(_blocks)
   }
-  if(!blocks.length) {
-    _element.push(exapos)
+  // EXAPOS
+  if(
+    exapos &&
+    !blocks.length
+  ) {
+    _element.push(
+      // Parsers.SpaceInsert(exapos, '➌', '➂')
+      Parsers.SpaceInsert(exapos, '', '')
+    )
   }
   // EXTRAPOSEBLOCKS
   if(!Operators.void.includes(name)) {
@@ -53,11 +90,10 @@ export default function Element($data, $options = {}) {
   }
   _element = _element
   .filter(($fragment) => $fragment)
-  console.log(
-    '\n', '-----',
-    '\n', '_element', 
-    // '\n', _element,
-    '\n', Parsers.Element(_element),
-  )
+  // console.log(
+  //   '\n', '-----',
+  //   '\n', '_element', 
+  //   '\n', Parsers.Element(_element),
+  // )
   return Parsers.Element(_element)
 }
