@@ -14,7 +14,6 @@ const FSSettingsSchema = new Schema({
   encoding: String,
   template: String,
   workspace: String,
-  moduleName: String,
   type: String,
 }, {
   _id: false,

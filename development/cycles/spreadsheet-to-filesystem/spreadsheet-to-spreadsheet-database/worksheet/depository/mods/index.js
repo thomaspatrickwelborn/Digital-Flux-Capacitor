@@ -24,13 +24,11 @@ export default class Mods extends Map {
     ) ? -1
       : 1
     )
-    console.log('modRanges',modRanges)
     var modRangeClassName
     for(const $modRange of modRanges) {
-      const { Name, Ref, Class } = $modRange
+      let { Name, Ref, Class } = $modRange
       modRangeClassName = Class
-      var [$key, $index, $val] = Name.split('_', 3)
-      console.log('$key, $index, $val', $key, $index, $val)
+      let [$key, $index, $val] = Name.split('_', 3)
       $index = Number($index)
       let mod
       if(_mods.has($index) === true) {
@@ -45,8 +43,7 @@ export default class Mods extends Map {
         $val === 'SUP' ||
         $val === 'COM'
       ) {
-        console.log(Array.from(this.#data))
-        const modRangeRows = [Array.from(this.#data)]
+        const modRangeRows = Array.from(this.#data)
         .slice(Ref.s.r, Ref.e.r + 1)
         .reduce(($modRangeRows, $modRangeRow) => {
           const modRangeRow = $modRangeRow.slice(

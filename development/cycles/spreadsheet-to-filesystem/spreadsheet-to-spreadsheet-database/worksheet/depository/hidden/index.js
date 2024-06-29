@@ -4,7 +4,11 @@ export default class Hidden extends EventEmitter {
   cols = []
   constructor($settings = {}) {
     super()
-    this.rows = $settings.rows.hidden
-    this.cols = $settings.cols.hidden
+    this.rows = Object.freeze(
+      $settings.rows.hidden.reverse()
+    )
+    this.cols = Object.freeze(
+      $settings.cols.hidden.reverse()
+    )
   }
 }

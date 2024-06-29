@@ -18,7 +18,6 @@ export default class Suppository extends EventEmitter {
     this.supposits = this.#settings
     this.schemata = this.#settings
     this.models = this.#settings
-    console.log(this)
   }
   get supposits() { return this.#_supposits }
   set supposits($supposits) {

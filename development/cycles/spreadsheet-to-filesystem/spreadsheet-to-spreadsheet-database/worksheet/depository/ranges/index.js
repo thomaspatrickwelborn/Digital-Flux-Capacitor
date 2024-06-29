@@ -21,8 +21,6 @@ export default class Ranges extends EventEmitter {
     this.#options = $options
     let rangesIndex = 0
     const hidden = this.#hidden
-    hidden.rows.reverse()
-    hidden.cols.reverse()
     // Iterate Ranges
     iterateRanges: 
     for(let $range of this.raw) {

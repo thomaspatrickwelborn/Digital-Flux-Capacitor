@@ -68,6 +68,5 @@ export default class Depository extends EventEmitter {
       ranges: this.ranges,
       merges: this.merges,
     })
-    console.log(this)
   }
 }

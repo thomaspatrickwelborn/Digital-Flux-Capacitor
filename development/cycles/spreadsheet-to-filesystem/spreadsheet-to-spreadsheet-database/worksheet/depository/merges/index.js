@@ -11,8 +11,6 @@ export default class Merges extends EventEmitter {
     this.#options = $options
     let mergesIndex = 0
     const hidden = this.#hidden
-    hidden.rows.reverse()
-    hidden.cols.reverse()
     // Iterate Merges
     iterateMerges: 
     for(let $merge of this.raw) {

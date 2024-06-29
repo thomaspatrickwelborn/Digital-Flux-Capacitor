@@ -51,7 +51,6 @@ function transormCollectDocs($collect, $worksheet) {
 			fs: {
 				id: collectDoc.fs.id,
 				workspace: collectDoc.fs.workspace,
-				moduleName: collectDoc.fs.moduleName,
 				name: collectDoc.fs.name,
 				path: collectDoc.fs.path,
 				template: collectDoc.fs.template,
