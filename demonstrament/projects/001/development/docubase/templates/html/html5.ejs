@@ -1,0 +1,22 @@
+<!DOCTYPE  [object Object]>
+<html  [object Object]>
+  <head>    <title></title>
+    <%
+      for (        const $meta of $data.content.meta
+      )
+      { %>        <meta          <%
+            for (              const $metaAttribute of $meta.attributes
+            )
+            { %>              [object Object]>
+            <% }
+          %>
+      <% }
+    %>
+    <%
+      for (        const $link of $data.content.link
+      )
+      { %>        <link          [object Object]
+          [object Object]>
+      <% }
+    %></head>
+  <body></body></html>

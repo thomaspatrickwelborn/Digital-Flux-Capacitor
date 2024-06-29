@@ -18,13 +18,14 @@ export default function Element($data, $options = {}) {
   _element.push(name)
   // ATTRIBUTE
   let attribute = (
-    Object.keys(_element?.attribute || {}).length
-  ) ? attribute
+    Object.keys(element?.attribute || {}).length
+  ) ? element.attribute
     : undefined
+  console.log('attribute', attribute)
   _element.push(attribute)
   // EXAPOS
   let exapos = tag?.apos?.ex
-  if(!blocks.length && exapos) {
+  if(blocks.length) {
     _element.push(exapos)
   }
   // BLOCKS
@@ -37,9 +38,9 @@ export default function Element($data, $options = {}) {
     }, $options)
     _element.push(_blocks)
   }
-  if(blocks.length && exapos) {
+  if(!blocks.length) {
     _element.push(exapos)
-  } 
+  }
   // EXTRAPOSEBLOCKS
   if(!Operators.void.includes(name)) {
     // INDEPOS
