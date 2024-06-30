@@ -60,9 +60,11 @@ const Parsers = {
       $block, $blockIndex
     ) => {
       if($blocks?.length > 1) {
-        Parsers.SpaceInsert($block, '(➋➊)', '(➁➀)') 
+        // Parsers.SpaceInsert($block, '(➋➊)', '(➁➀)') 
+        Parsers.SpaceInsert($block, '\n', '(➁➀)') 
       } else {
-        Parsers.SpaceInsert($block, '(➊➍)', '(➀➃)')
+        // Parsers.SpaceInsert($block, '(➊➍)', '(➀➃)')
+        Parsers.SpaceInsert($block, '\n', '(➀➃)')
       }
       return $block
     })

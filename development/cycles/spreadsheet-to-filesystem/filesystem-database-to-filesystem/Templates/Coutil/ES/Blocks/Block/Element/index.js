@@ -28,11 +28,12 @@ export default function Element($data, $options = {}) {
     ].join('')
   }
   if(attribute) {
-    if(coindex.blockLength > 1) {
+    // if(coindex.blockLength > 1) {
+      // attribute = Parsers.SpaceInsert(attribute, '(➁➁)', '(➋➋)')
       attribute = Parsers.SpaceInsert(attribute, '(➁➁)', '(➋➋)')
-    } else {
-      attribute = Parsers.SpaceInsert(attribute, '(➁➂)', '(➋➌)')
-    }
+    // } else {
+    //   attribute = Parsers.SpaceInsert(attribute, '(➁➂)', '(➋➌)')
+    // }
   }
   _element.push(attribute)
   // EXAPOS
@@ -43,12 +44,13 @@ export default function Element($data, $options = {}) {
   ) {
     if(blocks.length === 1) {
       _element.push(
-        Parsers.SpaceInsert(exapos, '➊', '➀')
+        Parsers.SpaceInsert(exapos, '(➊)', '(➀)')
       )
     } else
     if(blocks.length > 1) {
       _element.push(
-        Parsers.SpaceInsert(exapos, '➋', '➁')
+        // Parsers.SpaceInsert(exapos, '(➋)', '(➁)')
+        Parsers.SpaceInsert(exapos, '', '(➁)')
       )
     }
   }
@@ -68,7 +70,8 @@ export default function Element($data, $options = {}) {
     !blocks.length
   ) {
     _element.push(
-      Parsers.SpaceInsert(exapos, '➌', '➂')
+      // Parsers.SpaceInsert(exapos, '(➌)', '(➂)')
+      Parsers.SpaceInsert(exapos, '', '(➂)')
     )
   }
   // EXTRAPOSEBLOCKS
