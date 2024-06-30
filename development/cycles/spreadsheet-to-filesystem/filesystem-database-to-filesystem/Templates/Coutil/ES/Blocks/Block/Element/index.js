@@ -129,7 +129,10 @@ export default function Element($data, $options = {}) {
     _element.push(exapos)
   }
   // EXTRAPOS
-  if(tagName) {
+  if(
+    tagName &&
+    !Operators.void.includes(tagName)
+  ) {
     let name = tagName
     let extrapos = []
     // INDEPOS
