@@ -17,25 +17,21 @@ export default function Element($data, $options = {}) {
     : undefined
   _element.push(name)
   // ATTRIBUTE
-  let attribute = (
+  let attribute
+  if(
     Object.keys(element?.attribute || {}).length
-  ) ? [
-    element.attribute.key,
-    element.attribute.per,
-    element.attribute.val,
-  ].join('')
-    : undefined
+  ) {
+    attribute = [
+      element.attribute.key,
+      element.attribute.per,
+      element.attribute.val,
+    ].join('')
+  }
   if(attribute) {
     if(coindex.blockLength > 1) {
-      // attribute = Parsers.SpaceInsert(attribute, '(➁➁)', '(➋➋)')
-      attribute = Parsers.SpaceInsert(attribute, ' ', '')
+      attribute = Parsers.SpaceInsert(attribute, '(➁➁)', '(➋➋)')
     } else {
-      // attribute = Parsers.SpaceInsert(attribute, '(➁➂)', '(➋➌)')
-      attribute = Parsers.SpaceInsert(
-        attribute, 
-        '',
-        '\n'.concat(Parsers.Space('  ', coindex.scope - 1)), 
-      )
+      attribute = Parsers.SpaceInsert(attribute, '(➁➂)', '(➋➌)')
     }
   }
   _element.push(attribute)
@@ -47,14 +43,12 @@ export default function Element($data, $options = {}) {
   ) {
     if(blocks.length === 1) {
       _element.push(
-        // Parsers.SpaceInsert(exapos, '➊', '➀')
         Parsers.SpaceInsert(exapos, '➊', '➀')
       )
     } else
     if(blocks.length > 1) {
       _element.push(
-        // Parsers.SpaceInsert(exapos, '➋', '➁')
-        Parsers.SpaceInsert(exapos, '', '')
+        Parsers.SpaceInsert(exapos, '➋', '➁')
       )
     }
   }
@@ -74,8 +68,7 @@ export default function Element($data, $options = {}) {
     !blocks.length
   ) {
     _element.push(
-      // Parsers.SpaceInsert(exapos, '➌', '➂')
-      Parsers.SpaceInsert(exapos, '', '')
+      Parsers.SpaceInsert(exapos, '➌', '➂')
     )
   }
   // EXTRAPOSEBLOCKS

@@ -24,7 +24,10 @@ const Parsers = {
     ) ? 0
       : $length
     let space = []
-    space.length = $length
+    space.length = (
+      $length > -1
+    ) ? $length
+      : 0
     space = space
     .fill($char, 0, $length)
     .join('')
@@ -56,27 +59,10 @@ const Parsers = {
     .map((
       $block, $blockIndex
     ) => {
-      // const prespace = Parsers.Space(
-      //   ' ', coindex.scope + 1
-      // )
       if($blocks?.length > 1) {
-        // Parsers.SpaceInsert($block, '(➋➊)', '(➁➀)') 
-        Parsers.SpaceInsert(
-          $block, 
-          '', 
-          '\n'.concat(Parsers.Space(
-            '  ', coindex.scope
-          ))
-        )
+        Parsers.SpaceInsert($block, '(➋➊)', '(➁➀)') 
       } else {
-        // Parsers.SpaceInsert($block, '(➊➍)', '(➀➃)')
-        Parsers.SpaceInsert(
-          $block, 
-          '\n'.concat(Parsers.Space(
-            '  ', coindex.scope
-          )), 
-          ''
-        )
+        Parsers.SpaceInsert($block, '(➊➍)', '(➀➃)')
       }
       return $block
     })

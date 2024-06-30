@@ -28,27 +28,30 @@ export default function Statement($data, $options = {}) {
     // ---
     // SER
     // ---
-    ser = (ser)
-      ? (
-        expressionsIndex === 1 &&
-        Object.keys(
-          expressions[expressionsIndex - 1]
-        ).length
-      // ) ? Parsers.SpaceInsert(ser, '➍', '➃')
-      ) ? Parsers.SpaceInsert(ser, '', '')
-        // : Parsers.SpaceInsert(ser, '➎', '➄')
-        : Parsers.SpaceInsert(ser, '', '')
-      : ser
+    if(
+      expressionsIndex === 1 &&
+      Object.keys(
+        expressions[expressionsIndex - 1]
+      ).length
+    ) {
+      ser = Parsers.SpaceInsert(ser, '➍', '➃')
+    } else {
+      ser = Parsers.SpaceInsert(ser, '➎', '➄')
+    }
     // ---
     // TEN
     // ---
-    ten = (Functions.isSlug(ten))
-      ? undefined
-      : ten
-    ten = (ten)
-      // ? Parsers.SpaceInsert(ten, '➏', '➅')
-    ? Parsers.SpaceInsert(ten, ' ', '➅')
-      : ten
+    if(Functions.isSlug(ten)) {
+      ten = undefined
+    }
+    if(expressionsIndex === 1) {
+      ten = Parsers.SpaceInsert(ten, '(➍➍)', '(➃➃)')
+    } else
+    if(expressionsIndex === 0) {
+      ten = Parsers.SpaceInsert(ten, '(➎➎)', '(➄➄)')
+    } else {
+      ten = Parsers.SpaceInsert(ten, '➏', '➅')
+    }
     // ---
     // PER
     // ---
@@ -63,15 +66,14 @@ export default function Statement($data, $options = {}) {
     // -----
     // INPOS 
     // -----
-    inpos = (
+    if(
       inpos &&
       blocks?.length > 1
-    // ) ? Parsers.SpaceInsert(inpos, '➒', '➈')
-    ) ? Parsers.SpaceInsert(inpos, '', ' ')
-      : (inpos)
-        // ? Parsers.SpaceInsert(inpos, '➓', '➉')
-        ? Parsers.SpaceInsert(inpos, '', '')
-        : inpos
+    ) {
+      inpos = Parsers.SpaceInsert(inpos, '➒', '➈')
+    } else {
+      inpos = Parsers.SpaceInsert(inpos, '➓', '➉')
+    }
     // ------
     // BLOCKS
     // ------
@@ -91,20 +93,18 @@ export default function Statement($data, $options = {}) {
     // -----
     // EXPOS
     // -----
-    expos = (
+    if(
       expos &&
       _blocks?.length > 1
-    // ) ? Parsers.SpaceInsert(expos, '(➊➊)', '(➀➀)')
-    ) ? Parsers.SpaceInsert(expos, '', '')
-      : (expos)
-        ? Parsers.SpaceInsert(expos, '(➊➋)', '(➀➁)')
-        : expos
+    ) {
+      expos = Parsers.SpaceInsert(expos, '(➊➊)', '(➀➀)')
+    }
     // ---
     // PAR
     // ---
-    par = (par)
-      ? Parsers.SpaceInsert(par, '(➊➌)', '(➀➂)')
-      : par
+    if(par) {
+      par = Parsers.SpaceInsert(par, '(➊➌)', '(➀➂)')
+    }
     // --------------------
     // Expression Fragments
     // --------------------
