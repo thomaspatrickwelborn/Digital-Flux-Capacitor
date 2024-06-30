@@ -28,12 +28,8 @@ export default function Element($data, $options = {}) {
     ].join('')
   }
   if(attribute) {
-    // if(coindex.blockLength > 1) {
-      // attribute = Parsers.SpaceInsert(attribute, '(➁➁)', '(➋➋)')
-      attribute = Parsers.SpaceInsert(attribute, '(➁➁)', '(➋➋)')
-    // } else {
-    //   attribute = Parsers.SpaceInsert(attribute, '(➁➂)', '(➋➌)')
-    // }
+    attribute = Parsers.SpaceInsert(attribute, '(➁➂)', '(➋➌)')
+    attribute = Parsers.SpaceInsert(attribute, ' ', '')
   }
   _element.push(attribute)
   // EXAPOS
@@ -43,15 +39,14 @@ export default function Element($data, $options = {}) {
     blocks.length
   ) {
     if(blocks.length === 1) {
-      _element.push(
-        Parsers.SpaceInsert(exapos, '(➊)', '(➀)')
-      )
+      // exapos = Parsers.SpaceInsert(exapos, '(➊)', '(➀)')
+      exapos = Parsers.SpaceInsert(exapos, '(➊)', '(➀)')
+      _element.push(exapos)
     } else
     if(blocks.length > 1) {
-      _element.push(
-        // Parsers.SpaceInsert(exapos, '(➋)', '(➁)')
-        Parsers.SpaceInsert(exapos, '', '(➁)')
-      )
+      // exapos = Parsers.SpaceInsert(exapos, '(➋)', '(➁)')
+      exapos = Parsers.SpaceInsert(exapos, '', '')
+      _element.push(exapos)
     }
   }
   // BLOCKS
@@ -69,10 +64,9 @@ export default function Element($data, $options = {}) {
     exapos &&
     !blocks.length
   ) {
-    _element.push(
-      // Parsers.SpaceInsert(exapos, '(➌)', '(➂)')
-      Parsers.SpaceInsert(exapos, '', '(➂)')
-    )
+    // exapos = Parsers.SpaceInsert(exapos, '(➌)', '(➂)')
+    exapos = Parsers.SpaceInsert(exapos, '', '')
+    _element.push(exapos)
   }
   // EXTRAPOSEBLOCKS
   if(!Operators.void.includes(name)) {

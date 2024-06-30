@@ -5,6 +5,7 @@ const Parsers = {
   SpaceInsert: (
     $val = '', $prespace = '', $anspace = ''
   ) => {
+    if(!$val) return $val
     if(Array.isArray($val)) {
       $val.unshift($prespace)
       $val.push($anspace)
@@ -61,10 +62,10 @@ const Parsers = {
     ) => {
       if($blocks?.length > 1) {
         // Parsers.SpaceInsert($block, '(➋➊)', '(➁➀)') 
-        Parsers.SpaceInsert($block, '\n', '(➁➀)') 
+        Parsers.SpaceInsert($block, '\n', '') 
       } else {
         // Parsers.SpaceInsert($block, '(➊➍)', '(➀➃)')
-        Parsers.SpaceInsert($block, '\n', '(➀➃)')
+        Parsers.SpaceInsert($block, '\n', '\n')
       }
       return $block
     })

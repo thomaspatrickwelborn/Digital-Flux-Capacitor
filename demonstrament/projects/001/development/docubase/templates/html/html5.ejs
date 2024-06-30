@@ -1,23 +1,30 @@
 
-<!DOCTYPE(➁➁)html5(➋➋)>(➂)(➁➀)
-<html(➁➁)lang="en"(➋➋)>(➁)
-<head>(➁)
-<title>(➂)</title>(➁➀)
-(➎)(➄)(➄➄)(➒)<%(➈)
-(➎)for(➄)(➄➄)(
-(➎)const(➄)$meta(➄➄) of $data.content.meta(➃➃)(➀➃)(➊➊))(➀➀)(➁➀)
-(➎)(➄)(➄➄){ %>
+<!DOCTYPE (➁➂)html5(➋➌)>
+<html (➁➂)lang="en"(➋➌)>
+<head>
+<title></title>
+(➒)<%(➈)
+(➎)for(➄)(➓)((➉)
+(➎)const(➄) (➎➎)$meta(➄➄) (➍)of(➃) (➍➍)$data.content.meta(➃➃)
+(➊➊))(➀➀) 
+(➓){ %>(➉)
 <meta
-(➎)(➄)(➄➄)(➒)<%(➈)
-(➎)for(➄)(➄➄)(
-(➎)const(➄)$metaAttribute(➄➄) of $meta.attributes(➃➃)(➀➃)(➊➊))(➀➀)(➁➀)
-(➎)(➄)(➄➄){ %>
-(➁➁)<%= $metaAttr.key %>="<%= $metaAttr.val %>"(➋➋)>(➂)(➀➃)(➊➊)<% }(➀➀)(➁➀)(➊➊)%>(➀➀)(➀➃)(➀➃)(➊➊)<% }(➀➀)(➁➀)(➊➊)%>(➀➀)(➁➀)
-(➎)(➄)(➄➄)(➒)<%(➈)
-(➎)for(➄)(➄➄)(
-(➎)const(➄)$link(➄➄) of $data.content.link(➃➃)(➀➃)(➊➊))(➀➀)(➁➀)
-(➎)(➄)(➄➄){ %>
+(➒)<%(➈)
+(➎)for(➄)(➓)((➉)
+(➎)const(➄) (➎➎)$metaAttribute(➄➄) (➍)of(➃) (➍➍)$meta.attributes(➃➃)
+(➊➊))(➀➀) 
+(➓){ %>(➉)
+ (➁➂)<%= $metaAttr.key %>="<%= $metaAttr.val %>"(➋➌)>
+(➊➊)<% }(➀➀) (➊➊)%>(➀➀) 
+
+(➊➊)<% }(➀➀) (➊➊)%>(➀➀) 
+(➒)<%(➈)
+(➎)for(➄)(➓)((➉)
+(➎)const(➄) (➎➎)$link(➄➄) (➍)of(➃) (➍➍)$data.content.link(➃➃)
+(➊➊))(➀➀) 
+(➓){ %>(➉)
 <link
-(➁➁)rel="stylesheet"(➋➋)(➁➀)
-(➁➁)href="<%= $link.href %>"(➋➋)>(➂)(➁➀)(➀➃)(➊➊)<% }(➀➀)(➁➀)(➊➊)%>(➀➀)(➁➀)</head>(➁➀)
-<body>(➂)</body>(➁➀)</html>(➁➀)
+ (➁➂)rel="stylesheet"(➋➌)
+ (➁➂)href="<%= $link.href %>"(➋➌)>
+(➊➊)<% }(➀➀) (➊➊)%>(➀➀) </head>
+<body></body></html>
