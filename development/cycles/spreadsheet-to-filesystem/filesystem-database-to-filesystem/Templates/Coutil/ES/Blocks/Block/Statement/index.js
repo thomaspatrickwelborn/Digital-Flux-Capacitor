@@ -9,7 +9,12 @@ export default function Statement($data, $options = {}) {
   if(statement === undefined) return
   const { lexter, dexter } = statement
   const expressions = [lexter, dexter]
-  // const prespace = Parsers.Space('  ', coindex.scope)
+  const indent = Parsers.Indent(
+    '  ', coindex.scope
+  )
+  const newLineIndent = Parsers.NewLineIndent(
+    '  ', coindex.scope
+  )
   var expressionsIndex = 0
   iterateExpressions:
   while(expressionsIndex < expressions.length) {
@@ -34,11 +39,31 @@ export default function Statement($data, $options = {}) {
         expressions[expressionsIndex - 1]
       ).length
     ) {
-      ser = Parsers.SpaceInsert(ser, '(➍)', '(➃)')
-      ser = Parsers.SpaceInsert(ser, ' ', ' ')
+      // SER - SPACE
+      ser = Parsers.SpaceInsert(
+        ser, 
+        '', 
+        ''
+      )
+      // SER - TAG
+      ser = Parsers.SpaceInsert(
+        ser, 
+        '(➍)', 
+        '(➃)'
+      )
     } else {
-      ser = Parsers.SpaceInsert(ser, '(➎)', '(➄)')
-      ser = Parsers.SpaceInsert(ser, '', '')
+      // SER - SPACE
+      ser = Parsers.SpaceInsert(
+        ser, 
+        '', 
+        ''
+      )
+      // SER - TAG
+      ser = Parsers.SpaceInsert(
+        ser, 
+        '(➎)', 
+        '(➄)'
+      )
     }
     // ---
     // TEN
@@ -47,15 +72,45 @@ export default function Statement($data, $options = {}) {
       ten = undefined
     }
     if(expressionsIndex === 1) {
-      ten = Parsers.SpaceInsert(ten, '(➍➍)', '(➃➃)')
-      ten = Parsers.SpaceInsert(ten, '', '')
+      // TEN - SPACE
+      ten = Parsers.SpaceInsert(
+        ten, 
+        '', 
+        ''
+      )
+      // TEN - TAG
+      ten = Parsers.SpaceInsert(
+        ten, 
+        '(➍➍)', 
+        '(➃➃)'
+      )
     } else
     if(expressionsIndex === 0) {
-      ten = Parsers.SpaceInsert(ten, '(➎➎)', '(➄➄)')
-      ten = Parsers.SpaceInsert(ten, ' ', '')
+      // TEN - SPACE
+      ten = Parsers.SpaceInsert(
+        ten, 
+        '', 
+        ''
+      )
+      // TEN - TAG
+      ten = Parsers.SpaceInsert(
+        ten, 
+        '(➎➎)', 
+        '(➄➄)'
+      )
     } else {
-      ten = Parsers.SpaceInsert(ten, '(➏)', '(➅)')
-      ten = Parsers.SpaceInsert(ten, '(➏)', '(➅)')
+      // TEN - SPACE
+      ten = Parsers.SpaceInsert(
+        ten, 
+        '', 
+        ''
+      )
+      // TEN - TAG
+      ten = Parsers.SpaceInsert(
+        ten, 
+        '(➏)', 
+        '(➅)'
+      )
     }
     // ---
     // PER
@@ -64,11 +119,31 @@ export default function Statement($data, $options = {}) {
       per && 
       Operators.assignmentShort.includes(per)
     ) {
-      per = Parsers.SpaceInsert(per, '(➐)', '(➆)')
-      per = Parsers.SpaceInsert(per, '(➐)', '(➆)')
+      // PER - SPACE
+      per = Parsers.SpaceInsert(
+        per, 
+        '', 
+        ''
+      )
+      // PER - TAG
+      per = Parsers.SpaceInsert(
+        per, 
+        '(➐)', 
+        '(➆)'
+      )
     } else {
-      per = Parsers.SpaceInsert(per, '(➑)', '(➇)')
-      per = Parsers.SpaceInsert(per, '(➑)', '(➇)')
+      // PER - SPACE
+      per = Parsers.SpaceInsert(
+        per, 
+        '', 
+        ''
+      )
+      // PER - TAG
+      per = Parsers.SpaceInsert(
+        per, 
+        '(➑)', 
+        '(➇)'
+      )
     }
     pos = pos || {}
     // -----
@@ -78,11 +153,31 @@ export default function Statement($data, $options = {}) {
       inpos &&
       blocks?.length > 1
     ) {
-      inpos = Parsers.SpaceInsert(inpos, '(➒)', '(➈)')
-      inpos = Parsers.SpaceInsert(inpos, '', '')
+      // INPOS - SPACE
+      inpos = Parsers.SpaceInsert(
+        inpos, 
+        '', 
+        ''
+      )
+      // INPOS - TAG
+      inpos = Parsers.SpaceInsert(
+        inpos, 
+        '(➒)', 
+        '(➈)'
+      )
     } else {
-      inpos = Parsers.SpaceInsert(inpos, '(➓)', '(➉)')
-      inpos = Parsers.SpaceInsert(inpos, '', '')
+      // INPOS - SPACE
+      inpos = Parsers.SpaceInsert(
+        inpos, 
+        '', 
+        ''
+      )
+      // INPOS - TAG
+      inpos = Parsers.SpaceInsert(
+        inpos, 
+        '(➓)', 
+        '(➉)'
+      )
     }
     // ------
     // BLOCKS
@@ -107,14 +202,35 @@ export default function Statement($data, $options = {}) {
       expos &&
       _blocks?.length > 1
     ) {
-      expos = Parsers.SpaceInsert(expos, '(➊➊)', '(➀➀)')
-      expos = Parsers.SpaceInsert(expos, '', ' ')
+      // EXPOS - SPACE
+      expos = Parsers.SpaceInsert(
+        expos, 
+        '', 
+        ''
+      )
+      // EXPOS - TAG
+      expos = Parsers.SpaceInsert(
+        expos, 
+        '(➊➊)', 
+        '(➀➀)'
+      )
     }
     // ---
     // PAR
     // ---
     if(par) {
-      par = Parsers.SpaceInsert(par, '(➊➌)', '(➀➂)')
+      // PAR - SPACE
+      par = Parsers.SpaceInsert(
+        par, 
+        '', 
+        ''
+      )
+      // PAR - TAG
+      par = Parsers.SpaceInsert(
+        par, 
+        '(➊➌)', 
+        '(➀➂)'
+      )
     }
     // --------------------
     // Expression Fragments

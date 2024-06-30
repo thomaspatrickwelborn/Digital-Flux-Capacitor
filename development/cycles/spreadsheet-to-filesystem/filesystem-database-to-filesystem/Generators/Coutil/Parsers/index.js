@@ -1,7 +1,16 @@
 import Functions from '../Functions/index.js'
 
 const Parsers = {
-  // Space Parser
+  SpaceChar: ' ',
+  IndentChar: '  ',
+  Indent: ($indentChar, $scope) => Parsers.Space(
+    $indentChar || Parsers.IndentChar, $scope || 0
+  ),
+  NewLineIndent: ($indentChar, $scope) => [
+    '\n', Parsers.Indent(
+      $indentChar || Parsers.IndentChar, $scope || 0
+    ),
+  ].join(''),
   SpaceInsert: (
     $val = '', $prespace = '', $anspace = ''
   ) => {
@@ -11,9 +20,9 @@ const Parsers = {
       $val.push($anspace)
     } else
     if(typeof $val === 'string') {
-      $val = String.prototype.concat(
+      $val = [
         $prespace, $val, $anspace
-      )
+      ].join('')
     }
     return $val
   },
@@ -60,13 +69,18 @@ const Parsers = {
     .map((
       $block, $blockIndex
     ) => {
-      if($blocks?.length > 1) {
-        // Parsers.SpaceInsert($block, '(➋➊)', '(➁➀)') 
-        Parsers.SpaceInsert($block, '\n', '') 
-      } else {
-        // Parsers.SpaceInsert($block, '(➊➍)', '(➀➃)')
-        Parsers.SpaceInsert($block, '\n', '\n')
-      }
+      // BLOCK - SPACE
+      Parsers.SpaceInsert(
+        $block,
+        '',
+        '',
+      )
+      // BLOCK - TAG
+      Parsers.SpaceInsert(
+        $block, 
+        '(➊➍)',
+        '(➀➃)'
+      )
       return $block
     })
     .flat()

@@ -3,19 +3,39 @@ export default function Element($data, $options = {}) {
   const { coutils, content, coindex } = $data
   const { blocks, element } = content
   const { Functions, Operators, Parsers } = coutils
-  // const prespace = Parsers.Space('  ', coindex.scope)
+  const indent = Parsers.Indent(
+    '  ', coindex.scope
+  )
+  const newLineIndent = Parsers.NewLineIndent(
+    '  ', coindex.scope
+  )
   const { tag, text } = element
   let _element = []
   // INAPOS
   let inapos = tag?.apos?.in
   _element.push(inapos)
   // NAME
-  let name = tag?.name
-  name = (
-    !Functions.isSlug(name)
-  ) ? name
-    : undefined
-  _element.push(name)
+  const tagName = (
+    tag?.name &&
+    !Functions.isSlug(tag.name)
+  ) ? tag.name
+    : ''
+  if(tagName) {
+    let name = tagName
+    // NAME - SPACE
+    name = Parsers.SpaceInsert(
+      name, 
+      '',
+      ''
+    )
+    // NAME - TAG
+    name = Parsers.SpaceInsert(
+      name,
+      '(➂➁)',
+      '(➌➋)'
+    )
+    _element.push(name)
+  }
   // ATTRIBUTE
   let attribute
   if(
@@ -28,10 +48,20 @@ export default function Element($data, $options = {}) {
     ].join('')
   }
   if(attribute) {
-    attribute = Parsers.SpaceInsert(attribute, '(➁➂)', '(➋➌)')
-    attribute = Parsers.SpaceInsert(attribute, ' ', '')
+    // ATTRIBUTE - SPACE
+    attribute = Parsers.SpaceInsert(
+      attribute, 
+      Parsers.SpaceChar, 
+      ''
+    )
+    // ATTRIBUTE - TAG
+    attribute = Parsers.SpaceInsert(
+      attribute, 
+      '(➁➂)', 
+      '(➋➌)'
+    )
+    _element.push(attribute)
   }
-  _element.push(attribute)
   // EXAPOS
   let exapos = tag?.apos?.ex
   if(
@@ -39,13 +69,33 @@ export default function Element($data, $options = {}) {
     blocks.length
   ) {
     if(blocks.length === 1) {
-      // exapos = Parsers.SpaceInsert(exapos, '(➊)', '(➀)')
-      exapos = Parsers.SpaceInsert(exapos, '(➊)', '(➀)')
+      // EXAPOS - SPACE
+      exapos = Parsers.SpaceInsert(
+        exapos, 
+        '', 
+        ''
+      )
+      // EXAPOS - TAG
+      exapos = Parsers.SpaceInsert(
+        exapos, 
+        '(➊)', 
+        '(➀)'
+      )
       _element.push(exapos)
     } else
     if(blocks.length > 1) {
-      // exapos = Parsers.SpaceInsert(exapos, '(➋)', '(➁)')
-      exapos = Parsers.SpaceInsert(exapos, '', '')
+      // EXAPOS - SPACE
+      exapos = Parsers.SpaceInsert(
+        exapos, 
+        '', 
+        ''
+      )
+      // EXAPOS - TAG
+      exapos = Parsers.SpaceInsert(
+        exapos, 
+        '(➋)', 
+        '(➁)'
+      )
       _element.push(exapos)
     }
   }
@@ -64,26 +114,49 @@ export default function Element($data, $options = {}) {
     exapos &&
     !blocks.length
   ) {
-    // exapos = Parsers.SpaceInsert(exapos, '(➌)', '(➂)')
-    exapos = Parsers.SpaceInsert(exapos, '', '')
+    // EXAPOS - SPACE
+    exapos = Parsers.SpaceInsert(
+      exapos, 
+      '', 
+      ''
+    )
+    // EXAPOS - TAG
+    exapos = Parsers.SpaceInsert(
+      exapos, 
+      '(➌)', 
+      '(➂)'
+    )
     _element.push(exapos)
   }
-  // EXTRAPOSEBLOCKS
-  if(!Operators.void.includes(name)) {
+  // EXTRAPOS
+  if(tagName) {
+    let name = tagName
+    let extrapos = []
     // INDEPOS
     let indepos = tag?.depos?.in
-    _element.push(indepos)
-    _element.push(name)
     // EXDEPOS
     let exdepos = tag?.depos?.ex
-    _element.push(exdepos)
+    extrapos = [
+      indepos,
+      name,
+      exdepos,
+    ].filter(($fragment) => $fragment)
+    extrapos = (extrapos.length) ? extrapos : undefined
+    // EXAPOS - SPACE
+    extrapos = Parsers.SpaceInsert(
+      extrapos,
+      '',
+      '',
+    )
+    // EXAPOS - TAG
+    extrapos = Parsers.SpaceInsert(
+      extrapos,
+      '(➄➅)',
+      '(➎➏)',
+    )
+    _element.push(extrapos)
   }
   _element = _element
   .filter(($fragment) => $fragment)
-  // console.log(
-  //   '\n', '-----',
-  //   '\n', '_element', 
-  //   '\n', Parsers.Element(_element),
-  // )
   return Parsers.Element(_element)
 }
