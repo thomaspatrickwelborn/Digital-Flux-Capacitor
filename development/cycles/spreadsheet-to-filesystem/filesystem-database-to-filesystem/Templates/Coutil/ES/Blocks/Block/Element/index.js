@@ -104,6 +104,14 @@ export default function Element($data, $options = {}) {
     }, $options)
     _element.push(_blocks)
   }
+  // TEXT
+  if(
+    text &&
+    Object.keys(text).length
+  ) {
+    const textTen = text.ten || ''
+    _element.push(textTen)
+  }
   // EXAPOS
   if(
     exapos &&

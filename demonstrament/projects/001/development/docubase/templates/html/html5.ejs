@@ -6,37 +6,76 @@
 <html lang="en">
   <head>
     <title>
-      
+      <%= content.title %>
     </title>
     <%
-      for (
-        const $meta of content.meta
+      if (
+        content.meta
       )
-      { %>
-        <meta
-          <%
-            for (
-              const $metaAttribute of $meta.attributes
-            )
-            { %>
-               <%= $metaAttr.key %>="<%= $metaAttr.val %>"
-            <% }
-          %>
-        >
-      <% }
+      {
+        for (
+          const $meta of content.meta
+        )
+        { %>
+          <meta
+            <%
+              for (
+                const $metaAttribute of $meta.attributes
+              )
+              { %>
+                 <%= $metaAttribute.key %>="<%= $metaAttribute.val %>"
+              <% }
+            %>
+          >
+        <% }
+      }
     %>
     <%
-      for (
-        const $link of content.link
+      if (
+        content.link
       )
-      { %>
-        <link
-           rel="stylesheet"
-           href="<%= $link.href %>"
-        >
-      <% }
+      {
+        for (
+          const $link of content.link
+        )
+        { %>
+          <link
+            <%
+              for (
+                const $linkAttribute of $link.attributes
+              )
+              { %>
+                 <%= $metaAttribute.key %>="<%= $metaAttribute.val %>"
+              <% }
+            %>
+          >
+        <% }
+      }
     %>
   </head>
   <body>
+    <%
+      if (
+        content.script
+      )
+      {
+        for (
+          const $script of content.script
+        )
+        { %>
+          <script
+            <%
+              for (
+                const $scriptAttribute of $script.attributes
+              )
+              { %>
+                 <%= $scriptAttribute.key %>="<%= $metaAttribute.val %>"
+              <% }
+            %>
+          </script>
+          >
+        <% }
+      }
+    %>
   </body>
 </html>
