@@ -52,14 +52,14 @@ async function FSElementsContent(
 					collectDoc.fs.template
 				]
 				const fileData = Template(templateModel, TemplateOptions)
-				console
-				.log(
-					'\n', '=====', 
-					'\n', collectDoc.fs.template, filePath, 
-					'\n', '#####',
-					'\n', 'fileData',
-				)
-				console.log(fileData)
+				// console
+				// .log(
+				// 	'\n', '=====', 
+				// 	'\n', collectDoc.fs.template, filePath, 
+				// 	'\n', '#####',
+				// 	'\n', 'fileData',
+				// )
+				// console.log(fileData)
 				await writeFile(filePath, fileData)
 			}
 		}

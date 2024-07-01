@@ -28,6 +28,7 @@ class FilesystemDatabaseToFilesystem extends EventEmitter {
 		this.fsElements = await FSElements(
 			fsElements, $presubcycle, this
 		)
+		throw "Digital Flux Capacitor"
 		this.fsElementsContent = await FSElementsContent(
 			fsElements, $presubcycle, this
 		)

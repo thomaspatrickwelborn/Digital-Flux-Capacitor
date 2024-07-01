@@ -1,7 +1,10 @@
 import path from 'node:path'
 import { rm, rmdir, open, opendir, mkdir, stat } from 'node:fs/promises'
 import { glob, globSync, globStream, globStreamSync, Glob } from 'glob'
-import differentiateFSElements from './differentiateFSElements/index.js'
+// import differentiateFSElements from './differentiateFSElements/index.js'
+import AddedDiff from './added/diff/index.js'
+import UpdatedDiff from './updated/diff/index.js'
+import DeletedDiff from './deleted/diff/index.js'
 
 async function FSElements($collection, $presubcycle, $subcycle) {
 	const fsRootPath = $subcycle.filesystem.path
@@ -26,7 +29,13 @@ async function FSElements($collection, $presubcycle, $subcycle) {
 			return $fsVine
 		}, []
 	)
-	const { added, updated, deleted } = differentiateFSElements(fsRoot, fsVine)
+  const added = AddedDiff(fsRoot, fsVine)
+  const updated = UpdatedDiff(fsRoot, fsVine)
+  const deleted = DeletedDiff(fsRoot, fsVine)
+	console.log('-----')
+	console.log('added', added)
+	console.log('updated', updated)
+	console.log('deleted', deleted)
 	// Added FS Elements
 	const addedFSElements = added
 	const addedFSElementsLength = addedFSElements.length
