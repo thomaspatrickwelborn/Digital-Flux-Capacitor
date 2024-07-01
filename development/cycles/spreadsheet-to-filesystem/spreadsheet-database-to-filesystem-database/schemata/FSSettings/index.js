@@ -10,6 +10,7 @@ const FSSettingsSchema = new Schema({
   operations: {
     add: Boolean,
     update: Boolean,
+    delete: Boolean, 
   },
   encoding: String,
   template: String,

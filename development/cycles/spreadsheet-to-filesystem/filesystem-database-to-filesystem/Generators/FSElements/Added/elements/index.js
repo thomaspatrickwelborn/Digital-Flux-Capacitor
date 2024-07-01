@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { open, mkdir } from 'node:fs/promises'
-export default async function AddedElements($collection, $added) {
+export default async function AddedElements($collection, $fsRootPath, $added) {
   const added = []
   // Added FS Elements
   const addedFSElements = $added
@@ -10,7 +10,7 @@ export default async function AddedElements($collection, $added) {
     const addedFSElement = addedFSElements[addedFSElementsIndex]
     const addedFSElementDoc = $collection.find(($collectionDoc) => {
       return $collectionDoc.fs.path === addedFSElement.replace(
-        fsRootPath.concat('/'), ''
+        $fsRootPath.concat('/'), ''
       )
     })
     if(addedFSElementDoc.fs.operations.add === false) {
@@ -18,7 +18,7 @@ export default async function AddedElements($collection, $added) {
       continue
     }
     const addedFSElementDocPath = path.join(
-      fsRootPath, addedFSElementDoc.fs.path
+      $fsRootPath, addedFSElementDoc.fs.path
     )
     switch(addedFSElementDoc.fs.type) {
       case 'File':

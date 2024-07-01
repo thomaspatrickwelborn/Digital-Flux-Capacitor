@@ -1,6 +1,6 @@
 import path from 'node:path'
-import { rm, rmdir, open, opendir, mkdir, stat } from 'node:fs/promises'
-import { glob, globSync, globStream, globStreamSync, Glob } from 'glob'
+import { mkdir, stat } from 'node:fs/promises'
+import { globSync } from 'glob'
 import Added from './Added/index.js'
 import Updated from './Updated/index.js'
 import Deleted from './Deleted/index.js'
@@ -30,8 +30,8 @@ export default async function FSElements(
 			return $fsVine
 		}, []
 	)
-  const added = await Added($collection, fsRoot, fsVine)
-  const updated = await Updated($collection, fsRoot, fsVine)
-  const deleted = await Deleted($collection, fsRoot, fsVine)
+  const added = await Added($collection, fsRootPath, fsRoot, fsVine)
+  const updated = await Updated($collection, fsRootPath, fsRoot, fsVine)
+  const deleted = await Deleted($collection, fsRootPath, fsRoot, fsVine)
 	return $collection
 }

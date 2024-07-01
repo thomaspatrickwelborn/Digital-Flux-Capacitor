@@ -1,2 +1,17 @@
 
-{}
+{
+  "title":,
+  "metas":[],
+  "links":[
+    {
+      "href":"./indes.css",
+      "rel":"stylesheet"
+    }
+  ],
+  "scripts":[
+    {
+      "src":"./index.js",,
+      "type":"module",
+    }
+  ]
+}
