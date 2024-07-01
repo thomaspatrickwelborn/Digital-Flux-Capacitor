@@ -1,4 +1,4 @@
-export default function deletedDiff($setA, $setB) {
+export default function DeletedDiff($setA, $setB) {
   const deleted = []
   const setALength = $setA.length
   var setAIndex = 0

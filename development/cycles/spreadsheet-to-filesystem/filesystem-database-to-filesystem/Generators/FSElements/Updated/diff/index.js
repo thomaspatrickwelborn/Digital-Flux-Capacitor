@@ -1,17 +1,17 @@
-export default function addedDiff($setA, $setB) {
-  const added = []
+export default function UpdatedDiff($setA, $setB) {
+  const updated = []
   const setBLength = $setB.length
   var setBIndex = 0
   while(setBIndex < setBLength) {
     const setBElement = $setB[setBIndex]
     const isSetBElementInSetA = (
       $setA.findIndex(
-        ($setBElement) => $setBElement === setBElement
+        ($setAElement) => $setAElement === setBElement
       ) !== -1
     ) ? true
       : false
-    if(isSetBElementInSetA === false) added.push(setBElement)
+    if(isSetBElementInSetA === true) updated.push(setBElement)
     setBIndex++
   }
-  return added
+  return updated
 }
