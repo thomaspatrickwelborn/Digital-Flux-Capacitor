@@ -73,8 +73,8 @@ export default function Element($data, $options = {}) {
       // EXAPOS - TAG
       exapos = Parsers.SpaceInsert(
         exapos, 
-        '(➊)', 
-        '(➀)'
+        '', // '(➊)', 
+        '', // '(➀)'
       )
       _element.push(exapos)
     } else
