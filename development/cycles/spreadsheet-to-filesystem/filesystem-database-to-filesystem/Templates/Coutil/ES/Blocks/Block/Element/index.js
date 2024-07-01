@@ -3,12 +3,7 @@ export default function Element($data, $options = {}) {
   const { coutils, content, coindex } = $data
   const { blocks, element } = content
   const { Functions, Operators, Parsers } = coutils
-  const indent = Parsers.Indent(
-    '  ', coindex.scope
-  )
-  const newLineIndent = Parsers.NewLineIndent(
-    '  ', coindex.scope
-  )
+  const indent = Parsers.Indent(coindex)
   const { tag, text } = element
   let _element = []
   // INAPOS
@@ -31,8 +26,8 @@ export default function Element($data, $options = {}) {
     // NAME - TAG
     name = Parsers.SpaceInsert(
       name,
-      '(➂➁)',
-      '(➌➋)'
+      '(➂➁)', // '',
+      '(➌➋)', // '',
     )
     _element.push(name)
   }
@@ -57,8 +52,8 @@ export default function Element($data, $options = {}) {
     // ATTRIBUTE - TAG
     attribute = Parsers.SpaceInsert(
       attribute, 
-      '(➁➂)', 
-      '(➋➌)'
+      '(➁➂)', // '',  
+      '(➋➌)' // '',
     )
     _element.push(attribute)
   }

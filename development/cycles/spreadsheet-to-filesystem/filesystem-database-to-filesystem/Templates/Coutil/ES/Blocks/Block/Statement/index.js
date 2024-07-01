@@ -9,12 +9,7 @@ export default function Statement($data, $options = {}) {
   if(statement === undefined) return
   const { lexter, dexter } = statement
   const expressions = [lexter, dexter]
-  const indent = Parsers.Indent(
-    '  ', coindex.scope
-  )
-  const newLineIndent = Parsers.NewLineIndent(
-    '  ', coindex.scope
-  )
+  const indent = Parsers.Indent(coindex)
   var expressionsIndex = 0
   iterateExpressions:
   while(expressionsIndex < expressions.length) {
@@ -56,13 +51,13 @@ export default function Statement($data, $options = {}) {
       ser = Parsers.SpaceInsert(
         ser, 
         '', 
-        ''
+        Parsers.SpaceChar
       )
       // SER - TAG
       ser = Parsers.SpaceInsert(
         ser, 
-        '(➎)', 
-        '(➄)'
+        '', // '(➎)', 
+        '', // '(➄)'
       )
     }
     // ---
@@ -95,7 +90,7 @@ export default function Statement($data, $options = {}) {
       // TEN - TAG
       ten = Parsers.SpaceInsert(
         ten, 
-        '(➎➎)', 
+        '', // '(➎➎)', 
         '(➄➄)'
       )
     } else {
@@ -156,14 +151,14 @@ export default function Statement($data, $options = {}) {
       // INPOS - SPACE
       inpos = Parsers.SpaceInsert(
         inpos, 
-        '', 
-        ''
+        '',
+        '', // indent.anterScope,
       )
       // INPOS - TAG
       inpos = Parsers.SpaceInsert(
         inpos, 
-        '(➒)', 
-        '(➈)'
+        '(➒)', // '', 
+        '(➈)', // '',  
       )
     } else {
       // INPOS - SPACE

@@ -57,3 +57,40 @@ const Operators = {
   },
 }
 export default Operators
+
+/*
+Control flow
+
+return
+break
+continue
+throw
+if...else
+switch
+try...catch
+
+Declaring variables
+var
+let
+const
+
+Functions and classes
+function
+function*
+async function
+async function*
+class
+
+Iterations
+do...while
+for
+for...in
+for...of
+for await...of
+while
+
+Others
+export
+import
+
+*/

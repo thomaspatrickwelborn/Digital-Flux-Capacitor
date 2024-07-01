@@ -1,13 +1,37 @@
 import Functions from '../Functions/index.js'
-
 const Parsers = {
+  Indent($coindex) {
+    const { scope } = $coindex
+    const preter = Parsers.LineIndent(
+      '  ', (scope - 1)
+    )
+    const meter = Parsers.LineIndent(
+      '  ', (scope)
+    )
+    const anter = Parsers.LineIndent(
+      '  ', (scope + 1)
+    )
+    const preterScope = Parsers.NewLineIndent(
+      '  ', (scope - 1)
+    )
+    const meterScope = Parsers.NewLineIndent(
+      '  ', scope
+    )
+    const anterScope = Parsers.NewLineIndent(
+      '  ', scope + 1
+    )
+    return {
+      preter, meter, anter,
+      preterScope, meterScope, anterScope,
+    }
+  },
   SpaceChar: ' ',
   IndentChar: '  ',
-  Indent: ($indentChar, $scope) => Parsers.Space(
+  LineIndent: ($indentChar, $scope) => Parsers.Space(
     $indentChar || Parsers.IndentChar, $scope || 0
   ),
   NewLineIndent: ($indentChar, $scope) => [
-    '\n', Parsers.Indent(
+    '\n', Parsers.LineIndent(
       $indentChar || Parsers.IndentChar, $scope || 0
     ),
   ].join(''),
@@ -65,6 +89,7 @@ const Parsers = {
   // Block Parsers
   Blocks: ($blocks = [], $options = {}) => {
     const { coindex } = $options
+    const indent = Parsers.Indent(coindex)
     let blocks = $blocks
     .map((
       $block, $blockIndex
@@ -72,14 +97,14 @@ const Parsers = {
       // BLOCK - SPACE
       Parsers.SpaceInsert(
         $block,
-        '',
+        indent.preterScope,
         '',
       )
       // BLOCK - TAG
       Parsers.SpaceInsert(
         $block, 
-        '(➊➍)',
-        '(➀➃)'
+        '(➊➍)', // '',
+        '(➀➃)' // '',
       )
       return $block
     })
