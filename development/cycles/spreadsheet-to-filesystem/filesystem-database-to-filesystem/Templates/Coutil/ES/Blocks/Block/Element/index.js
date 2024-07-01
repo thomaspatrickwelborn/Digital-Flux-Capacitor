@@ -26,8 +26,8 @@ export default function Element($data, $options = {}) {
     // NAME - TAG
     name = Parsers.SpaceInsert(
       name,
-      '(➂➁)', // '',
-      '(➌➋)', // '',
+      '', // '(➂➁)', 
+      '', // '(➌➋)',
     )
     _element.push(name)
   }
@@ -52,8 +52,8 @@ export default function Element($data, $options = {}) {
     // ATTRIBUTE - TAG
     attribute = Parsers.SpaceInsert(
       attribute, 
-      '(➁➂)', // '',  
-      '(➋➌)' // '',
+      '', // '(➁➂)', 
+      '', // '(➋➌)',
     )
     _element.push(attribute)
   }
@@ -88,8 +88,8 @@ export default function Element($data, $options = {}) {
       // EXAPOS - TAG
       exapos = Parsers.SpaceInsert(
         exapos, 
-        '(➋)', 
-        '(➁)'
+        '', // '(➋)', 
+        '', // '(➁)',
       )
       _element.push(exapos)
     }
@@ -118,8 +118,8 @@ export default function Element($data, $options = {}) {
     // EXAPOS - TAG
     exapos = Parsers.SpaceInsert(
       exapos, 
-      '(➌)', 
-      '(➂)'
+      '', // '(➌)', 
+      '', // '(➂)',
     )
     _element.push(exapos)
   }
@@ -143,14 +143,14 @@ export default function Element($data, $options = {}) {
     // EXAPOS - SPACE
     extrapos = Parsers.SpaceInsert(
       extrapos,
-      '',
+      indent.meterScope,
       '',
     )
     // EXAPOS - TAG
     extrapos = Parsers.SpaceInsert(
       extrapos,
-      '(➄➅)',
-      '(➎➏)',
+      '', // '(➄➅)',
+      '', // '(➎➏)',
     )
     _element.push(extrapos)
   }

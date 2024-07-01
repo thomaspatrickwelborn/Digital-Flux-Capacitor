@@ -37,14 +37,14 @@ export default function Statement($data, $options = {}) {
       // SER - SPACE
       ser = Parsers.SpaceInsert(
         ser, 
-        '', 
-        ''
+        Parsers.SpaceChar, 
+        Parsers.SpaceChar, 
       )
       // SER - TAG
       ser = Parsers.SpaceInsert(
         ser, 
-        '(➍)', 
-        '(➃)'
+        '', // '(➍)', 
+        '', // '(➃)',
       )
     } else {
       // SER - SPACE
@@ -76,8 +76,8 @@ export default function Statement($data, $options = {}) {
       // TEN - TAG
       ten = Parsers.SpaceInsert(
         ten, 
-        '(➍➍)', 
-        '(➃➃)'
+        '', // '(➍➍)', 
+        '', // '(➃➃)',
       )
     } else
     if(expressionsIndex === 0) {
@@ -91,7 +91,7 @@ export default function Statement($data, $options = {}) {
       ten = Parsers.SpaceInsert(
         ten, 
         '', // '(➎➎)', 
-        '(➄➄)'
+        '', // '(➄➄)'
       )
     } else {
       // TEN - SPACE
@@ -123,8 +123,8 @@ export default function Statement($data, $options = {}) {
       // PER - TAG
       per = Parsers.SpaceInsert(
         per, 
-        '(➐)', 
-        '(➆)'
+        '', // '(➐)', 
+        '', // '(➆)',
       )
     } else {
       // PER - SPACE
@@ -136,8 +136,8 @@ export default function Statement($data, $options = {}) {
       // PER - TAG
       per = Parsers.SpaceInsert(
         per, 
-        '(➑)', 
-        '(➇)'
+        '', // '(➑)', 
+        '', // '(➇)'
       )
     }
     pos = pos || {}
@@ -157,8 +157,8 @@ export default function Statement($data, $options = {}) {
       // INPOS - TAG
       inpos = Parsers.SpaceInsert(
         inpos, 
-        '(➒)', // '', 
-        '(➈)', // '',  
+        '', // '(➒)', 
+        '', // '(➈)',  
       )
     } else {
       // INPOS - SPACE
@@ -170,8 +170,8 @@ export default function Statement($data, $options = {}) {
       // INPOS - TAG
       inpos = Parsers.SpaceInsert(
         inpos, 
-        '(➓)', 
-        '(➉)'
+        '', // '(➓)', 
+        '', //'(➉)',
       )
     }
     // ------
@@ -200,14 +200,14 @@ export default function Statement($data, $options = {}) {
       // EXPOS - SPACE
       expos = Parsers.SpaceInsert(
         expos, 
-        '', 
+        indent.meterScope, 
         ''
       )
       // EXPOS - TAG
       expos = Parsers.SpaceInsert(
         expos, 
-        '(➊➊)', 
-        '(➀➀)'
+        '', // '(➊➊)', 
+        '', // '(➀➀)'
       )
     }
     // ---
@@ -223,8 +223,8 @@ export default function Statement($data, $options = {}) {
       // PAR - TAG
       par = Parsers.SpaceInsert(
         par, 
-        '(➊➌)', 
-        '(➀➂)'
+        '', // '(➊➌)', 
+        '', // '(➀➂)',
       )
     }
     // --------------------

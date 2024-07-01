@@ -1,9 +1,11 @@
-(➊➍)
-(➒){(➈)(➊➍)
-"name"(➄➄)(➐):(➆)(➍➍)"dfc-configurator-docubase"(➃➃)(➊➌),(➀➂)(➀➃)(➊➍)
-"author"(➄➄)(➐):(➆)(➍➍)"Thomas Patrick Welborn"(➃➃)(➊➌),(➀➂)(➀➃)(➊➍)
-"devDependencies"(➄➄)(➐):(➆)(➒){(➈)(➊➍)
-"ejs"(➄➄)(➐):(➆)(➍➍)"^3.1.10"(➃➃)(➊➌),(➀➂)(➀➃)(➊➍)
-"express"(➄➄)(➐):(➆)(➍➍)"^4.19.2"(➃➃)(➊➌),(➀➂)(➀➃)(➊➍)
-"multer"(➄➄)(➐):(➆)(➍➍)"1.4.5-lts.1"(➃➃)(➀➃)(➊➊)}(➀➀)(➊➌),(➀➂)(➀➃)(➊➍)
-"main"(➄➄)(➐):(➆)(➍➍)"index.js"(➃➃)(➀➃)(➊➊)}(➀➀)(➀➃)
+
+{
+  "name":"dfc-configurator-docubase",
+  "author":"Thomas Patrick Welborn",
+  "devDependencies":{
+    "ejs":"^3.1.10",
+    "express":"^4.19.2",
+    "multer":"1.4.5-lts.1"
+  },
+  "main":"index.js"
+}

@@ -97,14 +97,14 @@ const Parsers = {
       // BLOCK - SPACE
       Parsers.SpaceInsert(
         $block,
-        indent.preterScope,
+        indent.anterScope, // '', 
         '',
       )
       // BLOCK - TAG
       Parsers.SpaceInsert(
         $block, 
-        '(➊➍)', // '',
-        '(➀➃)' // '',
+        '', // '(➊➍)',
+        '', // '(➀➃)',
       )
       return $block
     })
