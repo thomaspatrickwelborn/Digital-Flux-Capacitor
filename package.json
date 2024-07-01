@@ -7,7 +7,6 @@
   "devDependencies": {
     "chokidar": "^3.5.3",
     "deepmerge": "^4.3.1",
-    "ejs": "^3.1.9",
     "glob": "^10.3.10",
     "mongoose": "^8.0.3",
     "xlsx": "https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz",

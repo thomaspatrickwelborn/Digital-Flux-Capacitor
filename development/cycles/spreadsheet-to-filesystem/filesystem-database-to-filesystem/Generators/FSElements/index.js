@@ -1,14 +1,13 @@
 import path from 'node:path'
 import { rm, rmdir, open, opendir, mkdir, stat } from 'node:fs/promises'
 import { glob, globSync, globStream, globStreamSync, Glob } from 'glob'
-import AddedDiff from './Added/diff/index.js'
-import UpdatedDiff from './Updated/diff/index.js'
-import DeletedDiff from './Deleted/diff/index.js'
-import AddedElements from './Added/elements/index.js'
-import UpdatedElements from './Updated/elements/index.js'
-import DeletedElements from './Added/elements/index.js'
+import Added from './Added/index.js'
+import Updated from './Updated/index.js'
+import Deleted from './Deleted/index.js'
 
-async function FSElements($collection, $presubcycle, $subcycle) {
+export default async function FSElements(
+	$collection, $presubcycle, $subcycle
+) {
 	const fsRootPath = $subcycle.filesystem.path
 	var fsRootStat
 	try {
@@ -31,13 +30,11 @@ async function FSElements($collection, $presubcycle, $subcycle) {
 			return $fsVine
 		}, []
 	)
-  const added = AddedDiff(fsRoot, fsVine)
-  const updated = UpdatedDiff(fsRoot, fsVine)
-  const deleted = DeletedDiff(fsRoot, fsVine)
-	const addedElements = AddedElements($collection, added)
-	const updatedElements = UpdatedElements($collection, added)
-	const deletedElements = DeletedElements($collection, added)
+  const added = await Added($collection, fsRoot, fsVine)
+  console.log('added', added)
+  const updated = await Updated($collection, fsRoot, fsVine)
+  console.log('updated', updated)
+  const deleted = await Deleted($collection, fsRoot, fsVine)
+  console.log('deleted', deleted)
 	return $collection
 }
-
-export default FSElements

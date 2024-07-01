@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { rm, rmdir, open, opendir, mkdir, stat } from 'node:fs/promises'
-export export default async function DeletedElements($collection, $deleted) {
+export default async function DeletedElements($collection, $deleted) {
   const deleted = []
   const deletedFSElements = $deleted
   const deletedFSElementsLength = deletedFSElements.length
