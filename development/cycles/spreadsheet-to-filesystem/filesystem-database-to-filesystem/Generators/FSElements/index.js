@@ -31,10 +31,7 @@ export default async function FSElements(
 		}, []
 	)
   const added = await Added($collection, fsRoot, fsVine)
-  console.log('added', added)
   const updated = await Updated($collection, fsRoot, fsVine)
-  console.log('updated', updated)
   const deleted = await Deleted($collection, fsRoot, fsVine)
-  console.log('deleted', deleted)
 	return $collection
 }

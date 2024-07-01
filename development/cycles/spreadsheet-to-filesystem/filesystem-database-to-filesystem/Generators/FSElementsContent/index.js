@@ -1,7 +1,7 @@
 import path from 'node:path'
 import url from 'node:url'
 import { Functions, Parsers, Operators } from '../Coutil/index.js'
-import { writeFile } from 'node:fs/promises'
+import { writeFile, readFile } from 'node:fs/promises'
 import * as Templates from '../../Templates/index.js'
 const projectPath = process.env.PWD
 const modulePath = path.dirname(
@@ -51,16 +51,19 @@ async function FSElementsContent(
 				const TemplateOptions = filesystemContent[
 					collectDoc.fs.template
 				]
-				const fileData = Template(templateModel, TemplateOptions)
-				// console
-				// .log(
-				// 	'\n', '=====', 
-				// 	'\n', collectDoc.fs.template, filePath, 
-				// 	'\n', '#####',
-				// 	'\n', 'fileData',
-				// )
-				// console.log(fileData)
-				await writeFile(filePath, fileData)
+				const writeFileData = Template(templateModel, TemplateOptions)
+				const readFileData = await readFile(filePath)
+				.then(($fileBuffer) => $fileBuffer.toString())
+				if(writeFileData !== readFileData) {
+					console.log(
+						'\n', '=====', 
+						'\n', collectDoc.fs.template, filePath, 
+						'\n', '#####',
+						'\n', 'writeFileData', 
+						'\n', writeFileData, 
+					)
+					await writeFile(filePath, writeFileData)
+				}
 			}
 		}
 		collectionIndex++
