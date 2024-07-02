@@ -51,7 +51,5 @@ export default function Imports($data, $options = {}) {
       }
     }
   }
-  // return Parsers.Imports(_imports, $options)
-  return _imports
-  .filter(Functions.filterUndefined)
+  return Parsers.Imports(_imports, $options)
 }

@@ -1,17 +1,24 @@
 
 {
-  "title":,
-  "metas":[],
-  "links":[
+  "title": "Demonstrament 001",
+  "metas": [
     {
-      "href":"./indes.css",
-      "rel":"stylesheet"
+      "charset": "utf-8"
     }
   ],
-  "scripts":[
+  "links": [
     {
-      "src":"./index.js",,
-      "type":"module",
+      "href": "./indes.css",
+      "rel": "stylesheet"
+    }
+  ],
+  "body": [
+    {}
+  ],
+  "scripts": [
+    {
+      "src": "./index.js",
+      "type": "module"
     }
   ]
 }

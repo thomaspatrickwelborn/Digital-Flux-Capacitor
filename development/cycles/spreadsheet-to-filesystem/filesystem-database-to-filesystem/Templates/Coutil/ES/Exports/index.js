@@ -29,6 +29,5 @@ export default function Exports($data, $options) {
       )
     }
   }
-  return _exports
-  .filter(Functions.filterUndefined)
+  return Parsers.Exports(_exports, $options)
 }

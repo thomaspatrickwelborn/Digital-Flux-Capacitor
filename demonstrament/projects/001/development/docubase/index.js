@@ -1,6 +1,11 @@
-
-const application=Application()
-const router=Router()
+import express from "express"
+import {
+  Application,
+  Router
+} from "express"
+import ejs from "ejs"
+const application = Application()
+const router = Router()
 router(
   '/'
 )

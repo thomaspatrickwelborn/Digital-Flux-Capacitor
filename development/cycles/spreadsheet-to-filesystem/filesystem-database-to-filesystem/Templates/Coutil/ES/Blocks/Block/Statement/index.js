@@ -118,7 +118,7 @@ export default function Statement($data, $options = {}) {
       per = Parsers.SpaceInsert(
         per, 
         '', 
-        ''
+        Parsers.SpaceChar,
       )
       // PER - TAG
       per = Parsers.SpaceInsert(
@@ -130,8 +130,8 @@ export default function Statement($data, $options = {}) {
       // PER - SPACE
       per = Parsers.SpaceInsert(
         per, 
-        '', 
-        ''
+        Parsers.SpaceChar, 
+        Parsers.SpaceChar,
       )
       // PER - TAG
       per = Parsers.SpaceInsert(

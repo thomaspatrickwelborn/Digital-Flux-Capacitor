@@ -1,2 +1,2 @@
 
-const application=Application()
+const application = Application()

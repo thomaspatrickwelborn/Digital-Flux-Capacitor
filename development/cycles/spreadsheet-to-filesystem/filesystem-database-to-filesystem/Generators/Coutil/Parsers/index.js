@@ -67,6 +67,12 @@ const Parsers = {
     .join('')
     return space
   },
+  CSSFile: ($cssFile) => {
+    let cssFile = $cssFile
+    .flat()
+    .join('')
+   return cssFile
+  },
   // File Parsers
   ESMarkup: ($esMarkup) => {
     let esMarkup = $esMarkup
