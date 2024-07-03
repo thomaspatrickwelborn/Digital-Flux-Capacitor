@@ -9,7 +9,7 @@ const EcosystemConfig = {
     ],
     args: "--config \"./config.json\"",
     node_args: "--inspect --trace-deprecation",
-    exectMode: "fork"
+    execMode: "fork"
   ]
 }
 module.exports = EcosystemConfig
