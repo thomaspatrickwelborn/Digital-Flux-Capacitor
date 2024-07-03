@@ -139,16 +139,18 @@ const Parsers = {
   // Port Parsers
   Imports: ($imports) => {
     let imports = $imports
-    .map(Functions.mapImports)
+    .map(($import) => $export.join(''))
     .filter(Functions.filterUndefined)
     .join('\n')
     return imports
   },
   Exports: ($exports) => {
     let _exports = $exports
-    .map(Functions.mapExports)
+    .map(($export) => $export.join(''))
     .filter(Functions.filterUndefined)
-    .join('\n')
+    _exports = '\n'.concat(
+      _exports.join('\n')
+    )
     return _exports
   },
   // Statement Parser

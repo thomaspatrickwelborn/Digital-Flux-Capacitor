@@ -7,8 +7,9 @@ const EcosystemConfig = {
       "./config.json",
       "./ecosystem.config.cjs",
     ],
-    args: "--config \"./config.json\",
+    args: "--config \"./config.json\"",
     node_args: "--inspect --trace-deprecation",
     exectMode: "fork"
   ]
-}module.exports = EcosystemConfig
+}
+module.exports = EcosystemConfig
