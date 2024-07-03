@@ -139,7 +139,7 @@ const Parsers = {
   // Port Parsers
   Imports: ($imports) => {
     let imports = $imports
-    .map(($import) => $export.join(''))
+    .map(($import) => $import.join(''))
     .filter(Functions.filterUndefined)
     .join('\n')
     return imports
