@@ -1,5 +1,8 @@
 import Functions from '../Functions/index.js'
 const Parsers = {
+  Trim($content) {
+    return $content.trim()
+  },
   Indent($coindex) {
     const { scope } = $coindex
     const preter = Parsers.LineIndent(
@@ -67,10 +70,18 @@ const Parsers = {
     .join('')
     return space
   },
+  CJSModule: ($cjsModule) => {
+    let cjsModule = $cjsModule
+    .flat()
+    .join('')
+    .trim()
+    return cjsModule
+  },
   CSSFile: ($cssFile) => {
     let cssFile = $cssFile
     .flat()
     .join('')
+    .trim()
    return cssFile
   },
   // File Parsers
@@ -78,18 +89,21 @@ const Parsers = {
     let esMarkup = $esMarkup
     .flat()
     .join('')
+    .trim()
     return esMarkup
   },
   JSONFile: ($jsonFile) => {
     let jsonFile = $jsonFile
     .flat()
     .join('')
+    .trim()
    return jsonFile
   },
   ESModule: ($esModule) => {
     let esModule = $esModule
     .flat()
     .join('')
+    .trim()
     return esModule
   },
   // Block Parsers

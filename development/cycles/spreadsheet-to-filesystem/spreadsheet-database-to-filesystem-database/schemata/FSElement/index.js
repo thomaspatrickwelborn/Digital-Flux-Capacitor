@@ -7,6 +7,7 @@ const defaultSchemataOptions = {
 const ImportNameSchema = new Schema({
   name: String,
   alias: String,
+  declare: String,
 }, defaultSchemataOptions)
 // FS Data Import Schema
 const ImportSchema = new Schema({

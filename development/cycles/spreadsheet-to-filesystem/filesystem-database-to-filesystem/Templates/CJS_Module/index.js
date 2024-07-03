@@ -3,10 +3,10 @@ import {
   Exports
 } from '../Coutil/CJS/index.js'
 import { Blocks } from '../Coutil/ES/index.js'
-export default function ESModule($data, $options = {}) {
+export default function CJSModule($data, $options = {}) {
   const { coutils, content } = $data
   const { Functions, Parsers } = coutils
-  const _es_module = []
+  const _cjs_module = []
   const _imports = Imports({
     content: content.imports,
     coutils: coutils,
@@ -24,8 +24,8 @@ export default function ESModule($data, $options = {}) {
     content: content.exports,
     coutils: coutils,
   }, $options)
-  _es_module.push(
+  _cjs_module.push(
     _imports, _blocks, _exports
   )
-  return Parsers.ESModule(_es_module, $options)
+  return Parsers.CJSModule(_cjs_module, $options)
 }

@@ -1,4 +1,4 @@
- module.exports = {
+module.exports = {
   apps : [{
     name   : "DFC-Demo-001",
     script : "index.js",

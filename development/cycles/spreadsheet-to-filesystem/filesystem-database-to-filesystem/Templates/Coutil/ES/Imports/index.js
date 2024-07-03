@@ -5,35 +5,41 @@ export default function Imports($data, $options = {}) {
   for(const $import of $data.content) {
     if($import.default === false) {
       _imports.push(
-        ['import', ' ', '{']
+        ['import', Parsers.SpaceChar, '{']
       )
       var namedImportIndex = 0
       for(const $namedImport of $import.name) {
         if($namedImport.alias !== undefined) {
           if(namedImportIndex < $import.name.length - 1) {
             _imports.push(
-              ['  ', $namedImport.name, ' ', 'as', ' ', $namedImport.alias, ',']
+              [
+                Parsers.IndentChar, $namedImport.name, Parsers.SpaceChar, 
+                'as', Parsers.SpaceChar, $namedImport.alias, ','
+              ]
             )
           } else {
             _imports.push(
-              ['  ', $namedImport.name, ' ', 'as', ' ', $namedImport.alias]
+              [
+                Parsers.IndentChar, $namedImport.name, Parsers.SpaceChar, 
+                'as', Parsers.SpaceChar, $namedImport.alias
+              ]
             )
           }
         } else {
           if(namedImportIndex < $import.name.length - 1) {
             _imports.push(
-              ['  ', $namedImport.name, ',']
+              [Parsers.IndentChar, $namedImport.name, ',']
             )
           } else {
             _imports.push(
-              ['  ', $namedImport.name]
+              [Parsers.IndentChar, $namedImport.name]
             )
           }
         }
         namedImportIndex++
       }
       _imports.push(
-        ['}', ' ', 'from', ' ', '"', $import.path, '"']
+        ['}', Parsers.SpaceChar, 'from', Parsers.SpaceChar, '"', $import.path, '"']
       )
     } else 
     if($import.default === true) {
@@ -41,11 +47,18 @@ export default function Imports($data, $options = {}) {
       if(namedImport !== undefined) {
         if(namedImport.alias !== undefined) {
           _imports.push(
-            ['import', ' ', namedImport.name, ' ', 'as', ' ', namedImport.alias, ' ', 'from', ' ', '"', $import.path, '"']
+            [
+              'import', Parsers.SpaceChar, namedImport.name, Parsers.SpaceChar, 
+              'as', Parsers.SpaceChar, namedImport.alias, Parsers.SpaceChar, 
+              'from', Parsers.SpaceChar, '"', $import.path, '"'
+            ]
           )
         } else {
           _imports.push(
-            ['import', ' ', namedImport.name, ' ', 'from', ' ', '"', $import.path, '"']
+            [
+              'import', Parsers.SpaceChar, namedImport.name, Parsers.SpaceChar, 
+              'from', Parsers.SpaceChar, '"', $import.path, '"'
+            ]
           )
         }
       }

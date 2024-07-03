@@ -73,6 +73,16 @@
 						"path": "development"
 					},
 					"filesystemContent": {
+						"CJS_Module": {
+							"space": {
+								"horizon": {
+									"char": "  "
+								},
+								"verizon": {
+									"char": "\n"
+								}
+							}
+						},
 						"JSON_File": {
 							"space": {
 								"horizon": {

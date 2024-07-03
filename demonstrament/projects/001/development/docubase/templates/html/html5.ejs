@@ -1,4 +1,3 @@
-
 <%
   const content = $data.content
 %>
@@ -45,7 +44,7 @@
                 const $linkAttribute of $link.attributes
               )
               { %>
-                 <%= $metaAttribute.key %>="<%= $metaAttribute.val %>"
+                 <%= $linkAttribute.key %>="<%= $linkAttribute.val %>"
               <% }
             %>
           >
@@ -69,7 +68,7 @@
                 const $scriptAttribute of $script.attributes
               )
               { %>
-                 <%= $scriptAttribute.key %>="<%= $metaAttribute.val %>"
+                 <%= $scriptAttribute.key %>="<%= $scriptAttribute.val %>"
               <% }
             %>
           </script>
