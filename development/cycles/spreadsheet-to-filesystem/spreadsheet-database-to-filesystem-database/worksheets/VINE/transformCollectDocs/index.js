@@ -8,7 +8,7 @@ function transformCollectDocPort($ports) {
 	while(portsIndex < portsLength) {
 		const port = $ports[portsIndex]
 		const portNames = []
-		const portNamesData = port.name.split('\n')
+		const portNamesData = port?.name?.split('\n') || []
 		const portNamesDataLength = portNamesData.length
 		var portNamesDataIndex = 0
 		iteratePortNamesData: 

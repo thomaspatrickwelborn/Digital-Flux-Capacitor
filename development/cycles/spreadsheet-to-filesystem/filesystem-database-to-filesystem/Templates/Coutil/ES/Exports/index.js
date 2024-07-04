@@ -3,7 +3,7 @@ export default function Exports($data, $options) {
   const { Functions, Parsers } = coutils
   const _exports = []
   for(const $export of $data.content) {
-    if($export.default !== true) {
+    if($export.default === false) {
       let nameIndex = 0
       const nameLength = $export.nameLength
       _exports.push(
@@ -23,7 +23,8 @@ export default function Exports($data, $options) {
         nameIndex++
       }
       _exports.push(['}'])
-    } else {
+    } else 
+    if($export.default === true) {
       _exports.push(
         ['export', ' ', 'default', ' ', $export.name[0].name]
       )

@@ -62,6 +62,13 @@ export default function Imports($data, $options = {}) {
           )
         }
       }
+    } else
+    if($import.default === undefined) {
+      _imports.push(
+        [
+          'import', Parsers.SpaceChar, $import.path
+        ]
+      )
     }
   }
   return Parsers.Imports(_imports, $options)
