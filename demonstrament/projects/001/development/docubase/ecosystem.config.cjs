@@ -12,7 +12,7 @@ const EcosystemConfig = {
         "./templates/**/*.*"
       ],
       args: "--config \"./config.json\"",
-      node_args: "--inspect --trace-deprecation",
+      node_args: "--inspect=127.0.0.1:9230",
       execMode: "fork"
     }
   ]

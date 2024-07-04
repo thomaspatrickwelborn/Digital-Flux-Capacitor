@@ -9,7 +9,7 @@ module.exports = {
       "../../../development",
     ],
     args:"--config \"./config.json\"",
-    node_args: "--inspect --trace-deprecation",
+    node_args: "--inspect=127.0.0.1:9229",
     execMode: "fork"
   }]
 }
