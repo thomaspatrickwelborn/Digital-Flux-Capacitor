@@ -46,7 +46,8 @@ export default function Statement($data, $options = {}) {
         '', // '(➍)', 
         '', // '(➃)',
       )
-    } else {
+    } else 
+    if(expressionsIndex === 0) {
       // SER - SPACE
       ser = Parsers.SpaceInsert(
         ser, 
@@ -179,16 +180,23 @@ export default function Statement($data, $options = {}) {
     // ------
     let _blocks
     if(blocks.length) {
-      _blocks = Blocks({
-        content: blocks,
-        coindex: coindex,
-        coutils: coutils,
-      }, $options)
-      _blocks = (
-        _blocks && 
-        _blocks.length
-      ) ? _blocks
-        : undefined
+      if(
+        (
+          expressionsIndex === 0 &&
+          Object.keys(
+            expressions[1]?.pos || {}
+          ).length === 0
+        ) ||
+        (
+          expressionsIndex === 1
+        )
+      ) {
+        _blocks = Blocks({
+          content: blocks,
+          coindex: coindex,
+          coutils: coutils,
+        }, $options)
+      }
     }
     // -----
     // EXPOS

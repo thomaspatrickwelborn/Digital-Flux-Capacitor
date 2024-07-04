@@ -66,7 +66,7 @@ export default function Imports($data, $options = {}) {
     if($import.default === undefined) {
       _imports.push(
         [
-          'import', Parsers.SpaceChar, $import.path
+          'import', Parsers.SpaceChar, '"', $import.path, '"'
         ]
       )
     }
