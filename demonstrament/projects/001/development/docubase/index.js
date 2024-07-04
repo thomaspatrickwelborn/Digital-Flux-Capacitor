@@ -1,10 +1,9 @@
+import ./coutils/persist.js
 import express from "express"
-import {
-  Application,
-  Router
-} from "express"
 import ejs from "ejs"
-import EcosystemConfig from "ecosystem.config.cjs"
+console.log(
+  "Hello All Dogs"
+)
 const application = Application()
 const router = Router()
 router(

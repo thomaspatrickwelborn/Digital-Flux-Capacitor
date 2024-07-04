@@ -1,16 +1,15 @@
 {
   "name": "dfc-configurator-docubase",
   "version": "1.0.0",
-  "author": "index.js",
+  "type": "module",
+  "author": "Thomas Patrick Welborn",
   "main": "index.js",
   "dependencies": {
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "multer": "^1.4.5-lts.1"
   },
-  "devDependencies": {
-    "pm2": "^5.4.1"
-  },
+  "devDependencies": {},
   "scripts": {
     "save": "pm2 save",
     "start": "pm2 start ecosystem.config.cjs && npm run save",
