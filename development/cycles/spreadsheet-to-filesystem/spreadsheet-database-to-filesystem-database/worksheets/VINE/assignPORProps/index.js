@@ -56,6 +56,12 @@ function assignPORProps($collect, $worksheet) {
 							collectDocImport.path = path.relative(
 								path.dirname(collectDoc.fs.path), preterductCollectDoc.fs.path
 							)
+							if(
+								collectDocImport.path[0] !== './' &&
+								collectDocImport.path[0] !== '/'
+							) {
+								collectDocImport.path = String.prototype.concat('./', collectDocImport.path)
+							}
 						} else {
 							collectDocImport.path = collectDocImportPath
 						}
@@ -93,6 +99,12 @@ function assignPORProps($collect, $worksheet) {
 							collectDocImport.path = path.relative(
 								path.dirname(collectDoc.fs.path), anterductCollectDoc.fs.path
 							)
+							if(
+								collectDocImport.path[0] !== './' &&
+								collectDocImport.path[0] !== '/'
+							) {
+								collectDocImport.path = String.prototype.concat('./', collectDocImport.path)
+							}
 						} else {
 							collectDocImport.path = collectDocImportPath
 						}
