@@ -40,7 +40,7 @@ function assignPORProps($collect, $worksheet) {
 						preterductCollectDocPortal.flow === 'O'
 					) {
 						var collectDocImportPath = preterductCollectDoc.fs.path
-						.replace(new RegExp(`^${preterductCollectDoc.fs.workspace}/`), '')
+						.replace(new RegExp(`^${preterductCollectDoc.fs.workspace}[\/|\:]`), '')
 						collectDocImportPath = collectDocImportPath
 						.replace(new RegExp(`^node_modules/`), '')
 						// Collect Doc Import
