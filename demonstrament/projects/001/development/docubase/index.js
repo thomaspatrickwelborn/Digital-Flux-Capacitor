@@ -1,4 +1,6 @@
 import "./coutils/persist.js"
+import livereload from "livereload"
+import connectLivereload from "connect-livereload"
 import fs from "node:fs"
 import path from "node:path"
 import https from "node:https"
@@ -35,14 +37,15 @@ const httpsServer = https.createServer(
   },
   application
 )
-application.listen(
+httpServer.listen(
   3000,
-  function applicationListen(){
-    console.log(
-      'Listen To The Sound Of Silence'
-    )
+  function httpServerListen(){
+    console.log('docubase http server')
   }
 )
-console.log(
-  application
+httpsServer.listen(
+  443,
+  function httpsServerListen(){
+    console.log('docubase https server')
+  }
 )
