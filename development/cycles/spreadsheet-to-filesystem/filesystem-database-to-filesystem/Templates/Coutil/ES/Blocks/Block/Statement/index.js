@@ -260,10 +260,5 @@ export default function Statement($data, $options = {}) {
     )
     expressionsIndex++
   }
-  // console.log(
-  //   '\n', '-----',
-  //   '\n', '_statement', 
-  //   '\n', Parsers.Statement(_statement),
-  // )
   return Parsers.Statement(_statement)
 }
