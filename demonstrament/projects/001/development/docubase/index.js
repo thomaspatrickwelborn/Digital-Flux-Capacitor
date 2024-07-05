@@ -23,9 +23,9 @@ application.get(
     )
   }
 )
-const httpServer = http.createServer(
-  application
-)
+// const httpServer = http.createServer(
+//   application
+// )
 const httpsServer = https.createServer(
   {
     key: fs.readFileSync(
@@ -37,14 +37,14 @@ const httpsServer = https.createServer(
   },
   application
 )
-httpServer.listen(
-  3000,
-  function httpServerListen(){
-    console.log('docubase http server')
-  }
-)
+// httpServer.listen(
+//   3333,
+//   function httpServerListen(){
+//     console.log('docubase http server')
+//   }
+// )
 httpsServer.listen(
-  443,
+  3334,
   function httpsServerListen(){
     console.log('docubase https server')
   }
