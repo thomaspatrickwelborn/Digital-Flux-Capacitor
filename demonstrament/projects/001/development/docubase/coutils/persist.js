@@ -14,7 +14,3 @@ class Persist{
     )
   }
 }
-setInterval(
-  () => 
-  {}
-)
