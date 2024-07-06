@@ -1,9 +1,8 @@
+import "./coutils/persist.js"
 import livereload from "livereload"
-import connectLivereload from "connect-livereload"
 import fs from "node:fs"
 import path from "node:path"
 import https from "node:https"
-import http from "node:http"
 import cors from "cors"
 import express from "express"
 import ejs from "ejs"
@@ -12,47 +11,10 @@ const application = express()
 application.use(
   cors()
 )
-// LiveReload Server
-const livereloadServer = livereload.createServer(
-  {
-    wait: 0
-  }
-)
-livereloadServer.server.once(
-  'connection',
-  function livereloadServerOnceConnection(){
-    setTimeout(
-      () => {
-        liveReloadServer.refresh(
-          '/'
-        )
-      },
-      100
-    )
-  }
-)
-livereloadServer.watch(
-  [
-    path.join(
-      process.env.PWD , 
-      'localhost' , 
-    )
-  ]
-)
-// Application Routes
-application.get(
-  '/',
-  function indexGet(
-    $request, $response, $next
-  )
-  {
-    $response.send(
-      "Hello all dogs!"
-    )
-  }
-)
 application.use(
-  connectLivereload()
+  express.static(
+    'localhost'
+  )
 )
 // HTTPS Server
 const httpsServer = https.createServer(

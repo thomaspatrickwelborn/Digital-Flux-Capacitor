@@ -8,13 +8,14 @@
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "multer": "^1.4.5-lts.1",
-    "cors": "^2.8.5",
-    "livereload": "^0.9.3",
-    "connect-livereload": "^0.6.1"
+    "cors": "^2.8.5"
   },
   "devDependencies": {
-    "pm2": "^5.4.1"
+    "pm2": "^5.4.1",
+    "livereload": "^0.9.3"
   },
+    "pm2": "^5.4.1",
+    "livereload": "^0.9.3",
   "scripts": {
     "save": "npx pm2 save",
     "start": "npx pm2 start ecosystem.config.cjs && npm run save",
