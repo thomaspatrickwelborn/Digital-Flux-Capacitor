@@ -31,6 +31,15 @@ livereloadServer.server.once(
     )
   }
 )
+livereloadServer.watch(
+  [
+    path.join(
+      process.env.PWD , 
+      'localhost' , 
+    )
+  ]
+)
+// Application Routes
 application.get(
   '/',
   function indexGet(
@@ -41,6 +50,9 @@ application.get(
       "Hello all dogs!"
     )
   }
+)
+application.use(
+  connectLivereload()
 )
 // HTTPS Server
 const httpsServer = https.createServer(
