@@ -1,13 +1,16 @@
-import RollupConfig from "./rollup.config.mjs"
+import RollupConfig from "./rollup.config.js"
 import fs from "node:fs"
 import path from "node:path"
 import https from "node:https"
 import cors from "cors"
 import express from "express"
 import ejs from "ejs"
+import {
+  rollup
+} from "rollup"
 // Application
 console.log(
-  RollupConfig
+  RollupConfig, rollup
 )
 const application = express()
 application.use(

@@ -15,23 +15,32 @@ for (
   const pageGlobParsement = path.parse(
     $pageGlob
   )
+  let input = $pageGlob
   let outputDir = pageGlobParsement.dir
   .split(
     '/'
   )
+  outputDir
   .splice(
     0,
     1,
     'localhost'
   )
-  let outputFile = pageGlobParsement.file
+  outputDir = outputDir
+  .join(
+    '/'
+  )
+  let outputFile = pageGlobParsement.base
   let outputFormat = 'es'
   const pageRollupOptions = {
-    input: $pageGlob,
+    input: input,
     output: {
       dir: outputDir,
       file: outputFile,
       format: outputFormat
+    },
+    watch: {
+      chokidar: {}
     }
   }
   RollupConfig.push(

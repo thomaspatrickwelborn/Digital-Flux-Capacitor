@@ -28,7 +28,7 @@ for (
   )
   outputDir = outputDir
   .join(
-    ''
+    '/'
   )
   let outputFile = pageGlobParsement.base
   let outputFormat = 'es'
@@ -38,6 +38,9 @@ for (
       dir: outputDir,
       file: outputFile,
       format: outputFormat
+    },
+    watch: {
+      chokidar: {}
     }
   }
   RollupConfig.push(
