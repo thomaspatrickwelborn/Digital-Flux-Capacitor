@@ -1,4 +1,4 @@
-import "./coutils/persist.js"
+import RollupConfig from "./rollup.config.mjs"
 import fs from "node:fs"
 import path from "node:path"
 import https from "node:https"
@@ -6,6 +6,9 @@ import cors from "cors"
 import express from "express"
 import ejs from "ejs"
 // Application
+console.log(
+  RollupConfig
+)
 const application = express()
 application.use(
   cors()

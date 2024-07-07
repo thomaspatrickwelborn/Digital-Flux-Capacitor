@@ -15,25 +15,19 @@ for (
   const pageGlobParsement = path.parse(
     $pageGlob
   )
-  let input = $pageGlob
   let outputDir = pageGlobParsement.dir
   .split(
     '/'
   )
-  outputDir
   .splice(
     0,
     1,
     'localhost'
   )
-  outputDir = outputDir
-  .join(
-    ''
-  )
-  let outputFile = pageGlobParsement.base
+  let outputFile = pageGlobParsement.file
   let outputFormat = 'es'
   const pageRollupOptions = {
-    input: input,
+    input: $pageGlob,
     output: {
       dir: outputDir,
       file: outputFile,
