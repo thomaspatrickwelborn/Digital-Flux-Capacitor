@@ -42,7 +42,7 @@ export default class Data extends EventEmitter {
           continue iterateCols
         }
         const cell = $data[rowsIndex][colsIndex]
-        row.push(cell.v)
+        row.push(cell?.v)
         colsIndex++
       }
       Array.prototype.push.call(_data, row)

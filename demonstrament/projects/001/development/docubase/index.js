@@ -1,5 +1,4 @@
 import "./coutils/persist.js"
-import livereload from "livereload"
 import fs from "node:fs"
 import path from "node:path"
 import https from "node:https"
