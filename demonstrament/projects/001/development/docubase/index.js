@@ -1,6 +1,7 @@
 import "./coutils/persist.js"
 import {
-  RollupPiler
+  RollupPiler,
+  SASSPiler
 } from "./pilers/index.js"
 import fs from "node:fs"
 import path from "node:path"

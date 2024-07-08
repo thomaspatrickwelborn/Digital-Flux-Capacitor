@@ -1,6 +1,3 @@
-import {
-  globSync
-} from "glob"
 import path from "node:path"
 const pagesGlob =  await globSync(
   'pages/index.js',
