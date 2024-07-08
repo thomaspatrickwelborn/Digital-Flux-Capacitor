@@ -9,7 +9,6 @@ const EcosystemConfig = {
         "./ecosystem.config.ejs",
         "./index.js",
         "./pilers/**/*.*",
-        "./pages/**/*.*",
         "./templates/**/*.*"
       ],
       args: "--config \"./config.json\"",

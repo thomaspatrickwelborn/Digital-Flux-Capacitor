@@ -12,30 +12,13 @@ class RollupPiler extends EventEmitter{
     super ()
   }
   async start(){
-    console.log(
-      'RollupConfig', RollupConfig
-    )
     iterateRollupConfig:
     for (
       const $rollupConfig of RollupConfig
     )
     {
-      console.log(
-        '$rollupConfig', $rollupConfig
-      )
       const rollupBundle = watch(
         $rollupConfig
-      )
-      rollupBundle.on(
-        'event',
-        function rollupBundleEvent(
-          $event
-        )
-        {
-          console.log(
-            $event.code, $event
-          )
-        }
       )
       Array.prototype.push.call(
         this,
@@ -49,9 +32,7 @@ class RollupPiler extends EventEmitter{
       $rollupBundle of this
     )
     {
-      console.log(
-        '$rollupBundle', $rollupBundle
-      )
+      $rollupBundle.close()
       return this
     }
   }

@@ -11,9 +11,6 @@ import ejs from "ejs"
 // Application
 const rollupPiler =  new RollupPiler()
 await rollupPiler.start()
-console.log(
-  'rollupPiler', rollupPiler
-)
 const application = express()
 application.use(
   cors()
