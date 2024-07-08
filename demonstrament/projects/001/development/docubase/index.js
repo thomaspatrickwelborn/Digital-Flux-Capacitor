@@ -1,19 +1,18 @@
 import "./coutils/persist.js"
 import {
   RollupPiler
-} from "pilers/index.js"
+} from "./pilers/index.js"
 import fs from "node:fs"
 import path from "node:path"
 import https from "node:https"
 import cors from "cors"
 import express from "express"
 import ejs from "ejs"
-import {
-  rollup
-} from "rollup"
 // Application
+const rollupPiler =  new RollupPiler()
+await rollupPiler.start()
 console.log(
-  RollupConfig, rollup
+  'rollupPiler', rollupPiler
 )
 const application = express()
 application.use(

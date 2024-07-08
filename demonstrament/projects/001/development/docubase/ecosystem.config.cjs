@@ -7,8 +7,8 @@ const EcosystemConfig = {
         "./package.json",
         "./config.json",
         "./ecosystem.config.ejs",
-        "./rollup.config.mjs",
         "./index.js",
+        "./pilers/**/*.*",
         "./pages/**/*.*",
         "./templates/**/*.*"
       ],
