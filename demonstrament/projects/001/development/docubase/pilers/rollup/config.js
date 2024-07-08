@@ -36,7 +36,6 @@ for (
     input: input,
     output: {
       dir: outputDir,
-      // file: outputFile,
       format: outputFormat
     },
     watch: {
