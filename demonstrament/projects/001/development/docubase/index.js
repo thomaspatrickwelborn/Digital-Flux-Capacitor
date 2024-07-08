@@ -35,6 +35,8 @@ const httpsServer = https.createServer(
 httpsServer.listen(
   3334,
   function httpsServerListen(){
-    console.log('docubase https server')
+    console.log(
+      'docubase https server'
+    )
   }
 )

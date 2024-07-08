@@ -27,7 +27,7 @@ class RollupPiler extends EventEmitter{
     }
     return this
   }
-  async stop(){
+  stop(){
     for (
       $rollupBundle of this
     )
