@@ -4,7 +4,7 @@ import url from 'node:url'
 import { Functions, Parsers, Operators } from '../Coutil/index.js'
 import { writeFile, readFile } from 'node:fs/promises'
 import * as Templates from '../../Templates/index.js'
-const projectPath = process.env.PWD
+// const projectPath = process.env.PWD
 const modulePath = path.dirname(
 	url.fileURLToPath(import.meta.url)
 )
@@ -41,7 +41,7 @@ async function FSElementsContent(
 				}
 			}
 			const filePath = path.join(
-				projectPath,
+				// projectPath,
 				filesystem.path,
 				collectDoc.fs.path
 			)
@@ -57,13 +57,13 @@ async function FSElementsContent(
 				const readFileData = await readFile(filePath) || ''
 				.then(($fileBuffer) => $fileBuffer.toString())
 				if(writeFileData !== readFileData) {
-					console.log(
-						'\n', '=====', 
-						'\n', collectDoc.fs.template, filePath, 
-						'\n', '#####',
-						'\n', 'writeFileData', 
-						'\n', writeFileData, 
-					)
+					// console.log(
+					// 	'\n', '=====', 
+					// 	'\n', collectDoc.fs.template, filePath, 
+					// 	'\n', '#####',
+					// 	'\n', 'writeFileData', 
+					// 	'\n', writeFileData, 
+					// )
 					await writeFile(filePath, writeFileData)
 				}
 			}
