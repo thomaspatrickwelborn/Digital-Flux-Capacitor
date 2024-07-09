@@ -14,6 +14,12 @@
   },
   "type": "module",
   "main": "development/index.js",
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "bin": {
+    "dfc": "./bin/index.js"
+  },
   "imports": {
     "#core/*": "./development/core/*",
     "#cycles/*": "./development/cycles/*",

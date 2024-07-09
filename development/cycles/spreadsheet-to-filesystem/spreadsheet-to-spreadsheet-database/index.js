@@ -9,9 +9,11 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 	#_dbConnection
 	#_workbook
 	#_workbookWatch
+	#_watch = false
 	constructor($settings) {
 		super($settings)
 		this.dbConnection = this.settings.database
+		this.#watch = this.settings.watch
 		return this
 	}
 	get dbConnection() { return this.#_dbConnection }
@@ -21,7 +23,11 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 			this.#_dbConnection = createConnection(uri, options)
 			this.#_dbConnection.once(
 				'connected', function databaseConnected($event) {
-					this.workbookWatch = this.settings.spreadsheet
+					if(watch === true) {
+						this.workbookWatch = this.settings.spreadsheet
+					} else {
+						this.#workbookWatchChange(this.settings.spreadsheet.path)
+					}
 				}.bind(this)
 			)
 		}
@@ -40,6 +46,7 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 	get workbookWatch() { return this.#_workbookWatch }
 	set workbookWatch($workbookWatch) {
 		const { path } = this.settings.spreadsheet
+		const watch = this.#watch
 		this.#_workbookWatch = chokidar.watch(path)
 		this.workbookWatch.once(
 			'add', this.#workbookWatchChange.bind(this)
@@ -47,6 +54,13 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 		this.workbookWatch.on(
 			'change', this.#workbookWatchChange.bind(this)
 		)
+	}
+	get #watch() { return this.#_watch }
+	set #watch($watch) {
+		this.#_watch = (
+			$watch !== undefined
+		) ? $watch
+		  : this.#_watch
 	}
 	async #readWorkbook($workbookPath) {
 		const workbookFile = await readFile($workbookPath)
