@@ -8,8 +8,7 @@ import Deleted from './Deleted/index.js'
 export default async function FSElements(
 	$collection, $presubcycle, $subcycle
 ) {
-	console.log('FSElements', '$subcycle', $subcycle)
-	const fsRootPath = $subcycle.filesystem.path
+	const fsRootPath = $subcycle.settings.output.filesystem.path
 	var fsRootStat
 	try {
 		fsRootStat = await stat(fsRootPath)

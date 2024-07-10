@@ -12,9 +12,9 @@ const modulePath = path.dirname(
 async function FSElementsContent(
 	$collection, $presubcycle, $subcycle
 ) {
-	const {
-		filesystem, filesystemContent
-	} = $subcycle
+	const { filesystemContent } = $subcycle.settings
+	const { filesystem } = $subcycle.settings.output
+	console.log('FSElementsContent', 'filesystem', filesystem)
 	const fsDBConnection = $presubcycle.dbConnection
 	const File = fsDBConnection.models['File']
 	const collectionLength = $collection.length

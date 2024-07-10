@@ -1,14 +1,12 @@
 import { EventEmitter } from 'node:events'
 import * as Generators from './Generators/index.js'
 class FilesystemDatabaseToFilesystem extends EventEmitter {
-	#settings
-	filesystem
-	filesystemContent
+	settings
 	fsElements
 	fsElementsContent
 	constructor($settings) {
 		super()
-		this.#settings = $settings
+		this.settings = $settings
 		return this
 	}
 	async input($presubcycle) {

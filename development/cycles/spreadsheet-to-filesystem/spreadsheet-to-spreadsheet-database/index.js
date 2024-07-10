@@ -12,8 +12,8 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 	#_watch = false
 	constructor($settings) {
 		super($settings)
+		this.#watch = this.settings.input.spreadsheet.watch
 		this.dbConnection = this.settings.input.database
-		this.#watch = this.settings.input.watch
 		return this
 	}
 	get dbConnection() { return this.#_dbConnection }
@@ -35,19 +35,16 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 	}
 	get workbook() { return this.#_workbook }
 	set workbook($workbook) {
-		const { worksheets } = this.settings.spreadsheet
-		const { path } = this.settings.input.spreadsheet
-		const dbConnection = this.dbConnection
 		this.#_workbook = new Workbook({
-			worksheets,
-			workbookPath: path, 
+			worksheets: this.settings.spreadsheet.worksheets,
+			workbookPath: this.settings.input.spreadsheet.path, 
 			workbook: $workbook,
-			dbConnection, 
+			dbConnection: this.dbConnection, 
 		})
 	}
 	get workbookWatch() { return this.#_workbookWatch }
 	set workbookWatch($workbookWatch) {
-		const { path } = this.settings.spreadsheet
+		const { path } = $workbookWatch
 		this.#_workbookWatch = chokidar.watch(path)
 		this.workbookWatch.once(
 			'add', this.#workbookWatchChange.bind(this)
