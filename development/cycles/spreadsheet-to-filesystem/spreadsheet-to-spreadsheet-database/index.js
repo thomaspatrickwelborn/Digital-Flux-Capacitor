@@ -13,7 +13,7 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 	constructor($settings) {
 		super($settings)
 		this.dbConnection = this.settings.input.database
-		this.#watch = this.settings.watch
+		this.#watch = this.settings.input.watch
 		return this
 	}
 	get dbConnection() { return this.#_dbConnection }
@@ -24,9 +24,9 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 			this.#_dbConnection.once(
 				'connected', async function databaseConnected($event) {
 					if(this.#watch === true) {
-						this.workbookWatch = this.settings.spreadsheet
+						this.workbookWatch = this.settings.input.spreadsheet
 					} else {
-						await this.#workbookWatchChange(this.settings.spreadsheet.path)
+						await this.#workbookWatchChange(this.settings.input.spreadsheet.path)
 						process.exit()
 					}
 				}.bind(this)
@@ -35,7 +35,8 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 	}
 	get workbook() { return this.#_workbook }
 	set workbook($workbook) {
-		const { path, worksheets } = this.settings.spreadsheet
+		const { worksheets } = this.settings.spreadsheet
+		const { path } = this.settings.input.spreadsheet
 		const dbConnection = this.dbConnection
 		this.#_workbook = new Workbook({
 			worksheets,

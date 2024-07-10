@@ -27,10 +27,10 @@ class Capacitor extends EventEmitter {
     const _cycles = this.#_cycles
     iterateCycles: 
     for(const $cycleSettings of $cycles) {
-      const { classname } = $cycleSettings
+      const { name, classname } = $cycleSettings
       const Cycle = this.Cycles[classname]
       const cycle = new Cycle($cycleSettings)
-      _cycles.set($cycleName, cycle)
+      _cycles.set(name, cycle)
     }
     return this
   }
