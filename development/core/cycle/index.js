@@ -6,6 +6,7 @@ class Cycle extends EventEmitter {
   constructor($settings = {}, $Subcycles = {}) {
     super()
     this.settings = $settings
+    console.log('SETTINGS', this.settings)
     this.Subcycles = $Subcycles
     this.subcycles = this.settings.subcycles
   }
@@ -26,7 +27,13 @@ class Cycle extends EventEmitter {
         $subcycleName, $subcycleSettings
       ] = $subcycles[subcyclesIndex]
       const Subcycle = _Subcycles[$subcycleName]
-      const subcycle = new Subcycle($subcycleSettings)
+      const subcycleSettings = Object.assign(
+        {}, $subcycleSettings, {
+          input: this.settings.input || {},
+          output: this.settings.output || {},
+        }
+      )
+      const subcycle = new Subcycle(subcycleSettings)
       if(subcyclesIndex > 0) {
         const presubcycle = [..._subcycles.values()][subcyclesIndex - 1]
         presubcycle.on('output', function presubcycleOutput() {
