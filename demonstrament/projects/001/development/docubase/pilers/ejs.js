@@ -4,5 +4,5 @@ import {
 import chokidar from "chokidar"
 import ejs from "ejs"
 export {
-EJS
+  EJS
 }

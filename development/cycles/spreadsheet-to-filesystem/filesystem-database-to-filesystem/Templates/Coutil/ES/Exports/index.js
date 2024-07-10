@@ -13,11 +13,11 @@ export default function Exports($data, $options) {
         const name = $name.name
         if(nameIndex < nameLength - 1) {
           _exports.push(
-            [name, ',']
+            [Parsers.IndentChar, name, ',']
           )
         } else {
           _exports.push(
-            [name]
+            [Parsers.IndentChar, name]
           )
         }
         nameIndex++

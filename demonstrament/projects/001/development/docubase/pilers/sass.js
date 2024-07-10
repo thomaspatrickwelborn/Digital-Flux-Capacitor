@@ -53,5 +53,5 @@ for (
   )
 }
 export {
-SASS
+  SASS
 }

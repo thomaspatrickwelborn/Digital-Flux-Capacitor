@@ -14,7 +14,6 @@ async function FSElementsContent(
 ) {
 	const { filesystemContent } = $subcycle.settings
 	const { filesystem } = $subcycle.settings.output
-	console.log('FSElementsContent', 'filesystem', filesystem)
 	const fsDBConnection = $presubcycle.dbConnection
 	const File = fsDBConnection.models['File']
 	const collectionLength = $collection.length
@@ -56,14 +55,14 @@ async function FSElementsContent(
 				const readFileStat = await stat(filePath)
 				const readFileData = await readFile(filePath) || ''
 				.then(($fileBuffer) => $fileBuffer.toString())
+				console.log(
+					'\n', '=====', 
+					'\n', collectDoc.fs.template, filePath, 
+					'\n', '#####',
+					'\n', 'writeFileData', 
+					'\n', writeFileData, 
+				)
 				if(writeFileData !== readFileData) {
-					// console.log(
-					// 	'\n', '=====', 
-					// 	'\n', collectDoc.fs.template, filePath, 
-					// 	'\n', '#####',
-					// 	'\n', 'writeFileData', 
-					// 	'\n', writeFileData, 
-					// )
 					await writeFile(filePath, writeFileData)
 				}
 			}
