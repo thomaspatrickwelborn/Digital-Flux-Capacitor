@@ -13,7 +13,7 @@ class SpreadsheetDatabaseToFilesystemDatabase extends Subcycle {
 	worksheets = new Map()
 	constructor($settings) {
 		super($settings)
-		this.dbConnection = this.settings.database
+		this.dbConnection = this.settings.output.database
 	}
 	get dbConnection() { return this.#_dbConnection }
 	set dbConnection($database) {

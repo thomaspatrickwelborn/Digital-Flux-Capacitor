@@ -12,7 +12,7 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 	#_watch = false
 	constructor($settings) {
 		super($settings)
-		this.dbConnection = this.settings.database
+		this.dbConnection = this.settings.input.database
 		this.#watch = this.settings.watch
 		return this
 	}

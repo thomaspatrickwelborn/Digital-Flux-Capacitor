@@ -9,11 +9,6 @@ class FilesystemDatabaseToFilesystem extends EventEmitter {
 	constructor($settings) {
 		super()
 		this.#settings = $settings
-		const {
-			filesystem, filesystemContent
-		} = this.#settings
-		this.filesystem = filesystem
-		this.filesystemContent = filesystemContent
 		return this
 	}
 	async input($presubcycle) {

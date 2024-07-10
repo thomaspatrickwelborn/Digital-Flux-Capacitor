@@ -6,7 +6,6 @@ class Cycle extends EventEmitter {
   constructor($settings = {}, $Subcycles = {}) {
     super()
     this.settings = $settings
-    console.log('SETTINGS', this.settings)
     this.Subcycles = $Subcycles
     this.subcycles = this.settings.subcycles
   }
