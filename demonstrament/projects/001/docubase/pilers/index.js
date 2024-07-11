@@ -1,4 +1,3 @@
-import DFC from "./dfc.js"
 import Rollup from "./rollup.js"
 import {
   SASS
