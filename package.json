@@ -12,8 +12,8 @@
     "xlsx": "https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz",
     "yargs": "^17.7.2"
   },
+  "main": "development/index.js",
   "type": "module",
-  "main": "bin/index.js",
   "bin": {
     "dfc": "./bin/index.js"
   },

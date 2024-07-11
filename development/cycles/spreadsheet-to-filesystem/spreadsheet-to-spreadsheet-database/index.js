@@ -22,7 +22,7 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 			const { uri, options } = $database
 			this.#_dbConnection = createConnection(uri, options)
 			this.#_dbConnection.once(
-				'connected', async function databaseConnected($event) {
+				'connected', async function databaseConnected() {
 					if(this.#watch === true) {
 						this.workbookWatch = this.settings.input.spreadsheet
 					} else {

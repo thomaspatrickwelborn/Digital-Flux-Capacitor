@@ -1,0 +1,29 @@
+{
+	"name": "dfc-demo-001-docubase",
+	"path": "/home/thomaspatrickwelborn/Development/Digital-Flux-Capacitor/designment/projects/001/development",
+	"cycles": [
+		{
+			"name": "spreadsheet-to-filesystem",
+			"classname": "SpreadsheetToFilesystem",
+			"input": {
+				"spreadsheet": {
+					"watch": true,
+					"path": "/home/thomaspatrickwelborn/Development/Digital-Flux-Capacitor/designment/projects/001/development/docubase.xlsx"
+				},
+				"database": {
+					"uri": "mongodb://127.0.0.1:27017/dfc-demo-001-docubase-spreadsheet",
+				  "options": {}
+				}
+			},
+			"output": {
+				"database": {
+					"uri": "mongodb://127.0.0.1:27017/dfc-demo-001-docubase-filesystem",
+				  "options": {}
+				},
+				"filesystem": {
+					"path": "/home/thomaspatrickwelborn/Development/Digital-Flux-Capacitor/demonstrament/projects/001/development/docubase"
+				}
+			}
+		}
+	]
+}
