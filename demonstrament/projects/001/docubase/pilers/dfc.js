@@ -1,7 +1,3 @@
-import {
-  EventEmitter
-} from "node:events"
-import digital-flux-capacitor from "digital-flux-capacitor"
 const pagesGlob =  await globSync(
   'pages/index.js',
   'pages/.*/index.js'
