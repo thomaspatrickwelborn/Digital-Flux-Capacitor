@@ -37,4 +37,4 @@ class RollupPiler extends EventEmitter{
     }
   }
 }
-export default Rollup
+export default RollupPiler

@@ -1,8 +1,13 @@
-import Rollup from "./rollup.js"
+import RollupPiler from "./rollup.js"
 import {
-  SASS
+  SASSPiler
 } from "./sass.js"
 import {
-  EJS
+  EJSPiler
 } from "./ejs.js"
+const Pilers = {
+  SASS: SASSPiler , 
+  EJS: EJSPiler , 
+  Rollup: RollupPiler
+}
 export default Pilers

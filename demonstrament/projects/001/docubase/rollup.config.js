@@ -1,12 +1,15 @@
-[object Object] = require("node:path")
- {
+import path from "node:path"
+import {
   globSync
-} = require("glob")
+} from "glob"
 const pagesGlob =  await globSync(
-  'pages/index.js',
-  'pages/.*/index.js'
+  'develop/pages/index.js',
+  'develop/pages/.*/index.js'
 )
-const EJSConfig = []
+console.log(
+  'pagesGlob', pagesGlob
+)
+const RollupConfig = []
 iteratePagesGlob:
 for (
   const $pageGlob of pagesGlob
@@ -32,7 +35,7 @@ for (
   )
   let outputFile = pageGlobParsement.base
   let outputFormat = 'es'
-  const pageEJSOptions = {
+  const pageRollupOptions = {
     input: input,
     output: {
       dir: outputDir,
@@ -43,8 +46,8 @@ for (
       chokidar: {}
     }
   }
-  EJSConfig.push(
-    pageEJSOptions
+  RollupConfig.push(
+    pageRollupOptions
   )
 }
-module.exports = EJS
+export default RollupConfig

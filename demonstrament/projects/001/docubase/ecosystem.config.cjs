@@ -2,17 +2,17 @@ const EcosystemConfig = {
   apps: [
     {
       name: "DFC-Configurator-Docubase",
-      script: "index.js",
+      script: "./index.js",
       watch: [
         "./index.js",
         "./package.json",
         "./config/**/*.*",
         "./pilers/**/*.*"
       ],
-      args: "--config \"./config.json\"",
+      args: "--config \"./config/docubase.json\"",
       node_args: "--inspect=127.0.0.1:9231",
       execMode: "fork"
     }
   ]
 }
-export default EcosystemConfig
+module.exports = EcosystemConfig

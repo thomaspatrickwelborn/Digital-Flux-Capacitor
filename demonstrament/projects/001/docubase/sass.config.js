@@ -3,8 +3,8 @@ import {
   globSync
 } from "glob"
 const pagesGlob =  await globSync(
-  'pages/index.js',
-  'pages/.*/index.js'
+  'develop/pages/index.sass',
+  'develop/pages/.*/index.sass'
 )
 const SASSConfig = []
 iteratePagesGlob:
@@ -36,7 +36,6 @@ for (
     input: input,
     output: {
       dir: outputDir,
-      // file: outputFile,
       format: outputFormat
     },
     watch: {
@@ -47,4 +46,4 @@ for (
     pageSASSOptions
   )
 }
-export default SASS
+export default SASSConfig

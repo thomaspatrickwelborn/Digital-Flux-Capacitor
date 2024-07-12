@@ -3,10 +3,10 @@ import {
   globSync
 } from "glob"
 const pagesGlob =  await globSync(
-  'pages/index.js',
-  'pages/.*/index.js'
+  'pages/develop/index.ejs',
+  'pages/develop/.*/index.ejs'
 )
-const RollupConfig = []
+const EJSConfig = []
 iteratePagesGlob:
 for (
   const $pageGlob of pagesGlob
@@ -32,7 +32,7 @@ for (
   )
   let outputFile = pageGlobParsement.base
   let outputFormat = 'es'
-  const pageRollupOptions = {
+  const pageEJSOptions = {
     input: input,
     output: {
       dir: outputDir,
@@ -43,8 +43,8 @@ for (
       chokidar: {}
     }
   }
-  RollupConfig.push(
-    pageRollupOptions
+  EJSConfig.push(
+    pageEJSOptions
   )
 }
-export default Rollup
+export default EJSConfig
