@@ -20,10 +20,10 @@
   },
   "scripts": {
     "save": "npx pm2 save",
-    "start": "npx pm2 start ecosystem.config.cjs && npm run save",
-    "restart": "npx pm2 restart ecosystem.config.cjs",
-    "stop": "npx pm2 stop ecosystem.config.cjs && npm run save",
-    "delete": "npx pm2 delete ecosystem.config.cjs && npm run save",
+    "start": "npx pm2 start ./config/ecosystem.cjs && npm run save",
+    "restart": "npx pm2 restart ./config/ecosystem.cjs",
+    "stop": "npx pm2 stop ./config/ecosystem.cjs && npm run save",
+    "delete": "npx pm2 delete ./config/ecosystem.cjs && npm run save",
     "ls": "npx pm2 ls"
   }
 }

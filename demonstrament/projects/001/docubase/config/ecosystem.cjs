@@ -7,8 +7,7 @@ const EcosystemConfig = {
         "./index.js",
         "./package.json",
         "./config/**/*.*",
-        "./pilers/**/*.*",
-        "../../../../../development"
+        "./pilers/**/*.*"
       ],
       args: "--config \"./config.json\"",
       node_args: "--inspect=127.0.0.1:9231",
@@ -16,3 +15,4 @@ const EcosystemConfig = {
     }
   ]
 }
+export default EcosystemConfig
