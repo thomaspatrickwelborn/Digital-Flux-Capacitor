@@ -2,7 +2,9 @@ import { typeOf } from '#utils/index.js'
 import VINE from './VINE/index.js'
 import VERS from './VERS/index.js'
 import VIEW from './VIEW/index.js'
-const WorksheetTranslexes = { VINE, VERS, VIEW }
+import VELI from './VELI/index.js'
+
+const WorksheetTranslexes = { VINE, VERS, VIEW, VELI }
 export default async function Worksheets($worksheets) {
 	const worksheets = []
 	const { presubcycleWorkbook, subcycleModels } = $worksheets

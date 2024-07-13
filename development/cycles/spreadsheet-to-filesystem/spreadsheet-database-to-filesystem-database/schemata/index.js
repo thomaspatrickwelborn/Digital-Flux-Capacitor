@@ -1,7 +1,6 @@
 import { ObjectId, Mixed, Schema } from 'mongoose'
 import FSSettingsSchema from './FSSettings/index.js'
-import { ImportSchema, ExportSchema } from './FSElement/index.js'
-import BlockSchema from './BlockSchema/index.js'
+import { ImportSchema, BlockSchema, ExportSchema } from './FSElement/index.js'
 const defaultSchemataOptions = {
   strict: false,
   validateBeforeSave: false,

@@ -49,6 +49,25 @@ export default {
                 "VAL": "blocks"
               }
             }
+          },
+          "VELI": {
+            "ranges": {
+              "MOD_0": {
+                "Class": "Style"
+              },
+              "LMN_0_SUBSET": {
+                "VAL": "Style"
+              },
+              "LMN_0_SUPSET": {
+                "VAL": "blocks"
+              },
+              "LMN_1_SUBSET": {
+                "VAL": "Style"
+              },
+              "LMN_1_SUPSET": {
+                "VAL": "blocks"
+              }
+            }
           }
         }
       }
@@ -87,6 +106,26 @@ export default {
           }
         },
         "ES_Module": {
+          "space": {
+            "horizon": {
+              "char": "  "
+            },
+            "verizon": {
+              "char": "\n"
+            }
+          }
+        },
+        "CSS_Module": {
+          "space": {
+            "horizon": {
+              "char": "  "
+            },
+            "verizon": {
+              "char": "\n"
+            }
+          }
+        },
+        "SASS_Module": {
           "space": {
             "horizon": {
               "char": "  "

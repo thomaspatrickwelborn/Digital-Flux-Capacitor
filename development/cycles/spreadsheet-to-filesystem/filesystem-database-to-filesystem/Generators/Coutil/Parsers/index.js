@@ -84,6 +84,13 @@ const Parsers = {
     .trim()
    return cssFile
   },
+  SASSFile: ($sassFile) => {
+    let sassFile = $sassFile
+    .flat()
+    .join('')
+    .trim()
+   return sassFile
+  },
   // File Parsers
   ESMarkup: ($esMarkup) => {
     let esMarkup = $esMarkup
