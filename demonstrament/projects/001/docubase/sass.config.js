@@ -3,8 +3,8 @@ import {
   globSync
 } from "glob"
 const pagesGlob =  await globSync(
-  'develop/pages/index.sass',
-  'develop/pages/.*/index.sass'
+  'develop/pages/index.scss',
+  'develop/pages/.*/index.scss'
 )
 const SASSConfig = []
 iteratePagesGlob:
@@ -15,7 +15,7 @@ for (
   const pageGlobParsement = path.parse(
     $pageGlob
   )
-  let input = $pageGlob
+  const input = $pageGlob
   let outputDir = pageGlobParsement.dir
   .split(
     '/'
@@ -23,21 +23,25 @@ for (
   outputDir
   .splice(
     0,
-    1,
+    2,
+    'distribute',
     'localhost'
   )
   outputDir = outputDir
   .join(
     '/'
   )
-  let outputFile = pageGlobParsement.base
-  let outputFormat = 'es'
+  const output = path.join(
+    outputDir,
+    String.prototype.concat(
+      pageGlobParsement.name,
+      '.css'
+    )
+  )
+  const watch = {}
   const pageSASSOptions = {
-    input: input,
-    output: {
-      dir: outputDir,
-      format: outputFormat
-    },
+    input , 
+    output , 
     watch: {
       chokidar: {}
     }

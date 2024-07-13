@@ -7,24 +7,19 @@ import {
   watch
 } from "rollup"
 class RollupPiler extends EventEmitter{
-  length = 0
-  constructor (){
+  #settings
+  constructor (
+    $settings
+  )
+  {
     super ()
+    this.#settings = $settings
   }
   async start(){
-    iterateRollupConfig:
     for (
-      const $rollupConfig of RollupConfig
+      const $rollupConfig of this.#settings
     )
-    {
-      const rollupBundle = watch(
-        $rollupConfig
-      )
-      Array.prototype.push.call(
-        this,
-        rollupBundle
-      )
-    }
+    {}
     return this
   }
   stop(){

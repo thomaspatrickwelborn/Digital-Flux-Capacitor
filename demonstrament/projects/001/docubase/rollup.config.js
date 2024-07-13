@@ -6,9 +6,6 @@ const pagesGlob =  await globSync(
   'develop/pages/index.js',
   'develop/pages/.*/index.js'
 )
-console.log(
-  'pagesGlob', pagesGlob
-)
 const RollupConfig = []
 iteratePagesGlob:
 for (
@@ -26,7 +23,8 @@ for (
   outputDir
   .splice(
     0,
-    1,
+    2,
+    'distribute',
     'localhost'
   )
   outputDir = outputDir
@@ -39,7 +37,7 @@ for (
     input: input,
     output: {
       dir: outputDir,
-      // file: outputFile,
+      file: outputFile,
       format: outputFormat
     },
     watch: {

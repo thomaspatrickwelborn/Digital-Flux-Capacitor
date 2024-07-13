@@ -9,6 +9,4 @@ class EJSPiler extends EventEmitter{
     super ()
   }
 }
-export {
-  EJSPiler
-}
+export default EJSPiler

@@ -47,6 +47,9 @@ function assignPORProps($collect, $worksheet) {
 						const collectDocImport = {}
 						// Import Name
 						collectDocImport.name = collectDocPortal.name
+						if(collectDocPortal.alias !== undefined) {
+							collectDocImport.alias = collectDocPortal.alias
+						}
 						// Import Default
 						if(collectDocPortal.default !== undefined) {
 							collectDocImport.default = collectDocPortal.default
@@ -90,6 +93,9 @@ function assignPORProps($collect, $worksheet) {
 						const collectDocImport = {}
 						// Import Name
 						collectDocImport.name = collectDocPortal.name
+						if(collectDocPortal.alias !== undefined) {
+							collectDocImport.alias = collectDocPortal.alias
+						}
 						// Import Default
 						if(collectDocPortal.default !== undefined) {
 							collectDocImport.default = collectDocPortal.default

@@ -23,7 +23,8 @@ for (
   outputDir
   .splice(
     0,
-    1,
+    2,
+    'distribute',
     'localhost'
   )
   outputDir = outputDir
