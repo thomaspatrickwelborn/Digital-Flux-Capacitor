@@ -6,11 +6,10 @@ import RollupConfig from "./rollup.config.js"
 import SASSConfig from "./sass.config.js"
 import EJSConfig from "./ejs.config.js"
 import Pilers from "./pilers/index.js"
-// Application
 const rollupPiler =  new Pilers.Rollup(
   RollupConfig
 )
-// await rollupPiler.start()
+await rollupPiler.start()
 console.log(
   'rollupPiler', rollupPiler
 )

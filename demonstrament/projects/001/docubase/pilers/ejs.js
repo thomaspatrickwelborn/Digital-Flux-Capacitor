@@ -1,9 +1,6 @@
-import {
-  EventEmitter
-} from "node:events"
-import chokidar from "chokidar"
 import ejs from "ejs"
-class EJSPiler extends EventEmitter{
+import Piler from "./piler.js"
+class EJSPiler extends Piler{
   length = 0
   constructor (){
     super ()

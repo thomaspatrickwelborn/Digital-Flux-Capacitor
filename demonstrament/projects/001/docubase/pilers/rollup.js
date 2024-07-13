@@ -1,35 +1,32 @@
 import {
-  EventEmitter
-} from "node:events"
-import chokidar from "chokidar"
-import {
-  rollup,
-  watch
+  rollup
 } from "rollup"
-class RollupPiler extends EventEmitter{
-  #settings
+import Piler from "./piler.js"
+class RollupPiler extends Piler{
   constructor (
     $settings
   )
   {
-    super ()
-    this.#settings = $settings
-  }
-  async start(){
-    for (
-      const $rollupConfig of this.#settings
+    super (
+      $settings = $settings
     )
-    {}
+  }
+  async watcherChange(
+    $path
+  )
+  {
+    const watcherSettings = this.getWatcherSettingsByInputPath(
+      $path
+    )
+    const rollupBundle =  await rollup(
+      {
+        input: watcherSettings.input
+      }
+    )
+    console.log(
+      watcherSettings.output,
+      rollupBundle.generate
+    )
     return this
   }
-  stop(){
-    for (
-      $rollupBundle of this
-    )
-    {
-      $rollupBundle.close()
-      return this
-    }
-  }
 }
-export default RollupPiler
