@@ -1,4 +1,5 @@
 import fs from "node:fs/promises"
+import path from "node:path"
 import * as sass from "sass"
 import Piler from "./piler.js"
 class SASSPiler extends Piler{
@@ -7,7 +8,7 @@ class SASSPiler extends Piler{
   )
   {
     super (
-      $settings = $settings
+      $settings
     )
   }
   async watcherChange(
@@ -17,12 +18,14 @@ class SASSPiler extends Piler{
     const watcherSettings = this.getWatcherSettingsByInputPath(
       $path
     )
-    const fileContent =  await sass.compileAsync(
+    const fileContentPile =  await sass.compileAsync(
       watcherSettings.input
     )
+    const fileContent = fileContentPile.css
+    const filePath = watcherSettings.output
     await fs.writeFile(
-      watcherSettings.output,
-      fileContent.css
+      filePath,
+      fileContent
     )
     return this
   }

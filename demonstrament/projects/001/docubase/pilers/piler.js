@@ -48,25 +48,24 @@ class Piler extends EventEmitter{
       }
     )
   }
-  async start(){
-    for (
-      const $watcherSettings of this.settings
-    )
-    {
-      this.watcher.on(
-        'change',
-        this.watcherChange.bind(
-          this
-        )
+  start(){
+    this.watcher.on(
+      'add',
+      this.watcherChange.bind(
+        this
       )
-    }
-  }
-  async stop(){
-    await this.watcher.close()
+    )
+    this.watcher.on(
+      'change',
+      this.watcherChange.bind(
+        this
+      )
+    )
     return this
   }
-  watcherChange(){
-    // NOOP
+  stop(){
+    this.watcher.close()
+    return this
   }
 }
 export default Piler

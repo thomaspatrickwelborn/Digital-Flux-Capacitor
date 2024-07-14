@@ -1,3 +1,5 @@
+import fs from "node:fs/promises"
+import path from "node:path"
 import {
   rollup
 } from "rollup"
@@ -8,7 +10,7 @@ class RollupPiler extends Piler{
   )
   {
     super (
-      $settings = $settings
+      $settings
     )
   }
   async watcherChange(
@@ -23,10 +25,24 @@ class RollupPiler extends Piler{
         input: watcherSettings.input
       }
     )
-    console.log(
-      watcherSettings.output,
-      rollupBundle.generate
+    const fileContentGeneration =  await rollupBundle.generate(
+      {
+        format: watcherSettings.output.format
+      }
+    )
+    const fileContent = fileContentGeneration.output[
+      0
+    ]
+    .code
+    const filePath = path.join(
+      watcherSettings.output.dir,
+      watcherSettings.output.file
+    )
+    await fs.writeFile(
+      filePath,
+      fileContent
     )
     return this
   }
 }
+export default RollupPiler

@@ -9,14 +9,8 @@ import Pilers from "./pilers/index.js"
 const rollupPiler =  new Pilers.Rollup(
   RollupConfig
 )
-await rollupPiler.start()
-console.log(
-  'rollupPiler', rollupPiler
-)
+rollupPiler.start()
 const sassPiler =  new Pilers.SASS(
   SASSConfig
 )
-await sassPiler.start()
-console.log(
-  'sassPiler', sassPiler
-)
+sassPiler.start()
