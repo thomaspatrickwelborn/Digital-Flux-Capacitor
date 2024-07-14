@@ -125,7 +125,7 @@ export default {
             }
           }
         },
-        "SASS_Module": {
+        "SASS_File": {
           "space": {
             "horizon": {
               "char": "  "

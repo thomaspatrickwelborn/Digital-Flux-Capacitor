@@ -1,3 +1,4 @@
 import * as CJS from './CJS/index.js'
 import * as ES from './ES/index.js'
-export { CJS, ES }
+import * as SCSS from './SCSS/index.js'
+export { CJS, ES, SCSS }
