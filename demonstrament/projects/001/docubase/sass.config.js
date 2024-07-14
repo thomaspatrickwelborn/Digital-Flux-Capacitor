@@ -3,8 +3,10 @@ import {
   globSync
 } from "glob"
 const pagesGlob =  await globSync(
-  'develop/pages/index.scss',
-  'develop/pages/.*/index.scss'
+  [
+    'develop/pages/index.scss',
+    'develop/pages/.*/index.scss'
+  ]
 )
 const SASSConfig = []
 iteratePagesGlob:

@@ -3,10 +3,12 @@ import {
   globSync
 } from "glob"
 const pagesGlob =  await globSync(
-  'pages/develop/index.ejs',
-  'pages/develop/.*/index.ejs',
-  'pages/develop/.*/index.json',
-  'pages/develop/.*/index.json'
+  [
+    'develop/pages/index.ejs',
+    'develop/pages/.*/index.ejs',
+    'develop/pages/index.json',
+    'develop/pages/.*/index.json'
+  ]
 )
 const EJSConfig = []
 iteratePagesGlob:
@@ -17,10 +19,26 @@ for (
   const pageGlobParsement = path.parse(
     $pageGlob
   )
-  console.log(
-    pageGlobParsement
+  let inputModel = path.join(
+    pageGlobParsement.dir,
+    pageGlobParsement.name
+    .concat(
+      '.json'
+    ),
   )
-  let input = $pageGlob
+  console.log(
+    'inputModel', inputModel
+  )
+  let inputTemplate = path.join(
+    pageGlobParsement.dir,
+    pageGlobParsement.name
+    .concat(
+      '.ejs'
+    ),
+  )
+  console.log(
+    'inputTemplate', inputTemplate
+  )
   let outputDir = pageGlobParsement.dir
   .split(
     '/'
@@ -36,15 +54,19 @@ for (
   .join(
     '/'
   )
-  let outputFile = pageGlobParsement.base
-  let outputFormat = 'es'
+  let outputName = String.prototype.concat(
+    pageGlobParsement.name,
+    '.html'
+  )
+  let outputFilePath = path.join(
+    outputDir, outputName
+  )
   const pageEJSOptions = {
-    input: input,
-    output: {
-      dir: outputDir,
-      // file: outputFile,
-      format: outputFormat
-    },
+    input: [
+      inputModel,
+      inputTemplate
+    ],
+    output: outputFilePath,
     watch: {
       chokidar: {}
     }
