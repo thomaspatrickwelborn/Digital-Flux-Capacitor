@@ -18,6 +18,3 @@ const ejsPiler =  new Pilers.EJS(
   EJSConfig
 )
 ejsPiler.start()
-console.log(
-  ejsPiler
-)

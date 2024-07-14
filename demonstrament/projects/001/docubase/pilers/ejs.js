@@ -49,6 +49,7 @@ class EJSPiler extends Piler{
       filePath,
       fileContent
     )
+    return this
   }
 }
 export default EJSPiler

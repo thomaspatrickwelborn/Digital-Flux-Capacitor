@@ -34,9 +34,6 @@ class Piler extends EventEmitter{
     super ()
     this.settings = $settings
     this.watcher = $settings
-    console.log(
-      this
-    )
   }
   getWatcherSettingsByInputPath(
     $input

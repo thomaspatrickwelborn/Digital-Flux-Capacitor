@@ -26,18 +26,12 @@ for (
       '.json'
     ),
   )
-  console.log(
-    'inputModel', inputModel
-  )
   let inputTemplate = path.join(
     pageGlobParsement.dir,
     pageGlobParsement.name
     .concat(
       '.ejs'
     ),
-  )
-  console.log(
-    'inputTemplate', inputTemplate
   )
   let outputDir = pageGlobParsement.dir
   .split(
