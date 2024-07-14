@@ -14,3 +14,10 @@ const sassPiler =  new Pilers.SASS(
   SASSConfig
 )
 sassPiler.start()
+const ejsPiler =  new Pilers.EJS(
+  EJSConfig
+)
+ejsPiler.start()
+console.log(
+  ejsPiler
+)

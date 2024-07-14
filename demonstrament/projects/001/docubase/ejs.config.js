@@ -4,7 +4,9 @@ import {
 } from "glob"
 const pagesGlob =  await globSync(
   'pages/develop/index.ejs',
-  'pages/develop/.*/index.ejs'
+  'pages/develop/.*/index.ejs',
+  'pages/develop/.*/index.json',
+  'pages/develop/.*/index.json'
 )
 const EJSConfig = []
 iteratePagesGlob:
@@ -14,6 +16,9 @@ for (
 {
   const pageGlobParsement = path.parse(
     $pageGlob
+  )
+  console.log(
+    pageGlobParsement
   )
   let input = $pageGlob
   let outputDir = pageGlobParsement.dir
