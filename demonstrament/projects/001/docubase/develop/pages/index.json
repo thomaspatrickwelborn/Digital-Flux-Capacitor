@@ -1,15 +1,15 @@
 {
-  "meta"[
+  "meta": [
     {
-      "attributes"[
+      "attributes": [
         {
           "key": "charset" , 
           "val": "UTF-8"
         }
       ]
-    }
+    },
     {
-      "attributes"[
+      "attributes": [
         {
           "key": "name" , 
           "val": "viewport"
@@ -21,13 +21,13 @@
       ]
     }
   ],
-  "link"[
+  "link": [
     {
       "attributes": [
         {
           "key": "rel" , 
           "val": "stylesheet"
-        }
+        },
         {
           "key": "href" , 
           "val": "index.css"
@@ -35,16 +35,16 @@
       ]
     }
   ],
-  "script"[
+  "script": [
     {
       "attributes": [
         {
           "key": "type" , 
           "val": "module"
-        }
+        },
         {
           "key": "src" , 
-          "val": "index.js
+          "val": "index.js"
         }
       ]
     }

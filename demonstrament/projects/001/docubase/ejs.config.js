@@ -61,8 +61,11 @@ for (
       inputTemplate
     ],
     output: outputFilePath,
-    watch: {
-      chokidar: {}
+    options: {
+      root: [
+        '/home/thomaspatrickwelborn/Development/Digital-Flux-Capacitor/demonstrament/projects/001/docubase/develop/templates/'
+      ],
+      localsName: '$data'
     }
   }
   EJSConfig.push(

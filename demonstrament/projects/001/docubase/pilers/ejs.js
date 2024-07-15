@@ -2,7 +2,8 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import ejs from "ejs"
 import {
-  bufferToString
+  bufferToString,
+  bufferToJSON
 } from "./coutils/index.js"
 import Piler from "./piler.js"
 class EJSPiler extends Piler{
@@ -29,7 +30,7 @@ class EJSPiler extends Piler{
       'utf8'
     )
     .then(
-      bufferToString
+      bufferToJSON
     )
     const fileTemplate =  await fs.readFile(
       watcherSettings.input[
@@ -40,10 +41,15 @@ class EJSPiler extends Piler{
     .then(
       bufferToString
     )
+    const fileRenderOptions = watcherSettings.options
     const filePath = watcherSettings.output
-    const fileContent =  await ejs.render(
+    const fileData = {
+      content: fileModel
+    }
+    const fileContent = ejs.render(
       fileTemplate,
-      fileModel
+      fileData,
+      fileRenderOptions
     )
     await fs.writeFile(
       filePath,

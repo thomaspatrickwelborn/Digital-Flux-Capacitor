@@ -4,6 +4,15 @@ function bufferToString(
 {
   return $buffer.toString()
 }
+function bufferToJSON(
+  $buffer
+)
+{
+  return JSON.parse(
+    $buffer.toString()
+  )
+}
 export {
-  bufferToString
+  bufferToString,
+  bufferToJSON
 }

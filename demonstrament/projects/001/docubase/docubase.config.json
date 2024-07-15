@@ -1,17 +1,22 @@
 {
   "rollup": {
-    "options": {},
-    "glob": {},
-    "chokidar": {}
+    "glob": [
+      "develop/pages/index.js",
+      "develop/pages/.*/index.js"
+    ]
   },
   "sass": {
-    "options": {},
-    "glob": {},
-    "chokidar": {}
+    "glob": [
+      "develop/pages/index.scss",
+      "develop/pages/.*/index.scss"
+    ]
   },
   "ejs": {
-    "options": {},
-    "glob": {},
-    "chokidar": {}
+    "glob": [
+      "develop/pages/index.ejs",
+      "develop/pages/.*/index.ejs",
+      "develop/pages/index.json",
+      "develop/pages/.*/index.json"
+    ]
   }
 }
