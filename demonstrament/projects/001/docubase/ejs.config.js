@@ -61,11 +61,17 @@ for (
       inputTemplate
     ],
     output: outputFilePath,
+    formatter: {
+      prettier: {
+        semi: false,
+        parser: "html"
+      }
+    },
     options: {
       root: [
         '/home/thomaspatrickwelborn/Development/Digital-Flux-Capacitor/demonstrament/projects/001/docubase/develop/templates/'
       ],
-      localsName: '$data'
+      localsName: '$data',
     }
   }
   EJSConfig.push(

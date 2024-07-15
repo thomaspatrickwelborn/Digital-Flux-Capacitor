@@ -46,6 +46,12 @@ for (
     output , 
     watch: {
       chokidar: {}
+    },
+    formatter: {
+      prettier: {
+        semi: false,
+        parser: "scss"
+      }
     }
   }
   SASSConfig.push(

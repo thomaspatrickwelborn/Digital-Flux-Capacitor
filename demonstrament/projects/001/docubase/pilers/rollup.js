@@ -1,5 +1,6 @@
 import fs from "node:fs/promises"
 import path from "node:path"
+import prettier from "prettier"
 import {
   rollup
 } from "rollup"
@@ -38,9 +39,13 @@ class RollupPiler extends Piler{
       watcherSettings.output.dir,
       watcherSettings.output.file
     )
+    const prettierFileContent =  await prettier.format(
+      fileContent,
+      watcherSettings.formatter.prettier
+    )
     await fs.writeFile(
       filePath,
-      fileContent
+      prettierFileContent
     )
     return this
   }

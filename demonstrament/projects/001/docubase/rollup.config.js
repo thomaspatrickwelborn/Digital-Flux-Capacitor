@@ -44,6 +44,12 @@ for (
     },
     watch: {
       chokidar: {}
+    },
+    formatter: {
+      prettier: {
+        semi: false,
+        parser: "babel"
+      }
     }
   }
   RollupConfig.push(
