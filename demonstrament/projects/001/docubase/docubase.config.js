@@ -1,4 +1,11 @@
-{
+const DocubaseConfig = {
+  "express": {
+    "static": {
+      "routes": {
+        "/": "distribute/localhost"
+      }
+    }
+  },
   "rollup": {
     "glob": [
       "develop/pages/index.js",
@@ -20,3 +27,4 @@
     ]
   }
 }
+export default DocubaseConfig
