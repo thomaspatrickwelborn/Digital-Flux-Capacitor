@@ -5,7 +5,7 @@ export default function Exports($data, $options) {
   for(const $export of $data.content) {
     if($export.default === false) {
       let nameIndex = 0
-      const nameLength = $export.nameLength
+      const nameLength = $export.name.length
       _exports.push(
         ['export', ' ', '{']
       )

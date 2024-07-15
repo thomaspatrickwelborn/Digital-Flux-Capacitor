@@ -8,6 +8,12 @@ export default function Element($data, $options = {}) {
   let _element = []
   // INAPOS
   let inapos = tag?.apos?.in
+  // EXAPOS
+  let exapos = tag?.apos?.ex
+  // INDEPOS
+  let indepos = tag?.depos?.in
+  // EXDEPOS
+  let exdepos = tag?.depos?.ex
   _element.push(inapos)
   // NAME
   const tagName = (
@@ -15,7 +21,10 @@ export default function Element($data, $options = {}) {
     !Functions.isSlug(tag.name)
   ) ? tag.name
     : ''
-  if(tagName) {
+  if(
+    tagName &&
+    (inapos && exapos)
+  ) {
     let name = tagName
     // NAME - SPACE
     name = Parsers.SpaceInsert(
@@ -52,57 +61,69 @@ export default function Element($data, $options = {}) {
     // ATTRIBUTE - TAG
     attribute = Parsers.SpaceInsert(
       attribute, 
-      '', // '(➁➂)', 
-      '', // '(➋➌)',
+      '', // '(➆➈)', 
+      '', // '(➐➒)',
     )
     _element.push(attribute)
   }
-  // EXAPOS
-  let exapos = tag?.apos?.ex
-  if(
-    exapos &&
-    blocks.length
-  ) {
-    if(blocks.length === 1) {
-      // EXAPOS - SPACE
+  let _blocks
+  if(blocks.length) {
+    if(
+      (indepos && exdepos)
+    ) {
+      // Exapos - SPACE
       exapos = Parsers.SpaceInsert(
         exapos, 
-        '', 
+        '', // Parsers.SpaceChar, 
         ''
       )
-      // EXAPOS - TAG
+      // Exapos - TAG
       exapos = Parsers.SpaceInsert(
         exapos, 
-        '', // '(➊)', 
-        '', // '(➀)'
-      )
-      _element.push(exapos)
-    } else
-    if(blocks.length > 1) {
-      // EXAPOS - SPACE
-      exapos = Parsers.SpaceInsert(
-        exapos, 
-        '', 
-        ''
-      )
-      // EXAPOS - TAG
-      exapos = Parsers.SpaceInsert(
-        exapos, 
-        '', // '(➋)', 
-        '', // '(➁)',
+        '', // '(➆➇)', 
+        '', // '(❼❽)',
       )
       _element.push(exapos)
     }
-  }
-  // BLOCKS
-  let _blocks
-  if(blocks.length) { 
+    // BLOCKS
     _blocks = Blocks({
       content: blocks,
       coindex: coindex,
       coutils: coutils,
     }, $options)
     _element.push(_blocks)
+    if(
+      (!indepos && !exdepos) &&
+      (inapos && exapos)
+    ) {
+      // Exapos - SPACE
+      exapos = Parsers.SpaceInsert(
+        exapos, 
+        indent.meterScope, // Parsers.SpaceChar, 
+        ''
+      )
+      // Exapos - TAG
+      exapos = Parsers.SpaceInsert(
+        exapos, 
+        '', // '(➇➀)', 
+        '', // '(➑➊)',
+      )
+      _element.push(exapos)
+    }
+  } else
+  if(!blocks.length) {
+    exapos = Parsers.SpaceInsert(
+      exapos, 
+      '', //Parsers.SpaceChar, 
+      ''
+    )
+    // Exapos - TAG
+    exapos = Parsers.SpaceInsert(
+      exapos, 
+      '', // '(➇➁)', 
+      '', // '(❽❷)',
+    )
+    _element.push(exapos)
   }
   // TEXT
   if(
@@ -112,36 +133,14 @@ export default function Element($data, $options = {}) {
     const textTen = text.ten || ''
     _element.push(textTen)
   }
-  // EXAPOS
-  if(
-    exapos &&
-    !blocks.length
-  ) {
-    // EXAPOS - SPACE
-    exapos = Parsers.SpaceInsert(
-      exapos, 
-      '', 
-      ''
-    )
-    // EXAPOS - TAG
-    exapos = Parsers.SpaceInsert(
-      exapos, 
-      '', // '(➌)', 
-      '', // '(➂)',
-    )
-    _element.push(exapos)
-  }
   // EXTRAPOS
   if(
     tagName &&
+    (indepos && exdepos) &&
     !Operators.void.includes(tagName)
   ) {
     let name = tagName
     let extrapos = []
-    // INDEPOS
-    let indepos = tag?.depos?.in
-    // EXDEPOS
-    let exdepos = tag?.depos?.ex
     extrapos = [
       indepos,
       name,
@@ -149,11 +148,20 @@ export default function Element($data, $options = {}) {
     ].filter(($fragment) => $fragment)
     extrapos = (extrapos.length) ? extrapos : undefined
     // EXAPOS - SPACE
-    extrapos = Parsers.SpaceInsert(
-      extrapos,
-      indent.meterScope,
-      '',
-    )
+    if(blocks.length) {
+      extrapos = Parsers.SpaceInsert(
+        extrapos,
+        indent.meterScope,
+        '',
+      )
+    } else
+    if(!blocks.length) {
+      extrapos = Parsers.SpaceInsert(
+        extrapos,
+        '',
+        '',
+      )
+    }
     // EXAPOS - TAG
     extrapos = Parsers.SpaceInsert(
       extrapos,
