@@ -1,7 +1,16 @@
-<%-%>
+<%
+  const blocks
+-%>
 <%-
   include(
     '/html/html5',
-    Object.assign()
+    Object.assign(
+      $data,
+      {
+        content: {
+          blocks
+        }
+      }
+    )
   )
 -%>
