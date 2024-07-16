@@ -4,13 +4,6 @@
 <%-
   include(
     '/html/html5',
-    Object.assign(
-      $data,
-      {
-        content: {
-          blocks
-        }
-      }
-    )
+    $data()
   )
 -%>
