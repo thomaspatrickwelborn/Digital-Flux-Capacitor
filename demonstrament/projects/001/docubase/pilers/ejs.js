@@ -56,9 +56,31 @@ class EJSPiler extends Piler{
       fileContent,
       watcherSettings.formatter.prettier
     )
+    const baseTemplate =  await fs.readFile(
+      watcherSettings.input[
+        2
+      ],
+      'utf8'
+    )
+    .then(
+      bufferToString
+    )
+    const baseData = {
+      content: fileModel , 
+      fileContent: prettierFileContent
+    }
+    const baseContent = ejs.render(
+      baseTemplate,
+      baseData,
+      fileRenderOptions
+    )
+    const prettierBaseContent =  await prettier.format(
+      baseContent,
+      watcherSettings.formatter.prettier
+    )
     await fs.writeFile(
       filePath,
-      prettierFileContent
+      prettierBaseContent
     )
     return this
   }

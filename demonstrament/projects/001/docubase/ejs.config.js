@@ -33,6 +33,13 @@ for (
       '.ejs'
     ),
   )
+  let inputBaseTemplate = path.join(
+    'develop/templates/html/html5',
+    'index'
+    .concat(
+      '.ejs'
+    ),
+  )
   let outputDir = pageGlobParsement.dir
   .split(
     '/'
@@ -58,7 +65,8 @@ for (
   const pageEJSOptions = {
     input: [
       inputModel,
-      inputTemplate
+      inputTemplate,
+      inputBaseTemplate
     ],
     output: outputFilePath,
     formatter: {
