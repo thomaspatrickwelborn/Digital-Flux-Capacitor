@@ -27,7 +27,7 @@ application.use(
 )
 application.use(
   express.static(
-    'localhost'
+    'distribute/localhost'
   )
 )
 // HTTPS Server
