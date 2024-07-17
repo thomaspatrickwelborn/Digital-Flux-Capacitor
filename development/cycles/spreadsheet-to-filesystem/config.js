@@ -115,6 +115,16 @@ export default {
             }
           }
         },
+        "MD_File": {
+          "space": {
+            "horizon": {
+              "char": "  "
+            },
+            "verizon": {
+              "char": "\n"
+            }
+          }
+        },
         "CSS_Module": {
           "space": {
             "horizon": {

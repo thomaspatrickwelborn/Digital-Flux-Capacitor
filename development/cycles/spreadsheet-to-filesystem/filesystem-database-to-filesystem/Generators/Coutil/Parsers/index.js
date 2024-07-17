@@ -84,6 +84,13 @@ const Parsers = {
     .trim()
    return cssFile
   },
+  MDFile: ($mdFile) => {
+    let mdFile = $mdFile
+    .flat()
+    .join('')
+    .trim()
+   return mdFile
+  },
   SASSFile: ($sassFile) => {
     let sassFile = $sassFile
     .flat()
