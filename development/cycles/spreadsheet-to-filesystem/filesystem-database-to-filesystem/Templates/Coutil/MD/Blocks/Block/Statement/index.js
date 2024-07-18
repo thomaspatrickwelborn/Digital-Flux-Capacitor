@@ -7,8 +7,8 @@ export default function Statement($data, $options = {}) {
   const { horizon } = space
   const _statement = []
   if(statement === undefined) return
-  const { lexter, dexter } = statement
-  const expressions = [lexter, dexter]
+  const { lexter } = statement
+  const expressions = [lexter]
   const indent = Parsers.Indent(coindex)
   var expressionsIndex = 0
   iterateExpressions:
@@ -21,10 +21,10 @@ export default function Statement($data, $options = {}) {
     // --------------------
     // Expression Fragments
     // --------------------
-    let { ser, ten, per, pos, par } = expression
-    pos = pos || {}
-    let inpos = pos.in || ''
-    let expos = pos.ex || ''
+    let {
+      ser,
+      ten,
+    } = expression
     // ---
     // SER
     // ---
@@ -108,132 +108,16 @@ export default function Statement($data, $options = {}) {
         '(➅)'
       )
     }
-    // ---
-    // PER
-    // ---
-    if(
-      per && 
-      Operators.assignmentShort.includes(per)
-    ) {
-      // PER - SPACE
-      per = Parsers.SpaceInsert(
-        per, 
-        '', 
-        Parsers.SpaceChar,
-      )
-      // PER - TAG
-      per = Parsers.SpaceInsert(
-        per, 
-        '', // '(➐)', 
-        '', // '(➆)',
-      )
-    } else {
-      // PER - SPACE
-      per = Parsers.SpaceInsert(
-        per, 
-        Parsers.SpaceChar, 
-        Parsers.SpaceChar,
-      )
-      // PER - TAG
-      per = Parsers.SpaceInsert(
-        per, 
-        '', // '(➑)', 
-        '', // '(➇)'
-      )
-    }
-    pos = pos || {}
-    // -----
-    // INPOS 
-    // -----
-    if(
-      inpos &&
-      blocks?.length > 1
-    ) {
-      // INPOS - SPACE
-      inpos = Parsers.SpaceInsert(
-        inpos, 
-        '',
-        '', // indent.anterScope,
-      )
-      // INPOS - TAG
-      inpos = Parsers.SpaceInsert(
-        inpos, 
-        '', // '(➒)', 
-        '', // '(➈)',  
-      )
-    } else {
-      // INPOS - SPACE
-      inpos = Parsers.SpaceInsert(
-        inpos, 
-        '', 
-        ''
-      )
-      // INPOS - TAG
-      inpos = Parsers.SpaceInsert(
-        inpos, 
-        '', // '(➓)', 
-        '', //'(➉)',
-      )
-    }
     // ------
     // BLOCKS
     // ------
     let _blocks
     if(blocks.length) {
-      if(
-        (
-          expressionsIndex === 0 &&
-          Object.keys(
-            expressions[1]?.pos || {}
-          ).length === 0
-        ) ||
-        (
-          expressionsIndex === 1
-        )
-      ) {
-        _blocks = Blocks({
-          content: blocks,
-          coindex: coindex,
-          coutils: coutils,
-        }, $options)
-      }
-    }
-    // -----
-    // EXPOS
-    // -----
-    if(
-      expos &&
-      _blocks?.length > 1
-    ) {
-      // EXPOS - SPACE
-      expos = Parsers.SpaceInsert(
-        expos, 
-        indent.meterScope, 
-        ''
-      )
-      // EXPOS - TAG
-      expos = Parsers.SpaceInsert(
-        expos, 
-        '', // '(➊➊)', 
-        '', // '(➀➀)'
-      )
-    }
-    // ---
-    // PAR
-    // ---
-    if(par) {
-      // PAR - SPACE
-      par = Parsers.SpaceInsert(
-        par, 
-        '', 
-        ''
-      )
-      // PAR - TAG
-      par = Parsers.SpaceInsert(
-        par, 
-        '', // '(➊➌)', 
-        '', // '(➀➂)',
-      )
+      _blocks = Blocks({
+        content: blocks,
+        coindex: coindex,
+        coutils: coutils,
+      }, $options)
     }
     // --------------------
     // Expression Fragments
@@ -243,16 +127,8 @@ export default function Statement($data, $options = {}) {
       ser,
       // TEN
       ten,
-      // PER
-      per,
-      // INPOS
-      inpos,
       // _BLOCKS
       _blocks, 
-      // EXPOS
-      expos,
-      // PAR
-      par,
     ]
     .filter(($fragment) => $fragment)
     _statement.push(

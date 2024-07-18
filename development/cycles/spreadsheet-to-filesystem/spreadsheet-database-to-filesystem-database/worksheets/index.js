@@ -3,8 +3,9 @@ import VINE from './VINE/index.js'
 import VERS from './VERS/index.js'
 import VIEW from './VIEW/index.js'
 import VELI from './VELI/index.js'
+import VORM from './VORM/index.js'
 
-const WorksheetTranslexes = { VINE, VERS, VIEW, VELI }
+const WorksheetTranslexes = { VINE, VERS, VIEW, VELI, VORM }
 export default async function Worksheets($worksheets) {
 	const worksheets = []
 	const { presubcycleWorkbook, subcycleModels } = $worksheets

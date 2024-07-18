@@ -41,12 +41,6 @@ export default {
               },
               "LMN_0_SUPSET": {
                 "VAL": "blocks"
-              },
-              "LMN_1_SUBSET": {
-                "VAL": "Script"
-              },
-              "LMN_1_SUPSET": {
-                "VAL": "blocks"
               }
             }
           },
@@ -60,11 +54,18 @@ export default {
               },
               "LMN_0_SUPSET": {
                 "VAL": "blocks"
+              }
+            }
+          },
+          "VORM": {
+            "ranges": {
+              "MOD_0": {
+                "Class": "Markdown"
               },
-              "LMN_1_SUBSET": {
-                "VAL": "Style"
+              "LMN_0_SUBSET": {
+                "VAL": "Markdown"
               },
-              "LMN_1_SUPSET": {
+              "LMN_0_SUPSET": {
                 "VAL": "blocks"
               }
             }
