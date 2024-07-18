@@ -35,12 +35,18 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 	}
 	get workbook() { return this.#_workbook }
 	set workbook($workbook) {
-		this.#_workbook = new Workbook({
-			worksheets: this.settings.spreadsheet.worksheets,
-			workbookPath: this.settings.input.spreadsheet.path, 
-			workbook: $workbook,
-			dbConnection: this.dbConnection, 
-		})
+		if(this.#_workbook instanceof Workbook) {
+			this.#_workbook.workbook = $workbook
+			this.#_workbook.worksheets = this.settings.spreadsheet.worksheets
+		} else
+		if(this.#_workbook === undefined) {
+			this.#_workbook = new Workbook({
+				worksheets: this.settings.spreadsheet.worksheets,
+				workbookPath: this.settings.input.spreadsheet.path, 
+				workbook: $workbook,
+				dbConnection: this.dbConnection, 
+			})
+		}
 	}
 	get workbookWatch() { return this.#_workbookWatch }
 	set workbookWatch($workbookWatch) {
