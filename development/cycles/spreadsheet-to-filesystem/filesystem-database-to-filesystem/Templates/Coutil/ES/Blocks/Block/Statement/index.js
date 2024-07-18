@@ -141,6 +141,7 @@ export default function Statement($data, $options = {}) {
         '', // '(➇)'
       )
     }
+    pos = pos || {}
     // -----
     // INPOS 
     // -----
