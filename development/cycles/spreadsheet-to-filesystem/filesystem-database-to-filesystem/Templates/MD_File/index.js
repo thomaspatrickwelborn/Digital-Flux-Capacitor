@@ -1,5 +1,5 @@
 import { Blocks } from '../Coutil/MD/index.js'
-export default function JSON_File($data, $options = {}) {
+export default function MD_File($data, $options = {}) {
   const { coutils, content } = $data
   const { Functions, Parsers } = coutils
   const _md_file = []

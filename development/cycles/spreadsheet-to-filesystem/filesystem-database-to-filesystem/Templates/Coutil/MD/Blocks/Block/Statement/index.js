@@ -21,10 +21,10 @@ export default function Statement($data, $options = {}) {
     // --------------------
     // Expression Fragments
     // --------------------
-    let {
-      ser,
-      ten,
-    } = expression
+    let { ser, ten, pos } = expression
+    pos = pos || {}
+    let inpos = pos.in || ''
+    let expos = pos.ex || ''
     // ---
     // SER
     // ---
@@ -108,6 +108,39 @@ export default function Statement($data, $options = {}) {
         '(➅)'
       )
     }
+    // -----
+    // INPOS 
+    // -----
+    if(
+      inpos &&
+      blocks?.length > 1
+    ) {
+      // INPOS - SPACE
+      inpos = Parsers.SpaceInsert(
+        inpos, 
+        '',
+        '', // indent.anterScope,
+      )
+      // INPOS - TAG
+      inpos = Parsers.SpaceInsert(
+        inpos, 
+        '', // '(➒)', 
+        '', // '(➈)',  
+      )
+    } else {
+      // INPOS - SPACE
+      inpos = Parsers.SpaceInsert(
+        inpos, 
+        '', 
+        ''
+      )
+      // INPOS - TAG
+      inpos = Parsers.SpaceInsert(
+        inpos, 
+        '', // '(➓)', 
+        '', //'(➉)',
+      )
+    }
     // ------
     // BLOCKS
     // ------
@@ -119,6 +152,26 @@ export default function Statement($data, $options = {}) {
         coutils: coutils,
       }, $options)
     }
+    // -----
+    // EXPOS
+    // -----
+    if(
+      expos &&
+      _blocks?.length > 1
+    ) {
+      // EXPOS - SPACE
+      expos = Parsers.SpaceInsert(
+        expos, 
+        indent.meterScope, 
+        ''
+      )
+      // EXPOS - TAG
+      expos = Parsers.SpaceInsert(
+        expos, 
+        '', // '(➊➊)', 
+        '', // '(➀➀)'
+      )
+    }
     // --------------------
     // Expression Fragments
     // --------------------
@@ -127,8 +180,12 @@ export default function Statement($data, $options = {}) {
       ser,
       // TEN
       ten,
+      // INPOS
+      inpos,
       // _BLOCKS
       _blocks, 
+      // EXPOS
+      expos,
     ]
     .filter(($fragment) => $fragment)
     _statement.push(

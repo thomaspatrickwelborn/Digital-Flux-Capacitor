@@ -19,7 +19,6 @@ export default class Data extends EventEmitter {
     const rowsLength = $data.length
     const maxRowsLength = area.Ref.e.r
     let rowsIndex = 0
-
     iterateRows: 
     while(rowsIndex < rowsLength) {
       if(rowsIndex > maxRowsLength) break
