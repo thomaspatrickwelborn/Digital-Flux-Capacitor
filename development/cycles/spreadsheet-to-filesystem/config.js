@@ -5,13 +5,6 @@ export default {
     ["SpreadsheetToSpreadsheetDatabase", {
       "spreadsheet": {
         "worksheets": {
-          "VINE": {
-            "ranges": {
-              "MOD_0": {
-                "Class": "FSElement"
-              }
-            }
-          },
           "VIEW": {
             "ranges": {
               "MOD_0": {
@@ -31,16 +24,16 @@ export default {
               }
             }
           },
-          "VERS": {
+          "VINE": {
             "ranges": {
               "MOD_0": {
-                "Class": "Script"
+                "Class": "FSElement"
               },
               "LMN_0_SUBSET": {
-                "VAL": "Script"
+                "VAL": "FSElement"
               },
-              "LMN_0_SUPSET": {
-                "VAL": "blocks"
+              "LMN_0_SUBSET": {
+                "VAL": "fsElements"
               }
             }
           },
@@ -51,6 +44,19 @@ export default {
               },
               "LMN_0_SUBSET": {
                 "VAL": "Style"
+              },
+              "LMN_0_SUPSET": {
+                "VAL": "blocks"
+              }
+            }
+          },
+          "VERS": {
+            "ranges": {
+              "MOD_0": {
+                "Class": "Script"
+              },
+              "LMN_0_SUBSET": {
+                "VAL": "Script"
               },
               "LMN_0_SUPSET": {
                 "VAL": "blocks"
