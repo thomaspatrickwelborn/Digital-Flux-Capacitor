@@ -1,0 +1,29 @@
+{
+	"name": "dfc-demo-001-docubase",
+	"path": "/home/thomaspatrickwelborn/Development/Digital-Flux-Capacitor/designment/templates",
+	"cycles": [
+		{
+			"name": "spreadsheet-to-filesystem",
+			"classname": "SpreadsheetToFilesystem",
+			"input": {
+				"spreadsheet": {
+					"watch": true,
+					"path": "/home/thomaspatrickwelborn/Development/Digital-Flux-Capacitor/designment/templates/spreadsheet-to-codebase.xltx"
+				},
+				"database": {
+					"uri": "mongodb://127.0.0.1:27017/dfc-templates-spreadsheet-to-codebase-spreadsheet",
+				  "options": {}
+				}
+			},
+			"output": {
+				"database": {
+					"uri": "mongodb://127.0.0.1:27017/dfc-templates-spreadsheet-to-codebase-filesystem",
+				  "options": {}
+				},
+				"filesystem": {
+					"path": "/home/thomaspatrickwelborn/Development/Digital-Flux-Capacitor/demonstrament/templates/spreadsheet-to-codebase"
+				}
+			}
+		}
+	]
+}

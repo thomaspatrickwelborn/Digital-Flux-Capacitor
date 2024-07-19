@@ -7,13 +7,13 @@ export default {
         "worksheets": {
           "VIEW": {
             "ranges": {
-              "MOD_0": {
+              "MOD": {
                 "Class": "ViewScript"
               },
-              "LMN_0_SUBSET": {
+              "LMN_SUBSET": {
                 "VAL": "ViewScript"
               },
-              "LMN_0_SUPSET": {
+              "LMN_SUPSET": {
                 "VAL": "blocks"
               },
               "LMN_1_SUBSET": {
@@ -26,52 +26,52 @@ export default {
           },
           "VINE": {
             "ranges": {
-              "MOD_0": {
+              "MOD": {
                 "Class": "FSElement"
               },
-              "LMN_0_SUBSET": {
+              "LMN_SUBSET": {
                 "VAL": "FSElement"
               },
-              "LMN_0_SUBSET": {
+              "LMN_SUBSET": {
                 "VAL": "fsElements"
               }
             }
           },
           "VELI": {
             "ranges": {
-              "MOD_0": {
+              "MOD": {
                 "Class": "Style"
               },
-              "LMN_0_SUBSET": {
+              "LMN_SUBSET": {
                 "VAL": "Style"
               },
-              "LMN_0_SUPSET": {
+              "LMN_SUPSET": {
                 "VAL": "blocks"
               }
             }
           },
           "VERS": {
             "ranges": {
-              "MOD_0": {
+              "MOD": {
                 "Class": "Script"
               },
-              "LMN_0_SUBSET": {
+              "LMN_SUBSET": {
                 "VAL": "Script"
               },
-              "LMN_0_SUPSET": {
+              "LMN_SUPSET": {
                 "VAL": "blocks"
               }
             }
           },
           "VORM": {
             "ranges": {
-              "MOD_0": {
+              "MOD": {
                 "Class": "Markdown"
               },
-              "LMN_0_SUBSET": {
+              "LMN_SUBSET": {
                 "VAL": "Markdown"
               },
-              "LMN_0_SUPSET": {
+              "LMN_SUPSET": {
                 "VAL": "blocks"
               }
             }

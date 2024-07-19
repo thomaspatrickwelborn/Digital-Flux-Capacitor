@@ -1,6 +1,6 @@
 import { EventEmitter } from 'node:events'
 const Defaults = {
-  ModRangeNameRegExp: /^MOD_[0-9]/,
+  ModRangeNameRegExp: /^MOD_/,
 }
 export default class Mods extends Map {
   length = 0
