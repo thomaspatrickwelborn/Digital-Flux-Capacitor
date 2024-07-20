@@ -21,7 +21,7 @@ async function FSElementsContent(
 	iterateCollection: 
 	while(collectionIndex < collectionLength) {
 		var collectDoc = $collection[collectionIndex]
-		if(collectDoc.fs.operations.update === false) {
+		if(!collectDoc.fs.operations.update) {
 			collectionIndex++
 			continue iterateCollection
 		}

@@ -1,4 +1,4 @@
-  import { EventEmitter } from 'node:events'
+import { EventEmitter } from 'node:events'
 const LMNRangeDefaults = {
   DEX: Number,
   VAL: String,
@@ -69,6 +69,7 @@ export default class LMNRanges extends EventEmitter {
       const lmnRangeSlice = $row.slice(
         $LMN.Ref.s.c, $LMN.Ref.e.c + 1
       )
+      console.log('lmnRangeSlice', lmnRangeSlice)
       // DEX
       const DEX = lmnRangeSlice.findIndex(($rowCellLMNRange) => {
         return $rowCellLMNRange !== undefined
@@ -76,27 +77,13 @@ export default class LMNRanges extends EventEmitter {
       if(DEX === -1) continue iterateLMNRanges
       const VAL = lmnRangeSlice[DEX]
       // SUPSET
+      console.log('this.SUPSET', this)
       const lmnSupsetRange = this.SUPSET[$rangeIndex]
-      let SUPSET
-      if(lmnSupsetRange.Ref !== undefined) {
-        const lmnSupsetSlice = $row.slice(
-          lmnSupsetRange.Ref.s.c, lmnSupsetRange.Ref.e.c + 1
-        )
-        SUPSET = lmnSupsetSlice[0]
-      } else {
-        SUPSET = lmnSupsetRange.VAL
-      }
+      let SUPSET = lmnSupsetRange.VAL
       // SUBSET
+      console.log('this.SUBSET', this.SUBSET)
       const lmnSubsetRange = this.SUBSET[$rangeIndex]
-      let SUBSET
-      if(lmnSubsetRange.Ref !== undefined) {
-        const lmnSubsetSlice = $row.slice(
-          lmnSubsetRange.Ref.s.c, lmnSubsetRange.Ref.e.c + 1
-        )
-        SUBSET = lmnSubsetSlice[0] 
-      } else {
-        SUBSET = lmnSubsetRange.VAL
-      }
+      let SUBSET = lmnSubsetRange.VAL
       // PAT
       let PAT
       if(this.PAT.length > 0) {

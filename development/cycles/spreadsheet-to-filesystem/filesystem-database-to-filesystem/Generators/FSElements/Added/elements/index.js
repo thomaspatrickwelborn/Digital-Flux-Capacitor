@@ -13,7 +13,7 @@ export default async function AddedElements($collection, $fsRootPath, $added) {
         $fsRootPath.concat('/'), ''
       )
     })
-    if(addedFSElementDoc.fs.operations.add === false) {
+    if(!addedFSElementDoc.fs.operations.add) {
       addedFSElementsIndex++
       continue
     }

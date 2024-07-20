@@ -8,7 +8,7 @@
 			"input": {
 				"spreadsheet": {
 					"watch": true,
-					"path": "/home/thomaspatrickwelborn/Development/Digital-Flux-Capacitor/designment/templates/spreadsheet-to-codebase.xltx"
+					"path": "/home/thomaspatrickwelborn/Development/Digital-Flux-Capacitor/designment/templates/spreadsheet-to-codebase.xlsx"
 				},
 				"database": {
 					"uri": "mongodb://127.0.0.1:27017/dfc-templates-spreadsheet-to-codebase-spreadsheet",
@@ -21,7 +21,7 @@
 				  "options": {}
 				},
 				"filesystem": {
-					"path": "/home/thomaspatrickwelborn/Development/Digital-Flux-Capacitor/demonstrament/templates/spreadsheet-to-codebase"
+					"path": "/home/thomaspatrickwelborn/Development/Digital-Flux-Capacitor/demonstrament/templates/spreadsheet-to-codebase/project"
 				}
 			}
 		}

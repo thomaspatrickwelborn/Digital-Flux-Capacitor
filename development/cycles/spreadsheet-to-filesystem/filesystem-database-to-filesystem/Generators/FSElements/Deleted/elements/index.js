@@ -15,13 +15,12 @@ export default async function DeletedElements($collection, $fsRootPath, $deleted
     while(collectionIndex < collectionLength) {
       const collectionDoc = $collection[collectionIndex]
       const collectionDocPath = collectionDoc?.fs?.path
-      const collectionDocOperationDelete = collectionDoc.fs.operations.delete
       const deletedFSElementMatch = deletedFSElement.match(
         new RegExp(`^${collectionDocPath}`)
       )
       if(
         deletedFSElementMatch &&
-        collectionDocOperationDelete
+        collectionDoc.fs.operations.delete
       ) {
         const deletedFSElementDocPath = path.join(
           $fsRootPath, deletedFSElement
