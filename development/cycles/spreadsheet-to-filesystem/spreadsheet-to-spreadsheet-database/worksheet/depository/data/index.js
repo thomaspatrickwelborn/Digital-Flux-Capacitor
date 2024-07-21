@@ -13,17 +13,13 @@ export default class Data extends EventEmitter {
     const $data = this.raw
     const hidden = this.#hidden
     const _data = this
-    const areas = this.#ranges.getRangesByName('AREA', true)
+    const areas = this.#ranges.getRawRangesByName('AREA', true)
     if(areas.length === 0) return
     const area = areas[0]
-    const rowsLength = $data.length
-    const maxRowsLength = area.Ref.e.r + 1
+    const rowsLength = area.Ref.e.r + 1
     let rowsIndex = 0
     iterateRows: 
-    while(
-      rowsIndex < maxRowsLength
-    ) {
-      console.log(`hidden.rows.includes(${rowsIndex})`, hidden.rows.includes(rowsIndex))
+    while(rowsIndex < rowsLength) {
       if(hidden.rows.includes(rowsIndex)) {
         rowsIndex++
         continue iterateRows
@@ -42,10 +38,8 @@ export default class Data extends EventEmitter {
         row.push(cell?.v)
         colsIndex++
       }
-      console.log('_data.length', _data.length)
       Array.prototype.push.call(_data, row)
       rowsIndex++
     }
-    // console.log(this)
   }
 }

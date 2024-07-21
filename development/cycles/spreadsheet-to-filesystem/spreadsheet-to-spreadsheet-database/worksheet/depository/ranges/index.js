@@ -111,11 +111,22 @@ export default class Ranges extends EventEmitter {
       rangesIndex++
     }
   }
+  getRawRangesByName($rangeName/*, $raw = false*/) {
+    const targetRanges = this.#settings.ranges
+    var ranges
+    if(typeOf($rangeName) === 'string') {
+      ranges = targetRanges.filter(
+        ($range) => $range.Name === $rangeName
+      )
+    } else
+    if($rangeName instanceof RegExp) {
+      ranges = targetRanges.filter(
+        ($modRange) => $modRange.Name.match($rangeName)
+      )
+    }
+    return ranges
+  }
   getRangesByName($rangeName/*, $raw = false*/) {
-    // const targetRanges = (
-    //   $raw
-    // ) ? this.raw
-    //   : Array.from(this)
     const targetRanges = Array.from(this)
     var ranges
     if(typeOf($rangeName) === 'string') {
