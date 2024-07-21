@@ -30,7 +30,9 @@ export default class Suppository extends EventEmitter {
       var [$modIndex, $mod] = mods[modsIndex]
       var { nom, sup, com } = $mod
       var supposit = new Supposit({
-        nom, sup, com, 
+        nom, 
+        sup, 
+        com, 
         modIndex: $modIndex, 
         mods: mods,
         ranges: ranges, 

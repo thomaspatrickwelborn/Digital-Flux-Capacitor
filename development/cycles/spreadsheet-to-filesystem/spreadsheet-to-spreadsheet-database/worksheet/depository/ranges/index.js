@@ -4,10 +4,28 @@ import * as XLSX from 'xlsx'
 
 export default class Ranges extends EventEmitter {
   length = 0
-  #settings = {}
-  #options = {}
+  #_settings = []
+  get #settings() { return this.#_settings }
+  set #settings($settings) { this.#_settings = $settings }
+  #_options = []
+  get #options() { return this.#_options }
+  set #options($options) {
+    const _options = this.#_options
+    for(const [
+      $rangeName, $range
+    ] of Object.entries($options)) {
+      _options.push(Object.assign({
+        Name: $rangeName,
+      }, $range))
+    }
+  }
   get #hidden() { return this.#settings.hidden }
-  get raw() { return this.#settings.ranges }
+  get raw() {
+    return Array.prototype.concat(
+      this.#settings.ranges,
+      this.#options
+    )
+  }
   #parseRangeRef($rangeRef) {
     const rangeRefFrags = $rangeRef.split('!')
     const rangeRefFragsIndex = rangeRefFrags.length - 1
@@ -24,67 +42,81 @@ export default class Ranges extends EventEmitter {
     // Iterate Ranges
     iterateRanges: 
     for(let $range of this.raw) {
-      $range.Ref = this.#parseRangeRef($range.Ref)      
-      $range = structuredClone($range)
-      const hiddenRows = hidden.rows
-      const hiddenRowsLength = hiddenRows.length
-      const hiddenCols = hidden.cols
-      const hiddenColsLength = hiddenCols.length
-      var hiddenRowsIndex = 0
-      Object.assign($range, this.#options[$range.Name])
-      const { Name, Ref, Class } = $range
-      // Iterate Hidden Rows
-      iterateHiddenRows: 
-      while(hiddenRowsIndex < hiddenRowsLength) {
-        const $hiddenRowIndex = hiddenRows[hiddenRowsIndex]
-        if(
-          $hiddenRowIndex < Ref.s.r
-        ) {
-          Ref.s.r -= 1
-          Ref.e.r -= 1
-        } else if(
-          $hiddenRowIndex >= Ref.s.r &&
-          $hiddenRowIndex <= Ref.e.r
-        ) {
-          Ref.e.r -= 1
+      if($range.Ref) {
+        $range.Ref = this.#parseRangeRef($range.Ref)      
+        $range = structuredClone($range)
+        const hiddenRows = hidden.rows
+        const hiddenRowsLength = hiddenRows.length
+        const hiddenCols = hidden.cols
+        const hiddenColsLength = hiddenCols.length
+        var hiddenRowsIndex = 0
+        Object.assign($range, this.#options.find(
+          ($option) => $option.Name === $range.Name
+        ))
+        const { Name, Ref, Class } = $range
+        // Iterate Hidden Rows
+        iterateHiddenRows: 
+        while(hiddenRowsIndex < hiddenRowsLength) {
+          const $hiddenRowIndex = hiddenRows[hiddenRowsIndex]
+          if(
+            $hiddenRowIndex < Ref.s.r
+          ) {
+            Ref.s.r -= 1
+            Ref.e.r -= 1
+          } else if(
+            $hiddenRowIndex >= Ref.s.r &&
+            $hiddenRowIndex <= Ref.e.r
+          ) {
+            Ref.e.r -= 1
+          }
+          hiddenRowsIndex++
         }
-        hiddenRowsIndex++
-      }
-      var hiddenColsIndex = 0
-      // Iterate Hidden Cols
-      iterateHiddenCols: 
-      while(hiddenColsIndex < hiddenColsLength) {
-        const $hiddenColIndex = hiddenCols[hiddenColsIndex]
-        if(
-          $hiddenColIndex < Ref.s.c
-        ) {
-          Ref.s.c -= 1
-          Ref.e.c -= 1
-        } else if(
-          $hiddenColIndex >= Ref.s.c &&
-          $hiddenColIndex <= Ref.e.c
-        ) {
-          Ref.e.c -= 1
+        var hiddenColsIndex = 0
+        // Iterate Hidden Cols
+        iterateHiddenCols: 
+        while(hiddenColsIndex < hiddenColsLength) {
+          const $hiddenColIndex = hiddenCols[hiddenColsIndex]
+          if(
+            $hiddenColIndex < Ref.s.c
+          ) {
+            Ref.s.c -= 1
+            Ref.e.c -= 1
+          } else if(
+            $hiddenColIndex >= Ref.s.c &&
+            $hiddenColIndex <= Ref.e.c
+          ) {
+            Ref.e.c -= 1
+          }
+          hiddenColsIndex++
         }
-        hiddenColsIndex++
-      }
-      if((
-        Ref.s.r > -1 &&
-        Ref.e.r > -1
-      ) && (
-        Ref.s.c > -1 &&
-        Ref.e.c > -1
-      )) {
+        if((
+          Ref.s.r > -1 &&
+          Ref.e.r > -1
+        ) && (
+          Ref.s.c > -1 &&
+          Ref.e.c > -1
+        )) {
+          Array.prototype.push.call(this, $range)
+        }
+      } else
+      if(
+        Array.prototype.findIndex.call(
+          this, (
+            $prearrange
+          ) => $prearrange.Name === $range.Name
+        ) === -1
+      ) {
         Array.prototype.push.call(this, $range)
       }
       rangesIndex++
     }
   }
-  getRangesByName($rangeName, $raw = false) {
-    const targetRanges = (
-      $raw
-    ) ? this.raw
-      : Array.from(this)
+  getRangesByName($rangeName/*, $raw = false*/) {
+    // const targetRanges = (
+    //   $raw
+    // ) ? this.raw
+    //   : Array.from(this)
+    const targetRanges = Array.from(this)
     var ranges
     if(typeOf($rangeName) === 'string') {
       ranges = targetRanges.filter(

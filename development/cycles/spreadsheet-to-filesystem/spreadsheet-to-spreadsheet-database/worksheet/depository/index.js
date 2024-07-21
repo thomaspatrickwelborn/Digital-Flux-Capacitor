@@ -52,11 +52,10 @@ export default class Depository extends EventEmitter {
       ranges: this.#settings['!ranges'],
       hidden: this.hidden,
     }, this.#options.ranges)
-
     this.#_lmnRanges = new LMNRanges(
       this.ranges.getRangesByName(
         new RegExp(/^LMN_/)
-      )
+      ), this.#options.ranges
     )
     this.#_data = new Data({
       data: this.#settings['!data'],

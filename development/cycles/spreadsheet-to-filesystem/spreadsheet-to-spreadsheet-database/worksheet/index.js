@@ -29,8 +29,6 @@ export default class Worksheet extends EventEmitter {
 		this.className = worksheetClassName
 		this.#dbConnection = dbConnection
 		this.depository = worksheetTable
-		// console.log(this.depository)
-		// throw "Digital Flux Capacitor"
 		this.suppository = this.depository
 		this.compository = this.depository
 		return

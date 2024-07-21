@@ -8,7 +8,7 @@ const LMNRangeDefaults = {
 }
 export default class LMNRanges extends EventEmitter {
   length = 0
-  constructor($settings) {
+  constructor($settings, $options) {
     super()
     for(const $lmnRange of $settings) {
       Array.prototype.push.call(this, $lmnRange)
@@ -69,7 +69,6 @@ export default class LMNRanges extends EventEmitter {
       const lmnRangeSlice = $row.slice(
         $LMN.Ref.s.c, $LMN.Ref.e.c + 1
       )
-      console.log('lmnRangeSlice', lmnRangeSlice)
       // DEX
       const DEX = lmnRangeSlice.findIndex(($rowCellLMNRange) => {
         return $rowCellLMNRange !== undefined
@@ -77,11 +76,9 @@ export default class LMNRanges extends EventEmitter {
       if(DEX === -1) continue iterateLMNRanges
       const VAL = lmnRangeSlice[DEX]
       // SUPSET
-      console.log('this.SUPSET', this)
       const lmnSupsetRange = this.SUPSET[$rangeIndex]
       let SUPSET = lmnSupsetRange.VAL
       // SUBSET
-      console.log('this.SUBSET', this.SUBSET)
       const lmnSubsetRange = this.SUBSET[$rangeIndex]
       let SUBSET = lmnSubsetRange.VAL
       // PAT

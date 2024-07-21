@@ -35,7 +35,9 @@ export default class Mods extends Map {
         mod = _mods.get($index) 
       } else {
         _mods.set($index, {
-          nom: modRangeClassName, sup: Array, com: Array
+          nom: modRangeClassName,
+          sup: Array,
+          com: Array
         })
         mod = _mods.get($index)
       }

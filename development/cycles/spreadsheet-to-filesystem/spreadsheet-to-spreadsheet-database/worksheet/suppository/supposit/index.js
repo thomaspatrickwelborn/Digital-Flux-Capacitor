@@ -13,7 +13,6 @@ export default class Supposit extends EventEmitter {
 	constructor($settings = {}) {
 		super()
 		this.#settings = $settings
-		console.log('Supposit', $settings)
 		let {
 			nom, sup, com, modIndex, mods, lmnRanges
 		} = this.#settings

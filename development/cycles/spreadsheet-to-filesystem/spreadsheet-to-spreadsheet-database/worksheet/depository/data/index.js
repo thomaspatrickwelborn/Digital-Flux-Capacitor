@@ -17,26 +17,23 @@ export default class Data extends EventEmitter {
     if(areas.length === 0) return
     const area = areas[0]
     const rowsLength = $data.length
-    const maxRowsLength = area.Ref.e.r
+    const maxRowsLength = area.Ref.e.r + 1
     let rowsIndex = 0
-
     iterateRows: 
-    while(rowsIndex < rowsLength) {
-      if(rowsIndex > maxRowsLength) break
+    while(
+      rowsIndex < maxRowsLength
+    ) {
+      console.log(`hidden.rows.includes(${rowsIndex})`, hidden.rows.includes(rowsIndex))
       if(hidden.rows.includes(rowsIndex)) {
         rowsIndex++
         continue iterateRows
       }
       const row = []
-      const colsLength = (
-        $data[rowsIndex] !== undefined
-      ) ? $data[rowsIndex].length
-        : 0
+      const colsLength = $data[rowsIndex].length
       const maxColsLength = area.Ref.e.c
       let colsIndex = 0
       iterateCols: 
       while(colsIndex < colsLength) {
-        if(colsIndex > maxColsLength) break
         if(hidden.cols.includes(colsIndex)) {
           colsIndex++
           continue iterateCols
@@ -45,8 +42,10 @@ export default class Data extends EventEmitter {
         row.push(cell?.v)
         colsIndex++
       }
+      console.log('_data.length', _data.length)
       Array.prototype.push.call(_data, row)
       rowsIndex++
     }
+    // console.log(this)
   }
 }
