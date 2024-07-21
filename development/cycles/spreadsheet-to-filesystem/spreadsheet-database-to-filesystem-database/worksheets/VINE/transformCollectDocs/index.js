@@ -57,7 +57,7 @@ function transormCollectDocs($collect, $worksheet) {
 				type: collectDoc.fs.type,
 				operations: collectDoc.fs.operations,
 				encoding: collectDoc.fs.encoding,
-				permissions: collectDoc.fs.permission,
+				permissions: collectDoc.fs.permissions,
 			},
 			files: collectDoc.files,
 			folds: collectDoc.folds,

@@ -5,7 +5,9 @@ const FSSettingsSchema = new Schema({
   name: String,
   path: String,
   permissions: {
-    r: Number, w: Number, x: Number,
+    r: Number, 
+    w: Number, 
+    x: Number,
   },
   operations: {
     add: Boolean,

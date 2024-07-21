@@ -6,6 +6,7 @@ export default async function AddedElements($collection, $fsRootPath, $added) {
   const addedFSElements = $added
   const addedFSElementsLength = addedFSElements.length
   var addedFSElementsIndex = 0
+  iterateAddedFSElementsIndex: 
   while(addedFSElementsIndex < addedFSElementsLength) {
     const addedFSElement = addedFSElements[addedFSElementsIndex]
     const addedFSElementDoc = $collection.find(($collectionDoc) => {
@@ -13,9 +14,9 @@ export default async function AddedElements($collection, $fsRootPath, $added) {
         $fsRootPath.concat('/'), ''
       )
     })
-    if(!addedFSElementDoc.fs.operations.add) {
+    if(!addedFSElementDoc?.fs?.operations?.add) {
       addedFSElementsIndex++
-      continue
+      continue iterateAddedFSElementsIndex
     }
     const addedFSElementDocPath = path.join(
       $fsRootPath, addedFSElementDoc.fs.path
