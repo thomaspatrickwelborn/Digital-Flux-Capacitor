@@ -28,39 +28,18 @@ export default function Statement($data, $options = {}) {
     // ---
     // SER
     // ---
-    if(
-      expressionsIndex === 1 &&
-      Object.keys(
-        expressions[expressionsIndex - 1]
-      ).length
-    ) {
-      // SER - SPACE
-      ser = Parsers.SpaceInsert(
-        ser, 
-        Parsers.SpaceChar, 
-        Parsers.SpaceChar, 
-      )
-      // SER - TAG
-      ser = Parsers.SpaceInsert(
-        ser, 
-        '', // '(➍)', 
-        '', // '(➃)',
-      )
-    } else 
-    if(expressionsIndex === 0) {
-      // SER - SPACE
-      ser = Parsers.SpaceInsert(
-        ser, 
-        '', 
-        Parsers.SpaceChar
-      )
-      // SER - TAG
-      ser = Parsers.SpaceInsert(
-        ser, 
-        '', // '(➎)', 
-        '', // '(➄)'
-      )
-    }
+    // SER - SPACE
+    ser = Parsers.SpaceInsert(
+      ser, 
+      '', 
+      Parsers.SpaceChar, 
+    )
+    // SER - TAG
+    ser = Parsers.SpaceInsert(
+      ser, 
+      '', // '(➍)', 
+      '', // '(➃)',
+    )
     // ---
     // TEN
     // ---

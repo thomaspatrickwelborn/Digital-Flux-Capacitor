@@ -52,17 +52,16 @@ async function FSElementsContent(
 					collectDoc.fs.template
 				]
 				const writeFileData = Template(templateModel, TemplateOptions)
-				const readFileStat = await stat(filePath)
-				const readFileData = await readFile(filePath) || ''
+				const readFileData = await readFile(filePath)
 				.then(($fileBuffer) => $fileBuffer.toString())
-				console.log(
-					'\n', '=====', 
-					'\n', collectDoc.fs.template, filePath, 
-					'\n', '#####',
-					'\n', 'writeFileData', 
-					'\n', writeFileData, 
-				)
 				if(writeFileData !== readFileData) {
+					console.log(
+						'\n', '=====', 
+						'\n', collectDoc.fs.template, filePath, 
+						'\n', '#####',
+						'\n', 'writeFileData', 
+						'\n', writeFileData, 
+					)
 					await writeFile(filePath, writeFileData)
 				}
 			}
