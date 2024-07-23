@@ -75,6 +75,19 @@ export default {
                 "VAL": "blocks"
               }
             }
+          },
+          "VANT": {
+            "ranges": {
+              "MOD_0": {
+                "Class": "Text"
+              },
+              "LMN_0_SUBSET": {
+                "VAL": "Text"
+              },
+              "LMN_0_SUPSET": {
+                "VAL": "blocks"
+              }
+            }
           }
         }
       }
@@ -92,7 +105,7 @@ export default {
             }
           }
         },
-        "JSON_File": {
+        "CSS_Module": {
           "space": {
             "horizon": {
               "char": "  "
@@ -122,6 +135,16 @@ export default {
             }
           }
         },
+        "JSON_File": {
+          "space": {
+            "horizon": {
+              "char": "  "
+            },
+            "verizon": {
+              "char": "\n"
+            }
+          }
+        },
         "MD_File": {
           "space": {
             "horizon": {
@@ -132,7 +155,7 @@ export default {
             }
           }
         },
-        "CSS_Module": {
+        "SASS_File": {
           "space": {
             "horizon": {
               "char": "  "
@@ -142,7 +165,7 @@ export default {
             }
           }
         },
-        "SASS_File": {
+        "Text_File": {
           "space": {
             "horizon": {
               "char": "  "

@@ -22,71 +22,27 @@ export default function Statement($data, $options = {}) {
     // Expression Fragments
     // --------------------
     let {
-      ser,
       ten,
     } = expression
-    // ---
-    // SER
-    // ---
-    // SER - SPACE
-    ser = Parsers.SpaceInsert(
-      ser, 
-      '', 
-      Parsers.SpaceChar, 
-    )
-    // SER - TAG
-    ser = Parsers.SpaceInsert(
-      ser, 
-      '', // '(➍)', 
-      '', // '(➃)',
-    )
     // ---
     // TEN
     // ---
     if(Functions.isSlug(ten)) {
       ten = undefined
     }
-    if(expressionsIndex === 1) {
-      // TEN - SPACE
-      ten = Parsers.SpaceInsert(
-        ten, 
-        '', 
-        ''
-      )
-      // TEN - TAG
-      ten = Parsers.SpaceInsert(
-        ten, 
-        '', // '(➍➍)', 
-        '', // '(➃➃)',
-      )
-    } else
-    if(expressionsIndex === 0) {
-      // TEN - SPACE
-      ten = Parsers.SpaceInsert(
-        ten, 
-        '', 
-        ''
-      )
-      // TEN - TAG
-      ten = Parsers.SpaceInsert(
-        ten, 
-        '', // '(➎➎)', 
-        '', // '(➄➄)'
-      )
-    } else {
-      // TEN - SPACE
-      ten = Parsers.SpaceInsert(
-        ten, 
-        '', 
-        ''
-      )
-      // TEN - TAG
-      ten = Parsers.SpaceInsert(
-        ten, 
-        '', // '(➏)', 
-        '', // '(➅)'
-      )
-    }
+    // TEN - SPACE
+    ten = Parsers.SpaceInsert(
+      ten, 
+      '', 
+      ''
+    )
+    // TEN - TAG
+    ten = Parsers.SpaceInsert(
+      ten, 
+      '', // '(➎➎)', 
+      '', // '(➄➄)'
+    )
+    console.log('ten', ten)
     // ------
     // BLOCKS
     // ------
@@ -102,10 +58,8 @@ export default function Statement($data, $options = {}) {
     // Expression Fragments
     // --------------------
     const expressionFragments = [
-      // SER
-      ser,
       // TEN
-      ten,
+      ten, 
       // _BLOCKS
       _blocks, 
     ]
