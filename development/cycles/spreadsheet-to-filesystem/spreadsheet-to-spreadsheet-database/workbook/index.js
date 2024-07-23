@@ -36,7 +36,6 @@ class Workbook extends EventEmitter {
 			const workbookWorksheet = workbookWorksheets[workbookWorksheetsIndex]
 			const workbookWorksheetNameData = workbookWorksheet.name.split('_')
 			const workbookWorksheetClassName = workbookWorksheetNameData[0] 
-			// const workbookWorksheetClassIndex = workbookWorksheetNameData[1] || 0
 			const workbookWorksheetName = workbookWorksheet.name
 			const workbookWorksheetHidden = workbookWorksheet.Hidden
 			if(

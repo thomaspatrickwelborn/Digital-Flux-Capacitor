@@ -1,9 +1,9 @@
 {
   "name": "digital-flux-capacitor",
   "author": "Thomas Patrick Welborn",
-  "description": "Digital Workflow Tool. Document Generator.",
+  "description": "Early bird gets the wormhole. ",
   "license": "CC-BY-NC-ND-4.0",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "devDependencies": {
     "chokidar": "^3.5.3",
     "deepmerge": "^4.3.1",
@@ -12,11 +12,13 @@
     "xlsx": "https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz",
     "yargs": "^17.7.2"
   },
+  "repository": "https://github.com/thomaspatrickwelborn/Digital-Flux-Capacitor",
   "main": "development/index.js",
   "type": "module",
   "bin": {
     "dfc": "./bin/index.js"
   },
+
   "imports": {
     "#core/*": "./development/core/*",
     "#cycles/*": "./development/cycles/*",
