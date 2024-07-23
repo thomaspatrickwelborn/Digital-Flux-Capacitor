@@ -1,8 +1,7 @@
 import path from 'node:path'
-import { stat } from 'node:fs/promises'
 import url from 'node:url'
 import { Functions, Parsers, Operators } from '../Coutil/index.js'
-import { writeFile, readFile } from 'node:fs/promises'
+import { writeFile, readFile } from 'node:fs'
 import * as Templates from '../../Templates/index.js'
 // const projectPath = process.env.PWD
 const modulePath = path.dirname(
@@ -52,18 +51,24 @@ async function FSElementsContent(
 					collectDoc.fs.template
 				]
 				const writeFileData = Template(templateModel, TemplateOptions)
-				const readFileData = await readFile(filePath)
-				.then(($fileBuffer) => $fileBuffer.toString())
-				if(writeFileData !== readFileData) {
-					console.log(
-						'\n', '=====', 
-						'\n', collectDoc.fs.template, filePath, 
-						'\n', '#####',
-						'\n', 'writeFileData', 
-						'\n', writeFileData, 
-					)
-					await writeFile(filePath, writeFileData)
-				}
+				readFile(filePath, ($err, $data) => {
+					if($err) throw $err
+					writeFile(filePath, writeFileData, ($err) => {
+						if($err) throw $err
+					})
+				})
+				// const readFileData = await readFile(filePath)
+				// .then(($fileBuffer) => $fileBuffer.toString())
+				// if(writeFileData !== readFileData) {
+				// 	console.log(
+				// 		'\n', '=====', 
+				// 		'\n', collectDoc.fs.template, filePath, 
+				// 		'\n', '#####',
+				// 		'\n', 'writeFileData', 
+				// 		'\n', writeFileData, 
+				// 	)
+				// 	await writeFile(filePath, writeFileData)
+				// }
 			}
 		}
 		collectionIndex++

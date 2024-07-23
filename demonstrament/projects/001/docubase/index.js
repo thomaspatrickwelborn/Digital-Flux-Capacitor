@@ -8,6 +8,7 @@ import RollupConfig from "./rollup.config.js"
 import SASSConfig from "./sass.config.js"
 import EJSConfig from "./ejs.config.js"
 import Pilers from "./pilers/index.js"
+import Processors from "./processors/index.js"
 const rollupPiler =  new Pilers.Rollup(
   RollupConfig
 )
