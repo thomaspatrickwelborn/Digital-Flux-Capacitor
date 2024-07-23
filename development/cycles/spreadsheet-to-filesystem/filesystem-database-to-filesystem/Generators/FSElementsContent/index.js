@@ -1,77 +1,74 @@
+import EventEmitter from 'node:events'
 import path from 'node:path'
 import url from 'node:url'
 import { Functions, Parsers, Operators } from '../Coutil/index.js'
 import { writeFile, readFile } from 'node:fs'
 import * as Templates from '../../Templates/index.js'
-// const projectPath = process.env.PWD
 const modulePath = path.dirname(
 	url.fileURLToPath(import.meta.url)
 )
 
-async function FSElementsContent(
-	$collection, $presubcycle, $subcycle
-) {
-	const { filesystemContent } = $subcycle.settings
-	const { filesystem } = $subcycle.settings.output
-	const fsDBConnection = $presubcycle.dbConnection
-	const File = fsDBConnection.models['File']
-	const collectionLength = $collection.length
-	var collectionIndex = 0
-	iterateCollection: 
-	while(collectionIndex < collectionLength) {
-		var collectDoc = $collection[collectionIndex]
-		if(!collectDoc.fs.operations.update) {
-			collectionIndex++
-			continue iterateCollection
-		}
-		if(collectDoc.fs.type === 'File') {
-			if(collectDoc.fs.template === undefined) {
+class FSElementsContent extends EventEmitter {
+	constructor($collection, $presubcycle, $subcycle) {
+		super()
+		const { filesystemContent } = $subcycle.settings
+		const { filesystem } = $subcycle.settings.output
+		const fsDBConnection = $presubcycle.dbConnection
+		const File = fsDBConnection.models['File']
+		const collectionLength = $collection.length
+		var collectionIndex = 0
+		iterateCollection: 
+		while(collectionIndex < collectionLength) {
+			var collectDoc = $collection[collectionIndex]
+			if(!collectDoc.fs.operations.update) {
 				collectionIndex++
 				continue iterateCollection
 			}
-			const templateModel = {
-				content: collectDoc.toObject(),
-				coutils: {
-					Functions,
-					Parsers,
-					Operators,
-					path,
+			if(collectDoc.fs.type === 'File') {
+				if(collectDoc.fs.template === undefined) {
+					collectionIndex++
+					continue iterateCollection
 				}
-			}
-			const filePath = path.join(
-				// projectPath,
-				filesystem.path,
-				collectDoc.fs.path
-			)
-			const Template = Templates[
-				collectDoc.fs.template
-			]
-			if(Template) {
-				const TemplateOptions = filesystemContent[
+				const templateModel = {
+					content: collectDoc.toObject(),
+					coutils: {
+						Functions,
+						Parsers,
+						Operators,
+						path,
+					}
+				}
+				const filePath = path.join(
+					filesystem.path,
+					collectDoc.fs.path
+				)
+				const Template = Templates[
 					collectDoc.fs.template
 				]
-				const writeFileData = Template(templateModel, TemplateOptions)
-				readFile(filePath, ($err, $data) => {
-					if($err) throw $err
-					writeFile(filePath, writeFileData, ($err) => {
-						if($err) throw $err
+				if(Template) {
+					const TemplateOptions = filesystemContent[
+						collectDoc.fs.template
+					]
+					const writeFileData = Template(templateModel, TemplateOptions)
+					readFile(filePath, ($err, $readFileData) => {
+						if($err) return
+						if(writeFileData !== $readFileData) {
+							writeFile(filePath, writeFileData, ($err) => {
+								if($err) return
+								console.log(
+									'\n', '=====', 
+									'\n', collectDoc.fs.template, filePath, 
+									'\n', '#####',
+									'\n', 'writeFileData', 
+									'\n', writeFileData, 
+								)
+							})
+						}
 					})
-				})
-				// const readFileData = await readFile(filePath)
-				// .then(($fileBuffer) => $fileBuffer.toString())
-				// if(writeFileData !== readFileData) {
-				// 	console.log(
-				// 		'\n', '=====', 
-				// 		'\n', collectDoc.fs.template, filePath, 
-				// 		'\n', '#####',
-				// 		'\n', 'writeFileData', 
-				// 		'\n', writeFileData, 
-				// 	)
-				// 	await writeFile(filePath, writeFileData)
-				// }
+				}
 			}
+			collectionIndex++
 		}
-		collectionIndex++
 	}
 }
 
