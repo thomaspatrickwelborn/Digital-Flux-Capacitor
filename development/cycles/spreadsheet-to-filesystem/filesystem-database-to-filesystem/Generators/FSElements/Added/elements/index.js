@@ -40,14 +40,10 @@ export default class AddedElements extends EventEmitter {
         ) {
           switch(addedFSElementDoc.fs.type) {
             case 'File':
-              // open(
-              //   addedFSElementDocPath, 'w', async ($err, $fd) => {
-              //     if($err) return
-              //     close($fd)
-              //     console.log('createFile')
-              //     console.log(this)
-              //   }
-              // )
+              writeFile(addedFSElementDoc, '', ($err) => {
+                if($err) return
+                this.emit('added:file', addedFSElementDoc)
+              })
               break
             case 'Fold':
               mkdir(addedFSElementDocPath, {

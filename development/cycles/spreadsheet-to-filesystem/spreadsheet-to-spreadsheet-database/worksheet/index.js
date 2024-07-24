@@ -23,7 +23,10 @@ export default class Worksheet extends EventEmitter {
 		this.#settings = $settings
 		this.#options = $options
 		const {
-			worksheetClassName, worksheetName, worksheetTable, dbConnection
+			worksheetClassName, 
+			worksheetName, 
+			worksheetTable, 
+			dbConnection
 		} = $settings
 		this.name = worksheetName
 		this.className = worksheetClassName

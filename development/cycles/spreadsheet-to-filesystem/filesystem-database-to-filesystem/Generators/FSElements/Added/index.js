@@ -23,6 +23,10 @@ export default class Added extends EventEmitter {
       'added:fold',
       ($addedFold) => this.emit('added:fold', $addedFold)
     )
+    this.#_elements.on(
+      'added:file',
+      ($addedFile) => this.emit('added:file', $addedFile)
+    )
   }
   constructor($settings = {}) {
     super()

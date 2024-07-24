@@ -34,6 +34,7 @@ export default class FSElements extends EventEmitter {
 				]
 			}
 		)
+		console.log(fsRoot)
 		fsRoot.on('data', ($data) => {
 			console.log('globStream', 'data', $data)
 		})

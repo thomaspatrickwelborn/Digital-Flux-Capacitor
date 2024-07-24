@@ -51,16 +51,24 @@ class SpreadsheetDatabaseToFilesystemDatabase extends Subcycle {
 		}
 		return this.dbConnection.models
 	}
-	async input($presubcycle) {
-		await this.#deleteDBConnectionModels()
-		const models = this.#setDBConnectionModels()
-		const filesystemDBConnection = this.dbConnection
-		const spreadsheetDBConnection = $presubcycle.dbConnection
-		this.worksheets = new Map(await Worksheets({
-			presubcycleWorkbook: $presubcycle.workbook,
-			subcycleModels: models,
-		}))
-		this.emit('output', this)
+	async input($event) {
+		switch($event.type) {
+			case 'subcycle:output':
+				console.log($event.type, $event.subcycle)
+				break
+			case 'worksheet:save':
+				console.log($event.type, $event.worksheet)
+				break
+		}
+		// await this.#deleteDBConnectionModels()
+		// const models = this.#setDBConnectionModels()
+		// const filesystemDBConnection = this.dbConnection
+		// const spreadsheetDBConnection = $presubcycle.dbConnection
+		// this.worksheets = new Map(await Worksheets({
+		// 	presubcycleWorkbook: $presubcycle.workbook,
+		// 	subcycleModels: models,
+		// }))
+		// this.emit('output', this)
 	}
 }
 export default SpreadsheetDatabaseToFilesystemDatabase

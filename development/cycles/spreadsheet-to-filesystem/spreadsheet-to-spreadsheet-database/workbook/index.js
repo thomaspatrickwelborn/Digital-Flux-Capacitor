@@ -79,6 +79,7 @@ class Workbook extends EventEmitter {
 	async saveWorksheets() {
 		for(const $worksheet of this.#_worksheets.values()) {
 			await $worksheet.saveCompository()
+			this.emit('worksheet:save', $worksheet)
 		}
 	}
 }

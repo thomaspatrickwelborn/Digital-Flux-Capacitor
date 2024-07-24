@@ -1,3 +1,4 @@
+import { Timer } from '#utils/index.js'
 import chokidar from 'chokidar'
 import { createConnection } from 'mongoose'
 import * as XLSX from 'xlsx'
@@ -26,7 +27,9 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 					if(this.#watch === true) {
 						this.workbookWatch = this.settings.input.spreadsheet
 					} else {
-						await this.#workbookWatchChange(this.settings.input.spreadsheet.path)
+						await this.#workbookWatchChange(
+							this.settings.input.spreadsheet.path
+						)
 						process.exit()
 					}
 				}.bind(this)
@@ -45,6 +48,12 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 				workbookPath: this.settings.input.spreadsheet.path, 
 				workbook: $workbook,
 				dbConnection: this.dbConnection, 
+			})
+			this.#_workbook.on('worksheet:save', ($worksheet) => {
+				this.emit('output', {
+					type: 'worksheet:save',
+					worksheet: $worksheet
+				})
 			})
 		}
 	}
@@ -79,24 +88,11 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 			cellStyles: true, // hidden property is a cell style
 		}))
 		this.workbook = workbookFile
-
-		console.log('start')
-		const readWorkbookTimerCountInterval = 10
-		let readWorkbookTimerCount = 0
-		let readWorkbookTimer = setInterval(
-			function readWorkbookTimerInterval() {
-				readWorkbookTimerCount += readWorkbookTimerCountInterval
-			},
-			readWorkbookTimerCountInterval
-		)
-
 		await this.workbook.saveWorksheets()
-
-		clearInterval(readWorkbookTimer)
-		console.log('readWorkbookTimerCount', readWorkbookTimerCount)
-		console.log('stop')
-
-		// this.emit('output', this)
+		this.emit('output', {
+			type: 'subcycle:output',
+			subcycle: this
+		})
 		return this
 	}
 	async #workbookWatchChange($workbookPath) {
