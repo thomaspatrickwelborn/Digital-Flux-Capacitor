@@ -55,9 +55,9 @@ export default class Collect extends EventEmitter {
 	async save() {
 		const collectDocsLength = this.length
 		var collectDocsIndex = 0
-		const collectDocsSaveTimer = new Timer({
-			name: 'collectDocsSaveTimer'
-		}).start()
+		// const collectDocsSaveTimer = new Timer({
+		// 	name: 'collectDocsSaveTimer'
+		// }).start()
 		while(collectDocsIndex < collectDocsLength) {
 			// const collectDocSaveTimer = new Timer({
 			// 	name: 'collectDocSaveTimer'
@@ -69,7 +69,7 @@ export default class Collect extends EventEmitter {
 			// collectDocSaveTimer.stop().log()
 			collectDocsIndex++
 		}
-		collectDocsSaveTimer.stop().log()
+		// collectDocsSaveTimer.stop().log()
 		return this
 	}
 }

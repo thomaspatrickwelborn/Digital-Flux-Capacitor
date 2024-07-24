@@ -54,10 +54,10 @@ class SpreadsheetDatabaseToFilesystemDatabase extends Subcycle {
 	async input($event) {
 		switch($event.type) {
 			case 'subcycle:output':
-				console.log($event.type, $event.subcycle)
+				// console.log($event.type, $event.subcycle)
 				break
 			case 'worksheet:output':
-				console.log($event.type, $event.worksheet)
+				// console.log($event.type, $event.worksheet)
 				const { worksheet, subcycle } = $event
 				const worksheetClassName = worksheet.className
 				const worksheetCollect = [...worksheet.compository.collects.values()]
