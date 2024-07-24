@@ -1,12 +1,32 @@
+import EventEmitter from 'node:events'
 import Diff from './diff/index.js'
 import Elements from './elements/index.js'
-export default async function Added($collection, $fsRootPath, $fsRoot, $fsVine) {
-  const diff = Diff($fsRoot, $fsVine)
-  const elements = new Elements($collection, $fsRootPath, diff)
-  elements.on('added', ($data) => {
-    console.log($data)
-  })
-  return {
-    diff, elements
+export default class Added extends EventEmitter {
+  #_diff
+  get diff() { return this.#_diff }
+  set diff($diffSettings) {
+    const { fs } = $diffSettings
+    this.#_diff = Diff(fs.root, fs.vine)
+  }
+  #_elements
+  get elements() { return this.#_elements }
+  set elements($elementsSettings) {
+    const {
+      collection, fs
+    } = $elementsSettings
+    this.#_elements = new Elements({
+      collection, 
+      fs: fs, 
+      addedDiff: this.diff
+    })
+    this.#_elements.on(
+      'added:fold',
+      ($addedFold) => this.emit('added:fold', $addedFold)
+    )
+  }
+  constructor($settings = {}) {
+    super()
+    this.diff = $settings
+    this.elements = $settings
   }
 }

@@ -34,7 +34,6 @@ export default class FSElements extends EventEmitter {
 				]
 			}
 		)
-		console.log(fsRoot)
 		const fsVine = $collection.reduce(
 			($fsVine, $collectionDoc) => {
 				if($collectionDoc.fs.path === undefined) return $fsVine
@@ -44,11 +43,17 @@ export default class FSElements extends EventEmitter {
 				return $fsVine
 			}, []
 		)
-		console.log(fsVine)
-	  const added = new Added(
-	  	$collection, fsRootPath, fsRoot, fsVine
-  	)
-  	console.log('added', added)
+	  const added = new Added({
+	  	collection: $collection, 
+	  	fs: {
+	  		rootPath: fsRootPath,
+	  		root: fsRoot,
+	  		vine: fsVine
+	  	}
+  	})
+  	added.on('added:fold', ($addedFold) => {
+  		console.log('added:fold', $addedFold)
+  	})
 	  // const updated = await Updated(
 	  // 	$collection, fsRootPath, fsRoot, fsVine
   	// )

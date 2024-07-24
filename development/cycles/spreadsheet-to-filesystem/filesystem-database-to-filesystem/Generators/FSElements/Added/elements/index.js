@@ -1,62 +1,66 @@
 import EventEmitter from 'node:events'
 import path from 'node:path'
-import { open, mkdir, stat } from 'node:fs'
+import {
+  open, opendir, stat, close, mkdir
+} from 'node:fs'
 export default class AddedElements extends EventEmitter {
-  constructor(
-    $collection, $fsRootPath, $added
-  ) {
+  length = 0
+  constructor($settings = {}) {
     super()
-    const added = []
+    const {
+      collection, fs, addedDiff
+    } = $settings
+    const added = this
     // Added FS Elements
-    const addedFSElements = $added
+    const addedFSElements = addedDiff
     const addedFSElementsLength = addedFSElements.length
     var addedFSElementsIndex = 0
     iterateAddedFSElementsIndex: 
     while(addedFSElementsIndex < addedFSElementsLength) {
       const addedFSElement = addedFSElements[addedFSElementsIndex]
-      const addedFSElementDoc = $collection.find(($collectionDoc) => {
+      const addedFSElementDoc = collection.find(($collectionDoc) => {
         return $collectionDoc.fs.path === addedFSElement.replace(
-          $fsRootPath.concat('/'), ''
+          fs.rootPath.concat('/'), ''
         )
       })
       if(!addedFSElementDoc?.fs?.operations?.add) {
         addedFSElementsIndex++
         continue iterateAddedFSElementsIndex
       }
-      const addedFSElementDocPath = path.join(
-        $fsRootPath, addedFSElementDoc.fs.path
+      let addedFSElementDocPath = path.join(
+        fs.rootPath, addedFSElementDoc.fs.path
       )
-      const addedFSElementStat = stat(addedFSElementDocPath, (
+      let addedFSElementStat = stat(addedFSElementDocPath, (
         $err, $addedFSElementStat
       ) => {
-        if($err) return
         if(
+          $err || 
           $addedFSElementStat.isFile() === false &&
           $addedFSElementStat.isDirectory() === false
         ) {
           switch(addedFSElementDoc.fs.type) {
             case 'File':
-              // const fileHandle = open(
-              //   addedFSElementDocPath, 'w', async ($err) => {
-              //     await fileHandle.close()
+              // open(
+              //   addedFSElementDocPath, 'w', async ($err, $fd) => {
+              //     if($err) return
+              //     close($fd)
+              //     console.log('createFile')
               //     console.log(this)
               //   }
               // )
-              console.log('createFile')
               break
             case 'Fold':
               mkdir(addedFSElementDocPath, {
                 recursive: true,
-              }, ($err) => {
-                console.log(this)
+              }, ($err, $dir) => {
+                if($err) return
+                this.emit('added:fold', addedFSElementDoc)
               })
-              console.log('createFold')
-
               break
           }
         }
       })
-      added.push(addedFSElementDoc)
+      Array.prototype.push.call(added, addedFSElementDoc)
       addedFSElementsIndex++
     }
   }
