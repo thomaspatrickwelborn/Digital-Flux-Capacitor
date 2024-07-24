@@ -4,7 +4,7 @@ import {
 	File as FileSchema,
 	Fold as FoldSchema,
 } from './schemata/index.js'
-import Worksheets from './worksheets/index.js'
+import * as Worksheets from './worksheets/index.js'
 const Schemata = { FileSchema, FoldSchema }
 
 class SpreadsheetDatabaseToFilesystemDatabase extends Subcycle {
