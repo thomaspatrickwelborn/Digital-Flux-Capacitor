@@ -51,8 +51,9 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 			})
 			this.#_workbook.on('worksheet:save', ($worksheet) => {
 				this.emit('output', {
-					type: 'worksheet:save',
-					worksheet: $worksheet
+					type: 'worksheet:output',
+					worksheet: $worksheet,
+					subcycle: this,
 				})
 			})
 		}

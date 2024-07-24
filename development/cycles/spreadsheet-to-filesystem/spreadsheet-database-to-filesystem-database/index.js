@@ -56,18 +56,31 @@ class SpreadsheetDatabaseToFilesystemDatabase extends Subcycle {
 			case 'subcycle:output':
 				console.log($event.type, $event.subcycle)
 				break
-			case 'worksheet:save':
+			case 'worksheet:output':
 				console.log($event.type, $event.worksheet)
+				const { worksheet, subcycle } = $event
+				const worksheetClassName = worksheet.className
+				const worksheetCollect = [...worksheet.compository.collects.values()]
+				.map(($collect) => {
+					return Array.from($collect)
+				}).flat()
+				const worksheetTranslexis = await Worksheets[worksheetClassName](
+					worksheetCollect, 
+					{
+						worksheet: worksheet,
+						models: this.dbConnection.models,
+					}
+				)
+				this.worksheets.set(
+					worksheet.name, 
+					worksheetTranslexis
+				)
+				this.emit('output', {
+					type: 'worksheet:output',
+					worksheet: worksheetTranslexis,
+				})
 				break
 		}
-		// await this.#deleteDBConnectionModels()
-		// const models = this.#setDBConnectionModels()
-		// const filesystemDBConnection = this.dbConnection
-		// const spreadsheetDBConnection = $presubcycle.dbConnection
-		// this.worksheets = new Map(await Worksheets({
-		// 	presubcycleWorkbook: $presubcycle.workbook,
-		// 	subcycleModels: models,
-		// }))
 		// this.emit('output', this)
 	}
 }
