@@ -25,7 +25,7 @@ export default class Data extends EventEmitter {
         continue iterateRows
       }
       const row = []
-      const colsLength = $data[rowsIndex].length
+      const colsLength = $data[rowsIndex]?.length || 0
       const maxColsLength = area.Ref.e.c
       let colsIndex = 0
       iterateCols: 

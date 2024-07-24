@@ -72,11 +72,31 @@ class SpreadsheetToSpreadsheetDatabase extends Subcycle {
 			type: 'buffer',
 			raw: true,
 			dense: true,
-			cellStyles: true,
+			cellFormula: false,
+			cellHTML: false,
+			cellNF: false,
+			cellDates: false,
+			cellStyles: true, // hidden property is a cell style
 		}))
 		this.workbook = workbookFile
+
+		console.log('start')
+		const readWorkbookTimerCountInterval = 10
+		let readWorkbookTimerCount = 0
+		let readWorkbookTimer = setInterval(
+			function readWorkbookTimerInterval() {
+				readWorkbookTimerCount += readWorkbookTimerCountInterval
+			},
+			readWorkbookTimerCountInterval
+		)
+
 		await this.workbook.saveWorksheets()
-		this.emit('output', this)
+
+		clearInterval(readWorkbookTimer)
+		console.log('readWorkbookTimerCount', readWorkbookTimerCount)
+		console.log('stop')
+
+		// this.emit('output', this)
 		return this
 	}
 	async #workbookWatchChange($workbookPath) {

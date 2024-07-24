@@ -1,7 +1,7 @@
 import EventEmitter from 'node:events'
 import path from 'node:path'
 import { mkdir, stat } from 'node:fs'
-import { globSync } from 'glob'
+import { globStream } from 'glob'
 import Added from './Added/index.js'
 import Updated from './Updated/index.js'
 import Deleted from './Deleted/index.js'
@@ -24,7 +24,7 @@ export default class FSElements extends EventEmitter {
 				})
 			}
 		})
-		const fsRoot = globSync(
+		const fsRoot = globStream(
 			path.join(fsRootPath, '**/*'),
 			{
 				dot: true,
@@ -34,26 +34,29 @@ export default class FSElements extends EventEmitter {
 				]
 			}
 		)
-		const fsVine = $collection.reduce(
-			($fsVine, $collectionDoc) => {
-				if($collectionDoc.fs.path === undefined) return $fsVine
-				$fsVine.push(
-					path.join(fsRootPath, $collectionDoc.fs.path)
-				)
-				return $fsVine
-			}, []
-		)
-	  const added = new Added({
-	  	collection: $collection, 
-	  	fs: {
-	  		rootPath: fsRootPath,
-	  		root: fsRoot,
-	  		vine: fsVine
-	  	}
-  	})
-  	added.on('added:fold', ($addedFold) => {
-  		console.log('added:fold', $addedFold)
-  	})
+		fsRoot.on('data', ($data) => {
+			console.log('globStream', 'data', $data)
+		})
+		// const fsVine = $collection.reduce(
+		// 	($fsVine, $collectionDoc) => {
+		// 		if($collectionDoc.fs.path === undefined) return $fsVine
+		// 		$fsVine.push(
+		// 			path.join(fsRootPath, $collectionDoc.fs.path)
+		// 		)
+		// 		return $fsVine
+		// 	}, []
+		// )
+	  // const added = new Added({
+	  // 	collection: $collection, 
+	  // 	fs: {
+	  // 		rootPath: fsRootPath,
+	  // 		root: fsRoot,
+	  // 		vine: fsVine
+	  // 	}
+  	// })
+  	// added.on('added:fold', ($addedFold) => {
+  	// 	console.log('added:fold', $addedFold)
+  	// })
 	  // const updated = await Updated(
 	  // 	$collection, fsRootPath, fsRoot, fsVine
   	// )
