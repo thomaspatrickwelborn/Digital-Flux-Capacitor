@@ -57,7 +57,6 @@ export default class Worksheet extends EventEmitter {
 	}
 	async saveCompository() {
 		await this.compository.saveCollects()
-    this.emit('collects:save', this)
 		return this
 	}
 }

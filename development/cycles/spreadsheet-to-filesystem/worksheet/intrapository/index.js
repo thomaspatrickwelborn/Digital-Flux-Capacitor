@@ -9,11 +9,36 @@ const Schemata = { FileSchema, FoldSchema }
 
 export default class Intrapository extends EventEmitter {
 	#settings
+	#options
 	#dbConnections
 	worksheets = new Map()
-	constructor($settings) {
-		super($settings)
-		// this.dbConnections = this.settings.output.database
+	constructor($settings = {}, $options = {}) {
+		super()
+		this.#settings = $settings
+		for(
+			const $collect of this.#settings.collects.values()
+		) {
+			$collect.on('collect:save', async ($collect) => {
+				console.log('collect:save', $collect)
+				const worksheetTranslexis = await Worksheets[worksheetClassName](
+					worksheetCollect, 
+					{
+						worksheet: worksheet,
+						models: this.dbConnection.models,
+					}
+				)
+				console.log('worksheetTranslexis', worksheetTranslexis)
+				// this.worksheets.set(
+				// 	worksheet.name, 
+				// 	worksheetTranslexis
+				// )
+			})
+		}
+		// this.#settings.on(
+
+		// )
+		this.#options = $options
+		this.dbConnections = this.#options.dbConnections
 	}
 	#getDBConnectionModels() {
 		return this.dbConnection.models
@@ -40,35 +65,26 @@ export default class Intrapository extends EventEmitter {
 		return this.dbConnection.models
 	}
 	async input($event) {
-		switch($event.type) {
-			case 'subcycle:output':
-				// console.log($event.type, $event.subcycle)
-				break
-			case 'worksheet:output':
-				// console.log($event.type, $event.worksheet)
-				const { worksheet, subcycle } = $event
-				const worksheetClassName = worksheet.className
-				const worksheetCollect = [...worksheet.compository.collects.values()]
-				.map(($collect) => {
-					return Array.from($collect)
-				}).flat()
-				const worksheetTranslexis = await Worksheets[worksheetClassName](
-					worksheetCollect, 
-					{
-						worksheet: worksheet,
-						models: this.dbConnection.models,
-					}
-				)
-				this.worksheets.set(
-					worksheet.name, 
-					worksheetTranslexis
-				)
-				this.emit('output', {
-					type: 'worksheet:output',
-					worksheet: worksheetTranslexis,
-				})
-				break
-		}
-		// this.emit('output', this)
+		// const { worksheet, subcycle } = $event
+		// const worksheetClassName = worksheet.className
+		// const worksheetCollect = [...worksheet.compository.collects.values()]
+		// .map(($collect) => {
+		// 	return Array.from($collect)
+		// }).flat()
+		// const worksheetTranslexis = await Worksheets[worksheetClassName](
+		// 	worksheetCollect, 
+		// 	{
+		// 		worksheet: worksheet,
+		// 		models: this.dbConnection.models,
+		// 	}
+		// )
+		// this.worksheets.set(
+		// 	worksheet.name, 
+		// 	worksheetTranslexis
+		// )
+		// this.emit('output', {
+		// 	type: 'worksheet:output',
+		// 	worksheet: worksheetTranslexis,
+		// })
 	}
 }
