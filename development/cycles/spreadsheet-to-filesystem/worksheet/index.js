@@ -9,7 +9,6 @@ import {
 } from '#utils/index.js'
 import { LMNProps } from '#utils/defaults/index.js'
 const { ObjectId } = Types
-
 export default class Worksheet extends EventEmitter {
 	#settings
 	#options
@@ -44,6 +43,8 @@ export default class Worksheet extends EventEmitter {
 		this.#_depository = new Depository(
 			$worksheetTable, 
 			{
+				name: this.name,
+				className: this.className,
 				ranges: this.#options.ranges
 			}
 		)
@@ -53,6 +54,8 @@ export default class Worksheet extends EventEmitter {
 		this.#_suppository = new Suppository(
 			$depository, 
 			{
+				name: this.name,
+				className: this.className,
 				dbConnections: this.#dbConnections
 			}
 		)
@@ -62,6 +65,8 @@ export default class Worksheet extends EventEmitter {
 		this.#_compository = new Compository(
 			$depository, 
 			{
+				name: this.name,
+				className: this.className,
 				dbConnections: this.#dbConnections
 			}
 		)
@@ -71,7 +76,10 @@ export default class Worksheet extends EventEmitter {
 		this.#_intrapository = new Intrapository(
 			$compository, 
 			{
-				dbConnections: this.#dbConnections
+				name: this.name,
+				className: this.className,
+				dbConnections: this.#dbConnections,
+				worksheet: this,
 			}
 		)
 	}

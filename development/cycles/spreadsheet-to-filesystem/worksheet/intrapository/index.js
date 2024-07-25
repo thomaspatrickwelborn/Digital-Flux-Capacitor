@@ -15,19 +15,21 @@ export default class Intrapository extends EventEmitter {
 	constructor($settings = {}, $options = {}) {
 		super()
 		this.#settings = $settings
+		this.#options = $options
+		this.#dbConnections = this.#options.dbConnections
+		console.log(this.#dbConnections)
+		this.#setDBConnectionModels()
 		for(
 			const $collect of this.#settings.collects.values()
 		) {
 			$collect.on('collect:save', async ($collect) => {
-				console.log('collect:save', $collect)
-				const worksheetTranslexis = await Worksheets[worksheetClassName](
-					worksheetCollect, 
+				const worksheetTranslexis = await Worksheets[this.#options.className](
+					$collect, 
 					{
-						worksheet: worksheet,
-						models: this.dbConnection.models,
+						worksheet: this.#options.worksheet,
+						models: this.#dbConnections.filesystem.models,
 					}
 				)
-				console.log('worksheetTranslexis', worksheetTranslexis)
 				// this.worksheets.set(
 				// 	worksheet.name, 
 				// 	worksheetTranslexis
@@ -38,31 +40,31 @@ export default class Intrapository extends EventEmitter {
 
 		// )
 		this.#options = $options
-		this.dbConnections = this.#options.dbConnections
+		this.#dbConnections = this.#dbConnections
 	}
 	#getDBConnectionModels() {
-		return this.dbConnection.models
+		return this.#dbConnections.filesystem.models
 	}
 	#setDBConnectionModels() {
 		const modelNames = ['File', 'Fold']
 		for(const $modelName of modelNames) {
-			if(this.dbConnection.models[$modelName] === undefined) {
-				this.dbConnection.model($modelName, Schemata[`${$modelName}Schema`])
+			if(this.#dbConnections.filesystem.models[$modelName] === undefined) {
+				this.#dbConnections.filesystem.model($modelName, Schemata[`${$modelName}Schema`])
 			}
 		}
 		return this.#getDBConnectionModels()
 	}
 	async #deleteDBConnectionModels() {
-		await this.dbConnection.dropDatabase()
-		const modelNames = this.dbConnection.modelNames()
+		await this.#dbConnections.filesystem.dropDatabase()
+		const modelNames = this.#dbConnections.filesystem.modelNames()
 		const modelNamesLength = modelNames.length
 		var modelNamesIndex = 0
 		while(modelNamesIndex < modelNamesLength) {
 			const modelName = modelNames[modelNamesIndex]
-			await this.dbConnection.deleteModel(modelName)
+			await this.#dbConnections.filesystem.deleteModel(modelName)
 			modelNamesIndex++
 		}
-		return this.dbConnection.models
+		return this.#dbConnections.filesystem.models
 	}
 	async input($event) {
 		// const { worksheet, subcycle } = $event

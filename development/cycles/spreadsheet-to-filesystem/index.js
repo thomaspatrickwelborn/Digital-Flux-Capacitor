@@ -1,5 +1,4 @@
 import { EventEmitter } from 'node:events'
-import { Timer } from '#utils/index.js'
 import chokidar from 'chokidar'
 import { createConnection } from 'mongoose'
 import * as XLSX from 'xlsx'
@@ -8,58 +7,29 @@ import Workbook from './workbook/index.js'
 import Config from './config.js'
 
 export default class SpreadsheetToFilesystem extends EventEmitter {
-  settings
-  #_dbConnections
+  #settings
+  #dbConnectionTimeout = 500
+  #dbConnections
   #_workbook
   #_workbookWatch
   #_watch = false
   constructor($settings) {
     super()
-    this.settings = Object.assign({}, $settings, Config) 
-    this.#watch = this.settings.input.spreadsheet.watch
-    this.dbConnections = {
-      spreadsheet: this.settings.input.database,
-      filesystem: this.settings.output.database,
-    }
+    this.#settings = Object.assign({}, $settings, Config) 
     return this
-  }
-  get dbConnections() { return this.#_dbConnections }
-  set dbConnections($dbConnections) {
-    if(this.#_dbConnections === undefined) {
-      const { spreadsheet, filesystem } = $dbConnections
-      this.#_dbConnections = {}
-      this.#_dbConnections.spreadsheet = createConnection(
-        spreadsheet.uri, spreadsheet.options
-      )
-      this.#_dbConnections.filesystem = createConnection(
-        filesystem.uri, filesystem.options
-      )
-      this.#_dbConnections.spreadsheet.once(
-        'connected', async function spreadsheetDatabaseConnected() {
-          if(this.#watch === true) {
-            this.workbookWatch = this.settings.input.spreadsheet
-          } else {
-            await this.#workbookWatchChange(
-              this.settings.input.spreadsheet.path
-            )
-            process.exit()
-          }
-        }.bind(this)
-      )
-    }
   }
   get workbook() { return this.#_workbook }
   set workbook($workbook) {
     if(this.#_workbook instanceof Workbook) {
       this.#_workbook.workbook = $workbook
-      this.#_workbook.worksheets = this.settings.spreadsheet.worksheets
+      this.#_workbook.worksheets = this.#settings.spreadsheet.worksheets
     } else
     if(this.#_workbook === undefined) {
       this.#_workbook = new Workbook({
-        worksheets: this.settings.spreadsheet.worksheets,
-        workbookPath: this.settings.input.spreadsheet.path, 
+        worksheets: this.#settings.spreadsheet.worksheets,
+        workbookPath: this.#settings.input.spreadsheet.path, 
         workbook: $workbook,
-        dbConnections: this.dbConnections, 
+        dbConnections: this.#dbConnections, 
       })
       this.#_workbook.on('worksheet:save', ($worksheet) => {
         this.emit('output', {
@@ -87,6 +57,7 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       $watch !== undefined
     ) ? $watch
       : this.#_watch
+    this.workbookWatch = this.#settings.input.spreadsheet
   }
   async #readWorkbook($workbookPath) {
     const workbookFile = await readFile($workbookPath)
@@ -98,7 +69,7 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       cellHTML: false,
       cellNF: false,
       cellDates: false,
-      cellStyles: true, // hidden property is a cell style
+      cellStyles: true, // "hidden" property is cell style
     }))
     this.workbook = workbookFile
     await this.workbook.saveWorksheets()
@@ -110,15 +81,39 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
   }
   async #workbookWatchChange($workbookPath) {
     // console.clear()
-    await this.dbConnections.spreadsheet.dropDatabase()
-    const modelNames = this.dbConnections.spreadsheet.modelNames()
+    await this.#dbConnections.spreadsheet.dropDatabase()
+    const modelNames = this.#dbConnections.spreadsheet.modelNames()
     const modelNamesLength = modelNames.length
     var modelNamesIndex = 0
     while(modelNamesIndex < modelNamesLength) {
       const modelName = modelNames[modelNamesIndex]
-      await this.dbConnections.spreadsheet.deleteModel(modelName)
+      await this.#dbConnections.spreadsheet.deleteModel(modelName)
       modelNamesIndex++
     }
     await this.#readWorkbook($workbookPath)
+  }
+  async start() {
+    const spreadsheet = this.#settings.input.database
+    const filesystem = this.#settings.output.database
+    this.#dbConnections = {
+      spreadsheet: await createConnection(
+        spreadsheet.uri, spreadsheet.options
+      ),
+      filesystem: await createConnection(
+        filesystem.uri, filesystem.options
+      )
+    }
+    this.#dbConnections.spreadsheet.once(
+      'connected', async function spreadsheetDatabaseConnected() {
+        if(this.#watch === true) {
+          this.#watch = this.#settings.input.spreadsheet.watch
+        } else {
+          await this.#workbookWatchChange(
+            this.#settings.input.spreadsheet.path
+          )
+          process.exit()
+        }
+      }.bind(this)
+    )
   }
 }

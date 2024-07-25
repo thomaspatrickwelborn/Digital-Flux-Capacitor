@@ -50,10 +50,9 @@ export default class Compository extends EventEmitter {
       const collect = new Collect({
         mods, 
         composits, 
-        dbConnections: this.#dbConnections,
         ranges,
         lmnRanges,
-      })
+      }, this.options)
       _collects.set($modIndex, collect)
       modsIndex++
     }

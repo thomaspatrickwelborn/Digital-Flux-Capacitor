@@ -8,13 +8,18 @@ const Translexes = [
 export default class Collect extends EventEmitter {
 	length = 0
 	#settings = {}
-	constructor($settings) {
+	#options = {}
+	constructor($settings, $options) {
 		super()
 		this.#settings = $settings
+		this.#options = $options
 		var collect = this
 		const {
-			mods, composits, dbConnections, lmnRanges
+			mods, composits, lmnRanges
 		} = $settings
+		const {
+			name, className, dbConnections
+		} = $options
 		const modsLength = mods.length
 		var modsIndex = 0
 		iterateMods: 
@@ -69,7 +74,6 @@ export default class Collect extends EventEmitter {
 			// collectDocSaveTimer.stop().log()
 			collectDocsIndex++
 		}
-		// console.log(this)
 		this.emit(
 			'collect:save', 
 			this

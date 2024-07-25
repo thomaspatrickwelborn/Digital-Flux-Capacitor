@@ -15,7 +15,10 @@ export default class Timer extends EventEmitter {
   #delay = 1
   #_elapse = 0
   get elapse() { return this.#_elapse }
-  set elapse($elapse) { this.#_elapse = $elapse }
+  set elapse($elapse) {
+    this.#_elapse = $elapse
+    this.emit('elapse', this.#_elapse)
+  }
   durate() {
     this.elapse += this.#delay
   }
