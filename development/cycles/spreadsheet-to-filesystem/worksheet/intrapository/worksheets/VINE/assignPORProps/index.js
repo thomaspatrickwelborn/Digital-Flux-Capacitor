@@ -135,6 +135,7 @@ function assignPORProps($collect, $worksheet) {
 		}
 		collectDoc.imports = collectDocImports
 		collectDoc.exports = collectDocExports
+		$collect[collectDocsIndex] = collectDoc
 		collectDocsIndex++
 	}
 	return $collect

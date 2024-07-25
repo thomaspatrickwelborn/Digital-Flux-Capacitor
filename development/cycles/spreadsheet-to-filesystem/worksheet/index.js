@@ -1,5 +1,4 @@
 import { EventEmitter } from 'node:events'
-import { Schema, Types } from 'mongoose'
 import Depository from './depository/index.js'
 import Suppository from './suppository/index.js'
 import Compository from './compository/index.js'
@@ -8,7 +7,6 @@ import {
 	typeOf, parseCell, tem, combineMerge
 } from '#utils/index.js'
 import { LMNProps } from '#utils/defaults/index.js'
-const { ObjectId } = Types
 export default class Worksheet extends EventEmitter {
 	#settings
 	#options
@@ -81,6 +79,11 @@ export default class Worksheet extends EventEmitter {
 				dbConnections: this.#dbConnections,
 				worksheet: this,
 			}
+		)
+		this.#_intrapository.on(
+			'saveCollectDoc', function intrapositorySaveCollectDoc($collectDoc) {
+				console.log('$collectDoc', $collectDoc)
+			},
 		)
 	}
 	async saveCompository() {

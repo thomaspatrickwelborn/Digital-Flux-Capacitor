@@ -21,20 +21,27 @@ export default class Intrapository extends EventEmitter {
 		for(
 			const $collect of this.#settings.collects.values()
 		) {
-			$collect.on('collect:save', async ($collect) => {
-				const worksheetTranslexis = await Worksheets[this.#options.className](
+			$collect.on('collect:save', async function collectSave($collect) {
+				const worksheetTranslexis = new Worksheets[this.#options.className](
 					$collect, 
 					{
 						worksheet: this.#options.worksheet,
 						models: this.#dbConnections.filesystem.models,
 					}
 				)
-				// console.log('worksheetTranslexis', worksheetTranslexis)
+				worksheetTranslexis.on(
+					'saveCollectDoc',
+					($collectDoc) => {
+						this.emit('saveCollectDoc', $collectDoc)
+					}
+				)
 				this.worksheets.set(
 					this.#options.worksheet.name, 
 					worksheetTranslexis
 				)
-			})
+				worksheetTranslexis.save()
+				
+			}.bind(this))
 		}
 		this.#options = $options
 		this.#dbConnections = this.#dbConnections

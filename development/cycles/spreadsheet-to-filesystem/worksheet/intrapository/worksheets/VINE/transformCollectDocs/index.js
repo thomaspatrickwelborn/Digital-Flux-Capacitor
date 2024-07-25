@@ -1,5 +1,4 @@
 import path from 'node:path'
-
 function transformCollectDocPort($ports) {
 	const portsLength = $ports?.length
 	if(!portsLength) return $ports
@@ -35,9 +34,7 @@ function transformCollectDocPort($ports) {
 	}
 	return $ports
 }
-
 function transormCollectDocs($collect, $worksheet) {
-	const collect = []
 	const collectLength = $collect.length
 	var collectIndex = 0
 	iterateCollectDocs: 
@@ -64,9 +61,9 @@ function transormCollectDocs($collect, $worksheet) {
 			imports: transformCollectDocPort(collectDoc.imports),
 			exports: transformCollectDocPort(collectDoc.exports),
 		}
-		collect.push(element)
+		$collect[collectIndex] = element
 		collectIndex++
 	}
-	return collect
+	return $collect
 }
 export default transormCollectDocs

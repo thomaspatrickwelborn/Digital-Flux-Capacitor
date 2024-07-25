@@ -16,6 +16,7 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
   constructor($settings) {
     super()
     this.#settings = Object.assign({}, $settings, Config) 
+    this.#watch = this.#settings.input.spreadsheet.watch
     return this
   }
   get workbook() { return this.#_workbook }
@@ -57,7 +58,6 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       $watch !== undefined
     ) ? $watch
       : this.#_watch
-    this.workbookWatch = this.#settings.input.spreadsheet
   }
   async #readWorkbook($workbookPath) {
     const workbookFile = await readFile($workbookPath)
@@ -71,6 +71,7 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       cellDates: false,
       cellStyles: true, // "hidden" property is cell style
     }))
+    console.log(workbookFile)
     this.workbook = workbookFile
     await this.workbook.saveWorksheets()
     this.emit('output', {
@@ -106,11 +107,12 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
     this.#dbConnections.spreadsheet.once(
       'connected', async function spreadsheetDatabaseConnected() {
         if(this.#watch === true) {
-          this.#watch = this.#settings.input.spreadsheet.watch
+          this.workbookWatch = this.#settings.input.spreadsheet
+          console.log(this.#watch)
         } else {
-          await this.#workbookWatchChange(
-            this.#settings.input.spreadsheet.path
-          )
+          // await this.#workbookWatchChange(
+          //   this.#settings.input.spreadsheet.path
+          // )
           process.exit()
         }
       }.bind(this)
