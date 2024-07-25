@@ -6,7 +6,7 @@ import Supposit from './supposit/index.js'
 export default class Suppository extends EventEmitter {
   #settings
   #options
-  #dbConnection
+  #dbConnections
   #_supposits = new Map()
   #_schemata = new Map()
   #_models = new Map()
@@ -14,7 +14,7 @@ export default class Suppository extends EventEmitter {
     super()
     this.#settings = $settings
     this.#options = $options
-    this.#dbConnection = this.#options.dbConnection
+    this.#dbConnections = this.#options.dbConnections
     this.supposits = this.#settings
     this.schemata = this.#settings
     this.models = this.#settings
@@ -81,8 +81,8 @@ export default class Suppository extends EventEmitter {
       var { nom, sup, com } = $mod
       var schema = schemata.get(nom)
       if(_models[nom] === undefined) {
-        var model = this.#dbConnection.models[nom] ||
-        this.#dbConnection.model(nom, schema)
+        var model = this.#dbConnections.spreadsheet.models[nom] ||
+        this.#dbConnections.spreadsheet.model(nom, schema)
         _models.set(nom, model)
       }
       modsIndex++

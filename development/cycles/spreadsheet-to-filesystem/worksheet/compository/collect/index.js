@@ -13,7 +13,7 @@ export default class Collect extends EventEmitter {
 		this.#settings = $settings
 		var collect = this
 		const {
-			mods, composits, dbConnection, lmnRanges
+			mods, composits, dbConnections, lmnRanges
 		} = $settings
 		const modsLength = mods.length
 		var modsIndex = 0
@@ -25,7 +25,7 @@ export default class Collect extends EventEmitter {
 			const [
 				$compositIndex, $composit
 			] = composits[modsIndex]
-			const Model = dbConnection.models[nom]
+			const Model = dbConnections.spreadsheet.models[nom]
 			const collectRows = $composit
 			const collectRowsLength = collectRows.length
 			var collectRowsIndex = 0

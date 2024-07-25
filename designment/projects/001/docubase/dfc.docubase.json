@@ -8,7 +8,8 @@
 			"input": {
 				"spreadsheet": {
 					"watch": true,
-					"path": "/home/thomaspatrickwelborn/Development/Digital-Flux-Capacitor/designment/projects/001/docubase/docubase.xlsx"
+					"path": "/home/thomaspatrickwelborn/Development/Digital-Flux-Capacitor/designment/projects/001/docubase/docubase.xlsx",
+					"options": {}
 				},
 				"database": {
 					"uri": "mongodb://127.0.0.1:27017/dfc-demo-001-docubase-spreadsheet",
@@ -21,7 +22,8 @@
 				  "options": {}
 				},
 				"filesystem": {
-					"path": "/home/thomaspatrickwelborn/Development/Digital-Flux-Capacitor/demonstrament/projects/001/docubase"
+					"path": "/home/thomaspatrickwelborn/Development/Digital-Flux-Capacitor/demonstrament/projects/001/docubase",
+					"options": {}
 				}
 			}
 		}

@@ -15,7 +15,7 @@ export default class Worksheet extends EventEmitter {
 	#options
 	name
 	className
-	#dbConnection
+	#dbConnections
 	#_suppository
 	#_compository
 	#_depository
@@ -27,11 +27,11 @@ export default class Worksheet extends EventEmitter {
 			worksheetClassName, 
 			worksheetName, 
 			worksheetTable, 
-			dbConnection
+			dbConnections
 		} = $settings
 		this.name = worksheetName
 		this.className = worksheetClassName
-		this.#dbConnection = dbConnection
+		this.#dbConnections = dbConnections
 		this.depository = worksheetTable
 		this.suppository = this.depository
 		this.compository = this.depository
@@ -46,17 +46,18 @@ export default class Worksheet extends EventEmitter {
 	get suppository() { return this.#_suppository }
 	set suppository($suppository) {
 		this.#_suppository = new Suppository($suppository, {
-			dbConnection: this.#dbConnection
+			dbConnections: this.#dbConnections
 		})
 	}
 	get compository() { return this.#_compository }
 	set compository($compository) {
 		this.#_compository = new Compository($compository, {
-			dbConnection: this.#dbConnection
+			dbConnections: this.#dbConnections
 		})
 	}
 	async saveCompository() {
 		await this.compository.saveCollects()
+		console.log(this)
 		// this.intrapository = this.compository <<<<<<<<<<<<<<<<<<<<
     // this.emit('collects:save', this)
 		return this

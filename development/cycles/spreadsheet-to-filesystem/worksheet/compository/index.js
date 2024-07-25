@@ -2,7 +2,7 @@ import { EventEmitter } from 'node:events'
 import Composit from './composit/index.js'
 import Collect from './collect/index.js'
 export default class Compository extends EventEmitter {
-  #dbConnection
+  #dbConnections
   #_settings = {}
   #_options = {}
   #_composits = new Map()
@@ -11,7 +11,7 @@ export default class Compository extends EventEmitter {
     super()
     this.settings = $settings
     this.options = $options
-    this.#dbConnection = this.options.dbConnection
+    this.#dbConnections = this.options.dbConnections
     this.composits = this.settings
     this.collects = this.settings
   }
@@ -50,7 +50,7 @@ export default class Compository extends EventEmitter {
       const collect = new Collect({
         mods, 
         composits, 
-        dbConnection: this.#dbConnection,
+        dbConnections: this.#dbConnections,
         ranges,
         lmnRanges,
       })

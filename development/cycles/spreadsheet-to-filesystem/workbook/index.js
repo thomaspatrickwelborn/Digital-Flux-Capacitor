@@ -6,14 +6,14 @@ class Workbook extends EventEmitter {
 	#workbookPath
 	name
 	#settings
-	#dbConnection
+	#dbConnections
 	constructor($settings) {
 		super()
 		this.#settings = $settings
 		const {
-			workbookPath, workbook, worksheets, dbConnection
+			workbookPath, workbook, worksheets, dbConnections
 		} = this.#settings
-		this.#dbConnection = dbConnection
+		this.#dbConnections = dbConnections
 		this.#workbookPath = workbookPath
 		this.name = path.basename(this.#workbookPath).split('.')[0]
 		this.workbook = workbook
@@ -68,7 +68,7 @@ class Workbook extends EventEmitter {
 				worksheetClassName: workbookWorksheetClassName,
 				worksheetName: workbookWorksheetName,
 				worksheetTable: workbookWorksheetTable,
-				dbConnection: this.#dbConnection,
+				dbConnections: this.#dbConnections,
 			}, workbookWorksheetOptions)
 			_worksheets
 			.set(workbookWorksheetName, worksheet)
