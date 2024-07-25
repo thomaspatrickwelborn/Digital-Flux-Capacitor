@@ -1,6 +1,5 @@
 import Block from './Block/index.js'
 export default function Blocks($data, $options) {
-  console.log($data)
   const { coutils, content, coindex } = $data
   const { Functions, Parsers } = coutils
   const blocks = []

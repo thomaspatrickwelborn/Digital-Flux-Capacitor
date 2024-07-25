@@ -17,7 +17,6 @@ export default class Intrapository extends EventEmitter {
 		this.#settings = $settings
 		this.#options = $options
 		this.#dbConnections = this.#options.dbConnections
-		console.log(this.#dbConnections)
 		this.#setDBConnectionModels()
 		for(
 			const $collect of this.#settings.collects.values()
@@ -30,15 +29,13 @@ export default class Intrapository extends EventEmitter {
 						models: this.#dbConnections.filesystem.models,
 					}
 				)
-				// this.worksheets.set(
-				// 	worksheet.name, 
-				// 	worksheetTranslexis
-				// )
+				// console.log('worksheetTranslexis', worksheetTranslexis)
+				this.worksheets.set(
+					this.#options.worksheet.name, 
+					worksheetTranslexis
+				)
 			})
 		}
-		// this.#settings.on(
-
-		// )
 		this.#options = $options
 		this.#dbConnections = this.#dbConnections
 	}
@@ -65,28 +62,5 @@ export default class Intrapository extends EventEmitter {
 			modelNamesIndex++
 		}
 		return this.#dbConnections.filesystem.models
-	}
-	async input($event) {
-		// const { worksheet, subcycle } = $event
-		// const worksheetClassName = worksheet.className
-		// const worksheetCollect = [...worksheet.compository.collects.values()]
-		// .map(($collect) => {
-		// 	return Array.from($collect)
-		// }).flat()
-		// const worksheetTranslexis = await Worksheets[worksheetClassName](
-		// 	worksheetCollect, 
-		// 	{
-		// 		worksheet: worksheet,
-		// 		models: this.dbConnection.models,
-		// 	}
-		// )
-		// this.worksheets.set(
-		// 	worksheet.name, 
-		// 	worksheetTranslexis
-		// )
-		// this.emit('output', {
-		// 	type: 'worksheet:output',
-		// 	worksheet: worksheetTranslexis,
-		// })
 	}
 }

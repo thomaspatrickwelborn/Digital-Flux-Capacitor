@@ -8,13 +8,40 @@ async function saveCollectDocs($collect, $models) {
 		var fsDoc
 		switch(collectDoc.fs.type) {
 			case 'File':
-				fsDoc = await new File(collectDoc)
+				fsDoc = await File.findOneAndReplace({
+					'fs.id': collectDoc.fs.id,
+					'fs.path': collectDoc.fs.path,
+				}, collectDoc, {
+					returnDocument: 'after'
+				})
+				if(fsDoc === null) {
+					fsDoc = await File.findOneAndUpdate({
+						'fs.id': collectDoc.fs.id,
+						'fs.path': collectDoc.fs.path,
+					}, collectDoc, {
+						upsert: true,
+						new: true,
+					})
+				}
 				break
 			case 'Fold':
-				fsDoc = await new Fold(collectDoc)
+				fsDoc = await Fold.findOneAndReplace({
+					'fs.id': collectDoc.fs.id,
+					'fs.path': collectDoc.fs.path,
+				}, collectDoc, {
+					returnDocument: 'after'
+				})
+				if(fsDoc === null) {
+					fsDoc = await Fold.findOneAndUpdate({
+						'fs.id': collectDoc.fs.id,
+						'fs.path': collectDoc.fs.path,
+					}, collectDoc, {
+						upsert: true,
+						new: true,
+					})
+				}
 				break
 		}
-		fsDoc = await fsDoc.save()
 		collectDocs.push(fsDoc/*.toObject()*/)
 		collectDocsIndex++
 	}
