@@ -1,5 +1,5 @@
+import { EventEmitter } from 'node:events'
 import { createConnection } from 'mongoose'
-import Subcycle from '#core/subcycle/index.js'
 import {
 	File as FileSchema,
 	Fold as FoldSchema,
@@ -7,25 +7,13 @@ import {
 import * as Worksheets from './worksheets/index.js'
 const Schemata = { FileSchema, FoldSchema }
 
-class SpreadsheetDatabaseToFilesystemDatabase extends Subcycle {
+export default class Intrapository extends EventEmitter {
 	#settings
-	#_dbConnection
+	#dbConnections
 	worksheets = new Map()
 	constructor($settings) {
 		super($settings)
-		this.dbConnection = this.settings.output.database
-	}
-	get dbConnection() { return this.#_dbConnection }
-	set dbConnection($database) {
-		if(this.#_dbConnection === undefined) {
-			const { uri, options } = $database
-			this.#_dbConnection = createConnection(uri, options)
-			this.#_dbConnection.once(
-				'connected', function databaseConnected($event) {
-					this.#setDBConnectionModels()
-				}.bind(this)
-			)
-		}
+		// this.dbConnections = this.settings.output.database
 	}
 	#getDBConnectionModels() {
 		return this.dbConnection.models
@@ -84,4 +72,3 @@ class SpreadsheetDatabaseToFilesystemDatabase extends Subcycle {
 		// this.emit('output', this)
 	}
 }
-export default SpreadsheetDatabaseToFilesystemDatabase
