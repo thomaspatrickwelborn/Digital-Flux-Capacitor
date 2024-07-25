@@ -3,7 +3,7 @@ import { Schema, Types } from 'mongoose'
 import Depository from './depository/index.js'
 import Suppository from './suppository/index.js'
 import Compository from './compository/index.js'
-import Intrapository from './intrapository/index.js'
+// import Intrapository from './intrapository/index.js'
 import {
 	typeOf, parseCell, tem, combineMerge
 } from '#utils/index.js'
@@ -57,7 +57,8 @@ export default class Worksheet extends EventEmitter {
 	}
 	async saveCompository() {
 		await this.compository.saveCollects()
-    this.emit('collects:save', this)
+		// this.intrapository = this.compository <<<<<<<<<<<<<<<<<<<<
+    // this.emit('collects:save', this)
 		return this
 	}
 }
