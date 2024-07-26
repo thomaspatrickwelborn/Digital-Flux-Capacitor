@@ -95,28 +95,32 @@ class Workbook extends EventEmitter {
 			worksheetTable,
 			dbConnections,
 		}, worksheetOptions)
-		console.log(worksheet)
 		worksheet.on(
 			'extrapository:saveCollectDoc',
-			function worksheetSaveCollectDoc($collectDoc) {
-				this.emit('worksheet:saveCollectDoc', $collectDoc)
-			}
+			this.#worksheetExtrapositorySaveCollectDoc
 		)
 		worksheet.on(
 			'extrapository:saveCollect',
-			function worksheetSaveCollect($collect) {
-				this.emit('worksheet:saveCollect', $collect)
-			}
+			this.#worksheetExtrapositorySaveCollect
 		)
 		worksheet.on(
 			'save',
 			function worksheetSave($worksheet) {
-				this.emit('worksheet:save', $worksheet)
+				console.log('save')
+				// this.emit('worksheet:save', $worksheet)
 			}
 		)
 		this.worksheets
 		.set(worksheetName, worksheet)
 		return [worksheetName, worksheet]
+	}
+	#worksheetExtrapositorySaveCollectDoc($collectDoc) {
+		console.log('extrapository:saveCollectDoc', $collectDoc)
+		// this.emit('worksheet:saveCollectDoc', $collectDoc)
+	}
+	#worksheetExtrapositorySaveCollect($collect) {
+		console.log('extrapository:saveCollect', $collect)
+		// this.emit('worksheet:saveCollect', $collect)
 	}
 	async saveWorksheets($worksheets) {
 		const worksheets = []

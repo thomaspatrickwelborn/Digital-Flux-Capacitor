@@ -7,7 +7,15 @@ import {
 import * as Translexes from './translexes/index.js'
 const Schemata = { FileSchema, FoldSchema }
 export default class Extrapository extends EventEmitter {
-	#compository
+	#_compository
+	get #compository() { return this.#_compository }
+	set #compository($compository) {
+		this.#_compository = $compository
+		this.#_compository.on(
+			'collect:save',
+			this.#compositoryCollectSave.bind(this)
+		)
+	}
 	#options
 	#dbConnections
 	translexes = new Map()
@@ -17,39 +25,35 @@ export default class Extrapository extends EventEmitter {
 		this.#options = $options
 		this.#dbConnections = this.#options.dbConnections
 		this.#setDBConnectionModels()
-		for(
-			const $collect of this.#compository.collects.values()
-		) {
-			$collect.on('compository:saveCollect', async function collectSave($collect) {
-				const worksheetTranslexis = new Translexes[this.#options.className](
-					$collect, 
-					{
-						worksheet: this.#options.worksheet,
-						models: this.#dbConnections.filesystem.models,
-					}
-				)
-				worksheetTranslexis.on(
-					'saveCollectDoc',
-					($collectDoc) => {
-						this.emit('translexis:saveCollectDoc', $collectDoc)
-					}
-				)
-				worksheetTranslexis.on(
-					'saveCollect',
-					($collect) => {
-						this.emit('translexis:saveCollect', $collect)
-					}
-				)
-				this.translexes.set(
-					this.#options.worksheet.name, 
-					worksheetTranslexis
-				)
-				worksheetTranslexis.save()
-				
-			}.bind(this))
-		}
-		this.#options = $options
-		this.#dbConnections = this.#dbConnections
+	}
+	async #compositoryCollectSave($collect) {
+		const worksheetTranslexis = new Translexes[
+			this.#options.className
+		](
+			$collect, 
+			{
+				worksheet: this.#options.worksheet,
+				models: this.#dbConnections.filesystem.models,
+			}
+		)
+		worksheetTranslexis.on(
+			'saveCollectDoc',
+			($collectDoc) => {
+				this.emit('translexis:saveCollectDoc', $collectDoc)
+			}
+		)
+		worksheetTranslexis.on(
+			'saveCollect',
+			($collect) => {
+				this.emit('translexis:saveCollect', $collect)
+			}
+		)
+		this.translexes.set(
+			this.#options.worksheet.name, 
+			worksheetTranslexis
+		)
+		worksheetTranslexis.save()
+		
 	}
 	#getDBConnectionModels() {
 		return this.#dbConnections.filesystem.models
@@ -57,8 +61,14 @@ export default class Extrapository extends EventEmitter {
 	#setDBConnectionModels() {
 		const modelNames = ['File', 'Fold']
 		for(const $modelName of modelNames) {
-			if(this.#dbConnections.filesystem.models[$modelName] === undefined) {
-				this.#dbConnections.filesystem.model($modelName, Schemata[`${$modelName}Schema`])
+			if(
+				this.#dbConnections.filesystem
+				.models[$modelName] === undefined
+			) {
+				this.#dbConnections.filesystem.model(
+					$modelName, 
+					Schemata[`${$modelName}Schema`]
+				)
 			}
 		}
 		return this.#getDBConnectionModels()

@@ -75,7 +75,7 @@ export default class Collect extends EventEmitter {
 			collectDocsIndex++
 		}
 		this.emit(
-			'collect:save', 
+			'save', 
 			this
 		)
 		// collectDocsSaveTimer.stop().log()

@@ -78,11 +78,11 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
     //   'this.workbook.fsElementWorksheets', 
     //   this.workbook.fsElementWorksheets
     // )
-    console.log(
-      "this.workbook.fsElementWorksheets",
-      this.workbook.fsElementWorksheets
-    )
-    const fsElementsWorksheet = await this.workbook.saveWorksheets(
+    // console.log(
+    //   "this.workbook.fsElementWorksheets",
+    //   this.workbook.fsElementWorksheets
+    // )
+    const fsElementsWorksheets = await this.workbook.saveWorksheets(
       this.workbook.fsElementWorksheets
     )
     // console.log(
