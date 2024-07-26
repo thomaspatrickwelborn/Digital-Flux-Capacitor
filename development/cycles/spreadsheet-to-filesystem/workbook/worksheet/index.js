@@ -2,7 +2,7 @@ import { EventEmitter } from 'node:events'
 import Depository from './depository/index.js'
 import Suppository from './suppository/index.js'
 import Compository from './compository/index.js'
-import Intrapository from './intrapository/index.js'
+import Extrapository from './extrapository/index.js'
 import {
 	typeOf, parseCell, tem, combineMerge
 } from '#utils/index.js'
@@ -16,7 +16,7 @@ export default class Worksheet extends EventEmitter {
 	#_depository
 	#_suppository
 	#_compository
-	#_intrapository
+	#_extrapository
 	constructor($settings, $options) {
 		super()
 		this.#settings = $settings
@@ -33,7 +33,7 @@ export default class Worksheet extends EventEmitter {
 		this.depository = worksheetTable
 		this.suppository = this.depository
 		this.compository = this.depository
-		this.intrapository = this.compository
+		this.extrapository = this.compository
 		this.extrapository = {}
 		return
 	}
@@ -70,9 +70,9 @@ export default class Worksheet extends EventEmitter {
 			}
 		)
 	}
-	get intrapository() { return this.#_intrapository }
-	set intrapository($compository) {
-		this.#_intrapository = new Intrapository(
+	get extrapository() { return this.#_extrapository }
+	set extrapository($compository) {
+		this.#_extrapository = new Extrapository(
 			$compository, 
 			{
 				name: this.name,
@@ -81,8 +81,8 @@ export default class Worksheet extends EventEmitter {
 				worksheet: this,
 			}
 		)
-		this.#_intrapository.on(
-			'saveCollectDoc', function intrapositorySaveCollectDoc($collectDoc) {
+		this.#_extrapository.on(
+			'saveCollectDoc', function extrapositorySaveCollectDoc($collectDoc) {
 				console.log('$collectDoc', $collectDoc)
 			}
 		)

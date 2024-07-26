@@ -14,8 +14,8 @@ export default class Generators extends EventEmitter {
 		this.#dbConnections = this.#options.dbConnections
 		return this
 	}
-	generate($data) {
-		console.log('Generators', 'generate', '$data', $data)
+	generateFSElements($fsElements) {
+		console.log('Generators', 'generateFSElements', '$fsElements', $fsElements)
 		// this.fsElements = new FSElements(
 		// 	fsElements, $presubcycle, this
 		// )
