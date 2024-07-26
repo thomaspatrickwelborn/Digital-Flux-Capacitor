@@ -4,6 +4,7 @@ import { createConnection } from 'mongoose'
 import * as XLSX from 'xlsx'
 import { readFile } from 'node:fs/promises'
 import Workbook from './workbook/index.js'
+import Generators from './generators/index.js'
 import Config from './config.js'
 
 export default class SpreadsheetToFilesystem extends EventEmitter {
@@ -32,15 +33,18 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
         workbook: $workbook,
         dbConnections: this.#dbConnections, 
       })
-      this.#_workbook.on('worksheet:saveCollectDoc', ($collectDoc) => {
-        console.log('worksheet:saveCollectDoc', '$collectDoc', $collectDoc)
-      })
-      this.#_workbook.on('worksheet:saveCollect', ($collect) => {
-        console.log('worksheet:saveCollect', '$collect', $collect)
-      })
-      this.#_workbook.on('worksheet:save', ($worksheet) => {
-        console.log('worksheet:save', '$worksheet', $worksheet)
-      })
+      this.#_workbook.on(
+        'worksheet:saveCollectDoc', 
+        this.#workbookWorksheetSaveCollectDoc.bind(this)
+      )
+      this.#_workbook.on(
+        'worksheet:saveCollect', 
+        this.#workbookWorksheetSaveCollect.bind(this)
+      )
+      this.#_workbook.on(
+        'worksheet:save', 
+        this.#workbookWorksheetSave.bind(this)
+      )
     }
   }
   get workbookWatch() { return this.#_workbookWatch }
@@ -61,6 +65,15 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
     ) ? $watch
       : this.#_watch
   }
+  #workbookWorksheetSaveCollectDoc($collectDoc) {
+    console.log('worksheet:saveCollectDoc', '$collectDoc', $collectDoc)
+  }
+  #workbookWorksheetSaveCollect($collect) {
+    console.log('worksheet:saveCollect', '$collect', $collect)
+  }
+  #workbookWorksheetSave($worksheet) {
+    console.log('worksheet:save', '$worksheet', $worksheet)
+  }
   async #readWorkbook($workbookPath) {
     const workbookFile = await readFile($workbookPath)
     .then(($buffer) => XLSX.read($buffer, {
@@ -74,14 +87,6 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       cellStyles: true, // "hidden" property is cell style
     }))
     this.workbook = workbookFile
-    // console.log(
-    //   'this.workbook.fsElementWorksheets', 
-    //   this.workbook.fsElementWorksheets
-    // )
-    // console.log(
-    //   "this.workbook.fsElementWorksheets",
-    //   this.workbook.fsElementWorksheets
-    // )
     const fsElementsWorksheets = await this.workbook.saveWorksheets(
       this.workbook.fsElementWorksheets
     )
