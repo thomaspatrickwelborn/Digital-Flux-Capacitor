@@ -20,7 +20,7 @@ export default class Extrapository extends EventEmitter {
 		for(
 			const $collect of this.#compository.collects.values()
 		) {
-			$collect.on('collect:save', async function collectSave($collect) {
+			$collect.on('compository:saveCollect', async function collectSave($collect) {
 				const worksheetTranslexis = new Translexes[this.#options.className](
 					$collect, 
 					{

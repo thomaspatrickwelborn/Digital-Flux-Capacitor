@@ -60,7 +60,9 @@ export default class Compository extends EventEmitter {
   async saveCollects() {
     for(const $collect of this.collects.values()) {
       await $collect.save()
+      this.emit('collect:save', $collect)
     }
+    this.emit('collects:save', this)
     return this
   }
 }

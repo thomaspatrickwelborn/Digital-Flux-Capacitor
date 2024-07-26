@@ -68,6 +68,18 @@ export default class Worksheet extends EventEmitter {
 				dbConnections: this.#dbConnections
 			}
 		)
+		this.#_compository.on(
+			'collects:save', 
+			($collects) => {
+				this.emit('compository:saveCollects', $collects)
+			}
+		)
+		this.#_compository.on(
+			'collect:save', 
+			($collect) => {
+				this.emit('compository:saveCollect', $collect)
+			}
+		)
 	}
 	get extrapository() { return this.#_extrapository }
 	set extrapository($compository) {
@@ -95,7 +107,6 @@ export default class Worksheet extends EventEmitter {
 	}
 	async saveCompository() {
 		await this.compository.saveCollects()
-		this.emit('save', this)
 		return this
 	}
 }

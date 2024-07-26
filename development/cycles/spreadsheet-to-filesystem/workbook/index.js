@@ -97,13 +97,13 @@ class Workbook extends EventEmitter {
 		}, worksheetOptions)
 		console.log(worksheet)
 		worksheet.on(
-			'saveCollectDoc',
+			'extrapository:saveCollectDoc',
 			function worksheetSaveCollectDoc($collectDoc) {
 				this.emit('worksheet:saveCollectDoc', $collectDoc)
 			}
 		)
 		worksheet.on(
-			'saveCollect',
+			'extrapository:saveCollect',
 			function worksheetSaveCollect($collect) {
 				this.emit('worksheet:saveCollect', $collect)
 			}
