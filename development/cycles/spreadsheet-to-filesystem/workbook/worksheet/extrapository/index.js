@@ -31,7 +31,13 @@ export default class Extrapository extends EventEmitter {
 				worksheetTranslexis.on(
 					'saveCollectDoc',
 					($collectDoc) => {
-						this.emit('saveCollectDoc', $collectDoc)
+						this.emit('extrapository:saveCollectDoc', $collectDoc)
+					}
+				)
+				worksheetTranslexis.on(
+					'saveCollect',
+					($collect) => {
+						this.emit('extrapository:saveCollect', $collect)
 					}
 				)
 				this.worksheets.set(

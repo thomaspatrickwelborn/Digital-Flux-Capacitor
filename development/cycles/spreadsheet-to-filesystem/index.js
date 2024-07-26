@@ -32,13 +32,14 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
         workbook: $workbook,
         dbConnections: this.#dbConnections, 
       })
+      this.#_workbook.on('worksheet:saveCollectDoc', ($collectDoc) => {
+        console.log('worksheet:saveCollectDoc', '$collectDoc', $collectDoc)
+      })
+      this.#_workbook.on('worksheet:saveCollect', ($collect) => {
+        console.log('worksheet:saveCollect', '$collect', $collect)
+      })
       this.#_workbook.on('worksheet:save', ($worksheet) => {
         console.log('worksheet:save', '$worksheet', $worksheet)
-        // this.emit('output', {
-        //   type: 'worksheet:output',
-        //   worksheet: $worksheet,
-        //   subcycle: this,
-        // })
       })
     }
   }

@@ -34,7 +34,6 @@ export default class Worksheet extends EventEmitter {
 		this.suppository = this.depository
 		this.compository = this.depository
 		this.extrapository = this.compository
-		this.extrapository = {}
 		return
 	}
 	get depository() { return this.#_depository }
@@ -82,13 +81,21 @@ export default class Worksheet extends EventEmitter {
 			}
 		)
 		this.#_extrapository.on(
-			'saveCollectDoc', function extrapositorySaveCollectDoc($collectDoc) {
-				console.log('$collectDoc', $collectDoc)
+			'extrapository:saveCollectDoc', 
+			function extrapositorySaveCollectDoc($collectDoc) {
+				this.emit('saveCollectDoc', $collectDoc)
+			}
+		)
+		this.#_extrapository.on(
+			'extrapository:saveCollect', 
+			function extrapositorySaveCollect($collect) {
+				this.emit('$collect', $collect)
 			}
 		)
 	}
 	async saveCompository() {
 		await this.compository.saveCollects()
+		this.emit('save', this)
 		return this
 	}
 }
