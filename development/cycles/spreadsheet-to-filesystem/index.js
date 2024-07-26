@@ -81,20 +81,20 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       "this.workbook.fsElementWorksheets",
       this.workbook.fsElementWorksheets
     )
-    await this.workbook.saveWorksheets(
+    const fsElementsWorksheet = await this.workbook.saveWorksheets(
       this.workbook.fsElementWorksheets
     )
     // console.log(
     //   'this.workbook.fsElementContentWorksheets', 
     //   this.workbook.fsElementContentWorksheets
     // )
-    console.log(
-      "this.workbook.fsElementContentWorksheets",
-      this.workbook.fsElementContentWorksheets
-    )
-    await this.workbook.saveWorksheets(
-      this.workbook.fsElementContentWorksheets
-    )
+    // console.log(
+    //   "this.workbook.fsElementContentWorksheets",
+    //   this.workbook.fsElementContentWorksheets
+    // )
+    // const fsElementsWorksheet = await this.workbook.saveWorksheets(
+    //   this.workbook.fsElementContentWorksheets
+    // )
     return this
   }
   async #workbookWatchChange($workbookPath) {

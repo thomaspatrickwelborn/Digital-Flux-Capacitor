@@ -1,6 +1,6 @@
 import { EventEmitter } from 'node:events'
 import path from 'path'
-import Worksheet from '../worksheet/index.js'
+import Worksheet from './worksheet/index.js'
 
 class Workbook extends EventEmitter {
 	#workbookPath
@@ -100,15 +100,19 @@ class Workbook extends EventEmitter {
 		return [worksheetName, worksheet]
 	}
 	async saveWorksheets($worksheets) {
+		const worksheets = []
 		for(const $worksheet of $worksheets) {
-			await this.saveWorksheet($worksheet)
+			const worksheet = await this.saveWorksheet($worksheet)
+			worksheets.push(worksheet)
 		}
+		return new Map(worksheets)
 	}
 	async saveWorksheet($worksheet) {
 		const worksheetName = $worksheet[0]
 		const worksheet = $worksheet[1]
 		await worksheet.saveCompository()
 		this.emit('worksheet:save', worksheet)
+		return [worksheetName, worksheet]
 	}
 }
 export default Workbook
