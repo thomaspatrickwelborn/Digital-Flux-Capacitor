@@ -4,24 +4,24 @@ import {
 	File as FileSchema,
 	Fold as FoldSchema,
 } from './schemata/index.js'
-import * as Worksheets from './worksheets/index.js'
+import * as Translexes from './translexes/index.js'
 const Schemata = { FileSchema, FoldSchema }
 export default class Extrapository extends EventEmitter {
-	#settings
+	#compository
 	#options
 	#dbConnections
-	worksheets = new Map()
-	constructor($settings = {}, $options = {}) {
+	translexes = new Map()
+	constructor($compository = {}, $options = {}) {
 		super()
-		this.#settings = $settings
+		this.#compository = $compository
 		this.#options = $options
 		this.#dbConnections = this.#options.dbConnections
 		this.#setDBConnectionModels()
 		for(
-			const $collect of this.#settings.collects.values()
+			const $collect of this.#compository.collects.values()
 		) {
 			$collect.on('collect:save', async function collectSave($collect) {
-				const worksheetTranslexis = new Worksheets[this.#options.className](
+				const worksheetTranslexis = new Translexes[this.#options.className](
 					$collect, 
 					{
 						worksheet: this.#options.worksheet,
@@ -31,16 +31,16 @@ export default class Extrapository extends EventEmitter {
 				worksheetTranslexis.on(
 					'saveCollectDoc',
 					($collectDoc) => {
-						this.emit('extrapository:saveCollectDoc', $collectDoc)
+						this.emit('translexis:saveCollectDoc', $collectDoc)
 					}
 				)
 				worksheetTranslexis.on(
 					'saveCollect',
 					($collect) => {
-						this.emit('extrapository:saveCollect', $collect)
+						this.emit('translexis:saveCollect', $collect)
 					}
 				)
-				this.worksheets.set(
+				this.translexes.set(
 					this.#options.worksheet.name, 
 					worksheetTranslexis
 				)

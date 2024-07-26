@@ -81,15 +81,15 @@ export default class Worksheet extends EventEmitter {
 			}
 		)
 		this.#_extrapository.on(
-			'extrapository:saveCollectDoc', 
-			function extrapositorySaveCollectDoc($collectDoc) {
-				this.emit('saveCollectDoc', $collectDoc)
+			'translexis:saveCollectDoc', 
+			($collectDoc) => {
+				this.emit('extrapository:saveCollectDoc', $collectDoc)
 			}
 		)
 		this.#_extrapository.on(
-			'extrapository:saveCollect', 
-			function extrapositorySaveCollect($collect) {
-				this.emit('$collect', $collect)
+			'translexis:saveCollect', 
+			($collect) => {
+				this.emit('extrapository:saveCollect', $collect)
 			}
 		)
 	}

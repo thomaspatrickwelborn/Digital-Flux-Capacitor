@@ -7,17 +7,17 @@ export default class Compository extends EventEmitter {
   #_options = {}
   #_composits = new Map()
   #_collects = new Map()
-  constructor($settings = {}, $options = {}) {
+  constructor($depository = {}, $options = {}) {
     super()
-    this.settings = $settings
+    this.depository = $depository
     this.options = $options
     this.#dbConnections = this.options.dbConnections
-    this.composits = this.settings
-    this.collects = this.settings
+    this.composits = this.depository
+    this.collects = this.depository
   }
   get composits() { return this.#_composits }
   set composits($composits) {
-    var { mods, ranges, merges, lmnRanges } = this.settings
+    var { mods, ranges, merges, lmnRanges } = this.depository
     mods = Array.from(mods.entries())
     const _composits = this.#_composits
     const modsLength = mods.length 

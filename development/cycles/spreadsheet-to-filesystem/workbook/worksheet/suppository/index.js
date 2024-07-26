@@ -4,20 +4,20 @@ import deepmerge from 'deepmerge'
 import { combineMerge } from '#utils/index.js'
 import Supposit from './supposit/index.js'
 export default class Suppository extends EventEmitter {
-  #settings
+  #depository
   #options
   #dbConnections
   #_supposits = new Map()
   #_schemata = new Map()
   #_models = new Map()
-  constructor($settings = {}, $options = {}) {
+  constructor($depository = {}, $options = {}) {
     super()
-    this.#settings = $settings
+    this.#depository = $depository
     this.#options = $options
     this.#dbConnections = this.#options.dbConnections
-    this.supposits = this.#settings
-    this.schemata = this.#settings
-    this.models = this.#settings
+    this.supposits = this.#depository
+    this.schemata = this.#depository
+    this.models = this.#depository
   }
   get supposits() { return this.#_supposits }
   set supposits($supposits) {

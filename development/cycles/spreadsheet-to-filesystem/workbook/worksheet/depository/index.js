@@ -12,7 +12,7 @@ import LMNRanges from './lmnRanges/index.js'
 import Mods from './mods/index.js'
 
 export default class Depository extends EventEmitter {
-  #settings = {}
+  #worksheetTable = {}
   #options = {}
   #_rows = []
   #_cols = []
@@ -30,26 +30,26 @@ export default class Depository extends EventEmitter {
   get lmnRanges() { return this.#_lmnRanges }
   get data() { return this.#_data }
   get mods() { return this.#_mods }
-  constructor($settings, $options) {
+  constructor($worksheetTable, $options) {
     super()
-    this.#settings = $settings
+    this.#worksheetTable = $worksheetTable
     this.#options = $options
     this.#_rows = new Rows(
-      this.#settings['!rows']
+      this.#worksheetTable['!rows']
     )
     this.#_cols = new Cols(
-      this.#settings['!cols']   
+      this.#worksheetTable['!cols']   
     )
     this.#_hidden = new Hidden({
       rows: this.rows,
       cols: this.cols,
     })
     this.#_merges = new Merges({
-      merges: this.#settings['!merges'],
+      merges: this.#worksheetTable['!merges'],
       hidden: this.hidden,
     })
     this.#_ranges = new Ranges({
-      ranges: this.#settings['!ranges'],
+      ranges: this.#worksheetTable['!ranges'],
       hidden: this.hidden,
     }, this.#options.ranges)
     this.#_lmnRanges = new LMNRanges(
@@ -58,7 +58,7 @@ export default class Depository extends EventEmitter {
       ), this.#options.ranges
     )
     this.#_data = new Data({
-      data: this.#settings['!data'],
+      data: this.#worksheetTable['!data'],
       ranges: this.ranges,
       hidden: this.hidden,
     })
