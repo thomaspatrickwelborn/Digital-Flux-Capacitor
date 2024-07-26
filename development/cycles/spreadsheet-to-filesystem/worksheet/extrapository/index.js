@@ -3,13 +3,17 @@ import {
 	FSElements,
 	FSElementsContent,
 } from './Generators/index.js'
-class FilesystemDatabaseToFilesystem extends EventEmitter {
-	settings
+export default class Extrapository extends EventEmitter {
+	#settings
+	#options
+	#dbConnections
 	fsElements
 	fsElementsContent
-	constructor($settings) {
+	constructor($settings = {}, $options = {}) {
 		super()
-		this.settings = $settings
+		this.#settings = $settings
+		this.#options = $options
+		this.#dbConnections = this.#options.dbConnections
 		return this
 	}
 	async input($event) {
@@ -33,4 +37,3 @@ class FilesystemDatabaseToFilesystem extends EventEmitter {
 		// )
 	}
 }
-export default FilesystemDatabaseToFilesystem

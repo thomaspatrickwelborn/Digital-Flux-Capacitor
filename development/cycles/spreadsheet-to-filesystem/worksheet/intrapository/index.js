@@ -6,7 +6,6 @@ import {
 } from './schemata/index.js'
 import * as Worksheets from './worksheets/index.js'
 const Schemata = { FileSchema, FoldSchema }
-
 export default class Intrapository extends EventEmitter {
 	#settings
 	#options
@@ -18,6 +17,7 @@ export default class Intrapository extends EventEmitter {
 		this.#options = $options
 		this.#dbConnections = this.#options.dbConnections
 		this.#setDBConnectionModels()
+		console.log('this.#settings', this.#settings)
 		for(
 			const $collect of this.#settings.collects.values()
 		) {
