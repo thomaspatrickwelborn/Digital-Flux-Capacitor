@@ -16,19 +16,7 @@ export default class Extrapository extends EventEmitter {
 		this.#dbConnections = this.#options.dbConnections
 		return this
 	}
-	async input($event) {
-		switch($event.type) {
-			case 'worksheet:output':
-				console.log($event.type, $event.worksheet)
-				break
-		}
-		// const fsDBConnection = $presubcycle.dbConnection
-		// const { File, Fold } = fsDBConnection.models
-		// const fileCollection = await File
-		// .find({})
-		// const foldCollection = await Fold
-		// .find({})
-		// const fsElements = foldCollection.concat(fileCollection)
+	generate() {
 		// this.fsElements = new FSElements(
 		// 	fsElements, $presubcycle, this
 		// )

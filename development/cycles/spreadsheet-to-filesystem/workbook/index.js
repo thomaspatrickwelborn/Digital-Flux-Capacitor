@@ -21,18 +21,18 @@ class Workbook extends EventEmitter {
 		this.#workbookPath = workbookPath
 		this.name = path.basename(this.#workbookPath).split('.')[0]
 		this.workbook = workbook
-		this.fsElementWorksheets = this.#createWorksheets(
-			this.#getWorksheetsByClassName(
-				new RegExp(/^VINE/)
+		this.fsElementWorksheets = new Map(
+			this.#createWorksheets(
+				this.#getWorksheetsByClassName(
+					new RegExp(/^VINE/)
+				)
 			)
 		)
-		console.log(this.fsElementWorksheets)
 		this.fsElementContentWorksheets = this.#createWorksheets(
 			this.#getWorksheetsByClassName(
 				new RegExp(/^VANT|^VELI|^VERS|^VIEW|^VORM/)
 			)
 		)
-			ole.log(this.fsElementContentWorksheets)
 	}
 	get workbook() { return this.#_workbook }
 	set workbook($workbook) { this.#_workbook = Object.freeze($workbook) }
@@ -46,18 +46,24 @@ class Workbook extends EventEmitter {
 		return worksheets
 	}
 	#createWorksheets($worksheets) {
-		console.log('$worksheets', $worksheets)
+		const worksheets = []
 		const worksheetsLength = $worksheets.length
 		var worksheetsIndex = 0
 		iterateWorksheets: 
 		while(worksheetsIndex < worksheetsLength) {
-			const worksheet = $worksheets[worksheetsIndex]
-			this.#createWorksheet(worksheet)
+			const worksheet = this.#createWorksheet(
+				$worksheets[worksheetsIndex]
+			)
+			if(worksheet !== undefined) {
+				worksheets.push(worksheet)
+			}
 			worksheetsIndex++
 		}
+		return new Map(worksheets)
 	}
 	#createWorksheet($worksheet) {
-		console.log('$worksheet', $worksheet)
+		const hidden = $worksheet.Hidden
+		if(hidden) return
 		const dbConnections = this.#dbConnections
 		const { Workbook, Sheets } = this.workbook
 		const worksheetNameData = $worksheet.name.split('_')
@@ -78,9 +84,7 @@ class Workbook extends EventEmitter {
 			) $worksheetRanges.push($worksheetRange)
 			return $worksheetRanges
 		}, [])
-		console.log(this.#settings.worksheets)
 		const worksheetOptions = this.#settings.worksheets[worksheetClassName] || {}
-		console.log('worksheetOptions', Object.keys(worksheetOptions))
 		worksheetTable['!rows'] = worksheetRows
 		worksheetTable['!cols'] = worksheetCols
 		worksheetTable['!merges'] = worksheetMerges
@@ -93,6 +97,7 @@ class Workbook extends EventEmitter {
 		}, worksheetOptions)
 		this.worksheets
 		.set(worksheetName, worksheet)
+		return [worksheetName, worksheet]
 	}
 	async saveWorksheets($worksheets) {
 		for(const $worksheet of $worksheets) {
@@ -100,11 +105,10 @@ class Workbook extends EventEmitter {
 		}
 	}
 	async saveWorksheet($worksheet) {
-		console.log(this.worksheets)
-		const worksheet = this.worksheets.get($worksheet.name)
-		console.log('saveWorksheet', worksheet)
-		// await $worksheet.saveCompository()
-		// this.emit('worksheet:save', $worksheet)
+		const worksheetName = $worksheet[0]
+		const worksheet = $worksheet[1]
+		await worksheet.saveCompository()
+		this.emit('worksheet:save', worksheet)
 	}
 }
 export default Workbook

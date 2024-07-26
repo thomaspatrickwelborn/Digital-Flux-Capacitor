@@ -33,11 +33,12 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
         dbConnections: this.#dbConnections, 
       })
       this.#_workbook.on('worksheet:save', ($worksheet) => {
-        this.emit('output', {
-          type: 'worksheet:output',
-          worksheet: $worksheet,
-          subcycle: this,
-        })
+        console.log('worksheet:save', '$worksheet', $worksheet)
+        // this.emit('output', {
+        //   type: 'worksheet:output',
+        //   worksheet: $worksheet,
+        //   subcycle: this,
+        // })
       })
     }
   }
@@ -76,6 +77,10 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
     //   'this.workbook.fsElementWorksheets', 
     //   this.workbook.fsElementWorksheets
     // )
+    console.log(
+      "this.workbook.fsElementWorksheets",
+      this.workbook.fsElementWorksheets
+    )
     await this.workbook.saveWorksheets(
       this.workbook.fsElementWorksheets
     )
@@ -83,6 +88,10 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
     //   'this.workbook.fsElementContentWorksheets', 
     //   this.workbook.fsElementContentWorksheets
     // )
+    console.log(
+      "this.workbook.fsElementContentWorksheets",
+      this.workbook.fsElementContentWorksheets
+    )
     await this.workbook.saveWorksheets(
       this.workbook.fsElementContentWorksheets
     )
@@ -116,7 +125,7 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       'connected', async function spreadsheetDatabaseConnected() {
         if(this.#watch === true) {
           this.workbookWatch = this.#settings.input.spreadsheet
-          console.log(this.#watch)
+          // console.log(this.#watch)
         } else {
           // await this.#workbookWatchChange(
           //   this.#settings.input.spreadsheet.path

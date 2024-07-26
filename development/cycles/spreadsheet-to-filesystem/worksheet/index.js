@@ -85,7 +85,7 @@ export default class Worksheet extends EventEmitter {
 		this.#_intrapository.on(
 			'saveCollectDoc', function intrapositorySaveCollectDoc($collectDoc) {
 				console.log('$collectDoc', $collectDoc)
-			},
+			}
 		)
 	}
 	get extrapository() { return this.#_extrapository }
