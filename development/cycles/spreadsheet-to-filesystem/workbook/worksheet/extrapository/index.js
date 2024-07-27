@@ -14,69 +14,69 @@ export default class Extrapository extends EventEmitter {
     this.#_compository.on(
       'collect:saveCollectDoc',
       ($collectDoc) => {
-        console.log('collect:saveCollectDoc', $collectDoc)
-        this.emit('worksheet:collectDocSave', $collectDoc)
+        // console.log('collect:saveCollectDoc', $collectDoc)
+        // this.emit('worksheet:collectDocSave', $collectDoc)
+        this.translexis.saveCollectDoc($collectDoc)
       }
     )
     this.#_compository.on(
       'collect:save',
       ($collect) => {
-        console.log('collect:save', $collect)
-        this.emit('worksheet:collectSave', $collect)
+        // console.log('collect:save', $collect)
+        // this.emit('worksheet:collectSave', $collect)
+        this.translexis.saveCollect($collect)
       }
     )
     this.#_compository.on(
       'saveCollects',
       ($collects) => {
-        console.log('saveCollects', $collects)
-        this.emit('worksheet:collectsSave', $collects)
+        // console.log('saveCollects', $collects)
+        // this.emit('worksheet:collectsSave', $collects)
+        this.translexis.saveCollects($collects)
       }
     )
   }
   #options
   #dbConnections
-  translexis
+  #_translexis
   constructor($compository = {}, $options = {}) {
     super()
     this.#compository = $compository
     this.#options = $options
     this.#dbConnections = this.#options.dbConnections
     this.#setDBConnectionModels()
+    this.translexis = {
+      worksheet: this.#options.worksheet,
+      models: this.#dbConnections.filesystem.models,
+    }
   }
-  async #compositoryCollectSave($collect) {
-    const worksheetTranslexis = new Translexes[
+  get translexis() { return this.#_translexis }
+  set translexis($translexisSettings) {
+    const Translexis = Translexes[
       this.#options.className
-    ](
-      $collect, 
-      {
-        worksheet: this.#options.worksheet,
-        models: this.#dbConnections.filesystem.models,
-      }
-    )
-    worksheetTranslexis.on(
+    ]
+    this.#_translexis = new Translexis($translexisSettings)
+    this.#_translexis.on(
       'saveCollectDoc',
       ($collectDoc) => {
         console.log('translexis:saveCollectDoc', $collectDoc)
         // this.emit('translexis:saveCollectDoc', $collectDoc)
       }
     )
-    worksheetTranslexis.on(
+    this.#_translexis.on(
       'saveCollect',
       ($collect) => {
         console.log('translexis:saveCollect', $collect)
         // this.emit('translexis:saveCollect', $collect)
       }
     )
-    worksheetTranslexis.on(
+    this.#_translexis.on(
       'save',
       ($translexis) => {
         console.log('translexis:save', $collect)
         // this.emit('translexis:save', $collect)
       }
     )
-    this.translexis = worksheetTranslexis
-    await worksheetTranslexis.save()
-    return this
   }
   #getDBConnectionModels() {
     return this.#dbConnections.filesystem.models
