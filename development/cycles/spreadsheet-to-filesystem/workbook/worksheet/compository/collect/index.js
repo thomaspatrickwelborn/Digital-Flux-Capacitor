@@ -1,8 +1,11 @@
 import { Timer } from '#utils/index.js'
 import { EventEmitter } from 'node:events'
 import assignLMNProps from './assignLMNProps/index.js'
+import assignPORProps from './assignPORProps/index.js'
+
 const Translexes = [
   ["assignLMNProps", assignLMNProps],
+  ["assignPORProps", assignPORProps]
 ]
 
 export default class Collect extends EventEmitter {
@@ -54,6 +57,7 @@ export default class Collect extends EventEmitter {
       $translexisMethod(collect, {
         mods, lmnRanges, composits
       })
+      console.log($translexisName, collect)
       translexesIndex++
     }
   }

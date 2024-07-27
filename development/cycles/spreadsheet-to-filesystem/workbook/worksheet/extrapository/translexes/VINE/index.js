@@ -1,7 +1,7 @@
 import { EventEmitter } from 'node:events'
 import { Model } from 'mongoose'
 import collectDocsToCollectObjects from './collectDocsToCollectObjects/index.js'
-import assignPORProps from './assignPORProps/index.js'
+// import assignPORProps from './assignPORProps/index.js'
 import transormCollectDocs from './transformCollectDocs/index.js'
 
 export default class VINE extends EventEmitter {

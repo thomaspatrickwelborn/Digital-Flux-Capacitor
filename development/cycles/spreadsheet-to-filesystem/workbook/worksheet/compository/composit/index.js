@@ -54,5 +54,6 @@ export default class Composit extends EventEmitter {
       Array.prototype.push.call(composit, apposit)
       comRowsIndex++
     }
+    // this.#_com
   }
 }

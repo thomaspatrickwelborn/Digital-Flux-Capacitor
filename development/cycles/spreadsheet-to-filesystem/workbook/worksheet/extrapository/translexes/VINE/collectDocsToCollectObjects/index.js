@@ -1,4 +1,4 @@
-function collectDocsToCollectObjects($collect, $worksheet) {
+function collectDocsToCollectObjects($collect) {
   const collectLength = $collect.length
   var collectIndex = 0
   while(collectIndex < collectLength) {

@@ -34,7 +34,7 @@ function transformCollectDocPort($ports) {
   }
   return $ports
 }
-function transormCollectDocs($collect, $worksheet) {
+function transormCollectDocs($collect) {
   const collectLength = $collect.length
   var collectIndex = 0
   iterateCollectDocs: 
