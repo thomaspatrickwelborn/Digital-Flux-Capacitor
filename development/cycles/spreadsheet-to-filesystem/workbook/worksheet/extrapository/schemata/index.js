@@ -7,14 +7,14 @@ const defaultSchemataOptions = {
 }
 // Fold Schema
 const Fold = new Schema({
-	fs: FSSettingsSchema,
+  fs: FSSettingsSchema,
 }, defaultSchemataOptions)
 // File Schema
 const File = new Schema({
-	fs: FSSettingsSchema,
-	imports: [ImportSchema],
-	blocks: [BlockSchema],
-	exports: [ExportSchema],
+  fs: FSSettingsSchema,
+  imports: [ImportSchema],
+  blocks: [BlockSchema],
+  exports: [ExportSchema],
 }, defaultSchemataOptions)
 
 export { File, Fold }

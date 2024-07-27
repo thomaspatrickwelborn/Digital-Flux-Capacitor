@@ -4,5 +4,5 @@ import Cell from './cell/index.js'
 import Range from './range/index.js'
 
 export {
-	Row, Col, Cell, Range
+  Row, Col, Cell, Range
 }

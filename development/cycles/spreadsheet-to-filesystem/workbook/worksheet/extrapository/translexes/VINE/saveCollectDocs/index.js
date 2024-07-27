@@ -1,6 +1,6 @@
 async function saveCollectDocs($collect, $models) {
-	
-	return $collect
+  
+  return $collect
 }
 
 export default saveCollectDocs

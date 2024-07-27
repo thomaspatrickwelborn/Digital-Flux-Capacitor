@@ -9,13 +9,13 @@ import combineMerge from './combineMerge/index.js'
 import isNamedRange from './isNamedRange/index.js'
 
 export {
-	typeOf,
-	Timer,
-	inferType,
-	parseCell,
-	fillEmptyCells,
-	defaults,
-	tem,
-	combineMerge,
-	isNamedRange,
+  typeOf,
+  Timer,
+  inferType,
+  parseCell,
+  fillEmptyCells,
+  defaults,
+  tem,
+  combineMerge,
+  isNamedRange,
 }

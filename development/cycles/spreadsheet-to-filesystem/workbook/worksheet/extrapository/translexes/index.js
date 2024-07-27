@@ -6,10 +6,10 @@ import VORM from './VORM/index.js'
 import VANT from './VANT/index.js'
 
 export {
-	VINE,
-	VERS,
-	VIEW,
-	VELI,
-	VORM,
-	VANT
+  VINE,
+  VERS,
+  VIEW,
+  VELI,
+  VORM,
+  VANT
 }

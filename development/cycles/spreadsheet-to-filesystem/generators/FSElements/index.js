@@ -7,60 +7,66 @@ import Updated from './Updated/index.js'
 import Deleted from './Deleted/index.js'
 
 export default class FSElements extends EventEmitter {
-	added
-	updated
-	deleted
- 	constructor(
-		$collection, $filesystem
-	) {
- 		super()
-		const fsRootPath = $filesystem.path
-		var fsRootStat = stat(fsRootPath, ($err, $fsRootStat) => {
-			if($err) {
-				mkdir(fsRootPath, {
-					recursive: true,
-				}, ($err) => {
-					if($err) return $err
-				})
-			}
-		})
-		const fsRoot = globSync(
-			path.join(fsRootPath, '**/*'),
-			{
-				dot: true,
-				ignore: [
-					path.join(fsRootPath, 'node_modules/**'),
-					path.join(fsRootPath, '.git/**')
-				]
-			}
-		)
-		console.log('fsRoot', fsRoot)
-		// const fsVine = $collection.reduce(
-		// 	($fsVine, $collectionDoc) => {
-		// 		if($collectionDoc.fs.path === undefined) return $fsVine
-		// 		$fsVine.push(
-		// 			path.join(fsRootPath, $collectionDoc.fs.path)
-		// 		)
-		// 		return $fsVine
-		// 	}, []
-		// )
-	  // const added = new Added({
-	  // 	collection: $collection, 
-	  // 	fs: {
-	  // 		rootPath: fsRootPath,
-	  // 		root: fsRoot,
-	  // 		vine: fsVine
-	  // 	}
-  	// })
-  	// added.on('added:fold', ($addedFold) => {
-  	// 	console.log('added:fold', $addedFold)
-  	// })
-	  // const updated = await Updated(
-	  // 	$collection, fsRootPath, fsRoot, fsVine
-  	// )
-	  // const deleted = await Deleted(
-	  // 	$collection, fsRootPath, fsRoot, fsVine
-  	// )
-		return $collection
-	}
+  fsRoot
+  fsRootPath
+  fsRootStat
+  added
+  updated
+  deleted
+   constructor(
+    $filesystem, $generator
+  ) {
+     super()
+    this.fsRootPath = $filesystem.path
+    this.fsRootStat = stat(this.fsRootPath, ($err, $fsRootStat) => {
+      if($err) {
+        mkdir(this.fsRootPath, {
+          recursive: true,
+        }, ($err) => {
+          if($err) return $err
+        })
+      }
+    })
+    this.fsRoot = globSync(
+      path.join(this.fsRootPath, '**/*'),
+      {
+        dot: true,
+        ignore: [
+          path.join(this.fsRootPath, 'node_modules/**'),
+          path.join(this.fsRootPath, '.git/**')
+        ]
+      }
+    )
+    console.log('this.fsRoot', this.fsRoot)
+  }
+  input($collection) {
+    // const fsVine = $collection.reduce(
+    //   ($fsVine, $collectionDoc) => {
+    //     if($collectionDoc.fs.path === undefined) return $fsVine
+    //     $fsVine.push(
+    //       path.join(fsRootPath, $collectionDoc.fs.path)
+    //     )
+    //     return $fsVine
+    //   }, []
+    // )
+    // const added = new Added({
+    //   collection: $collection, 
+    //   fs: {
+    //     rootPath: fsRootPath,
+    //     root: fsRoot,
+    //     vine: fsVine
+    //   }
+    // })
+    // added.on('added:fold', ($addedFold) => {
+    //   console.log('added:fold', $addedFold)
+    // })
+    // const updated = await Updated(
+    //   $collection, fsRootPath, fsRoot, fsVine
+    // )
+    // const deleted = await Deleted(
+    //   $collection, fsRootPath, fsRoot, fsVine
+    // )
+    // return $collection
+    return this
+  }
 }
