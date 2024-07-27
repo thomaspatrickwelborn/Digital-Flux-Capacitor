@@ -76,12 +76,16 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       cellStyles: true, // "hidden" property is cell style
     }))
     this.workbook = workbookFile
-    const fsElementWorksheets = await this.workbook.saveFSElementWorksheets()
-    for(const $fsElementWorksheet of fsElementWorksheets.values()) {
-      this.generators.fsElements.input(
-        $fsElementWorksheet.extrapository.translexis
-      )
-    }
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    // const fsElementWorksheets = await this.workbook.saveFSElementWorksheets()
+    // console.log(Array.from(fsElementWorksheets.values())[0])
+    // setTimeout(() => console.log(console.log([...fsElementWorksheets.values()][0].extrapository.translexis)), 100)
+    // for(const $fsElementWorksheet of fsElementWorksheets.values()) {
+    //   console.log($fsElementWorksheet.extrapository.translexis)
+    //   // this.generators.fsElements.input(
+    //   //   $fsElementWorksheet.extrapository.translexis
+    //   // )
+    // }
     // this.workbook.on(
     //   'worksheet:saveCollectDoc',
     //   this.#saveFSElementCollectDoc

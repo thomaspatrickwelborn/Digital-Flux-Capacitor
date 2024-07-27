@@ -68,11 +68,15 @@ export default class VINE extends EventEmitter {
           fsDoc
         )
       }
-      this[collectDocsIndex] = fsDoc.toObject()
+      this[collectDocsIndex] = fsDoc
+      this.emit(
+        'saveCollect',
+        this[collectDocsIndex]
+      )
       collectDocsIndex++
     }
     this.emit(
-      'saveCollect',
+      'save',
       Array.from(this)
     )
     return this

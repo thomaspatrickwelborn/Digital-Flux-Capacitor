@@ -10,9 +10,10 @@ export default class FSElements extends EventEmitter {
   fsRoot
   fsRootPath
   fsRootStat
-  added
-  updated
-  deleted
+  // #_added
+  // added
+  // updated
+  // deleted
    constructor(
     $filesystem, $generator
   ) {
@@ -39,8 +40,29 @@ export default class FSElements extends EventEmitter {
     )
     console.log('this.fsRoot', this.fsRoot)
   }
-  input($collection) {
-    console.log('FSElements.input', '$collection', $collection)
+  // get added() { return this.#_added }
+  // set added($added) {
+  //   // 
+  // }
+  // get updated() { return this.#_updated }
+  // set updated($updated) {
+  //   // 
+  // }
+  // get deleted() { return this.#_deleted }
+  // set deleted($deleted) {
+  //   // 
+  // }
+  input($collect) {
+    const collectDocsLength = $collect.length
+    let collectDocsIndex = 0
+    while(collectDocsIndex < collectDocsLength) {
+      const collectDoc = $collect[collectDocsIndex]
+      console.log('collectDoc', collectDoc)
+      collectDocsIndex++
+    }
+    // for(const $collectDoc of Object.values($collect)) {
+    //   console.log('$collectDoc', $collectDoc)
+    // }
     // const fsVine = $collection.reduce(
     //   ($fsVine, $collectionDoc) => {
     //     if($collectionDoc.fs.path === undefined) return $fsVine
