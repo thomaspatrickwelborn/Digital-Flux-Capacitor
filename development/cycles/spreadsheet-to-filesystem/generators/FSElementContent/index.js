@@ -7,8 +7,7 @@ import * as Templates from '../Templates/index.js'
 const modulePath = path.dirname(
 	url.fileURLToPath(import.meta.url)
 )
-
-class FSElementsContent extends EventEmitter {
+export default class FSElementContent extends EventEmitter {
 	constructor($collection, $presubcycle, $subcycle) {
 		super()
 		const { filesystemContent } = $subcycle.settings
@@ -71,5 +70,3 @@ class FSElementsContent extends EventEmitter {
 		}
 	}
 }
-
-export default FSElementsContent

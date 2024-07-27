@@ -1,7 +1,7 @@
 import EventEmitter from 'node:events'
 import path from 'node:path'
 import { mkdir, stat } from 'node:fs'
-import { globStream } from 'glob'
+import { globSync } from 'glob'
 import Added from './Added/index.js'
 import Updated from './Updated/index.js'
 import Deleted from './Deleted/index.js'
@@ -11,10 +11,10 @@ export default class FSElements extends EventEmitter {
 	updated
 	deleted
  	constructor(
-		$collection, $presubcycle, $subcycle
+		$collection, $filesystem
 	) {
  		super()
-		const fsRootPath = $subcycle.settings.output.filesystem.path
+		const fsRootPath = $filesystem.path
 		var fsRootStat = stat(fsRootPath, ($err, $fsRootStat) => {
 			if($err) {
 				mkdir(fsRootPath, {
@@ -24,7 +24,7 @@ export default class FSElements extends EventEmitter {
 				})
 			}
 		})
-		const fsRoot = globStream(
+		const fsRoot = globSync(
 			path.join(fsRootPath, '**/*'),
 			{
 				dot: true,
@@ -34,10 +34,7 @@ export default class FSElements extends EventEmitter {
 				]
 			}
 		)
-		console.log(fsRoot)
-		fsRoot.on('data', ($data) => {
-			console.log('globStream', 'data', $data)
-		})
+		console.log('fsRoot', fsRoot)
 		// const fsVine = $collection.reduce(
 		// 	($fsVine, $collectionDoc) => {
 		// 		if($collectionDoc.fs.path === undefined) return $fsVine

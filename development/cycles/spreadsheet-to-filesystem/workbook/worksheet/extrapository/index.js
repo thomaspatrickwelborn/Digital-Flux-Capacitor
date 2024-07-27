@@ -52,8 +52,9 @@ export default class Extrapository extends EventEmitter {
 			this.#options.worksheet.name, 
 			worksheetTranslexis
 		)
-		worksheetTranslexis.save()
-		
+		await worksheetTranslexis.save()
+		this.emit('translexis:save', Array.from(worksheetTranslexis))
+		return this
 	}
 	#getDBConnectionModels() {
 		return this.#dbConnections.filesystem.models

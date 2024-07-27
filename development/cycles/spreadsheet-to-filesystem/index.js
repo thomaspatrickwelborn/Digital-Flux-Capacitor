@@ -11,6 +11,7 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
   #settings
   #dbConnectionTimeout = 500
   #dbConnections
+  #_generators
   #_workbook
   #_workbookWatch
   #_watch = false
@@ -19,6 +20,15 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
     this.#settings = Object.assign({}, $settings, Config) 
     this.#watch = this.#settings.input.spreadsheet.watch
     return this
+  }
+  get generators() {
+    if(this.#_generators === undefined) {
+      this.#_generators = new Generators({
+        dbConnections: this.#dbConnections,
+        filesystem: this.#settings.output.filesystem
+      })
+    }
+    return this.#_generators
   }
   get workbook() { return this.#_workbook }
   set workbook($workbook) {
@@ -66,31 +76,11 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       cellStyles: true, // "hidden" property is cell style
     }))
     this.workbook = workbookFile
-    this.workbook.on(
-      'worksheet:saveCollect',
-      this.workbookFSElementWorksheetSaveCollect.bind(this)
-    )
-    this.workbook.saveFSElementWorksheets()
+    await this.workbook.saveFSElementWorksheets()
+    console.log(this.generators)
+    this.generators.fsElements(this.workbook.fsElementWorksheets)
     // this.workbook.saveFSElementContentWorksheets()
     return this
-  }
-  workbookFSElementWorksheetSaveCollect($collect) {
-    console.log(this)
-    console.log(this.workbook._eventsCount)
-    this.workbook.off(
-      'worksheet:saveCollect',
-      this.workbookFSElementWorksheetSaveCollect.bind(this)
-    )
-    console.log(this)
-    console.log(this.workbook._eventsCount)
-    // this.workbook.on(
-    //   'worksheet:saveCollectDoc',
-    //   this.workbookFSElementContentWorksheetSaveCollectDoc
-    // )
-    // this.workbook.saveFSElementContentWorksheets()
-  }
-  workbookFSElementContentWorksheetSaveCollectDoc($collect) {
-    console.log('FSElementContent', $collect)
   }
   async #workbookWatchChange($workbookPath) {
     // console.clear()
@@ -120,7 +110,6 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       'connected', async function spreadsheetDatabaseConnected() {
         if(this.#watch === true) {
           this.workbookWatch = this.#settings.input.spreadsheet
-          // console.log(this.#watch)
         } else {
           // await this.#workbookWatchChange(
           //   this.#settings.input.spreadsheet.path

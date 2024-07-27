@@ -25,7 +25,9 @@ class Workbook extends EventEmitter {
 		this.createFSElementContentWorksheets()
 	}
 	get workbook() { return this.#_workbook }
-	set workbook($workbook) { this.#_workbook = Object.freeze($workbook) }
+	set workbook($workbook) {
+		this.#_workbook = Object.freeze($workbook)
+	}
 	get worksheets() { return this.#_worksheets }
 	createFSElementWorksheets() {
 		this.fsElementWorksheets = new Map(
@@ -57,7 +59,9 @@ class Workbook extends EventEmitter {
 		const { Workbook, Sheets } = this.workbook
 		const worksheets = Workbook.Sheets
 		.filter(($workbookWorksheet) => {
-			return $workbookWorksheet.name.match($workbookWorksheetClassName)
+			return $workbookWorksheet.name.match(
+				$workbookWorksheetClassName
+				)
 		})
 		return worksheets
 	}
@@ -100,7 +104,9 @@ class Workbook extends EventEmitter {
 			) $worksheetRanges.push($worksheetRange)
 			return $worksheetRanges
 		}, [])
-		const worksheetOptions = this.#settings.worksheets[worksheetClassName] || {}
+		const worksheetOptions = this.#settings.worksheets[
+			worksheetClassName
+		] || {}
 		worksheetTable['!rows'] = worksheetRows
 		worksheetTable['!cols'] = worksheetCols
 		worksheetTable['!merges'] = worksheetMerges
@@ -119,6 +125,10 @@ class Workbook extends EventEmitter {
 			'extrapository:saveCollect',
 			this.#worksheetExtrapositorySaveCollect.bind(this)
 		)
+		worksheet.on(
+			'extrapository:save',
+			this.#worksheetExtrapositorySave.bind(this)
+		)
 		this.worksheets
 		.set(worksheetName, worksheet)
 		return [worksheetName, worksheet]
@@ -128,6 +138,9 @@ class Workbook extends EventEmitter {
 	}
 	#worksheetExtrapositorySaveCollect($collect) {
 		this.emit('worksheet:saveCollect', $collect)
+	}
+	#worksheetExtrapositorySave($collect) {
+		this.emit('worksheet:save', $collect)
 	}
 	async saveWorksheets($worksheets) {
 		const worksheets = []
