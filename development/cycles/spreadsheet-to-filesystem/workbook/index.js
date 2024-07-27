@@ -21,6 +21,13 @@ class Workbook extends EventEmitter {
 		this.#workbookPath = workbookPath
 		this.name = path.basename(this.#workbookPath).split('.')[0]
 		this.workbook = workbook
+		this.createFSElementWorksheets()
+		this.createFSElementContentWorksheets()
+	}
+	get workbook() { return this.#_workbook }
+	set workbook($workbook) { this.#_workbook = Object.freeze($workbook) }
+	get worksheets() { return this.#_worksheets }
+	createFSElementWorksheets() {
 		this.fsElementWorksheets = new Map(
 			this.#createWorksheets(
 				this.#getWorksheetsByClassName(
@@ -28,15 +35,24 @@ class Workbook extends EventEmitter {
 				)
 			)
 		)
+		return this.fsElementWorksheets
+	}
+	async saveFSElementWorksheets() {
+		await this.saveWorksheets(this.fsElementWorksheets)
+		return this
+	}
+	createFSElementContentWorksheets() {
 		this.fsElementContentWorksheets = this.#createWorksheets(
 			this.#getWorksheetsByClassName(
 				new RegExp(/^VANT|^VELI|^VERS|^VIEW|^VORM/)
 			)
 		)
+		return this.fsElementContentWorksheets
 	}
-	get workbook() { return this.#_workbook }
-	set workbook($workbook) { this.#_workbook = Object.freeze($workbook) }
-	get worksheets() { return this.#_worksheets }
+	async saveFSElementContentWorksheets() {
+		await this.saveWorksheets(this.fsElementWorksheets)
+		return this
+	}
 	#getWorksheetsByClassName($workbookWorksheetClassName) {
 		const { Workbook, Sheets } = this.workbook
 		const worksheets = Workbook.Sheets
@@ -97,30 +113,21 @@ class Workbook extends EventEmitter {
 		}, worksheetOptions)
 		worksheet.on(
 			'extrapository:saveCollectDoc',
-			this.#worksheetExtrapositorySaveCollectDoc
+			this.#worksheetExtrapositorySaveCollectDoc.bind(this)
 		)
 		worksheet.on(
 			'extrapository:saveCollect',
-			this.#worksheetExtrapositorySaveCollect
-		)
-		worksheet.on(
-			'save',
-			function worksheetSave($worksheet) {
-				console.log('save')
-				// this.emit('worksheet:save', $worksheet)
-			}
+			this.#worksheetExtrapositorySaveCollect.bind(this)
 		)
 		this.worksheets
 		.set(worksheetName, worksheet)
 		return [worksheetName, worksheet]
 	}
 	#worksheetExtrapositorySaveCollectDoc($collectDoc) {
-		console.log('extrapository:saveCollectDoc', $collectDoc)
-		// this.emit('worksheet:saveCollectDoc', $collectDoc)
+		this.emit('worksheet:saveCollectDoc', $collectDoc)
 	}
 	#worksheetExtrapositorySaveCollect($collect) {
-		console.log('extrapository:saveCollect', $collect)
-		// this.emit('worksheet:saveCollect', $collect)
+		this.emit('worksheet:saveCollect', $collect)
 	}
 	async saveWorksheets($worksheets) {
 		const worksheets = []

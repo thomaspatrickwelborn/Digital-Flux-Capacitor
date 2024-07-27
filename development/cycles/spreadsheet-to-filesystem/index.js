@@ -33,18 +33,6 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
         workbook: $workbook,
         dbConnections: this.#dbConnections, 
       })
-      this.#_workbook.on(
-        'worksheet:saveCollectDoc', 
-        this.#workbookWorksheetSaveCollectDoc.bind(this)
-      )
-      this.#_workbook.on(
-        'worksheet:saveCollect', 
-        this.#workbookWorksheetSaveCollect.bind(this)
-      )
-      this.#_workbook.on(
-        'worksheet:save', 
-        this.#workbookWorksheetSave.bind(this)
-      )
     }
   }
   get workbookWatch() { return this.#_workbookWatch }
@@ -65,15 +53,6 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
     ) ? $watch
       : this.#_watch
   }
-  #workbookWorksheetSaveCollectDoc($collectDoc) {
-    console.log('worksheet:saveCollectDoc', '$collectDoc', $collectDoc)
-  }
-  #workbookWorksheetSaveCollect($collect) {
-    console.log('worksheet:saveCollect', '$collect', $collect)
-  }
-  #workbookWorksheetSave($worksheet) {
-    console.log('worksheet:save', '$worksheet', $worksheet)
-  }
   async #readWorkbook($workbookPath) {
     const workbookFile = await readFile($workbookPath)
     .then(($buffer) => XLSX.read($buffer, {
@@ -87,21 +66,31 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       cellStyles: true, // "hidden" property is cell style
     }))
     this.workbook = workbookFile
-    const fsElementsWorksheets = await this.workbook.saveWorksheets(
-      this.workbook.fsElementWorksheets
+    this.workbook.on(
+      'worksheet:saveCollect',
+      this.workbookFSElementWorksheetSaveCollect.bind(this)
     )
-    // console.log(
-    //   'this.workbook.fsElementContentWorksheets', 
-    //   this.workbook.fsElementContentWorksheets
-    // )
-    // console.log(
-    //   "this.workbook.fsElementContentWorksheets",
-    //   this.workbook.fsElementContentWorksheets
-    // )
-    // const fsElementsWorksheet = await this.workbook.saveWorksheets(
-    //   this.workbook.fsElementContentWorksheets
-    // )
+    this.workbook.saveFSElementWorksheets()
+    // this.workbook.saveFSElementContentWorksheets()
     return this
+  }
+  workbookFSElementWorksheetSaveCollect($collect) {
+    console.log(this)
+    console.log(this.workbook._eventsCount)
+    this.workbook.off(
+      'worksheet:saveCollect',
+      this.workbookFSElementWorksheetSaveCollect.bind(this)
+    )
+    console.log(this)
+    console.log(this.workbook._eventsCount)
+    // this.workbook.on(
+    //   'worksheet:saveCollectDoc',
+    //   this.workbookFSElementContentWorksheetSaveCollectDoc
+    // )
+    // this.workbook.saveFSElementContentWorksheets()
+  }
+  workbookFSElementContentWorksheetSaveCollectDoc($collect) {
+    console.log('FSElementContent', $collect)
   }
   async #workbookWatchChange($workbookPath) {
     // console.clear()
