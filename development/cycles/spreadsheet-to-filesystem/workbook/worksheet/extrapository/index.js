@@ -12,8 +12,25 @@ export default class Extrapository extends EventEmitter {
   set #compository($compository) {
     this.#_compository = $compository
     this.#_compository.on(
+      'collect:saveCollectDoc',
+      ($collectDoc) => {
+        console.log('collect:saveCollectDoc', $collectDoc)
+        this.emit('worksheet:collectDocSave', $collectDoc)
+      }
+    )
+    this.#_compository.on(
       'collect:save',
-      this.#compositoryCollectSave.bind(this)
+      ($collect) => {
+        console.log('collect:save', $collect)
+        this.emit('worksheet:collectSave', $collect)
+      }
+    )
+    this.#_compository.on(
+      'saveCollects',
+      ($collects) => {
+        console.log('saveCollects', $collects)
+        this.emit('worksheet:collectsSave', $collects)
+      }
     )
   }
   #options
@@ -39,22 +56,22 @@ export default class Extrapository extends EventEmitter {
     worksheetTranslexis.on(
       'saveCollectDoc',
       ($collectDoc) => {
-        // console.log('translexis:saveCollectDoc', $collectDoc)
-        this.emit('translexis:saveCollectDoc', $collectDoc)
+        console.log('translexis:saveCollectDoc', $collectDoc)
+        // this.emit('translexis:saveCollectDoc', $collectDoc)
       }
     )
     worksheetTranslexis.on(
       'saveCollect',
       ($collect) => {
-        // console.log('translexis:saveCollect', $collect)
-        this.emit('translexis:saveCollect', $collect)
+        console.log('translexis:saveCollect', $collect)
+        // this.emit('translexis:saveCollect', $collect)
       }
     )
     worksheetTranslexis.on(
       'save',
       ($translexis) => {
-        // console.log('translexis:save', $collect)
-        this.emit('translexis:save', $collect)
+        console.log('translexis:save', $collect)
+        // this.emit('translexis:save', $collect)
       }
     )
     this.translexis = worksheetTranslexis

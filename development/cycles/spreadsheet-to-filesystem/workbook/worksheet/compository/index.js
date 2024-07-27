@@ -54,17 +54,17 @@ export default class Compository extends EventEmitter {
         lmnRanges,
       }, this.options)
       collect.on(
-        'save', ($collect) => {
+        'saveCollectDoc', ($collect) => {
           this.emit(
-            'collect:save', 
+            'collect:saveCollectDoc', 
             $collect
           )
         }
       )
       collect.on(
-        'saveCollectDoc', ($collect) => {
+        'save', ($collect) => {
           this.emit(
-            'collect:saveCollectDoc', 
+            'collect:save', 
             $collect
           )
         }
@@ -77,7 +77,10 @@ export default class Compository extends EventEmitter {
     for(const $collect of this.collects.values()) {
       await $collect.save()
     }
-    this.emit('saveCollects', this.collects)
+    this.emit(
+      'saveCollects', 
+      this.collects
+    )
     return this
   }
 }
