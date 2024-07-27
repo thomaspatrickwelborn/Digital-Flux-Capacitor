@@ -40,6 +40,7 @@ export default class FSElements extends EventEmitter {
     console.log('this.fsRoot', this.fsRoot)
   }
   input($collection) {
+    console.log('FSElements.input', '$collection', $collection)
     // const fsVine = $collection.reduce(
     //   ($fsVine, $collectionDoc) => {
     //     if($collectionDoc.fs.path === undefined) return $fsVine

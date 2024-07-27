@@ -18,7 +18,7 @@ export default class Extrapository extends EventEmitter {
   }
   #options
   #dbConnections
-  translexes = new Map()
+  translexis
   constructor($compository = {}, $options = {}) {
     super()
     this.#compository = $compository
@@ -48,10 +48,7 @@ export default class Extrapository extends EventEmitter {
         this.emit('translexis:saveCollect', $collect)
       }
     )
-    this.translexes.set(
-      this.#options.worksheet.name, 
-      worksheetTranslexis
-    )
+    this.translexis = worksheetTranslexis
     await worksheetTranslexis.save()
     this.emit('translexis:save', Array.from(worksheetTranslexis))
     return this
