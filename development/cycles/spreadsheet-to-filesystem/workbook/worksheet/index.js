@@ -69,15 +69,24 @@ export default class Worksheet extends EventEmitter {
       }
     )
     this.#_compository.on(
-      'collects:save', 
-      ($collects) => {
-        this.emit('compository:saveCollects', $collects)
+      'collect:save', 
+      ($collect) => {
+        // console.log('compository:saveCollect', $collect)
+        this.emit('compository:saveCollect', $collect)
       }
     )
     this.#_compository.on(
-      'collect:save', 
-      ($collect) => {
-        this.emit('compository:saveCollect', $collect)
+      'collect:saveCollectDoc', 
+      ($collectDoc) => {
+        // console.log('compository:saveCollectDoc', $collectDoc)
+        this.emit('compository:saveCollectDoc', $collectDoc)
+      }
+    )
+    this.#_compository.on(
+      'saveCollects', 
+      ($collects) => {
+        // console.log('compository:saveCollects', $collects)
+        this.emit('compository:saveCollects', $collects)
       }
     )
   }

@@ -117,28 +117,25 @@ class Workbook extends EventEmitter {
     }, worksheetOptions)
     worksheet.on(
       'extrapository:saveCollectDoc',
-      this.#worksheetExtrapositorySaveCollectDoc.bind(this)
+      ($collectDoc) => {
+        this.emit('worksheet:saveCollectDoc', $collectDoc)
+      }
     )
     worksheet.on(
       'extrapository:saveCollect',
-      this.#worksheetExtrapositorySaveCollect.bind(this)
+      ($collect) => {
+        this.emit('worksheet:saveCollect', $collect)
+      }
     )
     worksheet.on(
       'extrapository:save',
-      this.#worksheetExtrapositorySave.bind(this)
+      ($collect) => {
+        this.emit('worksheet:save', $collect)
+      }
     )
     this.worksheets
     .set(worksheetName, worksheet)
     return [worksheetName, worksheet]
-  }
-  #worksheetExtrapositorySaveCollectDoc($collectDoc) {
-    this.emit('worksheet:saveCollectDoc', $collectDoc)
-  }
-  #worksheetExtrapositorySaveCollect($collect) {
-    this.emit('worksheet:saveCollect', $collect)
-  }
-  #worksheetExtrapositorySave($collect) {
-    this.emit('worksheet:save', $collect)
   }
   async saveWorksheets($worksheets) {
     const worksheets = []
@@ -146,6 +143,7 @@ class Workbook extends EventEmitter {
       const worksheet = await this.saveWorksheet($worksheet)
       worksheets.push(worksheet)
     }
+    this.emit('save', this)
     return new Map(worksheets)
   }
   async saveWorksheet($worksheet) {

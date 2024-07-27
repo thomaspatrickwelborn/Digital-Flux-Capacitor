@@ -55,7 +55,18 @@ export default class Compository extends EventEmitter {
       }, this.options)
       collect.on(
         'save', ($collect) => {
-          this.emit('collect:save', $collect)
+          this.emit(
+            'collect:save', 
+            $collect
+          )
+        }
+      )
+      collect.on(
+        'saveCollectDoc', ($collect) => {
+          this.emit(
+            'collect:saveCollectDoc', 
+            $collect
+          )
         }
       )
       _collects.set($modIndex, collect)
@@ -66,7 +77,7 @@ export default class Compository extends EventEmitter {
     for(const $collect of this.collects.values()) {
       await $collect.save()
     }
-    this.emit('collects:save', this)
+    this.emit('saveCollects', this.collects)
     return this
   }
 }
