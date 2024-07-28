@@ -3,19 +3,12 @@ import path from 'node:path'
 import { mkdir, stat } from 'node:fs'
 import { globSync } from 'glob'
 import chokidar from 'chokidar'
-// import Added from './Added/index.js'
-// import Updated from './Updated/index.js'
-// import Deleted from './Deleted/index.js'
 
 export default class FSElements extends EventEmitter {
   #_fsRoot
   fsRootPath
   #_fsRootStat
   #_fsRootWatch
-  // #_added
-  // added
-  // updated
-  // deleted
    constructor(
     $filesystem, $generator
   ) {
@@ -77,22 +70,9 @@ export default class FSElements extends EventEmitter {
     )
   }
   async #fsRootWatchChange($workbookPath) {
-    // console.clear()
+    this.fsRoot = this.fsRootPath
   }
   add() {
-    const addedFSElement = addedFSElements[addedFSElementsIndex]
-    const addedFSElementDoc = collection.find(($collectionDoc) => {
-      return $collectionDoc.fs.path === addedFSElement.replace(
-        fs.rootPath.concat('/'), ''
-      )
-    })
-    // if(!addedFSElementDoc?.fs?.operations?.add) {
-    //   addedFSElementsIndex++
-    //   continue iterateAddedFSElementsIndex
-    // }
-    let addedFSElementDocPath = path.join(
-      fs.rootPath, addedFSElementDoc.fs.path
-    )
     let addedFSElementStat = stat(addedFSElementDocPath, (
       $err, $addedFSElementStat
     ) => {
@@ -119,7 +99,6 @@ export default class FSElements extends EventEmitter {
         }
       }
     })
-    Array.prototype.push.call(added, addedFSElementDoc)
   }
   inputFileDoc($fileDoc) {
     const fileDoc = $fileDoc.toObject()
