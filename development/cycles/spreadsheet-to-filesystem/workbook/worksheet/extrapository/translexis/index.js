@@ -64,7 +64,7 @@ export default class Translexis extends EventEmitter {
     }
     return files
   }
-  async saveFileCollect($collect, $models) {
+  async filesystem($collect, $models) {
     $collect = Array.from($collect.entries())
     const FileModel = $models.File
     const fileCollect = []

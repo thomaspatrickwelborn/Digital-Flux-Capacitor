@@ -52,9 +52,6 @@ export default class Extrapository extends EventEmitter {
   }
   get translexis() { return this.#_translexis }
   set translexis($translexisSettings) {
-    const Translexis = Translexes[
-      this.#options.className
-    ]
     this.#_translexis = new Translexis($translexisSettings)
     this.#_translexis.on(
       'saveCollectDoc',
