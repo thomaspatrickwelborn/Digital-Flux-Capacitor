@@ -108,7 +108,7 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
     //   '$collectDoc',
     //   $collectDoc.toObject()
     // )
-    this.generators.fsElements.inputCollectDoc(
+    this.generators.fsElements.inputFileDoc(
       $collectDoc
     )
   }

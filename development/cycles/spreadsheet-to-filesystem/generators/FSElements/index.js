@@ -2,14 +2,16 @@ import EventEmitter from 'node:events'
 import path from 'node:path'
 import { mkdir, stat } from 'node:fs'
 import { globSync } from 'glob'
-import Added from './Added/index.js'
-import Updated from './Updated/index.js'
-import Deleted from './Deleted/index.js'
+import chokidar from 'chokidar'
+// import Added from './Added/index.js'
+// import Updated from './Updated/index.js'
+// import Deleted from './Deleted/index.js'
 
 export default class FSElements extends EventEmitter {
-  fsRoot
+  #_fsRoot
   fsRootPath
-  fsRootStat
+  #_fsRootStat
+  #_fsRootWatch
   // #_added
   // added
   // updated
@@ -19,25 +21,34 @@ export default class FSElements extends EventEmitter {
   ) {
     super()
     this.fsRootPath = $filesystem.path
-    stat(this.fsRootPath, ($err, $fsRootStat) => {
+    this.fsRootStat = this.fsRootPath
+    this.fsRoot = this.fsRootPath
+    this.fsRootWatch = this.fsRootPath
+  }
+  get fsRootStat() { return this.#_fsRootStat }
+  set fsRootStat($fsRootPath) {
+    this.#_fsRootStat = stat($fsRootPath, ($err, $fsRootStat) => {
       if($err) {
-        mkdir(this.fsRootPath, {
+        mkdir($fsRootPath, {
           recursive: true,
         }, ($err) => {
           if($err) return $err
-          this.fsRootStat = stat(this.fsRootPath)
+          this.#_fsRootStat = stat($fsRootPath)
         })
       } else {
-        this.fsRootStat = $fsRootStat
+        this.#_fsRootStat = $fsRootStat
       }
     })
-    this.fsRoot = globSync(
-      path.join(this.fsRootPath, '**/*'),
+  }
+  get fsRoot() { return this.#_fsRoot }
+  set fsRoot($fsRootPath) {
+    this.#_fsRoot = globSync(
+      path.join($fsRootPath, '**/*'),
       {
         dot: true,
         ignore: [
-          path.join(this.fsRootPath, 'node_modules/**'),
-          path.join(this.fsRootPath, '.git/**')
+          path.join($fsRootPath, 'node_modules/**'),
+          path.join($fsRootPath, '.git/**')
         ]
       }
     )
@@ -49,7 +60,82 @@ export default class FSElements extends EventEmitter {
       return fsRootGlobPath
     })
   }
-  inputCollectDoc() {}
+  get fsRootWatch() { return this.#_fsRootWatch }
+  set fsRootWatch($fsRootPath) {
+    this.#_fsRootWatch = chokidar.watch($fsRootPath)
+    this.#_fsRootWatch.on(
+      'add', this.#fsRootWatchChange.bind(this)
+    )
+    this.#_fsRootWatch.on(
+      'unlink', this.#fsRootWatchChange.bind(this)
+    )
+    this.#_fsRootWatch.on(
+      'addDir', this.#fsRootWatchChange.bind(this)
+    )
+    this.#_fsRootWatch.on(
+      'unlinkDir', this.#fsRootWatchChange.bind(this)
+    )
+  }
+  async #fsRootWatchChange($workbookPath) {
+    // console.clear()
+  }
+  add() {
+    const addedFSElement = addedFSElements[addedFSElementsIndex]
+    const addedFSElementDoc = collection.find(($collectionDoc) => {
+      return $collectionDoc.fs.path === addedFSElement.replace(
+        fs.rootPath.concat('/'), ''
+      )
+    })
+    // if(!addedFSElementDoc?.fs?.operations?.add) {
+    //   addedFSElementsIndex++
+    //   continue iterateAddedFSElementsIndex
+    // }
+    let addedFSElementDocPath = path.join(
+      fs.rootPath, addedFSElementDoc.fs.path
+    )
+    let addedFSElementStat = stat(addedFSElementDocPath, (
+      $err, $addedFSElementStat
+    ) => {
+      if(
+        $err || 
+        $addedFSElementStat.isFile() === false &&
+        $addedFSElementStat.isDirectory() === false
+      ) {
+        switch(addedFSElementDoc.fs.type) {
+          case 'File':
+            writeFile(addedFSElementDoc, '', ($err) => {
+              if($err) return
+              this.emit('added:file', addedFSElementDoc)
+            })
+            break
+          case 'Fold':
+            mkdir(addedFSElementDocPath, {
+              recursive: true,
+            }, ($err, $dir) => {
+              if($err) return
+              this.emit('added:fold', addedFSElementDoc)
+            })
+            break
+        }
+      }
+    })
+    Array.prototype.push.call(added, addedFSElementDoc)
+  }
+  inputFileDoc($fileDoc) {
+    const fileDoc = $fileDoc.toObject()
+    const { operations, permissions, path } = fileDoc.fs
+    // console.log('path', path)
+    // console.log('fsRoot', this.fsRoot)
+    console.log('operations', operations)
+    if(
+      operations.add === true &&
+      this.fsRoot.includes(path) === false
+    ) {
+      console.log('fileDoc', fileDoc)
+    }
+    // if(this.fsRoot.includes($fil))
+    
+  }
   // get added() { return this.#_added }
   // set added($added) {
   //   // 
