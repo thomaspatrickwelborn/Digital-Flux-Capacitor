@@ -25,6 +25,7 @@ export default class Extrapository extends EventEmitter {
   get #compository() { return this.#_compository }
   set #compository($compository) {
     this.#_compository = $compository
+    /*
     this.#_compository.on(
       'collect:saveCollectDoc',
       ($collectDoc) => {
@@ -44,11 +45,11 @@ export default class Extrapository extends EventEmitter {
     this.#_compository.on(
       'saveCollects',
       ($collects) => {
-        // console.log('saveCollects', $collects)
         // this.emit('worksheet:collectsSave', $collects)
         this.translexis.saveCollects($collects)
       }
     )
+    */
   }
   get translexis() { return this.#_translexis }
   set translexis($translexisSettings) {

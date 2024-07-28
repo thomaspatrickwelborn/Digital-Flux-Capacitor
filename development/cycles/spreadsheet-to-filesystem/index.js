@@ -76,25 +76,25 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       cellStyles: true, // "hidden" property is cell style
     }))
     this.workbook = workbookFile
-    this.workbook.on(
-      'worksheet:saveCollectDoc',
-      ($collectDoc) => { console.log('worksheet:saveCollectDoc', $collectDoc) }
-    )
-    this.workbook.on(
-      'worksheet:saveCollect',
-      ($workbook) => { console.log('save', $workbook) }
-    )
-    this.workbook.on(
-      'worksheet:save',
-      ($worksheet) => { console.log('worksheet:save', $worksheet) }
-    )
-    this.workbook.on(
-      'save',
-      ($workbook) => { console.log('save', $workbook) }
-    )
+    // this.workbook.on(
+    //   'worksheet:saveCollectDoc',
+    //   ($collectDoc) => { console.log('worksheet:saveCollectDoc', $collectDoc) }
+    // )
+    // this.workbook.on(
+    //   'worksheet:saveCollect',
+    //   ($workbook) => { console.log('save', $workbook) }
+    // )
+    // this.workbook.on(
+    //   'worksheet:save',
+    //   ($worksheet) => { console.log('worksheet:save', $worksheet) }
+    // )
+    // this.workbook.on(
+    //   'save',
+    //   ($workbook) => { console.log('save', $workbook) }
+    // )
     // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     const fsElementWorksheets = await this.workbook.saveFSElementWorksheets()
-    console.log(Array.from(fsElementWorksheets.values())[0])
+    // console.log(Array.from(fsElementWorksheets.values())[0])
     // setTimeout(() => console.log(console.log([...fsElementWorksheets.values()][0].extrapository.translexis)), 100)
     // for(const $fsElementWorksheet of fsElementWorksheets.values()) {
     //   console.log($fsElementWorksheet.extrapository.translexis)

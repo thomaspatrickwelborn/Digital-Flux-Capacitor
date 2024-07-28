@@ -68,6 +68,7 @@ export default class Worksheet extends EventEmitter {
         dbConnections: this.#dbConnections
       }
     )
+    /*
     this.#_compository.on(
       'collect:save', 
       ($collect) => {
@@ -80,10 +81,13 @@ export default class Worksheet extends EventEmitter {
         this.emit('compository:saveCollectDoc', $collectDoc)
       }
     )
+    */
     this.#_compository.on(
       'saveCollects', 
       ($collects) => {
-        this.emit('compository:saveCollects', $collects)
+        console.log('$collects', $collects)
+        // this.emit('compository:saveCollects', $collects)
+        this.extrapository.translexis.saveCollects($collects)
       }
     )
   }

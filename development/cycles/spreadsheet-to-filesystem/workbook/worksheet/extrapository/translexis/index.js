@@ -18,7 +18,6 @@ export default class Translexis extends EventEmitter {
     var worksheetModsIndex = 0
     const collectDocs = []
     var collectDocsIndex = 0
-    // var preterElement
     // Iterate Worksheet Mods
     iterateWorksheetMods: 
     while(worksheetModsIndex < worksheetModsLength) {
@@ -65,22 +64,28 @@ export default class Translexis extends EventEmitter {
     return files
   }
   async filesystem($collect) {
-    $collect = Array.from($collect.entries())
-    const FileModel = this.models.File
-    const fileCollect = []
-    const fileCollectLength = $collect.length
-    var fileCollectIndex = 0
-    while(fileCollectIndex < fileCollectLength) {
-      const [$fileCollectID, $fileCollect] = $collect[fileCollectIndex]
-      var fileDoc = await FileModel.findOneAndUpdate(
-        { 'fs.id': $fileCollectID },
-        { 'blocks': $fileCollect },
-        { upsert: true, new: true },
-      )
-      fileCollect.push(fileDoc/*.toObject()*/)
-      fileCollectIndex++
+    // const FileModel = this.models.File
+    // const fileCollect = []
+    const collectDocsLength = $collect.length
+    var collectDocsIndex = 0
+    while(collectDocsIndex < collectDocsLength) {
+      const collectDoc = $collect[collectDocsIndex]
+      console.log('collectDoc', collectDoc)
+      // const fileDoc = await FileModel.findOneAndUpdate(
+      //   { 'fs.id': collectDoc.fs.id },
+      //   {
+      //     fs: collectDoc.fs,
+      //     imports: collectDoc.imports,
+      //     blocks: collectDoc.blocks,
+      //     exports: collectDoc.exports,
+      //   }
+      //   { upsert: true, new: true }
+      // )
+      // console.log('fileDoc', fileDoc)
+      // fileCollect.push(fileDoc/*.toObject()*/)
+      collectDocsIndex++
     }
-    return fileCollect
+    // return fileCollect
   }
   // saveCollectDoc() {
   //   console.log('saveCollectDoc')
@@ -89,17 +94,10 @@ export default class Translexis extends EventEmitter {
   //   console.log('saveCollect')
   // }
   async saveCollects($collects) {
-    // console.log('-----')
-    // console.log('saveCollects')
-    // console.log('+++++')
-    console.log(this.worksheet.name, $collects)
-    // console.log('=====')
     if(
       this.worksheet.name.match(new RegExp(/^VINE/))
     ) {
-      // this.filesystem
       for(const $collect of $collects.values()) {
-        console.log($collect)
         this.filesystem($collect)
       }
     } else {
