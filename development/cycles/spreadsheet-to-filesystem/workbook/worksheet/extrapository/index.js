@@ -8,34 +8,6 @@ import Translexis from './translexis/index.js'
 const Schemata = { FileSchema, FoldSchema }
 export default class Extrapository extends EventEmitter {
   #_compository
-  get #compository() { return this.#_compository }
-  set #compository($compository) {
-    this.#_compository = $compository
-    this.#_compository.on(
-      'collect:saveCollectDoc',
-      ($collectDoc) => {
-        // console.log('collect:saveCollectDoc', $collectDoc)
-        // this.emit('worksheet:collectDocSave', $collectDoc)
-        this.translexis.saveCollectDoc($collectDoc)
-      }
-    )
-    this.#_compository.on(
-      'collect:save',
-      ($collect) => {
-        // console.log('collect:save', $collect)
-        // this.emit('worksheet:collectSave', $collect)
-        this.translexis.saveCollect($collect)
-      }
-    )
-    this.#_compository.on(
-      'saveCollects',
-      ($collects) => {
-        // console.log('saveCollects', $collects)
-        // this.emit('worksheet:collectsSave', $collects)
-        this.translexis.saveCollects($collects)
-      }
-    )
-  }
   #options
   #dbConnections
   #_translexis
@@ -49,6 +21,34 @@ export default class Extrapository extends EventEmitter {
       worksheet: this.#options.worksheet,
       models: this.#dbConnections.filesystem.models,
     }
+  }
+  get #compository() { return this.#_compository }
+  set #compository($compository) {
+    this.#_compository = $compository
+    this.#_compository.on(
+      'collect:saveCollectDoc',
+      ($collectDoc) => {
+        // console.log('collect:saveCollectDoc', $collectDoc)
+        // this.emit('worksheet:collectDocSave', $collectDoc)
+        // this.translexis.saveCollectDoc($collectDoc)
+      }
+    )
+    this.#_compository.on(
+      'collect:save',
+      ($collect) => {
+        // console.log('collect:save', $collect)
+        // this.emit('worksheet:collectSave', $collect)
+        // this.translexis.saveCollect($collect)
+      }
+    )
+    this.#_compository.on(
+      'saveCollects',
+      ($collects) => {
+        // console.log('saveCollects', $collects)
+        // this.emit('worksheet:collectsSave', $collects)
+        this.translexis.saveCollects($collects)
+      }
+    )
   }
   get translexis() { return this.#_translexis }
   set translexis($translexisSettings) {

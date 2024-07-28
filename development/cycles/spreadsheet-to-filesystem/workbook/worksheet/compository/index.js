@@ -54,10 +54,10 @@ export default class Compository extends EventEmitter {
         lmnRanges,
       }, this.options)
       collect.on(
-        'saveCollectDoc', ($collect) => {
+        'saveCollectDoc', ($collectDoc) => {
           this.emit(
             'collect:saveCollectDoc', 
-            $collect
+            $collectDoc
           )
         }
       )

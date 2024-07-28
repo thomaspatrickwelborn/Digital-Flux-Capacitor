@@ -64,9 +64,9 @@ export default class Translexis extends EventEmitter {
     }
     return files
   }
-  async filesystem($collect, $models) {
+  async filesystem($collect) {
     $collect = Array.from($collect.entries())
-    const FileModel = $models.File
+    const FileModel = this.models.File
     const fileCollect = []
     const fileCollectLength = $collect.length
     var fileCollectIndex = 0
@@ -82,13 +82,30 @@ export default class Translexis extends EventEmitter {
     }
     return fileCollect
   }
-  saveCollectDoc() {
-    // 
-  }
-  saveCollect() {
-    // 
-  }
-  saveCollects() {
-    // 
+  // saveCollectDoc() {
+  //   console.log('saveCollectDoc')
+  // }
+  // saveCollect() {
+  //   console.log('saveCollect')
+  // }
+  async saveCollects($collects) {
+    // console.log('-----')
+    // console.log('saveCollects')
+    // console.log('+++++')
+    console.log(this.worksheet.name, $collects)
+    // console.log('=====')
+    if(
+      this.worksheet.name.match(new RegExp(/^VINE/))
+    ) {
+      // this.filesystem
+      for(const $collect of $collects.values()) {
+        console.log($collect)
+        this.filesystem($collect)
+      }
+    } else {
+      for(const $collect of $collects.values()) {
+        this.filesystemContent($collect)
+      }
+    }
   }
 }
