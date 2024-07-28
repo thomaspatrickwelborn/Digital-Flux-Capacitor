@@ -5,6 +5,7 @@ export default class Translexis extends EventEmitter {
   #settings
   worksheet
   models
+  #_collects = new Map()
   #ignorePropertyKeys = [
     '$__', '_doc', '$errors', '$isNew', 
     '_id', '__v'
@@ -128,8 +129,16 @@ export default class Translexis extends EventEmitter {
         )
       }
       fileCollect.push(fileDoc/*.toObject()*/)
+      this.emit(
+        'saveCollectDoc',
+        fileDoc
+      )
       collectDocsIndex++
     }
+    this.emit(
+      'saveCollect',
+      fileCollect
+    )
     return fileCollect
   }
   // saveCollectDoc() {
@@ -139,16 +148,27 @@ export default class Translexis extends EventEmitter {
   //   console.log('saveCollect')
   // }
   async saveCollects($collects) {
+    const collects = this.#_collects
     if(
       this.worksheet.name.match(new RegExp(/^VINE/))
     ) {
-      for(const $collect of $collects.values()) {
-        this.#fsElements($collect)
+      for(const [
+        $collectName, $collect
+      ] of $collects.entries()) {
+        const collect = await this.#fsElements($collect)
+        collects.set($collectName, collect)
       }
     } else {
-      for(const $collect of $collects.values()) {
-        this.#fsElementContent($collect)
+      for(const [
+        $collectName, $collect
+      ] of $collects.entries()) {
+        const collect = await this.#fsElementContent($collect)
+        collects.set($collectName, collect)
       }
     }
+    this.emit(
+      'saveCollects',
+      collects
+    )
   }
 }

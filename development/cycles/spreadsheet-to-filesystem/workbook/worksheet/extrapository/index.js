@@ -41,9 +41,9 @@ export default class Extrapository extends EventEmitter {
     )
     this.#_translexis.on(
       'saveCollects',
-      ($translexis) => {
-        console.log('translexis:saveCollects', $collect)
-        this.emit('translexis:saveCollects', $collect)
+      ($collects) => {
+        console.log('translexis:saveCollects', $collects)
+        this.emit('translexis:saveCollects', $collects)
       }
     )
   }
