@@ -4,7 +4,7 @@ import {
   File as FileSchema,
   Fold as FoldSchema,
 } from './schemata/index.js'
-import * as Translexes from './translexes/index.js'
+import Translexis from './translexis/index.js'
 const Schemata = { FileSchema, FoldSchema }
 export default class Extrapository extends EventEmitter {
   #_compository

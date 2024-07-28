@@ -5,7 +5,7 @@ import assignPORProps from './assignPORProps/index.js'
 
 const Translexes = [
   ["assignLMNProps", assignLMNProps],
-  ["assignPORProps", assignPORProps]
+  ["assignPORProps", assignPORProps],
 ]
 
 export default class Collect extends EventEmitter {
@@ -57,7 +57,6 @@ export default class Collect extends EventEmitter {
       $translexisMethod(collect, {
         mods, lmnRanges, composits
       })
-      console.log($translexisName, collect)
       translexesIndex++
     }
   }
