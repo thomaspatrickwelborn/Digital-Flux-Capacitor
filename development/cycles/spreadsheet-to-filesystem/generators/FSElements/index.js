@@ -17,15 +17,18 @@ export default class FSElements extends EventEmitter {
    constructor(
     $filesystem, $generator
   ) {
-     super()
+    super()
     this.fsRootPath = $filesystem.path
-    this.fsRootStat = stat(this.fsRootPath, ($err, $fsRootStat) => {
+    stat(this.fsRootPath, ($err, $fsRootStat) => {
       if($err) {
         mkdir(this.fsRootPath, {
           recursive: true,
         }, ($err) => {
           if($err) return $err
+          this.fsRootStat = stat(this.fsRootPath)
         })
+      } else {
+        this.fsRootStat = $fsRootStat
       }
     })
     this.fsRoot = globSync(
@@ -38,8 +41,15 @@ export default class FSElements extends EventEmitter {
         ]
       }
     )
-    console.log('this.fsRoot', this.fsRoot)
+    .map(($fsRootGlobPath) => {
+      const fsRootGlobPath = $fsRootGlobPath.replace(
+        new RegExp(`^${this.fsRootPath}/`),
+        ''
+      )
+      return fsRootGlobPath
+    })
   }
+  inputCollectDoc() {}
   // get added() { return this.#_added }
   // set added($added) {
   //   // 
@@ -52,14 +62,15 @@ export default class FSElements extends EventEmitter {
   // set deleted($deleted) {
   //   // 
   // }
-  input($collect) {
-    const collectDocsLength = $collect.length
-    let collectDocsIndex = 0
-    while(collectDocsIndex < collectDocsLength) {
-      const collectDoc = $collect[collectDocsIndex]
-      console.log('collectDoc', collectDoc)
-      collectDocsIndex++
-    }
+
+  // input($collect) {
+    // const collectDocsLength = $collect.length
+    // let collectDocsIndex = 0
+    // while(collectDocsIndex < collectDocsLength) {
+    //   const collectDoc = $collect[collectDocsIndex]
+    //   console.log('collectDoc', collectDoc)
+    //   collectDocsIndex++
+    // }
     // for(const $collectDoc of Object.values($collect)) {
     //   console.log('$collectDoc', $collectDoc)
     // }
@@ -90,6 +101,6 @@ export default class FSElements extends EventEmitter {
     //   $collection, fsRootPath, fsRoot, fsVine
     // )
     // return $collection
-    return this
-  }
+    //   return this
+  // }
 }

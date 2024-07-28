@@ -20,7 +20,6 @@ export default class Generators extends EventEmitter {
     this.#_fsElements = new FSElements(
       $filesystem, this
     )
-
   }
   get fsElementContent() { return this.#_fsElementContent }
   set fsElementContent($fsElementContentSettings) {

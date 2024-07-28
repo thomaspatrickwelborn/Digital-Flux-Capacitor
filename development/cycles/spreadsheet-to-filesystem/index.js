@@ -76,48 +76,41 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       cellStyles: true, // "hidden" property is cell style
     }))
     this.workbook = workbookFile
+    this.workbook.on(
+      'worksheet:saveCollectDoc',
+      this.#workbookWorksheetSaveCollectDoc.bind(this)
+    )
     // this.workbook.on(
     //   'worksheet:saveCollectDoc',
-    //   ($collectDoc) => { console.log('worksheet:saveCollectDoc', $collectDoc) }
+    //   ($collectDoc) => {
+    //     console.log('worksheet:saveCollectDoc', $collectDoc)
+    //   }
     // )
     // this.workbook.on(
     //   'worksheet:saveCollect',
-    //   ($workbook) => { console.log('save', $workbook) }
+    //   ($collectDoc) => {
+    //     console.log('worksheet:saveCollect', $collectDoc)
+    //   }
     // )
     // this.workbook.on(
-    //   'worksheet:save',
-    //   ($worksheet) => { console.log('worksheet:save', $worksheet) }
+    //   'worksheet:saveCollects',
+    //   ($collectDoc) => {
+    //     console.log('worksheet:saveCollects', $collectDoc)
+    //   }
     // )
-    // this.workbook.on(
-    //   'save',
-    //   ($workbook) => { console.log('save', $workbook) }
-    // )
-    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     const fsElementWorksheets = await this.workbook.saveFSElementWorksheets()
-    // console.log(Array.from(fsElementWorksheets.values())[0])
-    // setTimeout(() => console.log(console.log([...fsElementWorksheets.values()][0].extrapository.translexis)), 100)
-    // for(const $fsElementWorksheet of fsElementWorksheets.values()) {
-    //   console.log($fsElementWorksheet.extrapository.translexis)
-    //   // this.generators.fsElements.input(
-    //   //   $fsElementWorksheet.extrapository.translexis
-    //   // )
-    // }
-    // this.workbook.on(
-    //   'worksheet:saveCollectDoc',
-    //   this.#saveFSElementCollectDoc
-    // )
     // await this.workbook.saveFSElementContentWorksheets()
     return this
   }
-  #saveFSElementCollectDoc($collectDoc) {
-    console.log(
-      '#saveFSElementCollectDoc',
-      '$collectDoc',
-      $collectDoc.toObject().fs.id
-    )
-    // this.generators.fsElements.input(
-    //   $collectDoc
+  #workbookWorksheetSaveCollectDoc($collectDoc) {
+    // console.log(
+    //   '#workbookWorksheetSaveCollectDoc',
+    //   '$collectDoc',
+    //   $collectDoc.toObject()
     // )
+    this.generators.fsElements.inputCollectDoc(
+      $collectDoc
+    )
   }
   async #workbookWatchChange($workbookPath) {
     // console.clear()
