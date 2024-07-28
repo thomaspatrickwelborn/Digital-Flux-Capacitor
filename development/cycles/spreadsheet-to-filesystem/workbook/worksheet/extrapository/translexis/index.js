@@ -11,74 +11,7 @@ export default class Translexis extends EventEmitter {
     this.worksheet = this.#settings.worksheet
     this.models = this.#settings.models
   }
-  transformCollectDocPort($ports) {
-    const portsLength = $ports?.length
-    if(!portsLength) return $ports
-    var portsIndex = 0
-    iteratePorts:
-    while(portsIndex < portsLength) {
-      const port = $ports[portsIndex]
-      const portNames = []
-      const portNamesData = port?.name?.split('\n') || []
-      const portNamesDataLength = portNamesData.length
-      var portNamesDataIndex = 0
-      iteratePortNamesData: 
-      while(portNamesDataIndex < portNamesDataLength) {
-        const portNameData = portNamesData[portNamesDataIndex].split(' ')
-        if(portNameData.length === 1) {
-          portNames.push({
-            name: portNameData[0]
-          })
-        } else if(
-          portNameData.length === 3 &&
-          portNameData[1] === 'as'
-        ) {
-          portNames.push({
-            name: portNameData[0],
-            alias: portNameData[2],
-          })
-        }
-        portNamesDataIndex++
-      }
-      port.name = portNames
-      $ports[portsIndex] = port
-      portsIndex++
-    }
-    return $ports
-  }
-  transormCollectDocs($collect) {
-    const collectLength = $collect.length
-    var collectIndex = 0
-    iterateCollectDocs: 
-    while(collectIndex < collectLength) {
-      const collectDoc = $collect[collectIndex]
-      if(collectDoc.fs === undefined) {
-        collectIndex++
-        continue iterateCollectDocs
-      }
-      const element = {
-        fs: {
-          id: collectDoc.fs.id,
-          workspace: collectDoc.fs.workspace,
-          name: collectDoc.fs.name,
-          path: collectDoc.fs.path,
-          template: collectDoc.fs.template,
-          type: collectDoc.fs.type,
-          operations: collectDoc.fs.operations,
-          encoding: collectDoc.fs.encoding,
-          permissions: collectDoc.fs.permissions,
-        },
-        files: collectDoc.files,
-        folds: collectDoc.folds,
-        imports: transformCollectDocPort(collectDoc.imports),
-        exports: transformCollectDocPort(collectDoc.exports),
-      }
-      $collect[collectIndex] = element
-      collectIndex++
-    }
-    return $collect
-  }
-  async collectToFileCollect($collect, $worksheet) {
+  async fileSystemContent($collect, $worksheet) {
     const lmnRanges = $worksheet.depository.lmnRanges
     const worksheetMods = Array.from($worksheet.depository.mods.values())
     const worksheetModsLength = worksheetMods.length
@@ -148,5 +81,14 @@ export default class Translexis extends EventEmitter {
       fileCollectIndex++
     }
     return fileCollect
+  }
+  saveCollectDoc() {
+    // 
+  }
+  saveCollect() {
+    // 
+  }
+  saveCollects() {
+    // 
   }
 }
