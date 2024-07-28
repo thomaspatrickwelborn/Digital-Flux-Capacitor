@@ -5,13 +5,37 @@ export default class Translexis extends EventEmitter {
   #settings
   worksheet
   models
+  #ignorePropertyKeys = [
+    '$__', '_doc', '$errors', '$isNew', 
+    '_id', '__v'
+  ]
+  #_filesystemIgnorePropertyKeys
+  #_filesystemContentIgnorePropertyKeys
   constructor($settings = {}) {
     super()
     this.#settings = $settings
     this.worksheet = this.#settings.worksheet
     this.models = this.#settings.models
   }
-  async fsElementContent($collect, $worksheet) {
+  get #filesystemIgnorePropertyKeys() {
+    if(this.#_filesystemIgnorePropertyKeys === undefined) {
+      this.#_filesystemIgnorePropertyKeys = this.#ignorePropertyKeys
+      .concat([
+        'portal', 'fsElements'
+      ])
+    }
+    return this.#_filesystemIgnorePropertyKeys
+  }
+  get #filesystemContentIgnorePropertyKeys() {
+    if(this.#_filesystemContentIgnorePropertyKeys === undefined) {
+      this.#_filesystemContentIgnorePropertyKeys = this.#ignorePropertyKeys
+      .concat([
+        // 
+      ])
+    }
+    return this.#_filesystemContentIgnorePropertyKeys
+  }
+  async #fsElementContent($collect, $worksheet) {
     const lmnRanges = $worksheet.depository.lmnRanges
     const worksheetMods = Array.from($worksheet.depository.mods.values())
     const worksheetModsLength = worksheetMods.length
@@ -63,11 +87,6 @@ export default class Translexis extends EventEmitter {
     }
     return files
   }
-  #filesystemIgnorePropertyKeys = [
-    '$__', '_doc', '$errors', '$isNew', 
-    '_id', '__v',
-    'portal', 'fsElements'
-  ]
   #reduceCollectDocProperties($updateCollectDoc, $updateCollectDocProperty) {
     const [
       $collectDocPropertyKey, $collectDocPropertyVal
@@ -83,7 +102,7 @@ export default class Translexis extends EventEmitter {
     }
     return $updateCollectDoc
   }
-  async fsElements($collect) {
+  async #fsElements($collect) {
     const FSElement = this.models.FSElement
     const fileCollect = []
     const collectDocsLength = $collect.length
@@ -124,11 +143,11 @@ export default class Translexis extends EventEmitter {
       this.worksheet.name.match(new RegExp(/^VINE/))
     ) {
       for(const $collect of $collects.values()) {
-        this.fsElements($collect)
+        this.#fsElements($collect)
       }
     } else {
       for(const $collect of $collects.values()) {
-        this.filesystemContent($collect)
+        this.#fsElementContent($collect)
       }
     }
   }

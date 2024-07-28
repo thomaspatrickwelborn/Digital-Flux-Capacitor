@@ -73,7 +73,6 @@ export default class Extrapository extends EventEmitter {
     )
   }
   #getDBConnectionModels() {
-    console.log(this.#dbConnections.filesystem.models)
     return this.#dbConnections.filesystem.models
   }
   #setDBConnectionModels() {
