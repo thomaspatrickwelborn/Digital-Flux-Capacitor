@@ -1,11 +1,7 @@
 import { EventEmitter } from 'node:events'
 import { createConnection } from 'mongoose'
-import {
-  File as FileSchema,
-  Fold as FoldSchema,
-} from './schemata/index.js'
+import Schemata from './schemata/index.js'
 import Translexis from './translexis/index.js'
-const Schemata = { FileSchema, FoldSchema }
 export default class Extrapository extends EventEmitter {
   #_compository
   #options
@@ -77,10 +73,11 @@ export default class Extrapository extends EventEmitter {
     )
   }
   #getDBConnectionModels() {
+    console.log(this.#dbConnections.filesystem.models)
     return this.#dbConnections.filesystem.models
   }
   #setDBConnectionModels() {
-    const modelNames = ['File', 'Fold']
+    const modelNames = ['FSElement']
     for(const $modelName of modelNames) {
       if(
         this.#dbConnections.filesystem
@@ -88,7 +85,7 @@ export default class Extrapository extends EventEmitter {
       ) {
         this.#dbConnections.filesystem.model(
           $modelName, 
-          Schemata[`${$modelName}Schema`]
+          Schemata[`${$modelName}`]
         )
       }
     }

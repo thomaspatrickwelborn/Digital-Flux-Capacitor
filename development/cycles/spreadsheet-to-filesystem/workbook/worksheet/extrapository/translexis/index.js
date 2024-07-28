@@ -11,7 +11,7 @@ export default class Translexis extends EventEmitter {
     this.worksheet = this.#settings.worksheet
     this.models = this.#settings.models
   }
-  async fileSystemContent($collect, $worksheet) {
+  async fsElementContent($collect, $worksheet) {
     const lmnRanges = $worksheet.depository.lmnRanges
     const worksheetMods = Array.from($worksheet.depository.mods.values())
     const worksheetModsLength = worksheetMods.length
@@ -63,29 +63,55 @@ export default class Translexis extends EventEmitter {
     }
     return files
   }
-  async filesystem($collect) {
-    // const FileModel = this.models.File
-    // const fileCollect = []
+  #filesystemIgnorePropertyKeys = [
+    '$__', '_doc', '$errors', '$isNew', 
+    '_id', '__v',
+    'portal', 'fsElements'
+  ]
+  #reduceCollectDocProperties($updateCollectDoc, $updateCollectDocProperty) {
+    const [
+      $collectDocPropertyKey, $collectDocPropertyVal
+    ] = $updateCollectDocProperty
+    if(
+      this.#filesystemIgnorePropertyKeys.includes(
+        $collectDocPropertyKey
+      ) === false
+    ) {
+      $updateCollectDoc[
+        $collectDocPropertyKey
+      ] = $collectDocPropertyVal
+    }
+    return $updateCollectDoc
+  }
+  async fsElements($collect) {
+    const FSElement = this.models.FSElement
+    const fileCollect = []
     const collectDocsLength = $collect.length
     var collectDocsIndex = 0
+    const reduceCollectDocProperties = this.#reduceCollectDocProperties
+    .bind(this)
     while(collectDocsIndex < collectDocsLength) {
       const collectDoc = $collect[collectDocsIndex]
-      console.log('collectDoc', collectDoc)
-      // const fileDoc = await FileModel.findOneAndUpdate(
-      //   { 'fs.id': collectDoc.fs.id },
-      //   {
-      //     fs: collectDoc.fs,
-      //     imports: collectDoc.imports,
-      //     blocks: collectDoc.blocks,
-      //     exports: collectDoc.exports,
-      //   }
-      //   { upsert: true, new: true }
-      // )
-      // console.log('fileDoc', fileDoc)
-      // fileCollect.push(fileDoc/*.toObject()*/)
+      let updateCollectDoc = Object.entries(collectDoc)
+      .reduce(reduceCollectDocProperties, {})
+      updateCollectDoc = Object.entries(collectDoc.toObject())
+      .reduce(reduceCollectDocProperties, updateCollectDoc)
+      let fileDoc = await FSElement.findOneAndReplace(
+        { 'fs.id': collectDoc.fs.id },
+        updateCollectDoc,
+        { returnDocument: 'after' }
+      )
+      if(fileDoc === null) {
+        const fileDoc = await FSElement.findOneAndUpdate(
+          { 'fs.id': collectDoc.fs.id },
+          updateCollectDoc,
+          { upsert: true, new: true }
+        )
+      }
+      fileCollect.push(fileDoc/*.toObject()*/)
       collectDocsIndex++
     }
-    // return fileCollect
+    return fileCollect
   }
   // saveCollectDoc() {
   //   console.log('saveCollectDoc')
@@ -98,7 +124,7 @@ export default class Translexis extends EventEmitter {
       this.worksheet.name.match(new RegExp(/^VINE/))
     ) {
       for(const $collect of $collects.values()) {
-        this.filesystem($collect)
+        this.fsElements($collect)
       }
     } else {
       for(const $collect of $collects.values()) {

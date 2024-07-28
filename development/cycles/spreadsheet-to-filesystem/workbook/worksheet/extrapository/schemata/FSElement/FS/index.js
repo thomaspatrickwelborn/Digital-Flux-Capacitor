@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose'
-// FS Settings Schema
-const FSSettingsSchema = new Schema({
+// FS Schema
+const FSSchema = new Schema({
   id: Number,
   name: String,
   path: String,
@@ -24,4 +24,4 @@ const FSSettingsSchema = new Schema({
   validateBeforeSave: false,
 })
 
-export default FSSettingsSchema
+export default FSSchema
