@@ -128,9 +128,9 @@ class Workbook extends EventEmitter {
       }
     )
     worksheet.on(
-      'extrapository:save',
-      ($collect) => {
-        this.emit('worksheet:save', $collect)
+      'extrapository:saveCollects',
+      ($collects) => {
+        this.emit('worksheet:saveCollects', $collects)
       }
     )
     this.worksheets
