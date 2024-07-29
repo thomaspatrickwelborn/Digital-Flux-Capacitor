@@ -20,7 +20,7 @@ export default class Worksheet extends EventEmitter {
   #_compository
   #_extrapository
   #depositoryWorksheetTableHasChanged
-  // #compositoryCollectsHaveSaved = false
+  #compositoryCollectsHaveSaved = false
   constructor($settings, $options) {
     super()
     this.#settings = $settings
@@ -62,7 +62,7 @@ export default class Worksheet extends EventEmitter {
       this.compository = this.depository
       this.extrapository = this.compository
       this.#depositoryWorksheetTableHasChanged = false
-      // this.#compositoryCollectsHaveSaved = false
+      this.#compositoryCollectsHaveSaved = false
     }
     return this
   }
@@ -150,10 +150,12 @@ export default class Worksheet extends EventEmitter {
     )
   }
   async saveCompository() {
-    // if(this.#compositoryCollectsHaveSaved === false) {
-      return await this.compository.saveCollects()
-    // } else {
-    //   return this.compository
-    // }
+    if(this.#compositoryCollectsHaveSaved === false) {
+      const compository = await this.compository.saveCollects()
+      this.#compositoryCollectsHaveSaved = false
+      return compository
+    } else {
+      return this.compository
+    }
   }
 }
