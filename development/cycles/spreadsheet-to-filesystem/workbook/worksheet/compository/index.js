@@ -75,12 +75,13 @@ export default class Compository extends EventEmitter {
   }
   async deleteCollects() {
     for(const $collect of this.collects.values()) {
-      for(const $collectDoc of $collect) {
-        await this.#dbConnections.spreadsheet.findOneAndDelete(({
-          _id: $collect._id
-        }))
-      }
+      await $collect.delete()
     }
+    this.emit(
+      'deleteCollects', 
+      this.collects
+    )
+    return this
   }
   async saveCollects() {
     for(const $collect of this.collects.values()) {

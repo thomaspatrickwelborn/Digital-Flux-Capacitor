@@ -12,6 +12,7 @@ export default class Collect extends EventEmitter {
   length = 0
   #settings = {}
   #options = {}
+  #dbConnections
   constructor($settings, $options) {
     super()
     this.#settings = $settings
@@ -23,6 +24,7 @@ export default class Collect extends EventEmitter {
     const {
       name, className, dbConnections
     } = $options
+    this.#dbConnections = dbConnections
     const modsLength = mods.length
     var modsIndex = 0
     iterateMods: 
@@ -60,12 +62,34 @@ export default class Collect extends EventEmitter {
       translexesIndex++
     }
   }
+  async delete() {
+    const collectDocsLength = this.length
+    var collectDocsIndex = collectDocsLength - 1
+    while(collectDocsIndex > -1) {
+      const collectDoc = this[collectDocsIndex]
+      await this.#dbConnections.spreadsheet.models[
+        collectDoc.$collection.modelName
+      ].findOneAndDelete({
+        _id: collectDoc._id
+      })
+      Array.prototype.splice.call(this, collectDocsIndex, 1)
+      this.emit(
+        'deleteCollectDoc',
+        collectDoc
+      )
+      collectDocsIndex--
+    }
+    this.emit(
+      'delete',
+      this
+    )
+    return this
+  }
   async save() {
     const collectDocsLength = this.length
     var collectDocsIndex = 0
     while(collectDocsIndex < collectDocsLength) {
       const collectDoc = this[collectDocsIndex]
-      console.log('collectDoc', collectDoc)
       await collectDoc.save({
         validateBeforeSave: false,
       })

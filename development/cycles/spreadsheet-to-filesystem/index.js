@@ -83,7 +83,6 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       this.#workbookWorksheetSaveCollectDoc.bind(this)
     )
     await this.workbook.saveWorksheets()
-    // await this.#dbConnections.spreadsheet.dropDatabase()
     return this
   }
   #workbookWorksheetSaveCollectDoc($collectDoc) {
@@ -117,6 +116,7 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
     }
     this.#dbConnections.spreadsheet.once(
       'connected', async function spreadsheetDatabaseConnected() {
+        await this.#dbConnections.spreadsheet.dropDatabase()
         if(this.#watch === true) {
           this.workbookWatch = this.#settings.input.spreadsheet
         } else {
