@@ -32,6 +32,7 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
   }
   get workbook() { return this.#_workbook }
   set workbook($workbook) {
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     if(this.#_workbook instanceof Workbook) {
       this.#_workbook.workbook = $workbook
       this.#_workbook.worksheets = this.#settings.spreadsheet.worksheets

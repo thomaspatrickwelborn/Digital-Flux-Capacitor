@@ -59,7 +59,7 @@ class Workbook extends EventEmitter {
     .filter(($workbookWorksheet) => {
       return $workbookWorksheet.name.match(
         $workbookWorksheetClassName
-        )
+      )
     })
     return worksheets
   }

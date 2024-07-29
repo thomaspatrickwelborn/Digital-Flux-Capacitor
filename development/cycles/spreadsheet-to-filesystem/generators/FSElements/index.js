@@ -10,10 +10,11 @@ export default class FSElements extends EventEmitter {
   #_fsRootStat
   #_fsRootWatch
    constructor(
-    $filesystem, $generator
+    $filesystem, $generators
   ) {
     super()
     this.fsRootPath = $filesystem.path
+    // console.log(this.fsRootPath)
     this.fsRootStat = this.fsRootPath
     this.fsRoot = this.fsRootPath
     this.fsRootWatch = this.fsRootPath
@@ -55,35 +56,73 @@ export default class FSElements extends EventEmitter {
   }
   get fsRootWatch() { return this.#_fsRootWatch }
   set fsRootWatch($fsRootPath) {
-    this.#_fsRootWatch = chokidar.watch($fsRootPath)
+    console.log('fsRootWatch', $fsRootPath)
+    this.#_fsRootWatch = chokidar.watch($fsRootPath, {
+      ignore: [
+        path.join($fsRootPath, 'node_modules/**'),
+        path.join($fsRootPath, '.git/**')
+      ]
+    })
     this.#_fsRootWatch.on(
-      'add', this.#fsRootWatchChange.bind(this)
+      'add',
+      ($fsPath) => {
+        console.log('add', $fsPath)
+        this.fsRoot.unshift($fsPath)
+      },
     )
     this.#_fsRootWatch.on(
-      'unlink', this.#fsRootWatchChange.bind(this)
+      'unlink', 
+      ($fsPath) => {
+        console.log('unlink', $fsPath)
+        const fsPathIndex = this.fsRoot.findIndex(
+          ($fsRootPath) => $fsRootPath === $fsPath
+        )
+        if(fsPathIndex) this.fsRoot.splice(fsPathIndex, 1)
+      },
     )
     this.#_fsRootWatch.on(
-      'addDir', this.#fsRootWatchChange.bind(this)
+      'addDir', 
+      ($fsPath) => {
+        console.log('addDir', $fsPath)
+        this.fsRoot.unshift($fsPath)
+      },
     )
     this.#_fsRootWatch.on(
-      'unlinkDir', this.#fsRootWatchChange.bind(this)
+      'unlinkDir', 
+      ($fsPath) => {
+        console.log('unlinkDir', $fsPath)
+        const fsPathIndex = this.fsRoot.findIndex(
+          ($fsRootPath) => $fsRootPath === $fsPath
+        )
+        if(fsPathIndex) this.fsRoot.splice(fsPathIndex, 1)
+      },
     )
   }
   async #fsRootWatchChange($workbookPath) {
     this.fsRoot = this.fsRootPath
   }
   addFile($addedFileDoc) {
-    let addedFSElementStat = stat($addedFileDoc.fs.path, (
+    const addedFileDocPath = path.join(
+      this.fsRootPath,
+      $addedFileDoc.fs.path,
+    )
+    const addedFileDirPath = path.dirname(addedFileDocPath)
+    stat(addedFileDirPath, (
       $err, $addedFSElementStat
     ) => {
-      console.log($err, $addedFSElementStat)
-      if(
-        $err || 
-        $addedFSElementStat.isFile() === false &&
-        $addedFSElementStat.isDirectory() === false
-      ) {
-        writeFile($addedFileDoc.fs.path, '', ($err) => {
-          console.log($err)
+      if($addedFSElementStat.isDirectory() === false) {
+        mkdir(addedFoldDocPath, {
+          recursive: true,
+        }, ($err, $dir) => {
+          writeFile(addedFileDocPath, '', ($err, $file) => {
+            console.log($err, $file)
+            if($err) return
+            // this.emit('addFile', $addedFileDoc)
+          })
+        })
+      } else {
+        writeFile(addedFileDocPath, '', ($err, $file) => {
+          console.log($err, $file)
           if($err) return
           // this.emit('addFile', $addedFileDoc)
         })
@@ -91,23 +130,16 @@ export default class FSElements extends EventEmitter {
     })
   }
   addFold($addedFoldDoc) {
-    let addedFSElementStat = stat($addedFoldDoc.fs.path, (
-      $err, $addedFSElementStat
-    ) => {
-      console.log($err, $addedFSElementStat)
-      if(
-        $err || 
-        $addedFSElementStat.isFile() === false &&
-        $addedFSElementStat.isDirectory() === false
-      ) {
-        mkdir($addedFoldDoc.fs.path, {
-          recursive: true,
-        }, ($err, $dir) => {
-          console.log($err)
-          if($err) return
-          // this.emit('addFold', $addedFoldDoc)
-        })
-      }
+    const addedFoldDocPath = path.join(
+      this.fsRootPath,
+      $addedFoldDoc.fs.path,
+    )
+    mkdir(addedFoldDocPath, {
+      recursive: true,
+    }, ($err, $dir) => {
+      console.log($err, $dir)
+      if($err) return
+      // this.emit('addFold', $addedFoldDoc)
     })
   }
   inputFileDoc($fileDoc) {
@@ -122,7 +154,7 @@ export default class FSElements extends EventEmitter {
           this.addFile(fileDoc)
           break
         case 'Fold':
-          this.addFile(fileDoc)
+          this.addFold(fileDoc)
           break
       }
     }
