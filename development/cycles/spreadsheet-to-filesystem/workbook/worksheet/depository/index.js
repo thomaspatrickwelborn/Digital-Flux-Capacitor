@@ -68,4 +68,43 @@ export default class Depository extends EventEmitter {
       merges: this.merges,
     })
   }
+  worksheetTableHasChanged($worksheetTable) {
+    return (
+      // (
+      //   JSON.stringify(
+      //     $worksheetTable['!ranges']
+      //   ) !== JSON.stringify(
+      //     this.#worksheetTable['!ranges']
+      //   )
+      // ) ||
+      // (
+      //   JSON.stringify(
+      //     $worksheetTable['!rows']
+      //   ) !== JSON.stringify(
+      //     this.#worksheetTable['!rows']
+      //   )
+      // ) ||
+      // (
+      //   JSON.stringify(
+      //     $worksheetTable['!cols']
+      //   ) !== JSON.stringify(
+      //     this.#worksheetTable['!cols']   
+      //   )
+      // ) ||
+      // (
+      //   JSON.stringify(
+      //     $worksheetTable['!merges']
+      //   ) !== JSON.stringify(
+      //     this.#worksheetTable['!merges']
+      //   )
+      // ) ||
+      (
+        JSON.stringify(
+          $worksheetTable['!data']
+        ) !== JSON.stringify(
+          this.#_data.raw
+        )
+      )
+    )
+  }
 }

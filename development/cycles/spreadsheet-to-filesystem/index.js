@@ -32,10 +32,11 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
   }
   get workbook() { return this.#_workbook }
   set workbook($workbook) {
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     if(this.#_workbook instanceof Workbook) {
-      this.#_workbook.workbook = $workbook
-      this.#_workbook.worksheets = this.#settings.spreadsheet.worksheets
+      this.#_workbook.reconstructor({
+        worksheets: this.#settings.spreadsheet.worksheets,
+        workbook: $workbook,
+      })
     } else
     if(this.#_workbook === undefined) {
       this.#_workbook = new Workbook({
@@ -81,41 +82,18 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       'worksheet:saveCollectDoc',
       this.#workbookWorksheetSaveCollectDoc.bind(this)
     )
-    // this.workbook.on(
-    //   'worksheet:saveCollectDoc',
-    //   ($collectDoc) => {
-    //     console.log('worksheet:saveCollectDoc', $collectDoc)
-    //   }
-    // )
-    // this.workbook.on(
-    //   'worksheet:saveCollect',
-    //   ($collectDoc) => {
-    //     console.log('worksheet:saveCollect', $collectDoc)
-    //   }
-    // )
-    // this.workbook.on(
-    //   'worksheet:saveCollects',
-    //   ($collectDoc) => {
-    //     console.log('worksheet:saveCollects', $collectDoc)
-    //   }
-    // )
-    const fsElementWorksheets = await this.workbook.saveFSElementWorksheets()
-    // await this.workbook.saveFSElementContentWorksheets()
+    await this.workbook.saveWorksheets()
+    // await this.#dbConnections.spreadsheet.dropDatabase()
     return this
   }
   #workbookWorksheetSaveCollectDoc($collectDoc) {
-    // console.log(
-    //   '#workbookWorksheetSaveCollectDoc',
-    //   '$collectDoc',
-    //   $collectDoc.toObject()
+    // this.generators.fsElements.inputFileDoc(
+    //   $collectDoc
     // )
-    this.generators.fsElements.inputFileDoc(
-      $collectDoc
-    )
   }
   async #workbookWatchChange($workbookPath) {
     // console.clear()
-    await this.#dbConnections.spreadsheet.dropDatabase()
+    // await this.#dbConnections.spreadsheet.dropDatabase()
     const modelNames = this.#dbConnections.spreadsheet.modelNames()
     const modelNamesLength = modelNames.length
     var modelNamesIndex = 0

@@ -110,6 +110,7 @@ export default class Translexis extends EventEmitter {
     var collectDocsIndex = 0
     const reduceCollectDocProperties = this.#reduceCollectDocProperties
     .bind(this)
+    console.log('#fsElements', '$collect', $collect)
     while(collectDocsIndex < collectDocsLength) {
       const collectDoc = $collect[collectDocsIndex]
       let updateCollectDoc = Object.entries(collectDoc)

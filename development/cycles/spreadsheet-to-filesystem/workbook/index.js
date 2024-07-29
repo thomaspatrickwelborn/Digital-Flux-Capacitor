@@ -9,86 +9,53 @@ class Workbook extends EventEmitter {
   name
   #settings
   #dbConnections
-  fsElementWorksheets
-  fsElementContentWorksheets
   constructor($settings) {
     super()
     this.#settings = $settings
     const {
-      workbookPath, workbook, worksheets, dbConnections
+      workbookPath, workbook, dbConnections
     } = this.#settings
     this.#dbConnections = dbConnections
     this.#workbookPath = workbookPath
     this.name = path.basename(this.#workbookPath).split('.')[0]
     this.workbook = workbook
-    this.createFSElementWorksheets()
-    this.createFSElementContentWorksheets()
+    this.#createWorksheets()
+  }
+  reconstructor($settings) {
+    const { workbook } = $settings
+    this.workbook = workbook
+    this.#createWorksheets()
+  }
+  get #worksheetsSettings() {
+    return this.workbook.Workbook.Sheets
   }
   get workbook() { return this.#_workbook }
   set workbook($workbook) {
-    this.#_workbook = Object.freeze($workbook)
+    this.#_workbook = $workbook
   }
   get worksheets() { return this.#_worksheets }
-  createFSElementWorksheets() {
-    this.fsElementWorksheets = new Map(
-      this.#createWorksheets(
-        this.#getWorksheetsByClassName(
-          new RegExp(/^VINE/)
-        )
-      )
-    )
-    return this.fsElementWorksheets
-  }
-  async saveFSElementWorksheets() {
-    return await this.saveWorksheets(this.fsElementWorksheets)
-  }
-  createFSElementContentWorksheets() {
-    this.fsElementContentWorksheets = this.#createWorksheets(
-      this.#getWorksheetsByClassName(
-        new RegExp(/^VANT|^VELI|^VERS|^VIEW|^VORM/)
-      )
-    )
-    return this.fsElementContentWorksheets
-  }
-  async saveFSElementContentWorksheets() {
-    return await this.saveWorksheets(this.fsElementWorksheets)
-  }
-  #getWorksheetsByClassName($workbookWorksheetClassName) {
-    const { Workbook, Sheets } = this.workbook
-    const worksheets = Workbook.Sheets
-    .filter(($workbookWorksheet) => {
-      return $workbookWorksheet.name.match(
-        $workbookWorksheetClassName
-      )
-    })
-    return worksheets
-  }
   #createWorksheets($worksheets) {
-    const worksheets = []
+    $worksheets = $worksheets || this.#worksheetsSettings
     const worksheetsLength = $worksheets.length
     var worksheetsIndex = 0
     iterateWorksheets: 
     while(worksheetsIndex < worksheetsLength) {
-      const worksheet = this.#createWorksheet(
-        $worksheets[worksheetsIndex]
-      )
-      if(worksheet !== undefined) {
-        worksheets.push(worksheet)
-      }
+      const worksheetSettings = $worksheets[worksheetsIndex]
+      this.#createWorksheet(worksheetSettings)
       worksheetsIndex++
     }
-    return new Map(worksheets)
+    return this.worksheets
   }
-  #createWorksheet($worksheet) {
-    const hidden = $worksheet.Hidden
+  #createWorksheet($worksheetSettings) {
+    const hidden = $worksheetSettings.Hidden
     if(hidden) return
     const dbConnections = this.#dbConnections
     const { Workbook, Sheets } = this.workbook
-    const worksheetNameData = $worksheet.name.split('_')
+    const worksheetNameData = $worksheetSettings.name.split('_')
     const worksheetClassName = worksheetNameData[0] 
-    const worksheetName = $worksheet.name
-    const worksheetHidden = $worksheet.Hidden
-    const worksheetID = Number($worksheet.sheetId)
+    const worksheetName = $worksheetSettings.name
+    const worksheetHidden = $worksheetSettings.Hidden
+    const worksheetID = Number($worksheetSettings.sheetId)
     const worksheetTable = Sheets[worksheetName]
     const worksheetRows = worksheetTable['!rows'] || []
     const worksheetCols = worksheetTable['!cols'] || []
@@ -109,48 +76,55 @@ class Workbook extends EventEmitter {
     worksheetTable['!cols'] = worksheetCols
     worksheetTable['!merges'] = worksheetMerges
     worksheetTable['!ranges'] = worksheetRanges
-    const worksheet = new Worksheet({
-      worksheetClassName,
-      worksheetName,
-      worksheetTable,
-      dbConnections,
-    }, worksheetOptions)
-    worksheet.on(
-      'extrapository:saveCollectDoc',
-      ($collectDoc) => {
-        this.emit('worksheet:saveCollectDoc', $collectDoc)
-      }
-    )
-    worksheet.on(
-      'extrapository:saveCollect',
-      ($collect) => {
-        this.emit('worksheet:saveCollect', $collect)
-      }
-    )
-    worksheet.on(
-      'extrapository:saveCollects',
-      ($collects) => {
-        this.emit('worksheet:saveCollects', $collects)
-      }
-    )
-    this.worksheets
-    .set(worksheetName, worksheet)
-    return [worksheetName, worksheet]
+    let worksheetsHasWorksheet = this.worksheets
+    .has(worksheetName)
+    let worksheet
+    if(worksheetsHasWorksheet === false) {
+      worksheet = new Worksheet({
+        worksheetClassName,
+        worksheetName,
+        worksheetTable,
+        dbConnections,
+      }, worksheetOptions)
+      worksheet.on(
+        'extrapository:saveCollectDoc',
+        ($collectDoc) => {
+          this.emit('worksheet:saveCollectDoc', $collectDoc)
+        }
+      )
+      worksheet.on(
+        'extrapository:saveCollect',
+        ($collect) => {
+          this.emit('worksheet:saveCollect', $collect)
+        }
+      )
+      worksheet.on(
+        'extrapository:saveCollects',
+        ($collects) => {
+          this.emit('worksheet:saveCollects', $collects)
+        }
+      )
+      this.worksheets
+      .set(worksheetName, worksheet)
+    } else
+    if(worksheetsHasWorksheet === true) {
+      worksheet = this.worksheets
+      .get(worksheetName)
+      worksheet.reconstructor({
+        worksheetTable
+      }, worksheetOptions)
+    }
+    return worksheet
   }
   async saveWorksheets($worksheets) {
-    const worksheets = []
-    for(const $worksheet of $worksheets) {
-      const worksheet = await this.saveWorksheet($worksheet)
-      worksheets.push(worksheet)
+    $worksheets = $worksheets || this.worksheets
+    for(const $worksheet of $worksheets.values()) {
+      await this.saveWorksheet($worksheet)
     }
     this.emit('save', this)
-    return new Map(worksheets)
   }
   async saveWorksheet($worksheet) {
-    const worksheetName = $worksheet[0]
-    const worksheet = $worksheet[1]
-    await worksheet.saveCompository()
-    return [worksheetName, worksheet]
+    await $worksheet.saveCompository()
   }
 }
 export default Workbook

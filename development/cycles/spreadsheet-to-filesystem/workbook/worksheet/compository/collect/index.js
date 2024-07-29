@@ -64,8 +64,9 @@ export default class Collect extends EventEmitter {
     const collectDocsLength = this.length
     var collectDocsIndex = 0
     while(collectDocsIndex < collectDocsLength) {
-      const collectDoc = await this[collectDocsIndex]
-      .save({
+      const collectDoc = this[collectDocsIndex]
+      console.log('collectDoc', collectDoc)
+      await collectDoc.save({
         validateBeforeSave: false,
       })
       this.emit(

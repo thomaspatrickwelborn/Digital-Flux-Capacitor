@@ -66,14 +66,12 @@ export default class FSElements extends EventEmitter {
     this.#_fsRootWatch.on(
       'add',
       ($fsPath) => {
-        console.log('add', $fsPath)
         this.fsRoot.unshift($fsPath)
       },
     )
     this.#_fsRootWatch.on(
       'unlink', 
       ($fsPath) => {
-        console.log('unlink', $fsPath)
         const fsPathIndex = this.fsRoot.findIndex(
           ($fsRootPath) => $fsRootPath === $fsPath
         )
@@ -83,14 +81,12 @@ export default class FSElements extends EventEmitter {
     this.#_fsRootWatch.on(
       'addDir', 
       ($fsPath) => {
-        console.log('addDir', $fsPath)
         this.fsRoot.unshift($fsPath)
       },
     )
     this.#_fsRootWatch.on(
       'unlinkDir', 
       ($fsPath) => {
-        console.log('unlinkDir', $fsPath)
         const fsPathIndex = this.fsRoot.findIndex(
           ($fsRootPath) => $fsRootPath === $fsPath
         )
@@ -144,6 +140,7 @@ export default class FSElements extends EventEmitter {
   }
   inputFileDoc($fileDoc) {
     const fileDoc = $fileDoc.toObject()
+    console.log('inputFileDoc', fileDoc)
     const { operations, permissions, path } = fileDoc.fs
     if(
       operations.add === true &&

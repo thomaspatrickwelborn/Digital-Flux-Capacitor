@@ -3,15 +3,17 @@ import Depository from './depository/index.js'
 import Suppository from './suppository/index.js'
 import Compository from './compository/index.js'
 import Extrapository from './extrapository/index.js'
-import {
-  typeOf, parseCell, tem, combineMerge
-} from '#utils/index.js'
 import { LMNProps } from '#utils/defaults/index.js'
 export default class Worksheet extends EventEmitter {
   #settings
   #options
   name
   className
+  #_worksheetTable
+  get #worksheetTable() { return this.#_worksheetTable }
+  set #worksheetTable($worksheetTable) {
+    this.#_worksheetTable = $worksheetTable
+  }
   #dbConnections
   #_depository
   #_suppository
@@ -26,15 +28,38 @@ export default class Worksheet extends EventEmitter {
       worksheetName, 
       worksheetTable, 
       dbConnections
-    } = $settings
+    } = this.#settings
     this.name = worksheetName
     this.className = worksheetClassName
     this.#dbConnections = dbConnections
-    this.depository = worksheetTable
+    this.#worksheetTable = worksheetTable
+    this.depository = this.#worksheetTable
     this.suppository = this.depository
     this.compository = this.depository
     this.extrapository = this.compository
-    return
+  }
+  async reconstructor($settings, $options) {
+    this.#settings = $settings
+    this.#options = $options
+    const {
+      // worksheetClassName, 
+      // worksheetName, 
+      worksheetTable, 
+      // dbConnections
+    } = this.#settings
+    const depositoryWorksheetTableHasChanged = this
+    .depository.worksheetTableHasChanged(
+      worksheetTable
+    )
+    if(depositoryWorksheetTableHasChanged === true) {
+      this.#worksheetTable = worksheetTable
+      this.depository = this.#worksheetTable
+      this.suppository = this.depository
+      await this.compository.deleteCollects()
+      this.compository = this.depository
+      this.extrapository = this.compository
+    }
+    return this
   }
   get depository() { return this.#_depository }
   set depository($worksheetTable) {
