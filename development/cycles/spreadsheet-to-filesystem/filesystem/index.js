@@ -11,12 +11,12 @@ export default class Filesystem extends EventEmitter {
   #_fsRootStat
   #_fsRootWatch
   #filesystem
-  #dbConnections
+  #databases
    constructor($settings = {}) {
     super()
     this.#settings = $settings
     this.#filesystem = this.#settings.filesystem
-    this.#dbConnections = this.#settings.dbConnections
+    this.#databases = this.#settings.databases
     this.fsRootPath = this.#filesystem.path
     this.fsRootStat = this.fsRootPath
     this.fsRoot = this.fsRootPath

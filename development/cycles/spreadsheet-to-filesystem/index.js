@@ -3,86 +3,80 @@ import chokidar from 'chokidar'
 import { createConnection } from 'mongoose'
 import * as XLSX from 'xlsx'
 import { readFile } from 'node:fs/promises'
-import Workbook from './workbook/index.js'
+import Spreadsheet from './spreadsheet/index.js'
 import Filesystem from './filesystem/index.js'
 import Config from './config.js'
 
 export default class SpreadsheetToFilesystem extends EventEmitter {
-  #settings
-  #_dbConnections
+  #_settings
+  #_databases
+  #_spreadsheet
   #_filesystem
-  #_workbook
   constructor($settings) {
     super()
-    this.#settings = Object.assign({}, $settings, Config) 
-    return this
+    this.#settings = $settings
   }
-  get filesystem() {
-    if(this.#_filesystem === undefined) {
-      this.#_filesystem = new Filesystem({
-        dbConnections: this.#dbConnections,
-        filesystem: this.#settings.output.filesystem
-      })
+  get #settings() { return this.#_settings }
+  set #settings($settings) {
+    if(this.#_settings === undefined) {
+      this.#settings = Object.freeze(
+        Object.assign(
+          {}, 
+          $settings, 
+          Config
+        )
+      )
     }
-    return this.#_filesystem
   }
-  get workbook() {
-    if(this.#_workbook instanceof Workbook) {
-      this.#_workbook.reconstructor({
-        worksheets: this.#settings.spreadsheet.worksheets,
-        workbook: $workbook,
+  get #databases() {
+    if(this.#_databases === undefined) {
+      const spreadsheet = this.#settings.input.database
+      const filesystem = this.#settings.output.database
+      this.#databases = {
+        spreadsheet: createConnection(
+          spreadsheet.uri, spreadsheet.options
+        ),
+        filesystem: createConnection(
+          filesystem.uri, filesystem.options
+        )
+      }
+    }
+    return this.#_databases
+  }
+  get #spreadsheet() {
+    if(this.#_spreadsheet === undefined) {
+      this.#_spreadsheet = new Spreadsheet({
+        spreadsheet: this.#settings.input.spreadsheet,
+        databases: this.#databases,
       })
-    } else
-    if(this.#_workbook === undefined) {
-      this.#_workbook = new Workbook({
-        worksheets: this.#settings.spreadsheet.worksheets,
-        workbookPath: this.#settings.input.spreadsheet.path, 
-        workbook: $workbook,
-        dbConnections: this.#dbConnections, 
-      })
-      this.#_workbook.on(
+      this.#_spreadsheet.on(
         'saveCollectDoc',
         ($collectDoc) => {
-          // this.filesystem.inputFileDoc(
+          // this.#filesystem.inputFileDoc(
           //   $collectDoc
           // )
         }
       )
     }
-    return this.#_workbook
+    return this.#_spreadsheet
   }
-  get dbConnections() {
-    if(this.#_dbConnections === undefined) {
-      const spreadsheetDB = this.#settings.input.database
-      const filesystemDB = this.#settings.output.database
-      this.#dbConnections = {
-        spreadsheet: createConnection(
-          spreadsheetDB.uri, spreadsheetDB.options
-        ),
-        filesystem: createConnection(
-          filesystemDB.uri, filesystemDB.options
-        )
-      }
+  get #filesystem() {
+    if(this.#_filesystem === undefined) {
+      this.#_filesystem = new Filesystem({
+        databases: this.#databases,
+        filesystem: this.#settings.output.filesystem,
+      })
     }
-    return this.#_dbConnections
+    return this.#_filesystem
   }
-  async start() {
-    this.#dbConnections.spreadsheet.once(
+  start() {
+    this.#databases.spreadsheet.once(
       'connected', 
-      async function spreadsheetDatabaseConnected() {
-        await this.#dbConnections.spreadsheet.dropDatabase()
-        if(this.#watch === true) {
-          // this.workbookWatch = this.#settings.input.spreadsheet
-        } else {
-          // await this.#workbookWatchChange(
-          //   this.#settings.input.spreadsheet.path
-          // )
-          process.exit()
-        }
-      }.bind(this)
+      async () => {
+        await this.#databases.spreadsheet.dropDatabase()
+        this.#spreadsheet.start()
+      }
     )
-    this.#workbook.on(
-
-    )
+    return this
   }
 }

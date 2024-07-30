@@ -14,7 +14,7 @@ export default class Worksheet extends EventEmitter {
   set #worksheetTable($worksheetTable) {
     this.#_worksheetTable = $worksheetTable
   }
-  #dbConnections
+  #databases
   #_depository
   #_suppository
   #_compository
@@ -29,11 +29,11 @@ export default class Worksheet extends EventEmitter {
       worksheetClassName, 
       worksheetName, 
       worksheetTable, 
-      dbConnections
+      databases
     } = this.#settings
     this.name = worksheetName
     this.className = worksheetClassName
-    this.#dbConnections = dbConnections
+    this.#databases = databases
     this.#worksheetTable = worksheetTable
     this.depository = this.#worksheetTable
     this.suppository = this.depository
@@ -47,7 +47,7 @@ export default class Worksheet extends EventEmitter {
       // worksheetClassName, 
       // worksheetName, 
       worksheetTable, 
-      // dbConnections
+      // databases
     } = this.#settings
     this.#depositoryWorksheetTableHasChanged = this
     .depository.worksheetTableHasChanged(
@@ -84,7 +84,7 @@ export default class Worksheet extends EventEmitter {
       {
         name: this.name,
         className: this.className,
-        dbConnections: this.#dbConnections
+        databases: this.#databases
       }
     )
   }
@@ -95,7 +95,7 @@ export default class Worksheet extends EventEmitter {
       {
         name: this.name,
         className: this.className,
-        dbConnections: this.#dbConnections
+        databases: this.#databases
       }
     )
     /*
@@ -126,7 +126,7 @@ export default class Worksheet extends EventEmitter {
       {
         name: this.name,
         className: this.className,
-        dbConnections: this.#dbConnections,
+        databases: this.#databases,
         worksheet: this,
       }
     )

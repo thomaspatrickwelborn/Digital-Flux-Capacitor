@@ -2,55 +2,64 @@ import { EventEmitter } from 'node:events'
 import path from 'path'
 import Worksheet from './worksheet/index.js'
 
-class Workbook extends EventEmitter {
-  #workbookPath
+class Spreadsheet extends EventEmitter {
+  #settings
+  #databases
+  // #workbookPath
   #_workbook
   #_watcher
-  #_watch = false
+  #_watch
   #_worksheets = new Map()
   name
-  #settings
-  #dbConnections
   constructor($settings) {
     super()
     this.#settings = $settings
-    const {
-      workbookPath, workbook, dbConnections
-    } = this.#settings
-    this.#dbConnections = dbConnections
-    this.#workbookPath = workbookPath
-    this.name = path.basename(this.#workbookPath).split('.')[0]
-    this.workbook = workbook
-    this.#createWorksheets()
+    this.#databases = this.#settings.databases
+    // this.#createWorksheets()
   }
   reconstructor($settings) {
     const { workbook } = $settings
     this.workbook = workbook
     this.#createWorksheets()
   }
-  // 
-  // 
-  get watcher() { return this.#_watcher }
-  set watcher($watcher) {
-    const { path } = $watcher
-    this.#_watcher = chokidar.watch(path)
-    this.watcher.once(
-      'add', this.#watcherChange.bind(this)
-    )
-    this.watcher.on(
-      'change', this.#watcherChange.bind(this)
-    )
+  get #watch() {
+    if(this.#_watch === undefined) {
+      this.#_watch = this.#settings.spreadsheet.watch || false
+    }
+    return this.#_watch
   }
-  get #watch() { return this.#_watch }
-  set #watch($watch) {
-    this.#_watch = (
-      $watch !== undefined
-    ) ? $watch
-      : this.#_watch
+  get #watcher() {
+    if(
+      this.#watch === true &&
+      this.#_watcher === undefined
+    ) {
+      this.#_watcher = chokidar.watch(
+        this.#settings.spreadsheet.path
+      )
+      this.#_watcher.once(
+        'add', this.#watcherChange.bind(this)
+      )
+      this.#_watcher.on(
+        'change', this.#watcherChange.bind(this)
+      )
+    }
+    return this.#_watcher
   }
-
-  async #readWorkbook($workbookPath) {
-    const workbookFile = await readFile($workbookPath)
+  async #watcherChange() {
+    const modelNames = this.#databases.spreadsheet.modelNames()
+    const modelNamesLength = modelNames.length
+    var modelNamesIndex = 0
+    while(modelNamesIndex < modelNamesLength) {
+      const modelName = modelNames[modelNamesIndex]
+      await this.#databases.spreadsheet.deleteModel(modelName)
+      modelNamesIndex++
+    }
+    await this.#read()
+  }
+  async #read() {
+    this.workbook = await readFile(
+      this.#settings.spreadsheet.path
+    )
     .then(($buffer) => XLSX.read($buffer, {
       type: 'buffer',
       raw: true,
@@ -59,9 +68,8 @@ class Workbook extends EventEmitter {
       cellHTML: false,
       cellNF: false,
       cellDates: false,
-      cellStyles: true, // "hidden" property is cell style
+      cellStyles: true, 
     }))
-    this.workbook = workbookFile
     this.workbook.on(
       'worksheet:saveCollectDoc',
       ($collectDoc) => {
@@ -79,21 +87,6 @@ class Workbook extends EventEmitter {
     )
     return this
   }
-  async #watcherChange($workbookPath) {
-    // console.clear()
-    // await this.#dbConnections.spreadsheet.dropDatabase()
-    const modelNames = this.#dbConnections.spreadsheet.modelNames()
-    const modelNamesLength = modelNames.length
-    var modelNamesIndex = 0
-    while(modelNamesIndex < modelNamesLength) {
-      const modelName = modelNames[modelNamesIndex]
-      await this.#dbConnections.spreadsheet.deleteModel(modelName)
-      modelNamesIndex++
-    }
-    await this.#readWorkbook($workbookPath)
-  }
-  // 
-  // 
   get fsElementWorksheets() {
     return new Map(
       Array.from(this.worksheets.entries())
@@ -124,9 +117,7 @@ class Workbook extends EventEmitter {
     return this.workbook.Workbook.Sheets
   }
   get workbook() { return this.#_workbook }
-  set workbook($workbook) {
-    this.#_workbook = $workbook
-  }
+  set workbook($workbook) { this.#_workbook = $workbook }
   get worksheets() { return this.#_worksheets }
   #createWorksheets($worksheets) {
     $worksheets = $worksheets || this.#worksheetsSettings
@@ -143,7 +134,7 @@ class Workbook extends EventEmitter {
   #createWorksheet($worksheetSettings) {
     const hidden = $worksheetSettings.Hidden
     if(hidden) return
-    const dbConnections = this.#dbConnections
+    const databases = this.#databases
     const { Workbook, Sheets } = this.workbook
     const worksheetNameData = $worksheetSettings.name.split('_')
     const worksheetClassName = worksheetNameData[0] 
@@ -178,7 +169,7 @@ class Workbook extends EventEmitter {
         worksheetClassName,
         worksheetName,
         worksheetTable,
-        dbConnections,
+        databases,
       }, worksheetOptions)
       worksheet.on(
         'extrapository:saveCollectDoc',

@@ -5,17 +5,17 @@ import Translexis from './translexis/index.js'
 export default class Extrapository extends EventEmitter {
   #_compository
   #options
-  #dbConnections
+  #databases
   #_translexis
   constructor($compository = {}, $options = {}) {
     super()
     this.#compository = $compository
     this.#options = $options
-    this.#dbConnections = this.#options.dbConnections
+    this.#databases = this.#options.databases
     this.#setDBConnectionModels()
     this.translexis = {
       worksheet: this.#options.worksheet,
-      models: this.#dbConnections.filesystem.models,
+      models: this.#databases.filesystem.models,
     }
   }
   get #compository() { return this.#_compository }
@@ -45,16 +45,16 @@ export default class Extrapository extends EventEmitter {
     )
   }
   #getDBConnectionModels() {
-    return this.#dbConnections.filesystem.models
+    return this.#databases.filesystem.models
   }
   #setDBConnectionModels() {
     const modelNames = ['FSElement']
     for(const $modelName of modelNames) {
       if(
-        this.#dbConnections.filesystem
+        this.#databases.filesystem
         .models[$modelName] === undefined
       ) {
-        this.#dbConnections.filesystem.model(
+        this.#databases.filesystem.model(
           $modelName, 
           Schemata[`${$modelName}`]
         )
@@ -63,15 +63,15 @@ export default class Extrapository extends EventEmitter {
     return this.#getDBConnectionModels()
   }
   async #deleteDBConnectionModels() {
-    await this.#dbConnections.filesystem.dropDatabase()
-    const modelNames = this.#dbConnections.filesystem.modelNames()
+    await this.#databases.filesystem.dropDatabase()
+    const modelNames = this.#databases.filesystem.modelNames()
     const modelNamesLength = modelNames.length
     var modelNamesIndex = 0
     while(modelNamesIndex < modelNamesLength) {
       const modelName = modelNames[modelNamesIndex]
-      await this.#dbConnections.filesystem.deleteModel(modelName)
+      await this.#databases.filesystem.deleteModel(modelName)
       modelNamesIndex++
     }
-    return this.#dbConnections.filesystem.models
+    return this.#databases.filesystem.models
   }
 }

@@ -12,7 +12,7 @@ export default class Collect extends EventEmitter {
   length = 0
   #settings = {}
   #options = {}
-  #dbConnections
+  #databases
   constructor($settings, $options) {
     super()
     this.#settings = $settings
@@ -22,9 +22,9 @@ export default class Collect extends EventEmitter {
       mods, composits, lmnRanges
     } = $settings
     const {
-      name, className, dbConnections
+      name, className, databases
     } = $options
-    this.#dbConnections = dbConnections
+    this.#databases = databases
     const modsLength = mods.length
     var modsIndex = 0
     iterateMods: 
@@ -35,7 +35,7 @@ export default class Collect extends EventEmitter {
       const [
         $compositIndex, $composit
       ] = composits[modsIndex]
-      const Model = dbConnections.spreadsheet.models[nom]
+      const Model = databases.spreadsheet.models[nom]
       const collectRows = $composit
       const collectRowsLength = collectRows.length
       var collectRowsIndex = 0
@@ -67,7 +67,7 @@ export default class Collect extends EventEmitter {
     var collectDocsIndex = collectDocsLength - 1
     while(collectDocsIndex > -1) {
       const collectDoc = this[collectDocsIndex]
-      await this.#dbConnections.spreadsheet.models[
+      await this.#databases.spreadsheet.models[
         collectDoc.$collection.modelName
       ].findOneAndDelete({
         _id: collectDoc._id
