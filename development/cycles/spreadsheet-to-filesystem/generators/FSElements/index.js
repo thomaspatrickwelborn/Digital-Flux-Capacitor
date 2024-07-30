@@ -152,6 +152,18 @@ export default class FSElements extends EventEmitter {
           this.addFold(fileDoc)
           break
       }
+    } else
+    if(
+      operations.update === true &&
+      this.fsRoot.includes(path) === true
+    ) {
+      // 
+    } else
+    if(
+      operations.delete === true &&
+      this.fsRoot.includes(path) === true
+    ) {
+      // 
     }
   }
 }
