@@ -1,8 +1,5 @@
 import { EventEmitter } from 'node:events'
-import chokidar from 'chokidar'
 import { createConnection } from 'mongoose'
-import * as XLSX from 'xlsx'
-import { readFile } from 'node:fs/promises'
 import Spreadsheet from './spreadsheet/index.js'
 import Filesystem from './filesystem/index.js'
 import Config from './config.js'
@@ -43,13 +40,18 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
   }
   get #spreadsheet() {
     if(this.#_spreadsheet === undefined) {
-      this.#_spreadsheet = new Spreadsheet({
-        spreadsheet: this.#settings.input.spreadsheet,
-        databases: this.#databases,
-      })
+      const spreadsheetSettings = Object.assign(
+        {
+          databases: this.#databases
+        },
+        this.#settings.spreadsheet,
+        this.#settings.input.spreadsheet,
+      )
+      this.#_spreadsheet = new Spreadsheet(spreadsheetSettings)
       this.#_spreadsheet.on(
         'saveCollectDoc',
         ($collectDoc) => {
+          console.log('saveCollectDoc', $collectDoc)
           // this.#filesystem.inputFileDoc(
           //   $collectDoc
           // )
@@ -63,6 +65,7 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       this.#_filesystem = new Filesystem({
         databases: this.#databases,
         filesystem: this.#settings.output.filesystem,
+        worksheets
       })
     }
     return this.#_filesystem

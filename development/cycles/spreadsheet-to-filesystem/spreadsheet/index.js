@@ -1,11 +1,13 @@
 import { EventEmitter } from 'node:events'
+import { readFile } from 'node:fs/promises'
 import path from 'path'
+import chokidar from 'chokidar'
+import * as XLSX from 'xlsx'
 import Worksheet from './worksheet/index.js'
 
 export default class Spreadsheet extends EventEmitter {
   #settings
   #databases
-  // #workbookPath
   #_workbook
   #_watcher
   #_watch
@@ -16,14 +18,9 @@ export default class Spreadsheet extends EventEmitter {
     this.#settings = $settings
     this.#databases = this.#settings.databases
   }
-  reconstructor($settings) {
-    const { workbook } = $settings
-    this.workbook = workbook
-    this.#createWorksheets()
-  }
   get #watch() {
     if(this.#_watch === undefined) {
-      this.#_watch = this.#settings.spreadsheet.watch || false
+      this.#_watch = this.#settings.watch || false
     }
     return this.#_watch
   }
@@ -33,7 +30,7 @@ export default class Spreadsheet extends EventEmitter {
       this.#_watcher === undefined
     ) {
       this.#_watcher = chokidar.watch(
-        this.#settings.spreadsheet.path
+        this.#settings.path
       )
       this.#_watcher.once(
         'add', this.#watcherChange.bind(this)
@@ -57,35 +54,49 @@ export default class Spreadsheet extends EventEmitter {
     //   }
     // )
   }
-  get worksheets() { return this.#_worksheets }
+  get #worksheetsSettings() {
+    return this.workbook.Workbook.Sheets
+  }
+  get fsElementWorksheetsSettings() {
+    return this.#reduceByPropKeyMatch(
+      this.#worksheetsSettings, 'name', new RegExp(/^VINE/), true
+    )
+  }
+  get fsElementContentWorksheetsSettings() {
+    return this.#reduceByPropKeyMatch(
+      this.#worksheetsSettings, 'name', new RegExp(/^VINE/), false
+    )
+  }
+  get #worksheets() { return this.#_worksheets }
   get fsElementWorksheets() {
-    return new Map(
-      Array.from(this.worksheets.entries())
-      .reduce(($worksheetsEntries, [$worksheetName, $worksheet]) => {
-        if($worksheetName.match(
-          new RegExp(/^VINE/)
-        )) {
-          $worksheetsEntries.push([$worksheetName, $worksheet])
-        }
-        return $worksheetsEntries
-      }, [])
+    return this.#reduceByPropKeyMatch(
+      Array.from(this.#worksheets.values()), 'name', new RegExp(/^VINE/), true
     )
   }
   get fsElementContentWorksheets() {
-    return new Map(
-      Array.from(this.worksheets.entries())
-      .reduce(($worksheetsEntries, [$worksheetName, $worksheet]) => {
-        if(!$worksheetName.match(
-          new RegExp(/^VINE/)
-        )) {
-          $worksheetsEntries.push([$worksheetName, $worksheet])
-        }
-        return $worksheetsEntries
-      }, [])
+    return this.#reduceByPropKeyMatch(
+      Array.from(this.#worksheets.values()), 'name', new RegExp(/^VINE/), false
     )
   }
-  get #worksheetsSettings() {
-    return this.workbook.Workbook.Sheets
+  #reduceByPropKeyMatch(
+    $target = [],
+    $propKey = 'name',
+    $matchRegExp,
+    $matchVal = true
+  ) {
+    return $target
+    .reduce(
+      ($targetValues, $targetValue) => {
+        if(
+          $targetValue[$propKey].match(
+            $matchRegExp
+          ) === $matchVal
+        ) {
+          $targetValues.push($worksheetsSettings)
+        }
+        return $targetValues
+      }, []
+    )
   }
   async #watcherChange() {
     const modelNames = this.#databases.spreadsheet.modelNames()
@@ -96,11 +107,11 @@ export default class Spreadsheet extends EventEmitter {
       await this.#databases.spreadsheet.deleteModel(modelName)
       modelNamesIndex++
     }
-    await this.#read()
+    await this.read()
   }
-  async #read() {
+  async read() {
     this.workbook = await readFile(
-      this.#settings.spreadsheet.path
+      this.#settings.path
     )
     .then(($buffer) => XLSX.read($buffer, {
       type: 'buffer',
@@ -112,28 +123,30 @@ export default class Spreadsheet extends EventEmitter {
       cellDates: false,
       cellStyles: true, 
     }))
-    
-    // await this.workbook.saveWorksheets(
-    //   this.workbook.fsElementWorksheets
+    console.log('worksheetsSettings',this.#worksheetsSettings)
+    this.#createWorksheets()
+    // await this.saveWorksheets(
+    //   this.fsElementWorksheets
     // )
-    // await this.workbook.saveWorksheets(
-    //   this.workbook.fsElementContentWorksheets
+    // await this.saveWorksheets(
+    //   this.fsElementContentWorksheets
     // )
     return this
   }
-  #createWorksheets($worksheets) {
-    $worksheets = $worksheets || this.#worksheetsSettings
-    const worksheetsLength = $worksheets.length
+  #createWorksheets(worksheetsSettings) {
+    worksheetsSettings = worksheetsSettings || this.#worksheetsSettings
+    const worksheetsLength = worksheetsSettings.length
     var worksheetsIndex = 0
     iterateWorksheets: 
     while(worksheetsIndex < worksheetsLength) {
-      const worksheetSettings = $worksheets[worksheetsIndex]
+      const worksheetSettings = worksheetsSettings[worksheetsIndex]
       this.#createWorksheet(worksheetSettings)
       worksheetsIndex++
     }
     return this.worksheets
   }
   #createWorksheet($worksheetSettings) {
+    console.log('$worksheetSettings',$worksheetSettings)
     const hidden = $worksheetSettings.Hidden
     if(hidden) return
     const databases = this.#databases
@@ -156,6 +169,7 @@ export default class Spreadsheet extends EventEmitter {
       ) $worksheetRanges.push($worksheetRange)
       return $worksheetRanges
     }, [])
+    console.log(this.#settings)
     const worksheetOptions = this.#settings.worksheets[
       worksheetClassName
     ] || {}
