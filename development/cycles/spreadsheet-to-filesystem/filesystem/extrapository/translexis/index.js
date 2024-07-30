@@ -1,5 +1,5 @@
 import { EventEmitter } from 'node:events'
-import populateOptions from '../coutil/populateOptions.js'
+import populateOptions from './populateOptions.js'
 
 export default class Translexis extends EventEmitter {
   #settings
@@ -10,38 +10,44 @@ export default class Translexis extends EventEmitter {
     '$__', '_doc', '$errors', '$isNew', 
     '_id', '__v'
   ]
-  #_filesystemIgnorePropertyKeys
-  #_filesystemContentIgnorePropertyKeys
+  #_fsIgnorePropertyKeys
+  #_fsContentIgnorePropertyKeys
   constructor($settings = {}) {
     super()
     this.#settings = $settings
     this.worksheet = this.#settings.worksheet
     this.models = this.#settings.models
   }
-  get #filesystemIgnorePropertyKeys() {
-    if(this.#_filesystemIgnorePropertyKeys === undefined) {
-      this.#_filesystemIgnorePropertyKeys = this.#ignorePropertyKeys
+  get #fsIgnorePropertyKeys() {
+    if(
+      this.#_fsIgnorePropertyKeys === undefined
+    ) {
+      this.#_fsIgnorePropertyKeys = this.#ignorePropertyKeys
       .concat([
         'portal', 'fsElements'
       ])
     }
-    return this.#_filesystemIgnorePropertyKeys
+    return this.#_fsIgnorePropertyKeys
   }
-  get #filesystemContentIgnorePropertyKeys() {
-    if(this.#_filesystemContentIgnorePropertyKeys === undefined) {
-      this.#_filesystemContentIgnorePropertyKeys = this.#ignorePropertyKeys
+  get #fsContentIgnorePropertyKeys() {
+    if(
+      this.#_fsContentIgnorePropertyKeys === undefined
+    ) {
+      this.#_fsContentIgnorePropertyKeys = this.#ignorePropertyKeys
       .concat([
         // 
       ])
     }
-    return this.#_filesystemContentIgnorePropertyKeys
+    return this.#_fsContentIgnorePropertyKeys
   }
-  #reduceFSElementContentCollectDocProperties($updateCollectDoc, $updateCollectDocProperty) {
+  #reduceFSElementContentCollectDocProperties(
+    $updateCollectDoc, $updateCollectDocProperty
+  ) {
     const [
       $collectDocPropertyKey, $collectDocPropertyVal
     ] = $updateCollectDocProperty
     if(
-      this.#filesystemContentIgnorePropertyKeys.includes(
+      this.#fsContentIgnorePropertyKeys.includes(
         $collectDocPropertyKey
       ) === false
     ) {
@@ -51,12 +57,14 @@ export default class Translexis extends EventEmitter {
     }
     return $updateCollectDoc
   }
-  #reduceFSElementCollectDocProperties($updateCollectDoc, $updateCollectDocProperty) {
+  #reduceFSElementCollectDocProperties(
+    $updateCollectDoc, $updateCollectDocProperty
+  ) {
     const [
       $collectDocPropertyKey, $collectDocPropertyVal
     ] = $updateCollectDocProperty
     if(
-      this.#filesystemIgnorePropertyKeys.includes(
+      this.#fsIgnorePropertyKeys.includes(
         $collectDocPropertyKey
       ) === false
     ) {
@@ -115,16 +123,15 @@ export default class Translexis extends EventEmitter {
       const collectDoc = collectDocs[collectDocsIndex]
       let updateCollectDoc = Object.entries(collectDoc)
       .reduce(reduceFSElementCollectDocProperties, {})
-      updateCollectDoc = Object.entries(collectDoc.toObject({ minimize: true }))
-      .reduce(reduceFSElementCollectDocProperties, updateCollectDoc)
+      updateCollectDoc = Object.entries(
+        collectDoc.toObject({ minimize: true })
+      )
+      .reduce(
+        reduceFSElementCollectDocProperties, updateCollectDoc
+      )
       const fsID = collectDoc.fs.id
       const fsPath = collectDoc.fs.path
       delete updateCollectDoc.fs
-      // let fileDoc = await FSElement.findOneAndReplace(
-      //   { 'fs.id': fsID },
-      //   updateCollectDoc,
-      //   { returnDocument: 'after' }
-      // )
       let fileDoc = await FSElement.findOneAndUpdate(
         { 'fs.id': fsID },
         updateCollectDoc,
@@ -145,8 +152,8 @@ export default class Translexis extends EventEmitter {
     const fileCollect = []
     const collectDocsLength = $collect.length
     var collectDocsIndex = 0
-    const reduceFSElementCollectDocProperties = this.#reduceFSElementCollectDocProperties
-    .bind(this)
+    const reduceFSElementCollectDocProperties = this
+    .#reduceFSElementCollectDocProperties.bind(this)
     while(collectDocsIndex < collectDocsLength) {
       const collectDoc = $collect[collectDocsIndex]
       let updateCollectDoc = Object.entries(collectDoc)

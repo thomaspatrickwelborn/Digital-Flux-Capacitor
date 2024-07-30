@@ -2,7 +2,7 @@ import { EventEmitter } from 'node:events'
 import path from 'path'
 import Worksheet from './worksheet/index.js'
 
-class Spreadsheet extends EventEmitter {
+export default class Spreadsheet extends EventEmitter {
   #settings
   #databases
   // #workbookPath
@@ -15,7 +15,6 @@ class Spreadsheet extends EventEmitter {
     super()
     this.#settings = $settings
     this.#databases = this.#settings.databases
-    // this.#createWorksheets()
   }
   reconstructor($settings) {
     const { workbook } = $settings
@@ -45,48 +44,20 @@ class Spreadsheet extends EventEmitter {
     }
     return this.#_watcher
   }
-  async #watcherChange() {
-    const modelNames = this.#databases.spreadsheet.modelNames()
-    const modelNamesLength = modelNames.length
-    var modelNamesIndex = 0
-    while(modelNamesIndex < modelNamesLength) {
-      const modelName = modelNames[modelNamesIndex]
-      await this.#databases.spreadsheet.deleteModel(modelName)
-      modelNamesIndex++
-    }
-    await this.#read()
+  get workbook() { return this.#_workbook }
+  set workbook($workbook) {
+    this.#_workbook = $workbook
+    // this.#_workbook.on(
+    //   'worksheet:saveCollectDoc',
+    //   ($collectDoc) => {
+    //     this.emit(
+    //       'saveCollectDoc',
+    //       $collectDoc
+    //     )
+    //   }
+    // )
   }
-  async #read() {
-    this.workbook = await readFile(
-      this.#settings.spreadsheet.path
-    )
-    .then(($buffer) => XLSX.read($buffer, {
-      type: 'buffer',
-      raw: true,
-      dense: true,
-      cellFormula: false,
-      cellHTML: false,
-      cellNF: false,
-      cellDates: false,
-      cellStyles: true, 
-    }))
-    this.workbook.on(
-      'worksheet:saveCollectDoc',
-      ($collectDoc) => {
-        this.emit(
-          'saveCollectDoc',
-          $collectDoc
-        )
-      }
-    )
-    await this.workbook.saveWorksheets(
-      this.workbook.fsElementWorksheets
-    )
-    await this.workbook.saveWorksheets(
-      this.workbook.fsElementContentWorksheets
-    )
-    return this
-  }
+  get worksheets() { return this.#_worksheets }
   get fsElementWorksheets() {
     return new Map(
       Array.from(this.worksheets.entries())
@@ -116,9 +87,40 @@ class Spreadsheet extends EventEmitter {
   get #worksheetsSettings() {
     return this.workbook.Workbook.Sheets
   }
-  get workbook() { return this.#_workbook }
-  set workbook($workbook) { this.#_workbook = $workbook }
-  get worksheets() { return this.#_worksheets }
+  async #watcherChange() {
+    const modelNames = this.#databases.spreadsheet.modelNames()
+    const modelNamesLength = modelNames.length
+    var modelNamesIndex = 0
+    while(modelNamesIndex < modelNamesLength) {
+      const modelName = modelNames[modelNamesIndex]
+      await this.#databases.spreadsheet.deleteModel(modelName)
+      modelNamesIndex++
+    }
+    await this.#read()
+  }
+  async #read() {
+    this.workbook = await readFile(
+      this.#settings.spreadsheet.path
+    )
+    .then(($buffer) => XLSX.read($buffer, {
+      type: 'buffer',
+      raw: true,
+      dense: true,
+      cellFormula: false,
+      cellHTML: false,
+      cellNF: false,
+      cellDates: false,
+      cellStyles: true, 
+    }))
+    
+    // await this.workbook.saveWorksheets(
+    //   this.workbook.fsElementWorksheets
+    // )
+    // await this.workbook.saveWorksheets(
+    //   this.workbook.fsElementContentWorksheets
+    // )
+    return this
+  }
   #createWorksheets($worksheets) {
     $worksheets = $worksheets || this.#worksheetsSettings
     const worksheetsLength = $worksheets.length
@@ -212,4 +214,3 @@ class Spreadsheet extends EventEmitter {
     await $worksheet.saveCompository()
   }
 }
-export default Workbook

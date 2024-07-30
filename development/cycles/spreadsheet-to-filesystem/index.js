@@ -19,12 +19,10 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
   get #settings() { return this.#_settings }
   set #settings($settings) {
     if(this.#_settings === undefined) {
-      this.#settings = Object.freeze(
-        Object.assign(
-          {}, 
-          $settings, 
-          Config
-        )
+      this.#_settings = Object.assign(
+        {}, 
+        $settings, 
+        Config
       )
     }
   }
@@ -32,7 +30,7 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
     if(this.#_databases === undefined) {
       const spreadsheet = this.#settings.input.database
       const filesystem = this.#settings.output.database
-      this.#databases = {
+      this.#_databases = {
         spreadsheet: createConnection(
           spreadsheet.uri, spreadsheet.options
         ),
@@ -74,7 +72,7 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       'connected', 
       async () => {
         await this.#databases.spreadsheet.dropDatabase()
-        this.#spreadsheet.start()
+        this.#spreadsheet.read()
       }
     )
     return this

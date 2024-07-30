@@ -2,7 +2,6 @@ import { EventEmitter } from 'node:events'
 import Depository from './depository/index.js'
 import Suppository from './suppository/index.js'
 import Compository from './compository/index.js'
-import Extrapository from './extrapository/index.js'
 import { LMNProps } from '#utils/defaults/index.js'
 export default class Worksheet extends EventEmitter {
   #settings
@@ -18,7 +17,6 @@ export default class Worksheet extends EventEmitter {
   #_depository
   #_suppository
   #_compository
-  #_extrapository
   #depositoryWorksheetTableHasChanged
   #compositoryCollectsHaveSaved = false
   constructor($settings, $options) {
@@ -38,16 +36,12 @@ export default class Worksheet extends EventEmitter {
     this.depository = this.#worksheetTable
     this.suppository = this.depository
     this.compository = this.depository
-    this.extrapository = this.compository
   }
   async reconstructor($settings, $options) {
     this.#settings = $settings
     this.#options = $options
     const {
-      // worksheetClassName, 
-      // worksheetName, 
       worksheetTable, 
-      // databases
     } = this.#settings
     this.#depositoryWorksheetTableHasChanged = this
     .depository.worksheetTableHasChanged(
@@ -60,7 +54,6 @@ export default class Worksheet extends EventEmitter {
       const precompository = this.compository
       precompository.deleteCollects()
       this.compository = this.depository
-      this.extrapository = this.compository
       this.#depositoryWorksheetTableHasChanged = false
       this.#compositoryCollectsHaveSaved = false
     }
@@ -115,37 +108,7 @@ export default class Worksheet extends EventEmitter {
     this.#_compository.on(
       'saveCollects', 
       ($collects) => {
-        this.extrapository.translexis.saveCollects($collects, this)
-      }
-    )
-  }
-  get extrapository() { return this.#_extrapository }
-  set extrapository($compository) {
-    this.#_extrapository = new Extrapository(
-      $compository, 
-      {
-        name: this.name,
-        className: this.className,
-        databases: this.#databases,
-        worksheet: this,
-      }
-    )
-    this.#_extrapository.on(
-      'translexis:saveCollectDoc', 
-      ($collectDoc) => {
-        this.emit('extrapository:saveCollectDoc', $collectDoc)
-      }
-    )
-    this.#_extrapository.on(
-      'translexis:saveCollect', 
-      ($collect) => {
-        this.emit('extrapository:saveCollect', $collect)
-      }
-    )
-    this.#_extrapository.on(
-      'translexis:saveCollects', 
-      ($collects) => {
-        this.emit('extrapository:saveCollects', $collects)
+        // 
       }
     )
   }

@@ -3,6 +3,7 @@ import path from 'node:path'
 import { writeFile, mkdir, stat } from 'node:fs'
 import { globSync } from 'glob'
 import chokidar from 'chokidar'
+import Extrapository from './extrapository/index.js'
 
 export default class Filesystem extends EventEmitter {
   #settings
@@ -10,94 +11,133 @@ export default class Filesystem extends EventEmitter {
   fsRootPath
   #_fsRootStat
   #_fsRootWatch
-  #filesystem
   #databases
+  #_extrapository
    constructor($settings = {}) {
     super()
     this.#settings = $settings
-    this.#filesystem = this.#settings.filesystem
     this.#databases = this.#settings.databases
-    this.fsRootPath = this.#filesystem.path
-    this.fsRootStat = this.fsRootPath
-    this.fsRoot = this.fsRootPath
-    this.fsRootWatch = this.fsRootPath
+    // this.fsRootPath = this.#settings.filesystem.path
+    // this.fsRootStat = this.fsRootPath
+    // this.fsRoot = this.fsRootPath
+    // this.fsRootWatch = this.fsRootPath
+    // this.extrapository = this.compository
   }
-  get fsRootStat() { return this.#_fsRootStat }
-  set fsRootStat($fsRootPath) {
-    this.#_fsRootStat = stat($fsRootPath, ($err, $fsRootStat) => {
-      if($err) {
-        mkdir($fsRootPath, {
-          recursive: true,
-        }, ($err) => {
-          if($err) return $err
-          this.#_fsRootStat = stat($fsRootPath)
-        })
-      } else {
-        this.#_fsRootStat = $fsRootStat
+  reconstructor() {
+    // this.extrapository = this.compository
+  }
+  get fsRootPath() {
+    return this.#settings.filesystem.path
+  }
+  get fsRootStat() {
+    this.#_fsRootStat = stat(
+      this.#settings.filesystem.path,
+      ($err, $fsRootStat) => {
+        if($err) {
+          mkdir($fsRootPath, {
+            recursive: true,
+          }, ($err) => {
+            if($err) return $err
+            this.#_fsRootStat = stat($fsRootPath)
+          })
+        } else {
+          this.#_fsRootStat = $fsRootStat
+        }
       }
-    })
+    )
+    return this.#_fsRootStat
   }
-  get fsRoot() { return this.#_fsRoot }
-  set fsRoot($fsRootPath) {
-    this.#_fsRoot = globSync(
-      path.join($fsRootPath, '**/*'),
-      {
-        dot: true,
+  get fsRoot() {
+    if(this.#_fsRoot === undefined) {
+      this.#_fsRoot = globSync(
+        path.join($fsRootPath, '**/*'),
+        {
+          dot: true,
+          ignore: [
+            path.join($fsRootPath, 'node_modules/**'),
+            path.join($fsRootPath, '.git/**')
+          ]
+        }
+      )
+      .map(($fsRootGlobPath) => {
+        const fsRootGlobPath = $fsRootGlobPath.replace(
+          new RegExp(`^${this.fsRootPath}/`),
+          ''
+        )
+        return fsRootGlobPath
+      })
+    }
+    return this.#_fsRoot
+  }
+  get fsRootWatch() {
+    if(this.#_fsRootWatch === undefined) {
+      this.#_fsRootWatch = chokidar.watch($fsRootPath, {
         ignore: [
           path.join($fsRootPath, 'node_modules/**'),
           path.join($fsRootPath, '.git/**')
         ]
-      }
-    )
-    .map(($fsRootGlobPath) => {
-      const fsRootGlobPath = $fsRootGlobPath.replace(
-        new RegExp(`^${this.fsRootPath}/`),
-        ''
+      })
+      this.#_fsRootWatch.on(
+        'add',
+        ($fsPath) => {
+          this.fsRoot.unshift($fsPath)
+        },
       )
-      return fsRootGlobPath
-    })
+      this.#_fsRootWatch.on(
+        'unlink', 
+        ($fsPath) => {
+          const fsPathIndex = this.fsRoot.findIndex(
+            ($fsRootPath) => $fsRootPath === $fsPath
+          )
+          if(fsPathIndex) this.fsRoot.splice(fsPathIndex, 1)
+        },
+      )
+      this.#_fsRootWatch.on(
+        'addDir', 
+        ($fsPath) => {
+          this.fsRoot.unshift($fsPath)
+        },
+      )
+      this.#_fsRootWatch.on(
+        'unlinkDir', 
+        ($fsPath) => {
+          const fsPathIndex = this.fsRoot.findIndex(
+            ($fsRootPath) => $fsRootPath === $fsPath
+          )
+          if(fsPathIndex) this.fsRoot.splice(fsPathIndex, 1)
+        },
+      )
+    }
+    return this.#_fsRootWatch
   }
-  get fsRootWatch() { return this.#_fsRootWatch }
-  set fsRootWatch($fsRootPath) {
-    this.#_fsRootWatch = chokidar.watch($fsRootPath, {
-      ignore: [
-        path.join($fsRootPath, 'node_modules/**'),
-        path.join($fsRootPath, '.git/**')
-      ]
-    })
-    this.#_fsRootWatch.on(
-      'add',
-      ($fsPath) => {
-        this.fsRoot.unshift($fsPath)
-      },
-    )
-    this.#_fsRootWatch.on(
-      'unlink', 
-      ($fsPath) => {
-        const fsPathIndex = this.fsRoot.findIndex(
-          ($fsRootPath) => $fsRootPath === $fsPath
-        )
-        if(fsPathIndex) this.fsRoot.splice(fsPathIndex, 1)
-      },
-    )
-    this.#_fsRootWatch.on(
-      'addDir', 
-      ($fsPath) => {
-        this.fsRoot.unshift($fsPath)
-      },
-    )
-    this.#_fsRootWatch.on(
-      'unlinkDir', 
-      ($fsPath) => {
-        const fsPathIndex = this.fsRoot.findIndex(
-          ($fsRootPath) => $fsRootPath === $fsPath
-        )
-        if(fsPathIndex) this.fsRoot.splice(fsPathIndex, 1)
-      },
-    )
+  get extrapository() {
+    if(this.#_extrapository === undefined) {
+      this.#_extrapository = new Extrapository({
+        databases: this.#databases,
+      })
+      this.#_extrapository.on(
+        'translexis:saveCollectDoc', 
+        ($collectDoc) => {
+          this.emit('extrapository:saveCollectDoc', $collectDoc)
+        }
+      )
+      this.#_extrapository.on(
+        'translexis:saveCollect', 
+        ($collect) => {
+          this.emit('extrapository:saveCollect', $collect)
+        }
+      )
+      this.#_extrapository.on(
+        'translexis:saveCollects', 
+        ($collects) => {
+          this.emit('extrapository:saveCollects', $collects)
+        }
+      )
+    }
+    return this.#_extrapository
   }
   async #fsRootWatchChange($workbookPath) {
-    this.fsRoot = this.fsRootPath
+    // this.fsRoot = this.fsRootPath
   }
   addFile($addedFileDoc) {
     const addedFileDocPath = path.join(
