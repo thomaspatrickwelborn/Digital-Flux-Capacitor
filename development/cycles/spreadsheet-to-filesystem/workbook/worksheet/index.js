@@ -115,7 +115,7 @@ export default class Worksheet extends EventEmitter {
     this.#_compository.on(
       'saveCollects', 
       ($collects) => {
-        this.extrapository.translexis.saveCollects($collects)
+        this.extrapository.translexis.saveCollects($collects, this)
       }
     )
   }

@@ -86,6 +86,7 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
     return this
   }
   #workbookWorksheetSaveCollectDoc($collectDoc) {
+    console.log('#workbookWorksheetSaveCollectDoc', $collectDoc)
     // this.generators.fsElements.inputFileDoc(
     //   $collectDoc
     // )
