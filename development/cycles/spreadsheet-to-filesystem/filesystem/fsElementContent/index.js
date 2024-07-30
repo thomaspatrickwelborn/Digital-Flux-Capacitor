@@ -1,9 +1,9 @@
 import EventEmitter from 'node:events'
 import path from 'node:path'
 import url from 'node:url'
-import { Functions, Parsers, Operators } from '../Coutil/index.js'
+import { Functions, Parsers, Operators } from './coutil/index.js'
 import { writeFile, readFile } from 'node:fs'
-import * as Templates from '../Templates/index.js'
+import * as Templates from './templates/index.js'
 const modulePath = path.dirname(
   url.fileURLToPath(import.meta.url)
 )
