@@ -4,14 +4,14 @@ import { createConnection } from 'mongoose'
 import * as XLSX from 'xlsx'
 import { readFile } from 'node:fs/promises'
 import Workbook from './workbook/index.js'
-import Generators from './generators/index.js'
+import Filesystem from './filesystem/index.js'
 import Config from './config.js'
 
 export default class SpreadsheetToFilesystem extends EventEmitter {
   #settings
   #dbConnectionTimeout = 500
   #dbConnections
-  #_generators
+  #_filesystem
   #_workbook
   #_workbookWatch
   #_watch = false
@@ -21,14 +21,14 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
     this.#watch = this.#settings.input.spreadsheet.watch
     return this
   }
-  get generators() {
-    if(this.#_generators === undefined) {
-      this.#_generators = new Generators({
+  get filesystem() {
+    if(this.#_filesystem === undefined) {
+      this.#_filesystem = new Filesystem({
         dbConnections: this.#dbConnections,
         filesystem: this.#settings.output.filesystem
       })
     }
-    return this.#_generators
+    return this.#_filesystem
   }
   get workbook() { return this.#_workbook }
   set workbook($workbook) {
@@ -92,7 +92,7 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
     return this
   }
   #workbookWorksheetSaveCollectDoc($collectDoc) {
-    this.generators.fsElements.inputFileDoc(
+    this.filesystem.inputFileDoc(
       $collectDoc
     )
   }
