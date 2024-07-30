@@ -14,7 +14,6 @@ export default class FSElements extends EventEmitter {
   ) {
     super()
     this.fsRootPath = $filesystem.path
-    // console.log(this.fsRootPath)
     this.fsRootStat = this.fsRootPath
     this.fsRoot = this.fsRootPath
     this.fsRootWatch = this.fsRootPath
@@ -56,7 +55,6 @@ export default class FSElements extends EventEmitter {
   }
   get fsRootWatch() { return this.#_fsRootWatch }
   set fsRootWatch($fsRootPath) {
-    console.log('fsRootWatch', $fsRootPath)
     this.#_fsRootWatch = chokidar.watch($fsRootPath, {
       ignore: [
         path.join($fsRootPath, 'node_modules/**'),
@@ -111,14 +109,14 @@ export default class FSElements extends EventEmitter {
           recursive: true,
         }, ($err, $dir) => {
           writeFile(addedFileDocPath, '', ($err, $file) => {
-            console.log($err, $file)
+            // console.log($err, $file)
             if($err) return
             // this.emit('addFile', $addedFileDoc)
           })
         })
       } else {
         writeFile(addedFileDocPath, '', ($err, $file) => {
-          console.log($err, $file)
+          // console.log($err, $file)
           if($err) return
           // this.emit('addFile', $addedFileDoc)
         })
@@ -133,7 +131,7 @@ export default class FSElements extends EventEmitter {
     mkdir(addedFoldDocPath, {
       recursive: true,
     }, ($err, $dir) => {
-      console.log($err, $dir)
+      // console.log($err, $dir)
       if($err) return
       // this.emit('addFold', $addedFoldDoc)
     })

@@ -153,13 +153,6 @@ export default class Translexis extends EventEmitter {
       .reduce(reduceFSElementCollectDocProperties, {})
       updateCollectDoc = Object.entries(collectDoc.toObject())
       .reduce(reduceFSElementCollectDocProperties, updateCollectDoc)
-      // let fileDoc = await FSElement.findOneAndReplace(
-      //   { 'fs.id': collectDoc.fs.id },
-      //   {
-      //     fs: updateCollectDoc.fs
-      //   },
-      //   { returnDocument: 'after' }
-      // )
       let fileDoc = await FSElement.findOneAndUpdate(
         { 'fs.id': collectDoc.fs.id },
         {
@@ -167,8 +160,6 @@ export default class Translexis extends EventEmitter {
         },
         { upsert: true, new: true }
       )
-      if(fileDoc === null) {
-      }
       fileCollect.push(fileDoc/*.toObject()*/)
       this.emit(
         'saveCollectDoc',
@@ -182,12 +173,6 @@ export default class Translexis extends EventEmitter {
     )
     return fileCollect
   }
-  // saveCollectDoc() {
-  //   console.log('saveCollectDoc')
-  // }
-  // saveCollect() {
-  //   console.log('saveCollect')
-  // }
   async saveCollects($collects, $worksheet) {
     const collects = this.#_collects
     if(
@@ -211,5 +196,6 @@ export default class Translexis extends EventEmitter {
       'saveCollects',
       collects
     )
+    return collects
   }
 }

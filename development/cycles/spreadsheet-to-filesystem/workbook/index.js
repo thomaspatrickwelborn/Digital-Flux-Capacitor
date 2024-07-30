@@ -26,6 +26,32 @@ class Workbook extends EventEmitter {
     this.workbook = workbook
     this.#createWorksheets()
   }
+  get fsElementWorksheets() {
+    return new Map(
+      Array.from(this.worksheets.entries())
+      .reduce(($worksheetsEntries, [$worksheetName, $worksheet]) => {
+        if($worksheetName.match(
+          new RegExp(/^VINE/)
+        )) {
+          $worksheetsEntries.push([$worksheetName, $worksheet])
+        }
+        return $worksheetsEntries
+      }, [])
+    )
+  }
+  get fsElementContentWorksheets() {
+    return new Map(
+      Array.from(this.worksheets.entries())
+      .reduce(($worksheetsEntries, [$worksheetName, $worksheet]) => {
+        if(!$worksheetName.match(
+          new RegExp(/^VINE/)
+        )) {
+          $worksheetsEntries.push([$worksheetName, $worksheet])
+        }
+        return $worksheetsEntries
+      }, [])
+    )
+  }
   get #worksheetsSettings() {
     return this.workbook.Workbook.Sheets
   }

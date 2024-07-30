@@ -82,14 +82,19 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       'worksheet:saveCollectDoc',
       this.#workbookWorksheetSaveCollectDoc.bind(this)
     )
-    await this.workbook.saveWorksheets()
+    // await this.workbook.saveWorksheets()
+    await this.workbook.saveWorksheets(
+      this.workbook.fsElementWorksheets
+    )
+    await this.workbook.saveWorksheets(
+      this.workbook.fsElementContentWorksheets
+    )
     return this
   }
   #workbookWorksheetSaveCollectDoc($collectDoc) {
-    console.log('#workbookWorksheetSaveCollectDoc', $collectDoc)
-    // this.generators.fsElements.inputFileDoc(
-    //   $collectDoc
-    // )
+    this.generators.fsElements.inputFileDoc(
+      $collectDoc
+    )
   }
   async #workbookWatchChange($workbookPath) {
     // console.clear()
