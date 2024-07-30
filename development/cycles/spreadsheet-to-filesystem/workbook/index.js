@@ -5,6 +5,8 @@ import Worksheet from './worksheet/index.js'
 class Workbook extends EventEmitter {
   #workbookPath
   #_workbook
+  #_watcher
+  #_watch = false
   #_worksheets = new Map()
   name
   #settings
@@ -26,6 +28,72 @@ class Workbook extends EventEmitter {
     this.workbook = workbook
     this.#createWorksheets()
   }
+  // 
+  // 
+  get watcher() { return this.#_watcher }
+  set watcher($watcher) {
+    const { path } = $watcher
+    this.#_watcher = chokidar.watch(path)
+    this.watcher.once(
+      'add', this.#watcherChange.bind(this)
+    )
+    this.watcher.on(
+      'change', this.#watcherChange.bind(this)
+    )
+  }
+  get #watch() { return this.#_watch }
+  set #watch($watch) {
+    this.#_watch = (
+      $watch !== undefined
+    ) ? $watch
+      : this.#_watch
+  }
+
+  async #readWorkbook($workbookPath) {
+    const workbookFile = await readFile($workbookPath)
+    .then(($buffer) => XLSX.read($buffer, {
+      type: 'buffer',
+      raw: true,
+      dense: true,
+      cellFormula: false,
+      cellHTML: false,
+      cellNF: false,
+      cellDates: false,
+      cellStyles: true, // "hidden" property is cell style
+    }))
+    this.workbook = workbookFile
+    this.workbook.on(
+      'worksheet:saveCollectDoc',
+      ($collectDoc) => {
+        this.emit(
+          'saveCollectDoc',
+          $collectDoc
+        )
+      }
+    )
+    await this.workbook.saveWorksheets(
+      this.workbook.fsElementWorksheets
+    )
+    await this.workbook.saveWorksheets(
+      this.workbook.fsElementContentWorksheets
+    )
+    return this
+  }
+  async #watcherChange($workbookPath) {
+    // console.clear()
+    // await this.#dbConnections.spreadsheet.dropDatabase()
+    const modelNames = this.#dbConnections.spreadsheet.modelNames()
+    const modelNamesLength = modelNames.length
+    var modelNamesIndex = 0
+    while(modelNamesIndex < modelNamesLength) {
+      const modelName = modelNames[modelNamesIndex]
+      await this.#dbConnections.spreadsheet.deleteModel(modelName)
+      modelNamesIndex++
+    }
+    await this.#readWorkbook($workbookPath)
+  }
+  // 
+  // 
   get fsElementWorksheets() {
     return new Map(
       Array.from(this.worksheets.entries())
