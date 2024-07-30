@@ -7,16 +7,27 @@ import Worksheet from './worksheet/index.js'
 
 export default class Spreadsheet extends EventEmitter {
   #settings
+  #_name
   #databases
   #_workbook
   #_watcher
   #_watch
   #_worksheets = new Map()
-  name
   constructor($settings) {
     super()
     this.#settings = $settings
     this.#databases = this.#settings.databases
+  }
+  get name() {
+    if(this.#_name === undefined) {
+      this.#_name = path.basename(
+        this.#settings.path,
+        path.extname(
+          this.#settings.path
+        )
+      )
+    }
+    return this.#_name
   }
   get #watch() {
     if(this.#_watch === undefined) {
@@ -58,27 +69,31 @@ export default class Spreadsheet extends EventEmitter {
     return this.workbook.Workbook.Sheets
   }
   get fsElementWorksheetsSettings() {
-    return this.#reduceByPropKeyMatch(
+    return this.#reduceValuesByPropertyKeyMatch(
       this.#worksheetsSettings, 'name', new RegExp(/^VINE/), true
     )
   }
   get fsElementContentWorksheetsSettings() {
-    return this.#reduceByPropKeyMatch(
+    return this.#reduceValuesByPropertyKeyMatch(
       this.#worksheetsSettings, 'name', new RegExp(/^VINE/), false
     )
   }
   get #worksheets() { return this.#_worksheets }
   get fsElementWorksheets() {
-    return this.#reduceByPropKeyMatch(
-      Array.from(this.#worksheets.values()), 'name', new RegExp(/^VINE/), true
+    return new Map(
+      this.#reduceEntriesByEntryValuePropertyKeyMatch(
+        Array.from(this.#worksheets.entries()), 'name', new RegExp(/^VINE/), true
+      )
     )
   }
   get fsElementContentWorksheets() {
-    return this.#reduceByPropKeyMatch(
-      Array.from(this.#worksheets.values()), 'name', new RegExp(/^VINE/), false
+    return new Map(
+      this.#reduceEntriesByEntryValuePropertyKeyMatch(
+        Array.from(this.#worksheets.entries()), 'name', new RegExp(/^VINE/), false
+      )
     )
   }
-  #reduceByPropKeyMatch(
+  #reduceValuesByPropertyKeyMatch(
     $target = [],
     $propKey = 'name',
     $matchRegExp,
@@ -87,14 +102,52 @@ export default class Spreadsheet extends EventEmitter {
     return $target
     .reduce(
       ($targetValues, $targetValue) => {
+        const targetValuePropertyMatchRegExp = $targetValue[$propKey]
+        .match(
+          $matchRegExp
+        )
         if(
-          $targetValue[$propKey].match(
-            $matchRegExp
-          ) === $matchVal
+          (
+            $matchVal === true &&
+            targetValuePropertyMatchRegExp.length !== 0
+          ) ||
+          (
+            $matchVal === false &&
+            targetValuePropertyMatchRegExp.length === 0
+          )
         ) {
-          $targetValues.push($worksheetsSettings)
+          $targetValues.push($targetValue)
         }
         return $targetValues
+      }, []
+    )
+  }
+  #reduceEntriesByEntryValuePropertyKeyMatch(
+    $target = [],
+    $propKey = 'name',
+    $matchRegExp,
+    $matchVal = true
+  ) {
+    return $target
+    .reduce(
+      ($targetEntries, [$targetEntryKey, $targetEntryValue]) => {
+        const targetValuePropertyMatchRegExp = $targetEntryValue[$propKey]
+        .match(
+          $matchRegExp
+        ) || []
+        if(
+          (
+            $matchVal === true &&
+            targetValuePropertyMatchRegExp.length !== 0
+          ) ||
+          (
+            $matchVal === false &&
+            targetValuePropertyMatchRegExp.length === 0
+          )
+        ) {
+          $targetEntries.push([$targetEntryKey, $targetEntryValue])
+        }
+        return $targetEntries
       }, []
     )
   }
@@ -123,11 +176,11 @@ export default class Spreadsheet extends EventEmitter {
       cellDates: false,
       cellStyles: true, 
     }))
-    console.log('worksheetsSettings',this.#worksheetsSettings)
+
     this.#createWorksheets()
-    // await this.saveWorksheets(
-    //   this.fsElementWorksheets
-    // )
+    await this.saveWorksheets(
+      this.fsElementWorksheets
+    )
     // await this.saveWorksheets(
     //   this.fsElementContentWorksheets
     // )
@@ -146,7 +199,6 @@ export default class Spreadsheet extends EventEmitter {
     return this.worksheets
   }
   #createWorksheet($worksheetSettings) {
-    console.log('$worksheetSettings',$worksheetSettings)
     const hidden = $worksheetSettings.Hidden
     if(hidden) return
     const databases = this.#databases
@@ -169,7 +221,6 @@ export default class Spreadsheet extends EventEmitter {
       ) $worksheetRanges.push($worksheetRange)
       return $worksheetRanges
     }, [])
-    console.log(this.#settings)
     const worksheetOptions = this.#settings.worksheets[
       worksheetClassName
     ] || {}
@@ -177,7 +228,7 @@ export default class Spreadsheet extends EventEmitter {
     worksheetTable['!cols'] = worksheetCols
     worksheetTable['!merges'] = worksheetMerges
     worksheetTable['!ranges'] = worksheetRanges
-    let worksheetsHasWorksheet = this.worksheets
+    let worksheetsHasWorksheet = this.#worksheets
     .has(worksheetName)
     let worksheet
     if(worksheetsHasWorksheet === false) {
@@ -187,25 +238,25 @@ export default class Spreadsheet extends EventEmitter {
         worksheetTable,
         databases,
       }, worksheetOptions)
+      // worksheet.on(
+      //   'compository:saveCollectDoc',
+      //   ($collectDoc) => {
+      //     this.emit('worksheet:saveCollectDoc', $collectDoc)
+      //   }
+      // )
+      // worksheet.on(
+      //   'compository:saveCollect',
+      //   ($collect) => {
+      //     this.emit('worksheet:saveCollect', $collect)
+      //   }
+      // )
       worksheet.on(
-        'extrapository:saveCollectDoc',
-        ($collectDoc) => {
-          this.emit('worksheet:saveCollectDoc', $collectDoc)
-        }
-      )
-      worksheet.on(
-        'extrapository:saveCollect',
-        ($collect) => {
-          this.emit('worksheet:saveCollect', $collect)
-        }
-      )
-      worksheet.on(
-        'extrapository:saveCollects',
+        'compository:saveCollects',
         ($collects) => {
           this.emit('worksheet:saveCollects', $collects)
         }
       )
-      this.worksheets
+      this.#worksheets
       .set(worksheetName, worksheet)
     } else
     if(worksheetsHasWorksheet === true) {
@@ -220,6 +271,7 @@ export default class Spreadsheet extends EventEmitter {
   async saveWorksheets($worksheets) {
     $worksheets = $worksheets || this.worksheets
     for(const $worksheet of $worksheets.values()) {
+      console.log($worksheet)
       await this.saveWorksheet($worksheet)
     }
     this.emit('save', this)

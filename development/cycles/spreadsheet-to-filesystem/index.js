@@ -42,16 +42,16 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
     if(this.#_spreadsheet === undefined) {
       const spreadsheetSettings = Object.assign(
         {
-          databases: this.#databases
+          databases: this.#databases,
         },
         this.#settings.spreadsheet,
         this.#settings.input.spreadsheet,
       )
       this.#_spreadsheet = new Spreadsheet(spreadsheetSettings)
       this.#_spreadsheet.on(
-        'saveCollectDoc',
-        ($collectDoc) => {
-          console.log('saveCollectDoc', $collectDoc)
+        'worksheet:saveCollects',
+        ($collects) => {
+          console.log('worksheet:saveCollects', $collects)
           // this.#filesystem.inputFileDoc(
           //   $collectDoc
           // )
