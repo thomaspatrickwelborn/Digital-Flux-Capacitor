@@ -253,7 +253,11 @@ export default class Spreadsheet extends EventEmitter {
       worksheet.on(
         'compository:saveCollects',
         ($collects) => {
-          this.emit('worksheet:saveCollects', $collects)
+          this.emit(
+            'worksheet:saveCollects', 
+            $collects, 
+            worksheet
+          )
         }
       )
       this.#worksheets

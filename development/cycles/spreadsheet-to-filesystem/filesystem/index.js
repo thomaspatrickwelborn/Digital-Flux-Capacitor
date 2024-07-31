@@ -116,23 +116,24 @@ export default class Filesystem extends EventEmitter {
         databases: this.#databases,
       })
       this.#_extrapository.on(
-        'translexis:saveCollectDoc', 
+        'saveCollectDoc', 
         ($collectDoc) => {
-          this.emit('extrapository:saveCollectDoc', $collectDoc)
+          console.log('saveCollectDoc', $collectDoc)
+          // this.emit('extrapository:saveCollectDoc', $collectDoc)
         }
       )
-      this.#_extrapository.on(
-        'translexis:saveCollect', 
-        ($collect) => {
-          this.emit('extrapository:saveCollect', $collect)
-        }
-      )
-      this.#_extrapository.on(
-        'translexis:saveCollects', 
-        ($collects) => {
-          this.emit('extrapository:saveCollects', $collects)
-        }
-      )
+      // this.#_extrapository.on(
+      //   'saveCollect', 
+      //   ($collect) => {
+      //     this.emit('extrapository:saveCollect', $collect)
+      //   }
+      // )
+      // this.#_extrapository.on(
+      //   'saveCollects', 
+      //   ($collects) => {
+      //     this.emit('extrapository:saveCollects', $collects)
+      //   }
+      // )
     }
     return this.#_extrapository
   }

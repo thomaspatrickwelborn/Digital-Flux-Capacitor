@@ -1,5 +1,6 @@
 import Schemata from './schemata/index.js'
 import { EventEmitter } from 'node:events'
+import reducers from './reducers.js'
 import populateOptions from './populateOptions.js'
 
 export default class Extrapository extends EventEmitter {
@@ -7,73 +8,12 @@ export default class Extrapository extends EventEmitter {
   #databases
   #_models
   #_collects = new Map()
-  #ignorePropertyKeys = [
-    '$__', '_doc', '$errors', '$isNew', 
-    '_id', '__v'
-  ]
   #_fsIgnorePropertyKeys
   #_fsContentIgnorePropertyKeys
   constructor($settings = {}) {
     super()
     this.#settings = $settings
     this.#databases = this.#settings.databases
-    this.models = this.#settings.models
-  }
-  get #fsIgnorePropertyKeys() {
-    if(
-      this.#_fsIgnorePropertyKeys === undefined
-    ) {
-      this.#_fsIgnorePropertyKeys = this.#ignorePropertyKeys
-      .concat([
-        'portal', 'fsElements'
-      ])
-    }
-    return this.#_fsIgnorePropertyKeys
-  }
-  get #fsContentIgnorePropertyKeys() {
-    if(
-      this.#_fsContentIgnorePropertyKeys === undefined
-    ) {
-      this.#_fsContentIgnorePropertyKeys = this.#ignorePropertyKeys
-      .concat([
-        // 
-      ])
-    }
-    return this.#_fsContentIgnorePropertyKeys
-  }
-  #reduceFSElementContentCollectDocProperties(
-    $updateCollectDoc, $updateCollectDocProperty
-  ) {
-    const [
-      $collectDocPropertyKey, $collectDocPropertyVal
-    ] = $updateCollectDocProperty
-    if(
-      this.#fsContentIgnorePropertyKeys.includes(
-        $collectDocPropertyKey
-      ) === false
-    ) {
-      $updateCollectDoc[
-        $collectDocPropertyKey
-      ] = $collectDocPropertyVal
-    }
-    return $updateCollectDoc
-  }
-  #reduceFSElementCollectDocProperties(
-    $updateCollectDoc, $updateCollectDocProperty
-  ) {
-    const [
-      $collectDocPropertyKey, $collectDocPropertyVal
-    ] = $updateCollectDocProperty
-    if(
-      this.#fsIgnorePropertyKeys.includes(
-        $collectDocPropertyKey
-      ) === false
-    ) {
-      $updateCollectDoc[
-        $collectDocPropertyKey
-      ] = $collectDocPropertyVal
-    }
-    return $updateCollectDoc
   }
   get #models() {
     const modelNames = ['FSElement']
@@ -98,8 +38,6 @@ export default class Extrapository extends EventEmitter {
     const worksheetMods = Array.from($worksheet.depository.mods.values())
     const worksheetModsLength = worksheetMods.length
     var worksheetModsIndex = 0
-    const reduceFSElementCollectDocProperties = this.#reduceFSElementCollectDocProperties
-    .bind(this)
     const collectDocs = []
     var collectDocsIndex = 0
     // Iterate Worksheet Mods
@@ -140,12 +78,12 @@ export default class Extrapository extends EventEmitter {
     while(collectDocsIndex < collectDocsLength) {
       const collectDoc = collectDocs[collectDocsIndex]
       let updateCollectDoc = Object.entries(collectDoc)
-      .reduce(reduceFSElementCollectDocProperties, {})
+      .reduce(reducers.fsElementContent, {})
       updateCollectDoc = Object.entries(
         collectDoc.toObject({ minimize: true })
       )
       .reduce(
-        reduceFSElementCollectDocProperties, updateCollectDoc
+        reducers.fsElementContent, updateCollectDoc
       )
       const fsID = collectDoc.fs.id
       const fsPath = collectDoc.fs.path
@@ -166,18 +104,16 @@ export default class Extrapository extends EventEmitter {
     return collectDocs
   }
   async #fsElements($collect, $worksheet) {
-    const FSElement = this.models.FSElement
+    const FSElement = this.#models.FSElement
     const fileCollect = []
     const collectDocsLength = $collect.length
     var collectDocsIndex = 0
-    const reduceFSElementCollectDocProperties = this
-    .#reduceFSElementCollectDocProperties.bind(this)
     while(collectDocsIndex < collectDocsLength) {
       const collectDoc = $collect[collectDocsIndex]
       let updateCollectDoc = Object.entries(collectDoc)
-      .reduce(reduceFSElementCollectDocProperties, {})
+      .reduce(reducers.fsElement, {})
       updateCollectDoc = Object.entries(collectDoc.toObject())
-      .reduce(reduceFSElementCollectDocProperties, updateCollectDoc)
+      .reduce(reducers.fsElement, updateCollectDoc)
       let fileDoc = await FSElement.findOneAndUpdate(
         { 'fs.id': collectDoc.fs.id },
         {
@@ -201,7 +137,7 @@ export default class Extrapository extends EventEmitter {
   async saveCollects($collects, $worksheet) {
     const collects = this.#_collects
     if(
-      this.worksheet.name.match(new RegExp(/^VINE/))
+      $worksheet.name.match(new RegExp(/^VINE/))
     ) {
       for(const [
         $collectName, $collect
