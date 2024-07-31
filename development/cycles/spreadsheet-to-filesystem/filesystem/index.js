@@ -11,6 +11,8 @@ export default class Filesystem extends EventEmitter {
    constructor($settings = {}) {
     super()
     this.#settings = $settings
+    this.root
+    this.extrapository
   }
   get #databases() { return this.#settings.databases }
   get extrapository() {

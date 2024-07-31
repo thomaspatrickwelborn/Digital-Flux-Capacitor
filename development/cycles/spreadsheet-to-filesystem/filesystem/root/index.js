@@ -12,6 +12,12 @@ export default class Root extends EventEmitter {
   constructor($settings) {
     super()
     this.#settings = $settings
+    this.stat
+    this.glob
+    this.watch
+  }
+  get path() { return this.#settings.path }
+  get glob() {
     const glob = globSync(
       path.join(this.path, '**/*'),
       {
@@ -24,27 +30,24 @@ export default class Root extends EventEmitter {
     )
     let globElementIndex = 0
     while(globElementIndex < glob.length) {
-      const globPath = $globPath.replace(
+      const globPath = glob[globElementIndex].replace(
         new RegExp(`^${this.path}/`),
         ''
       )
       Array.prototype.push.call(this, globPath)
       globElementIndex++
     }
-  }
-  get path() {
-    return this.#settings.path
+    return this
   }
   get stat() {
     this.#_stat = stat(
-      this.#settings.filesystem.path,
+      this.path,
       ($err, $stat) => {
         if($err) {
-          mkdir($fsRootPath, {
+          mkdir(this.path, {
             recursive: true,
           }, ($err) => {
-            if($err) return $err
-            this.#_stat = stat($fsRootPath)
+            this.stat
           })
         } else {
           this.#_stat = $stat
@@ -53,47 +56,47 @@ export default class Root extends EventEmitter {
     )
     return this.#_stat
   }
-  get fsRootWatch() {
+  get watch() {
     if(this.#_watch === undefined) {
-      this.#_watch = chokidar.watch($fsRootPath, {
+      this.#_watch = chokidar.watch(this.path, {
         ignore: [
-          path.join($fsRootPath, 'node_modules/**'),
-          path.join($fsRootPath, '.git/**')
+          path.join(this.path, 'node_modules/**'),
+          path.join(this.path, '.git/**')
         ]
       })
       this.#_watch.on(
         'add',
-        ($fsPath) => {
-          Array.prototype.unshift.call(this, $fsPath)
+        ($path) => {
+          Array.prototype.unshift.call(this, $path)
         },
       )
       this.#_watch.on(
         'unlink', 
-        ($fsPath) => {
-          const fsPathIndex = Array.prototype.findIndex.call(
+        ($path) => {
+          const pathIndex = Array.prototype.findIndex.call(
             this, 
-            ($fsRootPath) => $fsRootPath === $fsPath
+            ($fsRootPath) => $fsRootPath === $path
           )
-          if(fsPathIndex) {
-            Array.prototype.splice.call(this, fsPathIndex, 1)
+          if(pathIndex) {
+            Array.prototype.splice.call(this, pathIndex, 1)
           }
         }
       )
       this.#_watch.on(
         'addDir', 
-        ($fsPath) => {
-          Array.prototype.unshift.call(this, $fsPath)
+        ($path) => {
+          Array.prototype.unshift.call(this, $path)
         },
       )
       this.#_watch.on(
         'unlinkDir', 
-        ($fsPath) => {
-          const fsPathIndex = Array.prototype.findIndex.call(
+        ($path) => {
+          const pathIndex = Array.prototype.findIndex.call(
             this, 
-            ($fsRootPath) => $fsRootPath === $fsPath
+            ($fsRootPath) => $fsRootPath === $path
           )
-          if(fsPathIndex) {
-            Array.prototype.splice.call(this, fsPathIndex, 1)
+          if(pathIndex) {
+            Array.prototype.splice.call(this, pathIndex, 1)
           }
         },
       )
