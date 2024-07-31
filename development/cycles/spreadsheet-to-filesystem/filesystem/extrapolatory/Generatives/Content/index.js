@@ -1,7 +1,12 @@
-import Templates from './Templates/index.js'
-/*
-
-  generateFileContent($collectDoc) {
+import { EventEmitter } from 'node:events'
+import *  as Templates from './Templates/index.js'
+export default class Content extends EventEmitter {
+  #settings
+  constructor($settings) {
+    super()
+    this.#settings = $settings
+  }
+  file($collectDoc) {
     var collectDoc = $collectDoc
     if(
       collectDoc.fs.type === 'File' &&
@@ -46,5 +51,4 @@ import Templates from './Templates/index.js'
       }
     }
   }
-
-*/
+}

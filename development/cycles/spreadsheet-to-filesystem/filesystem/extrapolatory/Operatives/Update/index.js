@@ -5,22 +5,9 @@ export default class Update extends Operative {
   }
   updateFile($fileDoc) {
     console.log('$fileDoc', $fileDoc)
-
   }
   updateFold($foldDoc) {
     console.log('$foldDoc', $foldDoc)
 
   }
-  update($fileDoc) {
-    switch($fileDoc.fs.type) {
-      case 'File':
-        this.updateFile($fileDoc)
-        break
-      case 'Fold':
-        this.updateFold($fileDoc)
-        break
-    }
-    return $fileDoc
-  }
-
 }

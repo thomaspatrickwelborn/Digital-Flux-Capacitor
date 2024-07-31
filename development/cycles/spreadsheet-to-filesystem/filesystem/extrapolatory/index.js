@@ -29,7 +29,9 @@ export default class Extrapolatory extends EventEmitter {
   }
   get #generatives() {
     if(this.#_generatives === undefined) {
-      this.#_generatives = new Generatives()
+      this.#_generatives = new Generatives(
+        this.#settings
+      )
     }
     return this.#_generatives
   }

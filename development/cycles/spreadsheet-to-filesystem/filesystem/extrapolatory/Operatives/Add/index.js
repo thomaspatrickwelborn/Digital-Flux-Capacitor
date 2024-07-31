@@ -1,30 +1,31 @@
 import Operative from '../Operative/index.js'
+import { mkdir, writeFile } from 'node:fs'
 export default class Add extends Operative {
   constructor($settings) {
     super($settings)
   }
-  addFile($fileDoc) {
+  file($fileDoc) {
     console.log('$fileDoc', $fileDoc)
-    const addedFileDocPath = path.join(
+    const fileDocPath = path.join(
       this.root.path,
       $fileDoc.fs.path,
     )
-    const addedFileDirPath = path.dirname(addedFileDocPath)
-    stat(addedFileDirPath, (
-      $err, $addedFileDirStat
+    const fileDirPath = path.dirname(fileDocPath)
+    stat(fileDirPath, (
+      $err, $fileDirStat
     ) => {
-      if($addedFileDirStat.isDirectory() === false) {
-        mkdir(addedFileDirPath, {
+      if($fileDirStat.isDirectory() === false) {
+        mkdir(fileDirPath, {
           recursive: true,
         }, ($err, $dir) => {
-          writeFile(addedFileDocPath, '', ($err, $file) => {
+          writeFile(fileDocPath, '', ($err, $file) => {
             // console.log($err, $file)
             if($err) return
             // this.emit('addFile', $fileDoc)
           })
         })
       } else {
-        writeFile(addedFileDocPath, '', ($err, $file) => {
+        writeFile(fileDocPath, '', ($err, $file) => {
           // console.log($err, $file)
           if($err) return
           // this.emit('addFile', $fileDoc)
@@ -32,29 +33,18 @@ export default class Add extends Operative {
       }
     })
   }
-  addFold($foldDoc) {
+  fold($foldDoc) {
     console.log('$foldDoc', $foldDoc)
-    const addedFoldDocPath = path.join(
+    const foldDocPath = path.join(
       this.root.path,
       $foldDoc.fs.path,
     )
-    mkdir(addedFoldDocPath, {
+    mkdir(foldDocPath, {
       recursive: true,
     }, ($err, $dir) => {
       // console.log($err, $dir)
       if($err) return
       // this.emit('addFold', $foldDoc)
     })
-  }
-  add(fileDoc) {
-    switch(fileDoc.fs.type) {
-      case 'File':
-        this.addFile(fileDoc)
-        break
-      case 'Fold':
-        this.addFold(fileDoc)
-        break
-    }
-    return fileDoc
   }
 }
