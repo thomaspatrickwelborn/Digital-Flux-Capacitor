@@ -4,7 +4,7 @@ import path from 'path'
 import chokidar from 'chokidar'
 import * as XLSX from 'xlsx'
 import Worksheet from './worksheet/index.js'
-import reducers from './reducers.js'
+import { reducers } from './coutil/index.js'
 
 export default class Spreadsheet extends EventEmitter {
   #settings
