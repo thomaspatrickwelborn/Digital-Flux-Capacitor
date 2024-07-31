@@ -17,14 +17,6 @@ export default class Filesystem extends EventEmitter {
     super()
     this.#settings = $settings
     this.#databases = this.#settings.databases
-    // this.fsRootPath = this.#settings.filesystem.path
-    // this.fsRootStat = this.fsRootPath
-    // this.fsRoot = this.fsRootPath
-    // this.fsRootWatch = this.fsRootPath
-    // this.extrapository = this.compository
-  }
-  reconstructor() {
-    // this.extrapository = this.compository
   }
   get fsRootPath() {
     return this.#settings.filesystem.path
@@ -118,22 +110,11 @@ export default class Filesystem extends EventEmitter {
       this.#_extrapository.on(
         'saveCollectDoc', 
         ($collectDoc) => {
+          // <<<<<<<<<<<<>>>>>>>>>>>>
           console.log('saveCollectDoc', $collectDoc)
           // this.emit('extrapository:saveCollectDoc', $collectDoc)
         }
       )
-      // this.#_extrapository.on(
-      //   'saveCollect', 
-      //   ($collect) => {
-      //     this.emit('extrapository:saveCollect', $collect)
-      //   }
-      // )
-      // this.#_extrapository.on(
-      //   'saveCollects', 
-      //   ($collects) => {
-      //     this.emit('extrapository:saveCollects', $collects)
-      //   }
-      // )
     }
     return this.#_extrapository
   }

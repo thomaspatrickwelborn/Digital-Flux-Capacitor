@@ -145,7 +145,6 @@ function assignPORProps($collect) {
   // while(collectDocsIndex < collectDocsLength) {
   //   const collectDoc = $collect[collectDocsIndex]
   //   collectDoc.portal = undefined
-  //   console.log(collectDoc.portal)
   //   collectDocsIndex++
   // }
   return $collect

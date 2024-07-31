@@ -91,20 +91,6 @@ export default class Worksheet extends EventEmitter {
         databases: this.#databases
       }
     )
-    /*
-    this.#_compository.on(
-      'collect:save', 
-      ($collect) => {
-        this.emit('compository:saveCollect', $collect)
-      }
-    )
-    this.#_compository.on(
-      'collect:saveCollectDoc', 
-      ($collectDoc) => {
-        this.emit('compository:saveCollectDoc', $collectDoc)
-      }
-    )
-    */
     this.#_compository.on(
       'saveCollects', 
       ($collects) => {
@@ -115,7 +101,7 @@ export default class Worksheet extends EventEmitter {
   async saveCompository() {
     if(this.#compositoryCollectsHaveSaved === false) {
       const compository = await this.compository.saveCollects()
-      this.#compositoryCollectsHaveSaved = false
+      this.#compositoryCollectsHaveSaved = true
       return compository
     } else {
       return this.compository

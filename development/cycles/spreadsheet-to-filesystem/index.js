@@ -72,7 +72,6 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
     this.#databases.spreadsheet.once(
       'connected', 
       async () => {
-        await this.#databases.spreadsheet.dropDatabase()
         this.#spreadsheet.read()
       }
     )

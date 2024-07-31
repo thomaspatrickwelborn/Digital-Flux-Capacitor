@@ -66,10 +66,6 @@ export default class Extrapository extends EventEmitter {
         collectDocsIndex++
         comRowsIndex++
       }
-      this.emit(
-        'saveCollect',
-        collectDocs
-      )
       worksheetModsIndex++
     }
     const collectDocsLength = collectDocs.length
@@ -128,10 +124,6 @@ export default class Extrapository extends EventEmitter {
       )
       collectDocsIndex++
     }
-    this.emit(
-      'saveCollect',
-      fileCollect
-    )
     return fileCollect
   }
   async saveCollects($collects, $worksheet) {
@@ -153,10 +145,6 @@ export default class Extrapository extends EventEmitter {
         collects.set($collectName, collect)
       }
     }
-    this.emit(
-      'saveCollects',
-      collects
-    )
     return collects
   }
 }

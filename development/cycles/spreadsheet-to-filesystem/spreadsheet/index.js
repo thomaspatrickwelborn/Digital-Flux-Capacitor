@@ -8,7 +8,6 @@ import Worksheet from './worksheet/index.js'
 export default class Spreadsheet extends EventEmitter {
   #settings
   #_name
-  #databases
   #_workbook
   #_watcher
   #_watch
@@ -16,7 +15,7 @@ export default class Spreadsheet extends EventEmitter {
   constructor($settings) {
     super()
     this.#settings = $settings
-    this.#databases = this.#settings.databases
+    this.#watcher
   }
   get name() {
     if(this.#_name === undefined) {
@@ -29,12 +28,8 @@ export default class Spreadsheet extends EventEmitter {
     }
     return this.#_name
   }
-  get #watch() {
-    if(this.#_watch === undefined) {
-      this.#_watch = this.#settings.watch || false
-    }
-    return this.#_watch
-  }
+  get #databases() { return this.#settings.databases }
+  get #watch() { return this.#settings.watch }
   get #watcher() {
     if(
       this.#watch === true &&
@@ -53,18 +48,7 @@ export default class Spreadsheet extends EventEmitter {
     return this.#_watcher
   }
   get workbook() { return this.#_workbook }
-  set workbook($workbook) {
-    this.#_workbook = $workbook
-    // this.#_workbook.on(
-    //   'worksheet:saveCollectDoc',
-    //   ($collectDoc) => {
-    //     this.emit(
-    //       'saveCollectDoc',
-    //       $collectDoc
-    //     )
-    //   }
-    // )
-  }
+  set workbook($workbook) { this.#_workbook = $workbook }
   get #worksheetsSettings() {
     return this.workbook.Workbook.Sheets
   }
@@ -152,6 +136,7 @@ export default class Spreadsheet extends EventEmitter {
     )
   }
   async #watcherChange() {
+    await this.#databases.spreadsheet.dropDatabase()
     const modelNames = this.#databases.spreadsheet.modelNames()
     const modelNamesLength = modelNames.length
     var modelNamesIndex = 0
@@ -176,11 +161,11 @@ export default class Spreadsheet extends EventEmitter {
       cellDates: false,
       cellStyles: true, 
     }))
-
     this.#createWorksheets()
     await this.saveWorksheets(
       this.fsElementWorksheets
     )
+    // >>>>><<<<<
     // await this.saveWorksheets(
     //   this.fsElementContentWorksheets
     // )
@@ -238,18 +223,6 @@ export default class Spreadsheet extends EventEmitter {
         worksheetTable,
         databases,
       }, worksheetOptions)
-      // worksheet.on(
-      //   'compository:saveCollectDoc',
-      //   ($collectDoc) => {
-      //     this.emit('worksheet:saveCollectDoc', $collectDoc)
-      //   }
-      // )
-      // worksheet.on(
-      //   'compository:saveCollect',
-      //   ($collect) => {
-      //     this.emit('worksheet:saveCollect', $collect)
-      //   }
-      // )
       worksheet.on(
         'compository:saveCollects',
         ($collects) => {
@@ -264,7 +237,7 @@ export default class Spreadsheet extends EventEmitter {
       .set(worksheetName, worksheet)
     } else
     if(worksheetsHasWorksheet === true) {
-      worksheet = this.worksheets
+      worksheet = this.#worksheets
       .get(worksheetName)
       worksheet.reconstructor({
         worksheetTable
@@ -275,7 +248,6 @@ export default class Spreadsheet extends EventEmitter {
   async saveWorksheets($worksheets) {
     $worksheets = $worksheets || this.worksheets
     for(const $worksheet of $worksheets.values()) {
-      console.log($worksheet)
       await this.saveWorksheet($worksheet)
     }
     this.emit('save', this)
