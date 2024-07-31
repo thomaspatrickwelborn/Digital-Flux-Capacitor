@@ -1,7 +1,9 @@
 import Schemata from './schemata/index.js'
 import { EventEmitter } from 'node:events'
-import reducers from './reducers.js'
-import populateOptions from './populateOptions.js'
+import {
+  reducers,
+  populateOptions,
+} from './coutil/index.js'
 
 export default class Extrapository extends EventEmitter {
   #settings

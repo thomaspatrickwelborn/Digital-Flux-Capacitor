@@ -28,50 +28,22 @@ export default class Filesystem extends EventEmitter {
   }
   get extrapository() {
     if(this.#_extrapository === undefined) {
+      const extrapolatoryInputBind = this.extrapolatory.input
+      .bind(this.extrapolatory)
       this.#_extrapository = new Extrapository({
         databases: this.#databases,
       })
       this.#_extrapository.on(
         'saveCollectDoc', 
-        this.#extrapositorySaveCollectDoc.bind(this)
+        extrapolatoryInputBind
       )
     }
     return this.#_extrapository
   }
   get extrapolatory() {
-    if(this.#_extrapolatory) {
+    if(this.#_extrapolatory === undefined) {
       this.#_extrapolatory = new Extrapolatory()
     }
     return this.#_extrapolatory
-  }
-  #extrapositorySaveCollectDoc($fileDoc) {
-    const fileDoc = $fileDoc.toObject()
-    console.log('extrapositorySaveCollectDoc', fileDoc)
-    // const { operations, permissions, path } = fileDoc.fs
-    // if(
-    //   operations.add === true &&
-    //   this.root.includes(path) === false
-    // ) {
-    //   switch(fileDoc.fs.type) {
-    //     case 'File':
-    //       this.addFile(fileDoc)
-    //       break
-    //     case 'Fold':
-    //       this.addFold(fileDoc)
-    //       break
-    //   }
-    // } else
-    // if(
-    //   operations.update === true &&
-    //   this.root.includes(path) === true
-    // ) {
-    //   // 
-    // } else
-    // if(
-    //   operations.delete === true &&
-    //   this.root.includes(path) === true
-    // ) {
-    //   // 
-    // }
   }
 }
