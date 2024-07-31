@@ -7,7 +7,7 @@ import {
 
 export default class Extrapository extends EventEmitter {
   #settings
-  #databases
+  get #databases() { return this.#settings.databases }
   #_models
   #_collects = new Map()
   #_fsIgnorePropertyKeys
@@ -15,27 +15,35 @@ export default class Extrapository extends EventEmitter {
   constructor($settings = {}) {
     super()
     this.#settings = $settings
-    this.#databases = this.#settings.databases
+    this.#models
   }
   get #models() {
-    const modelNames = ['FSElement']
-    for(const [
-      $schemaName, $schema
-    ] of Object.entries(Schemata)) {
-      if(
-        this.#databases.filesystem
-        .models[$schemaName] === undefined
-      ) {
-        this.#databases.filesystem.model(
-          $schemaName, 
-          $schema
-        )
+    if(this.#_models === undefined) {
+      this.#_models = {}
+      const modelNames = ['FSElement']
+      for(const [
+        $schemaName, $schema
+      ] of Object.entries(Schemata)) {
+        let model
+        if(
+          this.#databases.filesystem
+          .models[$schemaName] === undefined
+        ) {
+          model = this.#databases.filesystem.model(
+            $schemaName, 
+            $schema
+          )
+        } else {
+          model = this.#databases.filesystem.models.models
+        }
+        this.#_models[$schemaName] = model
       }
     }
+    // return this.#_models
     return this.#databases.filesystem.models
   }
   async #fsElementContent($collect, $worksheet) {
-    const FSElement = this.models.FSElement
+    const FSElement = this.#models.FSElement
     const lmnRanges = $worksheet.depository.lmnRanges
     const worksheetMods = Array.from($worksheet.depository.mods.values())
     const worksheetModsLength = worksheetMods.length

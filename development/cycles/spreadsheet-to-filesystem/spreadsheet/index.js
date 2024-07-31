@@ -97,10 +97,9 @@ export default class Spreadsheet extends EventEmitter {
     await this.saveWorksheets(
       this.fsElementWorksheets
     )
-    // >>>>><<<<<
-    // await this.saveWorksheets(
-    //   this.fsElementContentWorksheets
-    // )
+    await this.saveWorksheets(
+      this.fsElementContentWorksheets
+    )
     return this
   }
   #createWorksheets(worksheetsSettings) {
