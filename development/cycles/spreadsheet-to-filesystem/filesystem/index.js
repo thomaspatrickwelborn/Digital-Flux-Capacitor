@@ -11,13 +11,12 @@ export default class Filesystem extends EventEmitter {
   fsRootPath
   #_fsRootStat
   #_fsRootWatch
-  #databases
   #_extrapository
    constructor($settings = {}) {
     super()
     this.#settings = $settings
-    this.#databases = this.#settings.databases
   }
+  get #databases() { return this.#settings.databases }
   get fsRootPath() {
     return this.#settings.filesystem.path
   }
@@ -118,9 +117,6 @@ export default class Filesystem extends EventEmitter {
     }
     return this.#_extrapository
   }
-  async #fsRootWatchChange($workbookPath) {
-    // this.fsRoot = this.fsRootPath
-  }
   addFile($addedFileDoc) {
     const addedFileDocPath = path.join(
       this.fsRootPath,
@@ -128,10 +124,10 @@ export default class Filesystem extends EventEmitter {
     )
     const addedFileDirPath = path.dirname(addedFileDocPath)
     stat(addedFileDirPath, (
-      $err, $addedFSElementStat
+      $err, $addedFileDirStat
     ) => {
-      if($addedFSElementStat.isDirectory() === false) {
-        mkdir(addedFoldDocPath, {
+      if($addedFileDirStat.isDirectory() === false) {
+        mkdir(addedFileDirPath, {
           recursive: true,
         }, ($err, $dir) => {
           writeFile(addedFileDocPath, '', ($err, $file) => {

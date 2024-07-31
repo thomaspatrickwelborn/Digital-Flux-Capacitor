@@ -4,6 +4,7 @@ import path from 'path'
 import chokidar from 'chokidar'
 import * as XLSX from 'xlsx'
 import Worksheet from './worksheet/index.js'
+import reducers from './reducers.js'
 
 export default class Spreadsheet extends EventEmitter {
   #settings
@@ -53,86 +54,28 @@ export default class Spreadsheet extends EventEmitter {
     return this.workbook.Workbook.Sheets
   }
   get fsElementWorksheetsSettings() {
-    return this.#reduceValuesByPropertyKeyMatch(
+    return reducers.valuesByPropertyKeyMatch(
       this.#worksheetsSettings, 'name', new RegExp(/^VINE/), true
     )
   }
   get fsElementContentWorksheetsSettings() {
-    return this.#reduceValuesByPropertyKeyMatch(
+    return reducers.valuesByPropertyKeyMatch(
       this.#worksheetsSettings, 'name', new RegExp(/^VINE/), false
     )
   }
   get #worksheets() { return this.#_worksheets }
   get fsElementWorksheets() {
     return new Map(
-      this.#reduceEntriesByEntryValuePropertyKeyMatch(
+      reducers.entriesByEntryValuePropertyKeyMatch(
         Array.from(this.#worksheets.entries()), 'name', new RegExp(/^VINE/), true
       )
     )
   }
   get fsElementContentWorksheets() {
     return new Map(
-      this.#reduceEntriesByEntryValuePropertyKeyMatch(
+      reducers.entriesByEntryValuePropertyKeyMatch(
         Array.from(this.#worksheets.entries()), 'name', new RegExp(/^VINE/), false
       )
-    )
-  }
-  #reduceValuesByPropertyKeyMatch(
-    $target = [],
-    $propKey = 'name',
-    $matchRegExp,
-    $matchVal = true
-  ) {
-    return $target
-    .reduce(
-      ($targetValues, $targetValue) => {
-        const targetValuePropertyMatchRegExp = $targetValue[$propKey]
-        .match(
-          $matchRegExp
-        )
-        if(
-          (
-            $matchVal === true &&
-            targetValuePropertyMatchRegExp.length !== 0
-          ) ||
-          (
-            $matchVal === false &&
-            targetValuePropertyMatchRegExp.length === 0
-          )
-        ) {
-          $targetValues.push($targetValue)
-        }
-        return $targetValues
-      }, []
-    )
-  }
-  #reduceEntriesByEntryValuePropertyKeyMatch(
-    $target = [],
-    $propKey = 'name',
-    $matchRegExp,
-    $matchVal = true
-  ) {
-    return $target
-    .reduce(
-      ($targetEntries, [$targetEntryKey, $targetEntryValue]) => {
-        const targetValuePropertyMatchRegExp = $targetEntryValue[$propKey]
-        .match(
-          $matchRegExp
-        ) || []
-        if(
-          (
-            $matchVal === true &&
-            targetValuePropertyMatchRegExp.length !== 0
-          ) ||
-          (
-            $matchVal === false &&
-            targetValuePropertyMatchRegExp.length === 0
-          )
-        ) {
-          $targetEntries.push([$targetEntryKey, $targetEntryValue])
-        }
-        return $targetEntries
-      }, []
     )
   }
   async #watcherChange() {
