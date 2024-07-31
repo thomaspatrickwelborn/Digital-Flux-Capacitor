@@ -33,11 +33,7 @@ export default class Filesystem extends EventEmitter {
       })
       this.#_extrapository.on(
         'saveCollectDoc', 
-        ($collectDoc) => {
-          // <<<<<<<<<<<<>>>>>>>>>>>>
-          console.log('saveCollectDoc', $collectDoc)
-          // this.emit('extrapository:saveCollectDoc', $collectDoc)
-        }
+        this.#extrapositorySaveCollectDoc.bind(this)
       )
     }
     return this.#_extrapository
@@ -48,9 +44,9 @@ export default class Filesystem extends EventEmitter {
     }
     return this.#_extrapolatory
   }
-  inputFileDoc($fileDoc) {
-    // const fileDoc = $fileDoc.toObject()
-    // console.log('inputFileDoc', fileDoc)
+  #extrapositorySaveCollectDoc($fileDoc) {
+    const fileDoc = $fileDoc.toObject()
+    console.log('extrapositorySaveCollectDoc', fileDoc)
     // const { operations, permissions, path } = fileDoc.fs
     // if(
     //   operations.add === true &&
