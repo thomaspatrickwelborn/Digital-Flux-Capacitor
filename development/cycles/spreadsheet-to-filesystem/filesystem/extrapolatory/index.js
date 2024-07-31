@@ -7,7 +7,49 @@ import * as Templates from './templates/index.js'
 const modulePath = path.dirname(
   url.fileURLToPath(import.meta.url)
 )
-export default class FSElementContent extends EventEmitter {
+export default class Extrapolatory extends EventEmitter {
+  
+  addFile($addedFileDoc) {
+    const addedFileDocPath = path.join(
+      this.rootPath,
+      $addedFileDoc.fs.path,
+    )
+    const addedFileDirPath = path.dirname(addedFileDocPath)
+    stat(addedFileDirPath, (
+      $err, $addedFileDirStat
+    ) => {
+      if($addedFileDirStat.isDirectory() === false) {
+        mkdir(addedFileDirPath, {
+          recursive: true,
+        }, ($err, $dir) => {
+          writeFile(addedFileDocPath, '', ($err, $file) => {
+            // console.log($err, $file)
+            if($err) return
+            // this.emit('addFile', $addedFileDoc)
+          })
+        })
+      } else {
+        writeFile(addedFileDocPath, '', ($err, $file) => {
+          // console.log($err, $file)
+          if($err) return
+          // this.emit('addFile', $addedFileDoc)
+        })
+      }
+    })
+  }
+  addFold($addedFoldDoc) {
+    const addedFoldDocPath = path.join(
+      this.rootPath,
+      $addedFoldDoc.fs.path,
+    )
+    mkdir(addedFoldDocPath, {
+      recursive: true,
+    }, ($err, $dir) => {
+      // console.log($err, $dir)
+      if($err) return
+      // this.emit('addFold', $addedFoldDoc)
+    })
+  }
   constructor($collection, $presubcycle, $subcycle) {
     super()
     const { filesystemContent } = $subcycle.settings

@@ -1,18 +1,21 @@
 import EventEmitter from 'node:events'
 import path from 'node:path'
 import { writeFile, mkdir, stat } from 'node:fs'
-import Extrapository from './extrapository/index.js'
 import Root from './root/index.js'
+import Extrapository from './extrapository/index.js'
+import Extrapolatory from './extrapolatory/index.js'
 
 export default class Filesystem extends EventEmitter {
   #settings
   #_root
   #_extrapository
+  #_extrapolatory
    constructor($settings = {}) {
     super()
     this.#settings = $settings
     this.root
     this.extrapository
+    this.extrapolatory
   }
   get #databases() { return this.#settings.databases }
   get root() {
@@ -39,75 +42,40 @@ export default class Filesystem extends EventEmitter {
     }
     return this.#_extrapository
   }
-  addFile($addedFileDoc) {
-    const addedFileDocPath = path.join(
-      this.rootPath,
-      $addedFileDoc.fs.path,
-    )
-    const addedFileDirPath = path.dirname(addedFileDocPath)
-    stat(addedFileDirPath, (
-      $err, $addedFileDirStat
-    ) => {
-      if($addedFileDirStat.isDirectory() === false) {
-        mkdir(addedFileDirPath, {
-          recursive: true,
-        }, ($err, $dir) => {
-          writeFile(addedFileDocPath, '', ($err, $file) => {
-            // console.log($err, $file)
-            if($err) return
-            // this.emit('addFile', $addedFileDoc)
-          })
-        })
-      } else {
-        writeFile(addedFileDocPath, '', ($err, $file) => {
-          // console.log($err, $file)
-          if($err) return
-          // this.emit('addFile', $addedFileDoc)
-        })
-      }
-    })
-  }
-  addFold($addedFoldDoc) {
-    const addedFoldDocPath = path.join(
-      this.rootPath,
-      $addedFoldDoc.fs.path,
-    )
-    mkdir(addedFoldDocPath, {
-      recursive: true,
-    }, ($err, $dir) => {
-      // console.log($err, $dir)
-      if($err) return
-      // this.emit('addFold', $addedFoldDoc)
-    })
+  get extrapolatory() {
+    if(this.#_extrapolatory) {
+      this.#_extrapolatory = new Extrapolatory()
+    }
+    return this.#_extrapolatory
   }
   inputFileDoc($fileDoc) {
-    const fileDoc = $fileDoc.toObject()
-    console.log('inputFileDoc', fileDoc)
-    const { operations, permissions, path } = fileDoc.fs
-    if(
-      operations.add === true &&
-      this.root.includes(path) === false
-    ) {
-      switch(fileDoc.fs.type) {
-        case 'File':
-          this.addFile(fileDoc)
-          break
-        case 'Fold':
-          this.addFold(fileDoc)
-          break
-      }
-    } else
-    if(
-      operations.update === true &&
-      this.root.includes(path) === true
-    ) {
-      // 
-    } else
-    if(
-      operations.delete === true &&
-      this.root.includes(path) === true
-    ) {
-      // 
-    }
+    // const fileDoc = $fileDoc.toObject()
+    // console.log('inputFileDoc', fileDoc)
+    // const { operations, permissions, path } = fileDoc.fs
+    // if(
+    //   operations.add === true &&
+    //   this.root.includes(path) === false
+    // ) {
+    //   switch(fileDoc.fs.type) {
+    //     case 'File':
+    //       this.addFile(fileDoc)
+    //       break
+    //     case 'Fold':
+    //       this.addFold(fileDoc)
+    //       break
+    //   }
+    // } else
+    // if(
+    //   operations.update === true &&
+    //   this.root.includes(path) === true
+    // ) {
+    //   // 
+    // } else
+    // if(
+    //   operations.delete === true &&
+    //   this.root.includes(path) === true
+    // ) {
+    //   // 
+    // }
   }
 }
