@@ -15,6 +15,14 @@ export default class Filesystem extends EventEmitter {
     this.extrapository
   }
   get #databases() { return this.#settings.databases }
+  get root() {
+    if(this.#_root === undefined) {
+      this.#_root = new Root(
+        this.#settings.filesystem
+      )
+    }
+    return this.#_root
+  }
   get extrapository() {
     if(this.#_extrapository === undefined) {
       this.#_extrapository = new Extrapository({
@@ -31,17 +39,9 @@ export default class Filesystem extends EventEmitter {
     }
     return this.#_extrapository
   }
-  get root() {
-    if(this.#_root === undefined) {
-      this.#_root = new Root(
-        this.#settings.filesystem
-      )
-    }
-    return this.#_root
-  }
   addFile($addedFileDoc) {
     const addedFileDocPath = path.join(
-      this.fsRootPath,
+      this.rootPath,
       $addedFileDoc.fs.path,
     )
     const addedFileDirPath = path.dirname(addedFileDocPath)
@@ -69,7 +69,7 @@ export default class Filesystem extends EventEmitter {
   }
   addFold($addedFoldDoc) {
     const addedFoldDocPath = path.join(
-      this.fsRootPath,
+      this.rootPath,
       $addedFoldDoc.fs.path,
     )
     mkdir(addedFoldDocPath, {
@@ -86,7 +86,7 @@ export default class Filesystem extends EventEmitter {
     const { operations, permissions, path } = fileDoc.fs
     if(
       operations.add === true &&
-      this.fsRoot.includes(path) === false
+      this.root.includes(path) === false
     ) {
       switch(fileDoc.fs.type) {
         case 'File':
@@ -99,13 +99,13 @@ export default class Filesystem extends EventEmitter {
     } else
     if(
       operations.update === true &&
-      this.fsRoot.includes(path) === true
+      this.root.includes(path) === true
     ) {
       // 
     } else
     if(
       operations.delete === true &&
-      this.fsRoot.includes(path) === true
+      this.root.includes(path) === true
     ) {
       // 
     }
