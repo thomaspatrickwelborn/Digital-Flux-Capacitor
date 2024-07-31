@@ -103,4 +103,9 @@ export default class Root extends EventEmitter {
     }
     return this.#_watch
   }
+  includes($searchElement, $searchIndex) {
+    return Array.prototype.includes.call(
+      this, $searchElement, $searchIndex
+    )
+  }
 }

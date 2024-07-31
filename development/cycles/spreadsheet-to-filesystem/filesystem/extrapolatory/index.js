@@ -1,5 +1,6 @@
 import EventEmitter from 'node:events'
 import path from 'node:path'
+import { stat } from 'node:fs'
 import url from 'node:url'
 import { Functions, Parsers, Operators } from './coutil/index.js'
 import { writeFile, readFile } from 'node:fs'
@@ -8,9 +9,12 @@ const modulePath = path.dirname(
   url.fileURLToPath(import.meta.url)
 )
 export default class Extrapolatory extends EventEmitter {
-  constructor() {
+  #settings
+  constructor($settings = {}) {
     super()
+    this.#settings = $settings
   }
+  get #root() { return this.#settings.root }
   generateFileContent($collectDoc) {
     var collectDoc = $collectDoc
     if(
@@ -57,8 +61,9 @@ export default class Extrapolatory extends EventEmitter {
     }
   }
   addFile($addedFileDoc) {
+    console.log('$addedFileDoc', $addedFileDoc)
     const addedFileDocPath = path.join(
-      this.rootPath,
+      this.#root.path,
       $addedFileDoc.fs.path,
     )
     const addedFileDirPath = path.dirname(addedFileDocPath)
@@ -85,8 +90,9 @@ export default class Extrapolatory extends EventEmitter {
     })
   }
   addFold($addedFoldDoc) {
+    console.log('$addedFoldDoc', $addedFoldDoc)
     const addedFoldDocPath = path.join(
-      this.rootPath,
+      this.#root.path,
       $addedFoldDoc.fs.path,
     )
     mkdir(addedFoldDocPath, {
@@ -99,32 +105,32 @@ export default class Extrapolatory extends EventEmitter {
   }
   input($fileDoc) {
     const fileDoc = $fileDoc.toObject()
-    console.log('extrapolatory.input', fileDoc)
-    // const { operations, permissions, path } = fileDoc.fs
-    // if(
-    //   operations.add === true &&
-    //   this.root.includes(path) === false
-    // ) {
-    //   switch(fileDoc.fs.type) {
-    //     case 'File':
-    //       this.addFile(fileDoc)
-    //       break
-    //     case 'Fold':
-    //       this.addFold(fileDoc)
-    //       break
-    //   }
-    // } else
-    // if(
-    //   operations.update === true &&
-    //   this.root.includes(path) === true
-    // ) {
-    //   // 
-    // } else
-    // if(
-    //   operations.delete === true &&
-    //   this.root.includes(path) === true
-    // ) {
-    //   // 
-    // }
+    const { operations, permissions, path } = fileDoc.fs
+    console.log('fileDoc', fileDoc)
+    if(
+      operations.add === true &&
+      this.#root.includes(path) === false
+    ) {
+      switch(fileDoc.fs.type) {
+        case 'File':
+          this.addFile(fileDoc)
+          break
+        case 'Fold':
+          this.addFold(fileDoc)
+          break
+      }
+    } else
+    if(
+      operations.update === true &&
+      this.#root.includes(path) === true
+    ) {
+      // 
+    } else
+    if(
+      operations.delete === true &&
+      this.#root.includes(path) === true
+    ) {
+      // 
+    }
   }
 }

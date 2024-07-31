@@ -78,7 +78,16 @@ export default class Spreadsheet extends EventEmitter {
       )
     )
   }
-  async #watcherChange() { await this.read() }
+  async #watcherChange() {
+    await this.read()
+    this.#createWorksheets()
+    await this.saveWorksheets(
+      this.fsElementWorksheets
+    )
+    await this.saveWorksheets(
+      this.fsElementContentWorksheets
+    )
+  }
   async read() {
     this.workbook = await readFile(
       this.#settings.path
@@ -93,13 +102,6 @@ export default class Spreadsheet extends EventEmitter {
       cellDates: false,
       cellStyles: true, 
     }))
-    this.#createWorksheets()
-    await this.saveWorksheets(
-      this.fsElementWorksheets
-    )
-    await this.saveWorksheets(
-      this.fsElementContentWorksheets
-    )
     return this
   }
   #createWorksheets(worksheetsSettings) {

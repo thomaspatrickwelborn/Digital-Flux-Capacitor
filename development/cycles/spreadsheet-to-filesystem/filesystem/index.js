@@ -42,7 +42,9 @@ export default class Filesystem extends EventEmitter {
   }
   get extrapolatory() {
     if(this.#_extrapolatory === undefined) {
-      this.#_extrapolatory = new Extrapolatory()
+      this.#_extrapolatory = new Extrapolatory({
+        root: this.root
+      })
     }
     return this.#_extrapolatory
   }
