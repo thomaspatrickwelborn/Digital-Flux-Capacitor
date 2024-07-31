@@ -90,6 +90,14 @@ export default class Collect extends EventEmitter {
     var collectDocsIndex = 0
     while(collectDocsIndex < collectDocsLength) {
       const collectDoc = this[collectDocsIndex]
+      await this.#databases.spreadsheet.models[
+        collectDoc.$collection.modelName
+      ].findOneAndUpdate({
+        _id: collectDoc._id
+      }, collectDoc, {
+        new: true,
+        upsert: true,
+      })
       collectDocsIndex++
     }
     this.emit(

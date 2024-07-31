@@ -68,11 +68,12 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
     }
     return this.#_filesystem
   }
-  start() {
+  async start() {
     this.#databases.spreadsheet.once(
       'connected', 
       async () => {
-        this.#spreadsheet.read()
+        await this.#databases.spreadsheet.dropDatabase()
+        this.#spreadsheet
       }
     )
     return this

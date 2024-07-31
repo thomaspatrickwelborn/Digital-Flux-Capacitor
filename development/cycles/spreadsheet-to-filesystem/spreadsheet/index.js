@@ -79,15 +79,15 @@ export default class Spreadsheet extends EventEmitter {
     )
   }
   async #watcherChange() {
-    await this.#databases.spreadsheet.dropDatabase()
-    const modelNames = this.#databases.spreadsheet.modelNames()
-    const modelNamesLength = modelNames.length
-    var modelNamesIndex = 0
-    while(modelNamesIndex < modelNamesLength) {
-      const modelName = modelNames[modelNamesIndex]
-      await this.#databases.spreadsheet.deleteModel(modelName)
-      modelNamesIndex++
-    }
+    // await this.#databases.spreadsheet.dropDatabase()
+    // const modelNames = this.#databases.spreadsheet.modelNames()
+    // const modelNamesLength = modelNames.length
+    // var modelNamesIndex = 0
+    // while(modelNamesIndex < modelNamesLength) {
+    //   const modelName = modelNames[modelNamesIndex]
+    //   await this.#databases.spreadsheet.deleteModel(modelName)
+    //   modelNamesIndex++
+    // }
     await this.read()
   }
   async read() {
