@@ -2,7 +2,6 @@ import EventEmitter from 'node:events'
 import path from 'node:path'
 import { stat } from 'node:fs'
 import url from 'node:url'
-import { Functions, Parsers, Operators } from './Coutil/index.js'
 import { writeFile, readFile } from 'node:fs'
 import Operatives from './Operatives/index.js'
 import Generatives from './Generatives/index.js'
@@ -35,7 +34,7 @@ export default class Extrapolatory extends EventEmitter {
     }
     return this.#_generatives
   }
-  input($collectDoc) {
+  async input($collectDoc) {
     const collectDoc = $collectDoc.toObject({
       lean: true
     })
@@ -44,19 +43,20 @@ export default class Extrapolatory extends EventEmitter {
       operations.add === true &&
       this.#root.includes(path) === false
     ) {
-      this.#operatives.add(collectDoc)
+      await this.#operatives.add(collectDoc)
     } else
     if(
       operations.update === true &&
       this.#root.includes(path) === true
     ) {
-      this.#operatives.update(collectDoc)
+      await this.#operatives.update(collectDoc)
     } else
     if(
       operations.delete === true &&
       this.#root.includes(path) === true
     ) {
-      this.#operatives.delete(collectDoc)
+      await this.#operatives.delete(collectDoc)
     }
+    this.#generatives.file(collectDoc)
   }
 }

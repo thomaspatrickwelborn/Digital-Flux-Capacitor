@@ -51,7 +51,7 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       this.#_spreadsheet.on(
         'worksheet:saveCollects',
         ($collects, $worksheet) => {
-          this.#filesystem.extrapository.saveCollects(
+          this.#filesystem.content.extrapository.saveCollects(
             $collects, $worksheet
           )
         }
@@ -63,7 +63,10 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
     if(this.#_filesystem === undefined) {
       this.#_filesystem = new Filesystem({
         databases: this.#databases,
-        filesystem: this.#settings.output.filesystem,
+        filesystem: Object.assign(
+          this.#settings.output.filesystem,
+          this.#settings.filesystem,
+        )
       })
     }
     return this.#_filesystem

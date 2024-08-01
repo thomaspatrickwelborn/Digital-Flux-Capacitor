@@ -1,11 +1,14 @@
+import path from 'node:path'
 import { EventEmitter } from 'node:events'
 import *  as Templates from './Templates/index.js'
-export default class Content extends EventEmitter {
+import { Functions, Parsers, Operators } from './Coutil/index.js'
+export default class Generatives extends EventEmitter {
   #settings
   constructor($settings) {
     super()
     this.#settings = $settings
   }
+  get root() { return this.#settings.root }
   file($collectDoc) {
     var collectDoc = $collectDoc
     if(
@@ -13,7 +16,7 @@ export default class Content extends EventEmitter {
       collectDoc.fs.template !== undefined
     ) {
       const templateModel = {
-        content: collectDoc.toObject(),
+        content: collectDoc,
         coutils: {
           Functions,
           Parsers,
@@ -22,7 +25,7 @@ export default class Content extends EventEmitter {
         }
       }
       const filePath = path.join(
-        filesystem.path,
+        this.root.path,
         collectDoc.fs.path
       )
       const Template = Templates[
