@@ -22,9 +22,17 @@ function fsElementContent(
       $collectDocPropertyKey
     ) === false
   ) {
-    $updateCollectDoc[
-      $collectDocPropertyKey
-    ] = $collectDocPropertyVal
+    if($collectDocPropertyKey === 'fs') {
+      $updateCollectDoc[
+        $collectDocPropertyKey
+      ] = $collectDocPropertyVal
+    } else
+    if($collectDocPropertyKey !== 'fs') {
+      $updateCollectDoc.content = $updateCollectDoc.content || {}
+      $updateCollectDoc.content[
+        $collectDocPropertyKey
+      ] = $collectDocPropertyVal
+    }
   }
   return $updateCollectDoc
 }
@@ -39,9 +47,11 @@ function fsElement(
       $collectDocPropertyKey
     ) === false
   ) {
-    $updateCollectDoc[
-      $collectDocPropertyKey
-    ] = $collectDocPropertyVal
+    if($collectDocPropertyKey === 'fs') {
+      $updateCollectDoc[
+        $collectDocPropertyKey
+      ] = $collectDocPropertyVal
+    }
   }
   return $updateCollectDoc
 }

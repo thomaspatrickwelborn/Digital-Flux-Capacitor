@@ -9,9 +9,11 @@ const defaultSchemataOptions = {
 }
 const FSElement = new Schema({
   fs: FSSchema,
-  imports: [ImportSchema],
-  blocks: [BlockSchema],
-  exports: [ExportSchema],
+  content: {
+    imports: [ImportSchema],
+    blocks: [BlockSchema],
+    exports: [ExportSchema],
+  },
 }, defaultSchemataOptions)
 
 export default FSElement
