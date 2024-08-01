@@ -5,6 +5,8 @@ import {
 } from '../Coutil/ES/index.js'
 export default function ES_Markup($data, $options = {}) {
   const { coutils, content } = $data
+  const coutils = $data.coutils
+  const { content } = $data.content
   const { Functions, Parsers } = coutils
   const _es_markup = []
   const _imports = Imports({

@@ -3,10 +3,10 @@ export default class Update extends Operative {
   constructor($settings) {
     super($settings)
   }
-  deleteFile($fileDoc) {
+  file($fileDoc) {
     console.log('$fileDoc', $fileDoc)
   }
-  deleteFold($foldDoc) {
+  fold($foldDoc) {
     console.log('$foldDoc', $foldDoc)
 
   }
