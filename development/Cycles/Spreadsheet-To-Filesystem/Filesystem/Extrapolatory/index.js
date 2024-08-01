@@ -4,8 +4,8 @@ import { stat } from 'node:fs'
 import url from 'node:url'
 import { Functions, Parsers, Operators } from './Coutil/index.js'
 import { writeFile, readFile } from 'node:fs'
-import * as Operatives from './Operatives/index.js'
-import * as Generatives from './Generatives/index.js'
+import Operatives from './Operatives/index.js'
+import Generatives from './Generatives/index.js'
 const modulePath = path.dirname(
   url.fileURLToPath(import.meta.url)
 )
@@ -35,27 +35,28 @@ export default class Extrapolatory extends EventEmitter {
     }
     return this.#_generatives
   }
-  input($fileDoc) {
-    const fileDoc = $fileDoc.toObject()
-    console.log('fileDoc', fileDoc)
-    // const { operations, permissions, path } = fileDoc.fs
-    // if(
-    //   operations.add === true &&
-    //   this.#root.includes(path) === false
-    // ) {
-    //   this.add(fileDoc)
-    // } else
-    // if(
-    //   operations.update === true &&
-    //   this.#root.includes(path) === true
-    // ) {
-      
-    // } else
-    // if(
-    //   operations.delete === true &&
-    //   this.#root.includes(path) === true
-    // ) {
-    //   // 
-    // }
+  input($collectDoc) {
+    const collectDoc = $collectDoc.toObject({
+      lean: true
+    })
+    const { operations, permissions, path } = collectDoc.fs
+    if(
+      operations.add === true &&
+      this.#root.includes(path) === false
+    ) {
+      this.#operatives.add(collectDoc)
+    } else
+    if(
+      operations.update === true &&
+      this.#root.includes(path) === true
+    ) {
+      this.#operatives.update(collectDoc)
+    } else
+    if(
+      operations.delete === true &&
+      this.#root.includes(path) === true
+    ) {
+      this.#operatives.delete(collectDoc)
+    }
   }
 }

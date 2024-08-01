@@ -1,50 +1,38 @@
 import Operative from '../Operative/index.js'
-import { mkdir, writeFile } from 'node:fs'
+import { stat, mkdir, writeFile } from 'node:fs/promises'
 export default class Add extends Operative {
   constructor($settings) {
     super($settings)
   }
-  file($fileDoc) {
-    console.log('$fileDoc', $fileDoc)
+  async file($fileDoc) {
     const fileDocPath = path.join(
       this.root.path,
       $fileDoc.fs.path,
     )
     const fileDirPath = path.dirname(fileDocPath)
-    stat(fileDirPath, (
-      $err, $fileDirStat
-    ) => {
-      if($fileDirStat.isDirectory() === false) {
-        mkdir(fileDirPath, {
-          recursive: true,
-        }, ($err, $dir) => {
-          writeFile(fileDocPath, '', ($err, $file) => {
-            // console.log($err, $file)
-            if($err) return
-            // this.emit('addFile', $fileDoc)
-          })
-        })
-      } else {
-        writeFile(fileDocPath, '', ($err, $file) => {
-          // console.log($err, $file)
-          if($err) return
-          // this.emit('addFile', $fileDoc)
-        })
-      }
-    })
+    const fileDirStat = await stat(fileDirPath)
+    if(fileDirStat.isDirectory() === false) {
+      await mkdir(fileDirPath, {
+        recursive: true,
+      })
+      // this.emit('addFile', $fileDoc)
+    } else {
+      await writeFile(fileDocPath, '', ($err, $file) => {
+        if($err) return
+        // this.emit('addFile', $fileDoc)
+      })
+    }
+    return 
   }
-  fold($foldDoc) {
-    console.log('$foldDoc', $foldDoc)
+  async fold($foldDoc) {
     const foldDocPath = path.join(
       this.root.path,
       $foldDoc.fs.path,
     )
-    mkdir(foldDocPath, {
+    await mkdir(foldDocPath, {
       recursive: true,
-    }, ($err, $dir) => {
-      // console.log($err, $dir)
-      if($err) return
-      // this.emit('addFold', $foldDoc)
     })
+    // this.emit('addFold', $foldDoc)
+    return $foldDoc
   }
 }
