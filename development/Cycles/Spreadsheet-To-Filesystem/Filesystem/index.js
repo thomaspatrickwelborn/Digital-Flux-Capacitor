@@ -28,7 +28,8 @@ export default class Filesystem extends EventEmitter {
       this.#_content = new Content({
         root: this.#root,
         content: this.#settings.filesystem.content,
-        databases: this.#databases
+        deleteExtraneous: this.#settings.filesystem.deleteExtraneous,
+        databases: this.#databases,
       })
     }
     return this.#_content

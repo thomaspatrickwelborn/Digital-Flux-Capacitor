@@ -22,6 +22,7 @@
 				  "options": {}
 				},
 				"filesystem": {
+					"deleteExtraneous": true,
 					"path": "/home/thomaspatrickwelborn/Development/Digital-Flux-Capacitor/demonstrament/projects/001/docubase",
 					"options": {}
 				}

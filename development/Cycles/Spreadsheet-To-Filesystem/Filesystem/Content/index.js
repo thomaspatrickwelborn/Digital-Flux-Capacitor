@@ -13,6 +13,7 @@ export default class Content extends EventEmitter {
     this.extrapolatory
   }
   get #databases() { return this.#settings.databases }
+  get #deleteExtraneous() { return this.#settings.deleteExtraneous }
   get #root() { return this.#settings.root }
   get #content() { return this.#settings.content }
   get extrapository() {
@@ -35,6 +36,7 @@ export default class Content extends EventEmitter {
       this.#_extrapolatory = new Extrapolatory({
         root: this.#root,
         content: this.#content,
+        deleteExtraneous: this.#deleteExtraneous,
       })
     }
     return this.#_extrapolatory

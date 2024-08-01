@@ -55,13 +55,17 @@ export default class Operatives extends EventEmitter {
     return this.#deleteFace
   }
   #deleteFace($fileDoc) {
-    switch($fileDoc.fs.type) {
-      case 'file':
-        this.#_delete.file($fileDoc)
-        break
-      case 'fold':
-        this.#_delete.fold($fileDoc)
-        break
+    if(typeof $fileDoc === 'string') {
+      this.#_delete.element($fileDoc) 
+    } else {
+      switch($fileDoc.fs.type) {
+        case 'file':
+          this.#_delete.file($fileDoc)
+          break
+        case 'fold':
+          this.#_delete.fold($fileDoc)
+          break
+      }
     }
   }
 }

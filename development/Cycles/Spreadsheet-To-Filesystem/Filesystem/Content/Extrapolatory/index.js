@@ -19,6 +19,7 @@ export default class Extrapolatory extends EventEmitter {
     this.#settings = $settings
   }
   get #root() { return this.#settings.root }
+  get #deleteExtraneous() { return this.#settings.deleteExtraneous }
   get #differatives() {
     if(this.#_differatives === undefined) {
       this.#_differatives = new Differatives(
@@ -50,40 +51,27 @@ export default class Extrapolatory extends EventEmitter {
     )
   }
   async saveCollects($collects, $worksheet) {
-    // const collects = this.#_collects
+    // console.log(this.#settings)
     if(
+      this.#deleteExtraneous === true &&
       $worksheet.name.match(new RegExp(/^VINE/))
     ) {
       for(const [
         $collectName, $collect
       ] of $collects.entries()) {
         const collectPaths = this.#mapCollectDocsToCollectDocPaths($collect)
-        console.log(
-          'this.#differatives.add', 
-          this.#differatives.add(
-            Array.from(this.#root), 
-            collectPaths
-          )
+        const deleteDifferative = this.#differatives.delete(
+          Array.from(this.#root), 
+          collectPaths
         )
-        console.log(
-          'this.#differatives.update', 
-          this.#differatives.update(
-            Array.from(this.#root), 
-            collectPaths
+        iterateDeleteDifferative:
+        for(const $deleteDifferative of deleteDifferative) {
+          this.#operatives.delete(
+            $deleteDifferative
           )
-        )
-        console.log(
-          'this.#differatives.delete', 
-          this.#differatives.delete(
-            Array.from(this.#root), 
-            collectPaths
-          )
-        )
-        // console.log('$collect', $collect)
-        // console.log('this.#root', this.#root)
+        }
       }
     }
-    // return collects
   }
   async input($collectDoc) {
     const collectDoc = $collectDoc.toObject({
