@@ -58,7 +58,7 @@ export default class Generatives extends EventEmitter {
     }
     return file
   }
-  async update() {
+  async update($collectDoc) {
     const file = {}
     var collectDoc = $collectDoc
     if(
@@ -81,7 +81,7 @@ export default class Generatives extends EventEmitter {
     }
     return file
   }
-  async delete() {
+  async delete($collectDoc) {
     const file = {}
     var collectDoc = $collectDoc
     const filePath = this.#path(collectDoc)

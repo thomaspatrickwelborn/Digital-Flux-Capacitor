@@ -39,7 +39,6 @@ export default class Extrapository extends EventEmitter {
         this.#_models[$schemaName] = model
       }
     }
-    // return this.#_models
     return this.#databases.filesystem.models
   }
   async #fsElementContent($collect, $worksheet) {
