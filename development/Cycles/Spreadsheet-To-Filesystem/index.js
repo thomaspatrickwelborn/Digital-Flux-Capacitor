@@ -2,7 +2,7 @@ import { EventEmitter } from 'node:events'
 import { createConnection } from 'mongoose'
 import Spreadsheet from './Spreadsheet/index.js'
 import Filesystem from './Filesystem/index.js'
-import Config from './config.js'
+import Config from './Config/index.js'
 
 export default class SpreadsheetToFilesystem extends EventEmitter {
   #_settings
