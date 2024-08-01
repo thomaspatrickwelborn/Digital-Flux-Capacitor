@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { EventEmitter } from 'node:events'
-import { readFile, writeFile } from 'node:fs/promises'
+import { readFile, writeFile, rm } from 'node:fs/promises'
 import *  as Templates from './Templates/index.js'
 import { Functions, Parsers, Operators } from './Coutil/index.js'
 export default class Generatives extends EventEmitter {
@@ -21,7 +21,6 @@ export default class Generatives extends EventEmitter {
         path,
       }
     }
-
     const Template = Templates[
       $collectDoc.fs.template
     ]
@@ -33,10 +32,10 @@ export default class Generatives extends EventEmitter {
     }
     return ''
   }
-  #renderPath($collectDoc) {
+  #path($collectDoc) {
     return path.join(
       this.root.path,
-      collectDoc.fs.path
+      $collectDoc.fs.path
     )
   }
   #readAndWriteFilesSame($readFile, $writeFile) {
@@ -49,12 +48,29 @@ export default class Generatives extends EventEmitter {
       collectDoc.fs.type === 'File' &&
       collectDoc.fs.template !== undefined
     ) {
-      file.path = this.#renderPath(collectDoc)
+      file.path = this.#path(collectDoc)
+      file.write = this.#render(collectDoc)
+      file.read = await readFile(file.path)
+      file.handle = await writeFile(
+        file.path, 
+        file.write
+      )
+    }
+    return file
+  }
+  async update() {
+    const file = {}
+    var collectDoc = $collectDoc
+    if(
+      collectDoc.fs.type === 'File' &&
+      collectDoc.fs.template !== undefined
+    ) {
+      file.path = this.#path(collectDoc)
       file.write = this.#render(collectDoc)
       file.read = await readFile(file.path)
       if(
         this.#readAndWriteFilesSame(
-          file.write, file.read
+          file.read, file.write
         ) === false
       ) {
         file.handle = await writeFile(
@@ -65,6 +81,14 @@ export default class Generatives extends EventEmitter {
     }
     return file
   }
-  async update() {}
-  async delete() {}
+  async delete() {
+    const file = {}
+    var collectDoc = $collectDoc
+    const filePath = this.#path(collectDoc)
+    await rm(filePath, {
+      recursive: true,
+      force: true,
+    })
+    return file
+  }
 }
