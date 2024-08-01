@@ -1,2 +1,2 @@
-import Capacitor from './capacitor/index.js'
+import Capacitor from './Capacitor/index.js'
 export default Capacitor

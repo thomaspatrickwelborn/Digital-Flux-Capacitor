@@ -20,8 +20,8 @@
   },
 
   "imports": {
-    "#core/*": "./development/core/*",
-    "#cycles/*": "./development/cycles/*",
-    "#utils/*": "./development/utils/*"
+    "#Core/*": "./development/Core/*",
+    "#Cycles/*": "./development/Cycles/*",
+    "#Coutil/*": "./development/Coutil/*"
   }
 }
