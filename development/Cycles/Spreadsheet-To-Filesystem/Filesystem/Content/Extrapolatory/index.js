@@ -44,19 +44,20 @@ export default class Extrapolatory extends EventEmitter {
       this.#root.includes(path) === false
     ) {
       await this.#operatives.add(collectDoc)
+      await this.#generatives.file.add(collectDoc)
     } else
     if(
       operations.update === true &&
       this.#root.includes(path) === true
     ) {
       await this.#operatives.update(collectDoc)
+      await this.#generatives.file.update(collectDoc)
     } else
     if(
       operations.delete === true &&
       this.#root.includes(path) === true
     ) {
-      await this.#operatives.delete(collectDoc)
+      await this.#operatives.file.delete(collectDoc)
     }
-    this.#generatives.file(collectDoc)
   }
 }

@@ -14,6 +14,7 @@ export default class Content extends EventEmitter {
   }
   get #databases() { return this.#settings.databases }
   get #root() { return this.#settings.root }
+  get #content() { return this.#settings.content }
   get extrapository() {
     if(this.#_extrapository === undefined) {
       const extrapolatoryInputBind = this.extrapolatory.input
@@ -32,7 +33,8 @@ export default class Content extends EventEmitter {
   get extrapolatory() {
     if(this.#_extrapolatory === undefined) {
       this.#_extrapolatory = new Extrapolatory({
-        root: this.#root
+        root: this.#root,
+        content: this.#content,
       })
     }
     return this.#_extrapolatory

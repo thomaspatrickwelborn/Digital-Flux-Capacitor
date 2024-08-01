@@ -1,57 +1,16 @@
-import path from 'node:path'
 import { EventEmitter } from 'node:events'
-import *  as Templates from './Templates/index.js'
-import { Functions, Parsers, Operators } from './Coutil/index.js'
+import File from './File/index.js'
 export default class Generatives extends EventEmitter {
   #settings
+  #_file
   constructor($settings) {
     super()
     this.#settings = $settings
   }
-  get root() { return this.#settings.root }
-  file($collectDoc) {
-    var collectDoc = $collectDoc
-    if(
-      collectDoc.fs.type === 'File' &&
-      collectDoc.fs.template !== undefined
-    ) {
-      const templateModel = {
-        content: collectDoc,
-        coutils: {
-          Functions,
-          Parsers,
-          Operators,
-          path,
-        }
-      }
-      const filePath = path.join(
-        this.root.path,
-        collectDoc.fs.path
-      )
-      const Template = Templates[
-        collectDoc.fs.template
-      ]
-      if(Template) {
-        const TemplateOptions = filesystemContent[
-          collectDoc.fs.template
-        ]
-        const writeFileData = Template(templateModel, TemplateOptions)
-        readFile(filePath, ($err, $readFileData) => {
-          if($err) return
-          if(writeFileData !== $readFileData) {
-            writeFile(filePath, writeFileData, ($err) => {
-              if($err) return
-              console.log(
-                '\n', '=====', 
-                '\n', collectDoc.fs.template, filePath, 
-                '\n', '#####',
-                '\n', 'writeFileData', 
-                '\n', writeFileData, 
-              )
-            })
-          }
-        })
-      }
+  get file() {
+    if(this.#_file === undefined) {
+      this.#_file = new File(this.#settings)
     }
+    return this.#_file
   }
 }
