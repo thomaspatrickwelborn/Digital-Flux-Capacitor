@@ -16,20 +16,20 @@ export default class Content extends EventEmitter {
   // EXTRAPOSITORY
   get extrapository() {
     if(this.#_extrapository === undefined) {
-      const extrapolatoryInputBind = this.extrapolatory.input
-      .bind(this.extrapolatory)
       this.#_extrapository = new Extrapository(Object.assign({
         root: this.#settings.root,
         database: this.#settings.database,
       }, this.#settings.extrapository || {}))
       this.#_extrapository.on(
         'saveCollectDoc', 
-        extrapolatoryInputBind
+        ($collectDoc) => {
+          this.extrapolatory.input($collectDoc)
+        }
       )
     }
     return this.#_extrapository
   }
-  // EXTRAPOLARITY
+  // EXTRAPOLATORY
   get extrapolatory() {
     if(this.#_extrapolatory === undefined) {
       this.#_extrapolatory = new Extrapolatory(Object.assign({

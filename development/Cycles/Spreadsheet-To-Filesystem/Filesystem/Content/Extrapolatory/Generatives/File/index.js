@@ -11,9 +11,8 @@ export default class File extends EventEmitter {
   }
   get #templates() { return this.#settings.templates }
   #render($collectDoc) {
-    // console.log('render', $collectDoc)
     const templateModel = {
-      content: $collectDoc,
+      content: $collectDoc.content,
       coutils: {
         Functions,
         Parsers,
@@ -42,7 +41,6 @@ export default class File extends EventEmitter {
     return $readFile === $writeFile
   }
   async add($collectDoc) {
-    console.log('add', $collectDoc)
     const file = {}
     var collectDoc = $collectDoc
     if(

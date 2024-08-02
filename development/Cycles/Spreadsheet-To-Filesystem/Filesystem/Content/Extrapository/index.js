@@ -79,6 +79,7 @@ export default class Extrapository extends EventEmitter {
     }
     const collectDocsLength = collectDocs.length
     collectDocsIndex = 0
+    // collectDocsIndex = 0
     reiterateCollectDocs: 
     while(collectDocsIndex < collectDocsLength) {
       const collectDoc = collectDocs[collectDocsIndex]
@@ -95,11 +96,11 @@ export default class Extrapository extends EventEmitter {
       delete updateCollectDoc.fs
       let fileDoc = await FSElement.findOneAndUpdate(
         { 'fs.id': fsID },
-        updateCollectDoc,
+        {
+          content: updateCollectDoc.content
+        },
         { upsert: true, new: true }
       )
-      if(fileDoc === null) {
-      }
       this.emit(
         'saveCollectDoc',
         fileDoc

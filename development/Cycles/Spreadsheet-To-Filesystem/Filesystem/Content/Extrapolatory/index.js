@@ -19,7 +19,9 @@ export default class Extrapolatory extends EventEmitter {
     this.#settings = $settings
   }
   get #root() { return this.#settings.root }
-  get #deleteExtraneous() { return this.#settings.deleteExtraneous }
+  get #deleteExtraneous() {
+    return this.#settings.deleteExtraneous
+  }
   get #differatives() {
     if(this.#_differatives === undefined) {
       this.#_differatives = new Differatives(
@@ -85,29 +87,43 @@ export default class Extrapolatory extends EventEmitter {
     const collectDoc = $collectDoc.toObject({
       lean: true,
       version: false,
-      _id: false
+      _id: false,
     })
-    // console.log('input', collectDoc)
     const { operations, permissions, path } = collectDoc.fs
     if(
       operations.add === true &&
       this.#root.includes(path) === false
     ) {
       await this.#operatives.add(collectDoc)
-      // await this.#generatives.file.add(collectDoc)
+      if(
+        collectDoc.fs.type === 'File' &&
+        collectDoc.content
+      ) {
+        await this.#generatives.file.add(collectDoc)
+      }
     } else
     if(
       operations.update === true &&
       this.#root.includes(path) === true
     ) {
       await this.#operatives.update(collectDoc)
-      // await this.#generatives.file.update(collectDoc)
+      if(
+        collectDoc.fs.type === 'File' &&
+        collectDoc.content
+      ) {
+        await this.#generatives.file.update(collectDoc)
+      }
     } else
     if(
       operations.delete === true &&
       this.#root.includes(path) === true
     ) {
-      // await this.#operatives.file.delete(collectDoc)
+        if(
+          collectDoc.fs.type === 'File' &&
+          collectDoc.content
+        ) {
+        // await this.#operatives.file.delete(collectDoc)
+        }
     }
   }
 }

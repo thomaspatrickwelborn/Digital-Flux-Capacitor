@@ -2,7 +2,7 @@ import FSSchema from './FS/index.js'
 import ContentSchema from './Content/index.js'
 import { ObjectId, Mixed, Schema } from 'mongoose'
 const defaultSchemataOptions = {
-  strict: false,
+  strict: true,
   validateBeforeSave: false,
   minimize: true,
 }

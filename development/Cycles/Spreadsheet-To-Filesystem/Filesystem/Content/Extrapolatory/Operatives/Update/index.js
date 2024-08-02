@@ -6,10 +6,9 @@ export default class Update extends Operative {
     super($settings)
   }
   file($fileDoc) {
-    console.log('$fileDoc', $fileDoc)
+    // console.log('$fileDoc', $fileDoc)
   }
   fold($foldDoc) {
-    console.log('$foldDoc', $foldDoc)
-
+    // console.log('$foldDoc', $foldDoc)
   }
 }
