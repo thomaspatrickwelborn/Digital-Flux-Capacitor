@@ -23,7 +23,10 @@ export default class Extrapolatory extends EventEmitter {
   get #differatives() {
     if(this.#_differatives === undefined) {
       this.#_differatives = new Differatives(
-        this.#settings
+        Object.assign({
+          root: this.#settings.root,
+          database: this.#settings.database,
+        }, this.#settings.differatives)
       )
     }
     return this.#_differatives
@@ -31,7 +34,10 @@ export default class Extrapolatory extends EventEmitter {
   get #operatives() {
     if(this.#_operatives === undefined) {
       this.#_operatives = new Operatives(
-        this.#settings
+        Object.assign({
+          root: this.#settings.root,
+          database: this.#settings.database,
+        }, this.#settings.operatives)
       )
     }
     return this.#_operatives
@@ -39,7 +45,10 @@ export default class Extrapolatory extends EventEmitter {
   get #generatives() {
     if(this.#_generatives === undefined) {
       this.#_generatives = new Generatives(
-        this.#settings
+        Object.assign({
+          root: this.#settings.root,
+          database: this.#settings.database,
+        }, this.#settings.generatives)
       )
     }
     return this.#_generatives
@@ -51,7 +60,6 @@ export default class Extrapolatory extends EventEmitter {
     )
   }
   async saveCollects($collects, $worksheet) {
-    // console.log(this.#settings)
     if(
       this.#deleteExtraneous === true &&
       $worksheet.name.match(new RegExp(/^VINE/))

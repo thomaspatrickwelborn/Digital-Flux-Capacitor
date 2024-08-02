@@ -1,12 +1,10 @@
 import { EventEmitter } from 'node:events'
 import { Schema } from 'mongoose'
-import deepmerge from 'deepmerge'
-import { combineMerge } from '#Coutil/index.js'
 import Supposit from './Supposit/index.js'
 export default class Suppository extends EventEmitter {
   #depository
   #options
-  #databases
+  #database
   #_supposits = new Map()
   #_schemata = new Map()
   #_models = new Map()
@@ -14,7 +12,7 @@ export default class Suppository extends EventEmitter {
     super()
     this.#depository = $depository
     this.#options = $options
-    this.#databases = this.#options.databases
+    this.#database = this.#options.database
     this.supposits = this.#depository
     this.schemata = this.#depository
     this.models = this.#depository
@@ -81,8 +79,8 @@ export default class Suppository extends EventEmitter {
       var { nom, sup, com } = $mod
       var schema = schemata.get(nom)
       if(_models[nom] === undefined) {
-        var model = this.#databases.spreadsheet.models[nom] ||
-        this.#databases.spreadsheet.model(nom, schema)
+        var model = this.#database.models[nom] ||
+        this.#database.model(nom, schema)
         _models.set(nom, model)
       }
       modsIndex++

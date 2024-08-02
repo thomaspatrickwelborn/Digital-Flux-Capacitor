@@ -13,7 +13,7 @@ export default class Worksheet extends EventEmitter {
   set #worksheetTable($worksheetTable) {
     this.#_worksheetTable = $worksheetTable
   }
-  #databases
+  #database
   #_depository
   #_suppository
   #_compository
@@ -27,11 +27,11 @@ export default class Worksheet extends EventEmitter {
       worksheetClassName, 
       worksheetName, 
       worksheetTable, 
-      databases
+      database
     } = this.#settings
     this.name = worksheetName
     this.className = worksheetClassName
-    this.#databases = databases
+    this.#database = database
     this.#worksheetTable = worksheetTable
     this.depository = this.#worksheetTable
     this.suppository = this.depository
@@ -77,7 +77,7 @@ export default class Worksheet extends EventEmitter {
       {
         name: this.name,
         className: this.className,
-        databases: this.#databases
+        database: this.#database
       }
     )
   }
@@ -88,7 +88,7 @@ export default class Worksheet extends EventEmitter {
       {
         name: this.name,
         className: this.className,
-        databases: this.#databases
+        database: this.#database
       }
     )
     this.#_compository.on(

@@ -3,14 +3,13 @@ import { EventEmitter } from 'node:events'
 import { readFile, writeFile, rm } from 'node:fs/promises'
 import *  as Templates from './Templates/index.js'
 import { Functions, Parsers, Operators } from './Coutil/index.js'
-export default class Generatives extends EventEmitter {
+export default class File extends EventEmitter {
   #settings
   constructor($settings) {
     super()
     this.#settings = $settings
   }
-  get root() { return this.#settings.root }
-  get content() { return this.#settings.content }
+  get #templates() { return this.#settings.templates }
   #render($collectDoc) {
     const templateModel = {
       content: $collectDoc,
@@ -25,7 +24,7 @@ export default class Generatives extends EventEmitter {
       $collectDoc.fs.template
     ]
     if(Template) {
-      const TemplateOptions = this.#settings.content[
+      const TemplateOptions = this.#templates[
         $collectDoc.fs.template
       ]
       return Template(templateModel, TemplateOptions)
@@ -34,7 +33,7 @@ export default class Generatives extends EventEmitter {
   }
   #path($collectDoc) {
     return path.join(
-      this.root.path,
+      this.#settings.root.path,
       $collectDoc.fs.path
     )
   }

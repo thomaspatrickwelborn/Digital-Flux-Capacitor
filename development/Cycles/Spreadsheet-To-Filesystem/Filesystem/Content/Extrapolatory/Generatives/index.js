@@ -9,7 +9,12 @@ export default class Generatives extends EventEmitter {
   }
   get file() {
     if(this.#_file === undefined) {
-      this.#_file = new File(this.#settings)
+      this.#_file = new File(
+        Object.assign({
+          root: this.#settings.root,
+          database: this.#settings.database,
+        }, this.#settings.file)
+      )
     }
     return this.#_file
   }

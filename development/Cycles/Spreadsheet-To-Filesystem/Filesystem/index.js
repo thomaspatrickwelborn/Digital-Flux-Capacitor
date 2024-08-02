@@ -1,36 +1,53 @@
 import EventEmitter from 'node:events'
 import path from 'node:path'
 import { writeFile, mkdir, stat } from 'node:fs'
+import mongoose from 'mongoose'
 import Root from './Root/index.js'
 import Content from './Content/index.js'
 
 export default class Filesystem extends EventEmitter {
   #settings
   #_root
+  #_database
   #_content
    constructor($settings = {}) {
     super()
     this.#settings = $settings
+    this.#database
     this.#root
     this.content
   }
-  get #databases() { return this.#settings.databases }
+  get #database() {
+    if(this.#_database === undefined) {
+      const database = this.#settings.database
+      this.#_database = mongoose.createConnection(
+        database.uri, database.options
+      )
+      .once(
+        'connected', 
+        async () => {
+        }
+      )
+    }
+    return this.#_database
+  }
   get #root() {
     if(this.#_root === undefined) {
       this.#_root = new Root(
-        this.#settings.filesystem
+        this.#settings.root
       )
     }
     return this.#_root
   }
   get content() {
     if(this.#_content === undefined) {
-      this.#_content = new Content({
-        root: this.#root,
-        content: this.#settings.filesystem.content,
-        deleteExtraneous: this.#settings.filesystem.deleteExtraneous,
-        databases: this.#databases,
-      })
+      this.#_content = new Content(Object.assign(
+        {
+          root: this.#root,
+          database: this.#database
+        },
+        this.#settings.content
+      ))
     }
     return this.#_content
   }

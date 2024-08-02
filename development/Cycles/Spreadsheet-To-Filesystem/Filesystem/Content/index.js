@@ -12,18 +12,16 @@ export default class Content extends EventEmitter {
     this.extrapository
     this.extrapolatory
   }
-  get #databases() { return this.#settings.databases }
   get #deleteExtraneous() { return this.#settings.deleteExtraneous }
-  get #root() { return this.#settings.root }
-  get #content() { return this.#settings.content }
+  // EXTRAPOSITORY
   get extrapository() {
     if(this.#_extrapository === undefined) {
       const extrapolatoryInputBind = this.extrapolatory.input
       .bind(this.extrapolatory)
-      this.#_extrapository = new Extrapository({
-        root: this.#root,
-        databases: this.#databases,
-      })
+      this.#_extrapository = new Extrapository(Object.assign({
+        root: this.#settings.root,
+        database: this.#settings.database,
+      }, this.#settings.extrapository || {}))
       this.#_extrapository.on(
         'saveCollectDoc', 
         extrapolatoryInputBind
@@ -31,13 +29,13 @@ export default class Content extends EventEmitter {
     }
     return this.#_extrapository
   }
+  // EXTRAPOLARITY
   get extrapolatory() {
     if(this.#_extrapolatory === undefined) {
-      this.#_extrapolatory = new Extrapolatory({
-        root: this.#root,
-        content: this.#content,
-        deleteExtraneous: this.#deleteExtraneous,
-      })
+      this.#_extrapolatory = new Extrapolatory(Object.assign({
+        root: this.#settings.root,
+        database: this.#settings.database,
+      }, this.#settings.extrapolatory))
     }
     return this.#_extrapolatory
   }

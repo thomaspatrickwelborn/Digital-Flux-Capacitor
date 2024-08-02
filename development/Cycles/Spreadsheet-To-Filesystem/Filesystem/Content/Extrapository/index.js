@@ -7,7 +7,7 @@ import {
 
 export default class Extrapository extends EventEmitter {
   #settings
-  get #databases() { return this.#settings.databases }
+  get #database() { return this.#settings.database }
   #_models
   #_collects = new Map()
   #_fsIgnorePropertyKeys
@@ -26,20 +26,20 @@ export default class Extrapository extends EventEmitter {
       ] of Object.entries(Schemata)) {
         let model
         if(
-          this.#databases.filesystem
+          this.#database
           .models[$schemaName] === undefined
         ) {
-          model = this.#databases.filesystem.model(
+          model = this.#database.model(
             $schemaName, 
             $schema
           )
         } else {
-          model = this.#databases.filesystem.models.models
+          model = this.#database.models.models
         }
         this.#_models[$schemaName] = model
       }
     }
-    return this.#databases.filesystem.models
+    return this.#database.models
   }
   async #fsElementContent($collect, $worksheet) {
     const FSElement = this.#models.FSElement

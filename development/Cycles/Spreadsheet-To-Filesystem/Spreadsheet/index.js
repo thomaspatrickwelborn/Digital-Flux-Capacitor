@@ -1,6 +1,7 @@
 import { EventEmitter } from 'node:events'
 import { readFile } from 'node:fs/promises'
 import path from 'path'
+import mongoose from 'mongoose'
 import chokidar from 'chokidar'
 import * as XLSX from 'xlsx'
 import Worksheet from './Worksheet/index.js'
@@ -9,6 +10,7 @@ import { reducers } from './Coutil/index.js'
 export default class Spreadsheet extends EventEmitter {
   #settings
   #_name
+  #_database
   #_workbook
   #_watcher
   #_watch
@@ -16,7 +18,7 @@ export default class Spreadsheet extends EventEmitter {
   constructor($settings) {
     super()
     this.#settings = $settings
-    this.#watcher
+    this.#database
   }
   get name() {
     if(this.#_name === undefined) {
@@ -29,7 +31,22 @@ export default class Spreadsheet extends EventEmitter {
     }
     return this.#_name
   }
-  get #databases() { return this.#settings.databases }
+  get #database() {
+    if(this.#_database === undefined) {
+      const database = this.#settings.database
+      this.#_database = mongoose.createConnection(
+        database.uri, database.options
+      )
+      .once(
+        'connected', 
+        async () => {
+          await this.#_database.dropDatabase()
+          this.#watcher
+        }
+      )
+    }
+    return this.#_database
+  }
   get #watch() { return this.#settings.watch }
   get #watcher() {
     if(
@@ -119,7 +136,7 @@ export default class Spreadsheet extends EventEmitter {
   #createWorksheet($worksheetSettings) {
     const hidden = $worksheetSettings.Hidden
     if(hidden) return
-    const databases = this.#databases
+    const database = this.#database
     const { Workbook, Sheets } = this.workbook
     const worksheetNameData = $worksheetSettings.name.split('_')
     const worksheetClassName = worksheetNameData[0] 
@@ -154,7 +171,7 @@ export default class Spreadsheet extends EventEmitter {
         worksheetClassName,
         worksheetName,
         worksheetTable,
-        databases,
+        database,
       }, worksheetOptions)
       worksheet.on(
         'compository:saveCollects',
