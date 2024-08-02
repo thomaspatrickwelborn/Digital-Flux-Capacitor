@@ -1,4 +1,5 @@
 import Operative from '../Operative/index.js'
+import path from 'node:path'
 import { stat, mkdir, writeFile } from 'node:fs/promises'
 export default class Add extends Operative {
   constructor($settings) {

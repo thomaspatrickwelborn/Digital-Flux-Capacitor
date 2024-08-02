@@ -18,11 +18,12 @@ export default class Operatives extends EventEmitter {
     return this.#addFace
   }
   #addFace($fileDoc) {
+    console.log('#addFace', $fileDoc)
     switch($fileDoc.fs.type) {
-      case 'file':
+      case 'File':
         this.#_add.file($fileDoc)
         break
-      case 'fold':
+      case 'Fold':
         this.#_add.fold($fileDoc)
         break
     }
@@ -37,10 +38,10 @@ export default class Operatives extends EventEmitter {
   }
   #updateFace($fileDoc) {
     switch($fileDoc.fs.type) {
-      case 'file':
+      case 'File':
         this.#_update.file($fileDoc)
         break
-      case 'fold':
+      case 'Fold':
         this.#_update.fold($fileDoc)
         break
     }
@@ -58,10 +59,10 @@ export default class Operatives extends EventEmitter {
       this.#_delete.element($fileDoc) 
     } else {
       switch($fileDoc.fs.type) {
-        case 'file':
+        case 'File':
           this.#_delete.file($fileDoc)
           break
-        case 'fold':
+        case 'Fold':
           this.#_delete.fold($fileDoc)
           break
       }
