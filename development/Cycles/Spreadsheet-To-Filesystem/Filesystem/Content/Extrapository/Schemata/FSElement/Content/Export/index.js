@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose'
 const defaultSchemataOptions = {
-  strict: false,
+  strict: true,
   validateBeforeSave: false,
   _id: false,
   minimize: true,

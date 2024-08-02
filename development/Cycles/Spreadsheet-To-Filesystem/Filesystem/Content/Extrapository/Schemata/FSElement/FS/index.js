@@ -20,7 +20,7 @@ const FSSchema = new Schema({
   type: String,
 }, {
   _id: false,
-  strict: false,
+  strict: true,
   validateBeforeSave: false,
 })
 

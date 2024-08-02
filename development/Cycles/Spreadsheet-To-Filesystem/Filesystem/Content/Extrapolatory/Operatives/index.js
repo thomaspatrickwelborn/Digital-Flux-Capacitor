@@ -18,7 +18,6 @@ export default class Operatives extends EventEmitter {
     return this.#addFace
   }
   #addFace($fileDoc) {
-    console.log('#addFace', $fileDoc)
     switch($fileDoc.fs.type) {
       case 'File':
         this.#_add.file($fileDoc)

@@ -70,6 +70,7 @@ export default class Extrapository extends EventEmitter {
         const comRowLMNRange = lmnRanges.parseRow(comRow)
         if(comRowLMNRange.DEX === 0) {
           collectDoc = await collectDoc.populate(collectDocPopulateOptions)
+          // console.log('#fsElementContent', 'collectDoc', collectDoc)
           collectDocs.push(collectDoc)
         }
         collectDocsIndex++
@@ -83,24 +84,27 @@ export default class Extrapository extends EventEmitter {
     reiterateCollectDocs: 
     while(collectDocsIndex < collectDocsLength) {
       const collectDoc = collectDocs[collectDocsIndex]
-      let updateCollectDoc = Object.entries(collectDoc)
-      .reduce(reducers.fsElementContent, {})
-      updateCollectDoc = Object.entries(
-        collectDoc.toObject({ minimize: true })
+      // console.log('#fsElementContent', 'collectDoc', collectDoc.toObject())
+      // let updateCollectDoc = Object.entries(collectDoc)
+      // .reduce(reducers.fsElementContent, {})
+      let updateCollectDoc = Object.entries(
+        collectDoc.toObject()
       )
       .reduce(
-        reducers.fsElementContent, updateCollectDoc
+        reducers.fsElementContent, {}
       )
+      // console.log('#fsElementContent', 'updateCollectDoc', updateCollectDoc)
       const fsID = collectDoc.fs.id
       const fsPath = collectDoc.fs.path
       delete updateCollectDoc.fs
       let fileDoc = await FSElement.findOneAndUpdate(
         { 'fs.id': fsID },
         {
-          content: updateCollectDoc.content
+          content: updateCollectDoc
         },
         { upsert: true, new: true }
       )
+      // console.log('fileDoc', fileDoc)
       this.emit(
         'saveCollectDoc',
         fileDoc
@@ -144,15 +148,17 @@ export default class Extrapository extends EventEmitter {
       for(const [
         $collectName, $collect
       ] of $collects.entries()) {
-        const collect = await this.#fsElements($collect, $worksheet)
-        collects.set($collectName, collect)
+        console.log('$collect', $collect)
+        // const collect = await this.#fsElements($collect, $worksheet)
+        // collects.set($collectName, collect)
       }
     } else {
       for(const [
         $collectName, $collect
       ] of $collects.entries()) {
-        const collect = await this.#fsElementContent($collect, $worksheet)
-        collects.set($collectName, collect)
+        console.log('$collect', $collect)
+        // const collect = await this.#fsElementContent($collect, $worksheet)
+        // collects.set($collectName, collect)
       }
     }
     return collects
