@@ -1,4 +1,10 @@
 import { Schema } from 'mongoose'
+const defaultSchemaOptions = {
+  _id: false, 
+  strict: false,
+  validateBeforeSave: false,
+  minimize: true,
+}
 const BlockStatementSchema = new Schema({
   lexter: {
     ser: String,
@@ -20,17 +26,13 @@ const BlockStatementSchema = new Schema({
     },
     par: String,
   }
-}, {
-  _id: false, 
-  strict: false,
-  validateBeforeSave: false,
-})
+}, defaultSchemaOptions)
 // Block Element Schema
 const ElementAttributeSchema = new Schema({
   key: String,
   per: String, 
   val: String,
-})
+}, defaultSchemaOptions)
 const BlockElementSchema = new Schema({
   tag: {
     name: String,
@@ -47,22 +49,9 @@ const BlockElementSchema = new Schema({
   texts: [{
     ten: String,
   }],
-}, {
-  _id: false, 
-  strict: false,
-  validateBeforeSave: false,
-})
-const BlockSchema = new Schema({}, {
-  _id: false, 
-  strict: true,
-  validateBeforeSave: false,
-})
+}, defaultSchemaOptions)
+const BlockSchema = new Schema({}, defaultSchemaOptions)
 BlockSchema.add({
-  // coindex: {
-  //   scope: Number,
-  //   block: Number,
-  //   blockLen: Number,
-  // },
   element: BlockElementSchema,
   statement: BlockStatementSchema,
   blocks: [BlockSchema],

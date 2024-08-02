@@ -11,6 +11,7 @@ export default class File extends EventEmitter {
   }
   get #templates() { return this.#settings.templates }
   #render($collectDoc) {
+    // console.log('render', $collectDoc)
     const templateModel = {
       content: $collectDoc,
       coutils: {
@@ -41,6 +42,7 @@ export default class File extends EventEmitter {
     return $readFile === $writeFile
   }
   async add($collectDoc) {
+    console.log('add', $collectDoc)
     const file = {}
     var collectDoc = $collectDoc
     if(
@@ -49,7 +51,6 @@ export default class File extends EventEmitter {
     ) {
       file.path = this.#path(collectDoc)
       file.write = this.#render(collectDoc)
-      file.read = await readFile(file.path)
       file.handle = await writeFile(
         file.path, 
         file.write

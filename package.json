@@ -3,7 +3,7 @@
   "author": "Thomas Patrick Welborn",
   "description": "Early bird gets the wormhole. ",
   "license": "CC-BY-NC-ND-4.0",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "devDependencies": {
     "chokidar": "^3.5.3",
     "deepmerge": "^4.3.1",

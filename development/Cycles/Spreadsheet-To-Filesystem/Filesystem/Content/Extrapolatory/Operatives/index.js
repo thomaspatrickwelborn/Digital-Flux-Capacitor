@@ -9,7 +9,6 @@ export default class Operatives extends EventEmitter {
     super()
     this.#settings = $settings
   }
-  get #root() { return this.#settings.root }
   // ADD
   #_add
   get add() {

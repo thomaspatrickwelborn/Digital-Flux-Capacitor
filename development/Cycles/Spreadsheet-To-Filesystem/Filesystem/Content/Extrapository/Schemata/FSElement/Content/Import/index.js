@@ -3,6 +3,7 @@ const defaultSchemataOptions = {
   strict: false,
   validateBeforeSave: false,
   _id: false,
+  minimize: true,
 }
 const ImportNameSchema = new Schema({
   name: String,

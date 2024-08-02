@@ -32,7 +32,6 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       this.#_spreadsheet.on(
         'worksheet:saveCollects',
         ($collects, $worksheet) => {
-          console.log(this)
           this.#filesystem.content.extrapolatory.saveCollects(
             $collects, $worksheet
           )

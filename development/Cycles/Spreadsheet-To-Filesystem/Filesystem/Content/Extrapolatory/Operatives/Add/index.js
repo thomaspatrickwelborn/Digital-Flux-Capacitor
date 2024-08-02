@@ -15,11 +15,9 @@ export default class Add extends Operative {
       await mkdir(fileDirPath, {
         recursive: true,
       })
-      // this.emit('addFile', $fileDoc)
     } else {
       await writeFile(fileDocPath, '', ($err, $file) => {
         if($err) return
-        // this.emit('addFile', $fileDoc)
       })
     }
     return 
