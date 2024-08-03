@@ -201,6 +201,7 @@ export default class Spreadsheet extends EventEmitter {
       await this.saveWorksheet($worksheet)
     }
     this.emit('save', this)
+    
   }
   async saveWorksheet($worksheet) {
     await $worksheet.saveCompository()

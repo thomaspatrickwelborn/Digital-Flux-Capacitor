@@ -87,18 +87,25 @@ export default class Extrapository extends EventEmitter {
       const preFSID = precollectDoc?.fs?.id
       const fsID = collectDoc.fs.id
       if(fsID !== preFSID) {
-        let reducedCollectDoc = Object.entries(collectDoc.toObject())
+        let reducedCollectDoc = Object.entries(collectDoc.toObject({
+          depopulate: false, 
+          minimize: true
+        }))
         .reduce(reducers.fsElementContent, {})
         let fileDoc = await FSElement.findOneAndUpdate(
           { 'fs.id': fsID },
           reducedCollectDoc,
           { upsert: true, new: true, strict: false }
         )
+        // this.emit(
+        //   'saveCollectDoc',
+        //   fileDoc
+        // )
+        console.log('#fsElementContent', fileDoc)
         fileDocs.push(fileDoc)
       }
       collectDocsIndex++
     }
-    console.log('fileDocs', fileDocs)
     return collectDocs
   }
   async #fsElements($collect, $worksheet) {
@@ -108,22 +115,17 @@ export default class Extrapository extends EventEmitter {
     var collectDocsIndex = 0
     while(collectDocsIndex < collectDocsLength) {
       const collectDoc = $collect[collectDocsIndex]
-      let updateCollectDoc = Object.entries(collectDoc.toObject())
+      let reducedCollectDoc = Object.entries(collectDoc.toObject())
       .reduce(reducers.fsElement, {})
       let fileDoc = await FSElement.findOneAndUpdate(
         { 'fs.id': collectDoc.fs.id },
-        {
-          fs: updateCollectDoc.fs
-        },
+        reducedCollectDoc,
         { upsert: true, new: true }
       )
       fileCollect.push(fileDoc/*.toObject()*/)
-      // this.emit(
-      //   'saveCollectDoc',
-      //   fileDoc
-      // )
       collectDocsIndex++
     }
+    console.log('#fsElement', fileDoc)
     return fileCollect
   }
   async saveCollects($collects, $worksheet) {
@@ -145,7 +147,6 @@ export default class Extrapository extends EventEmitter {
         collects.set($collectName, collect)
       }
     }
-    console.log('collects', collects)
     return collects
   }
 }
