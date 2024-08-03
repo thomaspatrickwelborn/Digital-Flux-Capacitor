@@ -90,12 +90,12 @@ export default class Collect extends EventEmitter {
     var collectDocsIndex = 0
     while(collectDocsIndex < collectDocsLength) {
       const collectDoc = this[collectDocsIndex]
-      await this.#database.models[
+      const savedCollectDoc = await this.#database.models[
         collectDoc.$collection.modelName
       ].findOneAndUpdate({
         _id: collectDoc._id
       }, collectDoc, {
-        new: true,
+        returnDocument: 'after',
         upsert: true,
       })
       collectDocsIndex++

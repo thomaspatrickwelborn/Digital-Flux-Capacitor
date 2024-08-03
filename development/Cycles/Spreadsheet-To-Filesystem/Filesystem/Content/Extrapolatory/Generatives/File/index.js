@@ -11,6 +11,8 @@ export default class File extends EventEmitter {
   }
   get #templates() { return this.#settings.templates }
   #render($collectDoc) {
+    console.log('#render', '$collectDoc', $collectDoc)
+    // return
     const templateModel = {
       content: $collectDoc.content,
       coutils: {

@@ -10,6 +10,9 @@ const fsContentIgnorePropertyKeys = ignorePropertyKeys
 .concat([
   // 
 ])
+const fsContentBlockPropertyKeys = [
+  'element', 'statement', 'blocks'
+]
 
 function fsElementContent(
   $updateCollectDoc, $updateCollectDocProperty
@@ -22,16 +25,25 @@ function fsElementContent(
       $collectDocPropertyKey
     ) === false
   ) {
-    if($collectDocPropertyKey === 'fs') {
-      $updateCollectDoc[
-        $collectDocPropertyKey
-      ] = $collectDocPropertyVal
-    } else
     if($collectDocPropertyKey !== 'fs') {
       $updateCollectDoc.content = $updateCollectDoc.content || {}
-      $updateCollectDoc.content[
-        $collectDocPropertyKey
-      ] = $collectDocPropertyVal
+      if(
+        fsContentBlockPropertyKeys.includes(
+          $collectDocPropertyKey
+        ) === true
+      ) {
+        $updateCollectDoc.content.blocks = $updateCollectDoc.content.blocks || [{}]
+        Object.assign(
+          $updateCollectDoc.content.blocks[0],
+          {
+            [$collectDocPropertyKey]: $collectDocPropertyVal
+          }
+        )
+      } else {
+        $updateCollectDoc.content[
+          $collectDocPropertyKey
+        ] = $collectDocPropertyVal
+      }
     }
   }
   return $updateCollectDoc

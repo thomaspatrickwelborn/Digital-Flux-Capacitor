@@ -14,8 +14,6 @@ export default class Filesystem extends EventEmitter {
     super()
     this.#settings = $settings
     this.#database
-    this.#root
-    this.content
   }
   get #database() {
     if(this.#_database === undefined) {
@@ -26,6 +24,9 @@ export default class Filesystem extends EventEmitter {
       .once(
         'connected', 
         async () => {
+          await this.#_database.dropDatabase()
+          this.#root
+          this.content
         }
       )
     }

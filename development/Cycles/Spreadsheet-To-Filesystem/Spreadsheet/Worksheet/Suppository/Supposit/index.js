@@ -2,9 +2,11 @@ import { EventEmitter } from 'node:events'
 import { fillEmptyCells } from '#Coutil/index.js'
 import assignProps from './assignProps/index.js'
 import assignLMNProps from './assignLMNProps/index.js'
+import assignPORProps from './assignPORProps/index.js'
 const translexes = [
   ["assignProps", assignProps],
   ["assignLMNProps", assignLMNProps],
+  ["assignPORProps", assignPORProps],
 ]
 
 export default class Supposit extends EventEmitter {

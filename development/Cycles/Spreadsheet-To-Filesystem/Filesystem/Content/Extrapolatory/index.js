@@ -91,7 +91,7 @@ export default class Extrapolatory extends EventEmitter {
     })
     const { operations, permissions, path } = collectDoc.fs
     if(
-      operations.add === true &&
+      operations?.add === true &&
       this.#root.includes(path) === false
     ) {
       await this.#operatives.add(collectDoc)
@@ -103,7 +103,7 @@ export default class Extrapolatory extends EventEmitter {
       }
     } else
     if(
-      operations.update === true &&
+      operations?.update === true &&
       this.#root.includes(path) === true
     ) {
       await this.#operatives.update(collectDoc)
@@ -115,14 +115,14 @@ export default class Extrapolatory extends EventEmitter {
       }
     } else
     if(
-      operations.delete === true &&
+      operations?.delete === true &&
       this.#root.includes(path) === true
     ) {
         if(
           collectDoc.fs.type === 'File' &&
           collectDoc.content
         ) {
-        // await this.#operatives.file.delete(collectDoc)
+          // await this.#operatives.file.delete(collectDoc)
         }
     }
   }
