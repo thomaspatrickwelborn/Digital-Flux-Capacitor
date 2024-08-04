@@ -1,3 +1,5 @@
+import { combineMerge } from '#Coutil/index.js'
+console.log('combineMerge', combineMerge)
 import deepmerge from 'deepmerge'
 import Schemata from './Schemata/index.js'
 import { EventEmitter } from 'node:events'
@@ -92,30 +94,25 @@ export default class Extrapository extends EventEmitter {
           { 'fs.id': fsID }
         )
         preFileDoc = preFileDoc?.toObject() || {}
+        preFileDoc = {
+          fs: preFileDoc.fs || {},
+          content: preFileDoc.content || {},
+        }
         let reducedCollectDoc = Object.entries(
-          deepmerge(
-            preFileDoc,
-            collectDoc.toObject({
-              depopulate: false, 
-              minimize: true
-            })
-          )
+          collectDoc.toObject({
+            depopulate: false, 
+            minimize: true
+          })
         )
         .reduce(reducers.fsElementContent, {})
-        console.log(
-          '#fsElementContent', 
-          '\n', '-----',
-          '\n', 'reducedCollectDoc', reducedCollectDoc
+        let fileDoc = await FSElement.findOneAndUpdate(
+          { 'fs.id': fsID },
+          deepmerge(preFileDoc, reducedCollectDoc, {
+            arrayMerge: combineMerge
+          }),
+          { upsert: true, new: true }
         )
-        // let fileDoc = await FSElement.findOneAndUpdate(
-        //   { 'fs.id': fsID },
-        //   reducedCollectDoc,
-        //   { upsert: true, new: true, strict: false }
-        // )
-        // console.log(
-        //   '#fsElementContent', 
-        //   '\n', 'fileDoc', fileDoc
-        // )
+        console.log('fileDoc', fileDoc?.fs?.id, fileDoc)
         // this.emit(
         //   'saveCollectDoc',
         //   fileDoc
@@ -138,27 +135,26 @@ export default class Extrapository extends EventEmitter {
         { 'fs.id': fsID }
       )
       preFileDoc = preFileDoc?.toObject() || {}
+      preFileDoc = {
+        fs: preFileDoc.fs || {},
+        content: preFileDoc.content || {},
+      }
       let reducedCollectDoc = Object.entries(
-        deepmerge(
-          preFileDoc,
-          collectDoc.toObject({
-            depopulate: false, 
-            minimize: true
-          }),
-        )
+        collectDoc.toObject({
+          depopulate: false, 
+          minimize: true
+        })
       )
       .reduce(reducers.fsElement, {})
-      console.log(
-        '#fsElement', 
-        '\n', '-----',
-        '\n', 'reducedCollectDoc', reducedCollectDoc
+      let fileDoc = await FSElement.findOneAndUpdate(
+        { 'fs.id': collectDoc.fs.id },
+        deepmerge(preFileDoc, reducedCollectDoc, {
+          arrayMerge: combineMerge
+        }),
+        { upsert: true, new: true }
       )
-      // let fileDoc = await FSElement.findOneAndUpdate(
-      //   { 'fs.id': collectDoc.fs.id },
-      //   reducedCollectDoc,
-      //   { upsert: true, new: true }
-      // )
-      // fileCollect.push(fileDoc/*.toObject()*/)
+      console.log('fileDoc', fileDoc?.fs?.id, fileDoc)
+      fileCollect.push(fileDoc/*.toObject()*/)
       collectDocsIndex++
     }
     return fileCollect

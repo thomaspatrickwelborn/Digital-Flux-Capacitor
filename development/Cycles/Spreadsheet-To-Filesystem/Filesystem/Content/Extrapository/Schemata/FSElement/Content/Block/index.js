@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose'
 const defaultSchemaOptions = {
   _id: false, 
-  strict: true,
+  strict: false,
   validateBeforeSave: false,
   minimize: true,
 }
@@ -50,11 +50,12 @@ const BlockElementSchema = new Schema({
     ten: String,
   }],
 }, defaultSchemaOptions)
-const BlockSchema = new Schema({}, defaultSchemaOptions)
+const BlockSchema = new Schema(
+  {}, defaultSchemaOptions
+)
 BlockSchema.add({
   element: BlockElementSchema,
   statement: BlockStatementSchema,
   blocks: [BlockSchema],
-
 })
 export default BlockSchema

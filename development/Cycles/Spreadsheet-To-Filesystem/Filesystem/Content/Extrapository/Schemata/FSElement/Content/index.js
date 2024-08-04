@@ -3,15 +3,24 @@ import ImportSchema from './Import/index.js'
 import BlockSchema from './Block/index.js'
 import ExportSchema from './Export/index.js'
 const defaultSchemataOptions = {
-  strict: true,
+  strict: false,
   validateBeforeSave: false,
   minimize: true,
   _id: false,
 }
 const ContentSchema = new Schema({
-  imports: [ImportSchema],
-  blocks: BlockSchema,
-  exports: [ExportSchema],
+  imports: {
+    type: [ImportSchema],
+    required: false,
+  },
+  blocks: {
+    type: BlockSchema,
+    required: false,
+  },
+  exports: {
+    type: [ExportSchema],
+    required: false,
+  },
 }, defaultSchemataOptions)
 
 export default ContentSchema
