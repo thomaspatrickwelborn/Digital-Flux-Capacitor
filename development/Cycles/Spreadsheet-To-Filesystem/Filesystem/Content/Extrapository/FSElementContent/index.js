@@ -1,9 +1,33 @@
+import deepmerge from 'deepmerge'
+import { combineMerge } from '#Coutil/index.js'
+import { populateOptions } from '../Coutil/index.js'
 export default class FSElementContent {
-  constructor() {
-    // 
+  #settings
+  constructor($settings = {}) {
+    this.#settings = $settings
+    console.log(this.#settings)
   }
-  async #fsElementContent($collect, $worksheet) {
-    const FSElement = this.#models.FSElement
+  #reduce(
+    $updateCollectDoc, $updateCollectDocProperty
+  ) {
+    $updateCollectDoc.content = $updateCollectDoc.content || {}
+    $updateCollectDoc.content.blocks = $updateCollectDoc.content.blocks || {}
+    const [
+      $collectDocPropertyKey, $collectDocPropertyVal
+    ] = $updateCollectDocProperty
+    if(
+      $collectDocPropertyKey === 'statement' ||
+      $collectDocPropertyKey === 'element' ||
+      $collectDocPropertyKey === 'blocks'
+    ) {
+      $updateCollectDoc.content.blocks[
+        $collectDocPropertyKey
+      ] = $collectDocPropertyVal
+    }
+    return $updateCollectDoc
+  }
+  async save($collect, $worksheet) {
+    const FSElement = this.#settings.models.FSElement
     const lmnRanges = $worksheet.depository.lmnRanges
     const worksheetMods = Array.from($worksheet.depository.mods.values())
     const worksheetModsLength = worksheetMods.length
@@ -62,7 +86,7 @@ export default class FSElementContent {
             minimize: true
           })
         )
-        .reduce(reducers.fsElementContent, {})
+        .reduce(this.#reduce, {})
         let fileDoc = await FSElement.findOneAndUpdate(
           { 'fs.id': fsID },
           deepmerge(preFileDoc, reducedCollectDoc, {
