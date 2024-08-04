@@ -1,6 +1,7 @@
 import { Schema } from 'mongoose'
 const defaultSchemaOptions = {
   _id: false, 
+  id: false, 
   strict: false,
   validateBeforeSave: false,
   minimize: true,

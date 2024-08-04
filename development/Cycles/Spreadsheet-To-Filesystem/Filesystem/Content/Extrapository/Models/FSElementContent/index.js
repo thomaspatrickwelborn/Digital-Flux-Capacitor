@@ -1,6 +1,6 @@
 import deepmerge from 'deepmerge'
 import { combineMerge } from '#Coutil/index.js'
-import { populateOptions } from '../Coutil/index.js'
+// import { populateOptions } from '../../Coutil/index.js'
 export default class FSElementContent {
   #settings
   constructor($settings = {}) {
@@ -23,6 +23,11 @@ export default class FSElementContent {
       $updateCollectDoc.content.blocks[
         $collectDocPropertyKey
       ] = $collectDocPropertyVal
+    } else
+    if(
+      $collectDocPropertyKey === 'fs'
+    ) {
+      $updateCollectDoc.fs = $collectDocPropertyVal
     }
     return $updateCollectDoc
   }
@@ -51,10 +56,10 @@ export default class FSElementContent {
         const comRow = com[comRowsIndex]
         const comRowLMNRange = lmnRanges.parseRow(comRow)
         if(comRowLMNRange.DEX === 0) {
-          const collectDocPopulateOptions = populateOptions(
-            lmnRanges.WIDTH, collectDoc.fs.populatePaths
-          )
-          collectDoc = await collectDoc.populate(collectDocPopulateOptions)
+          // const collectDocPopulateOptions = populateOptions(
+          //   lmnRanges.WIDTH, collectDoc.fs.populatePaths
+          // )
+          // collectDoc = await collectDoc.populate(collectDocPopulateOptions)
           collectDocs.push(collectDoc)
         }
         collectDocsIndex++
@@ -80,6 +85,12 @@ export default class FSElementContent {
           fs: preFileDoc.fs || {},
           content: preFileDoc.content || {},
         }
+        console.log(
+          '-----', 
+          '\n', collectDoc.fs.id
+        )
+        console.log('collectDoc', collectDoc)
+        console.log('collectDoc.toObject()', collectDoc.toObject())
         let reducedCollectDoc = Object.entries(
           collectDoc.toObject({
             depopulate: false, 
@@ -87,11 +98,16 @@ export default class FSElementContent {
           })
         )
         .reduce(this.#reduce, {})
+        const mergeFileDoc = deepmerge(preFileDoc, reducedCollectDoc, {
+          arrayMerge: combineMerge
+        })
+        // console.log(
+        //   '#FSElementContent', 'mergeFileDoc', 
+        //   '\n', mergeFileDoc
+        // )
         let fileDoc = await FSElement.findOneAndUpdate(
           { 'fs.id': fsID },
-          deepmerge(preFileDoc, reducedCollectDoc, {
-            arrayMerge: combineMerge
-          }),
+          mergeFileDoc,
           { upsert: true, new: true }
         )
         console.log('fileDoc', fileDoc?.fs?.id, fileDoc)

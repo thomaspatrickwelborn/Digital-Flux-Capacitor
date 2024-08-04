@@ -1,6 +1,8 @@
 import Schemata from './Schemata/index.js'
-import FSElement from './FSElement/index.js'
-import FSElementContent from './FSElementContent/index.js'
+import {
+  FSElement,
+  FSElementContent,
+} from './Models/index.js'
 import { EventEmitter } from 'node:events'
 
 export default class Extrapository extends EventEmitter {

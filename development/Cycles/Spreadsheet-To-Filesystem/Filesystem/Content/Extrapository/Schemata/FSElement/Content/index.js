@@ -7,6 +7,7 @@ const defaultSchemataOptions = {
   validateBeforeSave: false,
   minimize: true,
   _id: false,
+  id: false,
 }
 const ContentSchema = new Schema({
   imports: {
