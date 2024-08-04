@@ -95,7 +95,7 @@ export default class Collect extends EventEmitter {
       ].findOneAndUpdate({
         _id: collectDoc._id
       }, collectDoc, {
-        returnDocument: 'after',
+        new: true,
         upsert: true,
       })
       collectDocsIndex++

@@ -10,7 +10,7 @@ const defaultSchemataOptions = {
 }
 const ContentSchema = new Schema({
   imports: [ImportSchema],
-  blocks: [BlockSchema],
+  blocks: BlockSchema,
   exports: [ExportSchema],
 }, defaultSchemataOptions)
 

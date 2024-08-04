@@ -1,3 +1,4 @@
+import deepmerge from 'deepmerge'
 import Schemata from './Schemata/index.js'
 import { EventEmitter } from 'node:events'
 import {
@@ -87,22 +88,39 @@ export default class Extrapository extends EventEmitter {
       const preFSID = precollectDoc?.fs?.id
       const fsID = collectDoc.fs.id
       if(fsID !== preFSID) {
-        let reducedCollectDoc = Object.entries(collectDoc.toObject({
-          depopulate: false, 
-          minimize: true
-        }))
-        .reduce(reducers.fsElementContent, {})
-        let fileDoc = await FSElement.findOneAndUpdate(
-          { 'fs.id': fsID },
-          reducedCollectDoc,
-          { upsert: true, new: true, strict: false }
+        let preFileDoc = await FSElement.findOne(
+          { 'fs.id': fsID }
         )
+        preFileDoc = preFileDoc?.toObject() || {}
+        let reducedCollectDoc = Object.entries(
+          deepmerge(
+            preFileDoc,
+            collectDoc.toObject({
+              depopulate: false, 
+              minimize: true
+            })
+          )
+        )
+        .reduce(reducers.fsElementContent, {})
+        console.log(
+          '#fsElementContent', 
+          '\n', '-----',
+          '\n', 'reducedCollectDoc', reducedCollectDoc
+        )
+        // let fileDoc = await FSElement.findOneAndUpdate(
+        //   { 'fs.id': fsID },
+        //   reducedCollectDoc,
+        //   { upsert: true, new: true, strict: false }
+        // )
+        // console.log(
+        //   '#fsElementContent', 
+        //   '\n', 'fileDoc', fileDoc
+        // )
         // this.emit(
         //   'saveCollectDoc',
         //   fileDoc
         // )
-        console.log('#fsElementContent', fileDoc)
-        fileDocs.push(fileDoc)
+        // fileDocs.push(fileDoc)
       }
       collectDocsIndex++
     }
@@ -115,17 +133,34 @@ export default class Extrapository extends EventEmitter {
     var collectDocsIndex = 0
     while(collectDocsIndex < collectDocsLength) {
       const collectDoc = $collect[collectDocsIndex]
-      let reducedCollectDoc = Object.entries(collectDoc.toObject())
-      .reduce(reducers.fsElement, {})
-      let fileDoc = await FSElement.findOneAndUpdate(
-        { 'fs.id': collectDoc.fs.id },
-        reducedCollectDoc,
-        { upsert: true, new: true }
+      const fsID = collectDoc.fs.id
+      let preFileDoc = await FSElement.findOne(
+        { 'fs.id': fsID }
       )
-      fileCollect.push(fileDoc/*.toObject()*/)
+      preFileDoc = preFileDoc?.toObject() || {}
+      let reducedCollectDoc = Object.entries(
+        deepmerge(
+          preFileDoc,
+          collectDoc.toObject({
+            depopulate: false, 
+            minimize: true
+          }),
+        )
+      )
+      .reduce(reducers.fsElement, {})
+      console.log(
+        '#fsElement', 
+        '\n', '-----',
+        '\n', 'reducedCollectDoc', reducedCollectDoc
+      )
+      // let fileDoc = await FSElement.findOneAndUpdate(
+      //   { 'fs.id': collectDoc.fs.id },
+      //   reducedCollectDoc,
+      //   { upsert: true, new: true }
+      // )
+      // fileCollect.push(fileDoc/*.toObject()*/)
       collectDocsIndex++
     }
-    console.log('#fsElement', fileDoc)
     return fileCollect
   }
   async saveCollects($collects, $worksheet) {

@@ -24,7 +24,7 @@ export default class Content extends EventEmitter {
         'saveCollectDoc', 
         ($collectDoc) => {
           console.log('Content.Extrapository.saveCollectDoc', $collectDoc)
-          this.extrapolatory.input($collectDoc)
+          // this.extrapolatory.input($collectDoc)
         }
       )
     }

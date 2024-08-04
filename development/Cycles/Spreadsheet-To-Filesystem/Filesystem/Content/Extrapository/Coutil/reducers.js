@@ -32,31 +32,21 @@ function fsElementContent(
       $collectDocPropertyKey
     ) === false
   ) {
+    console.log($collectDocPropertyKey, $collectDocPropertyVal)
     $updateCollectDoc.content = $updateCollectDoc.content || {}
     if(
       Keys.FSElementContent.include.includes(
         $collectDocPropertyKey
       ) === true
     ) {
-      $updateCollectDoc.content.blocks = $updateCollectDoc.content.blocks || [{}]
       $updateCollectDoc = deepmerge(
         $updateCollectDoc,
         {
           content: {
-            blocks: {
-              [0]: {
-                [$collectDocPropertyKey]: $collectDocPropertyVal
-              }
-            }
+            [$collectDocPropertyKey]: $collectDocPropertyVal
           }
         }
       )
-    } else {
-      $updateCollectDoc = deepmerge($updateCollectDoc, {
-        content: {
-          [$collectDocPropertyKey]: $collectDocPropertyVal
-        }
-      })
     }
   }
   return $updateCollectDoc
@@ -72,6 +62,7 @@ function fsElement(
       $collectDocPropertyKey
     ) === false
   ) {
+    console.log($collectDocPropertyKey, $collectDocPropertyVal)
     if($collectDocPropertyKey === 'fs') {
       $updateCollectDoc.fs = $updateCollectDoc.fs || {}
       $updateCollectDoc = deepmerge(
