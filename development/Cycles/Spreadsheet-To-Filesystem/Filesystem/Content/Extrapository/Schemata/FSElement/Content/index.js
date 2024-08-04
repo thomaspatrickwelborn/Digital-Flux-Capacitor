@@ -3,7 +3,7 @@ import ImportSchema from './Import/index.js'
 import BlockSchema from './Block/index.js'
 import ExportSchema from './Export/index.js'
 const defaultSchemataOptions = {
-  strict: false,
+  strict: true,
   validateBeforeSave: false,
   minimize: true,
   _id: false,
@@ -15,7 +15,7 @@ const ContentSchema = new Schema({
     required: false,
   },
   blocks: {
-    type: BlockSchema,
+    type: [BlockSchema],
     required: false,
   },
   exports: {

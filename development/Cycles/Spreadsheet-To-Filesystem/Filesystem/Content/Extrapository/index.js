@@ -34,12 +34,12 @@ export default class Extrapository extends EventEmitter {
             $schema
           )
         } else {
-          model = this.#settings.database.models.models
+          model = this.#settings.database.models[$schemaName]
         }
         this.#_models[$schemaName] = model
       }
     }
-    return this.#settings.database.models
+    return this.#_models
   }
   get #fsElement() {
     if(this.#_fsElement === undefined) {
@@ -54,6 +54,15 @@ export default class Extrapository extends EventEmitter {
       this.#_fsElementContent = new FSElementContent({
         models: this.#models
       })
+      this.#_fsElementContent.on(
+        'saveCollectDoc', 
+        ($collectDoc) => {
+          this.emit(
+            'fsElementContent:saveCollectDoc',
+            $collectDoc
+          )
+        }
+      )
     }
     return this.#_fsElementContent
   }

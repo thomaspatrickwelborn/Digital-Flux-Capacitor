@@ -1,11 +1,9 @@
-import deepmerge from 'deepmerge'
-import { combineMerge } from '#Coutil/index.js'
-// import { populateOptions } from '../../Coutil/index.js'
-export default class FSElement {
+import { EventEmitter } from 'node:events'
+export default class FSElement extends EventEmitter {
   #settings
   constructor($settings = {}) {
+    super()
     this.#settings = $settings
-    console.log(this.#settings)
   }
   #reduce(
     $updateCollectDoc, $updateCollectDocProperty
@@ -39,42 +37,19 @@ export default class FSElement {
     var collectDocsIndex = 0
     while(collectDocsIndex < collectDocsLength) {
       const collectDoc = $collect[collectDocsIndex]
-      console.log(
-        '-----', 
-        '\n', collectDoc.fs.id
-      )
-      console.log('collectDoc', collectDoc)
-      console.log('collectDoc.toObject()', collectDoc.toObject())
       const fsID = collectDoc.fs.id
-      let preFileDoc = await FSElement.findOne(
-        { 'fs.id': fsID }
-      )
-      preFileDoc = preFileDoc?.toObject() || {}
-      preFileDoc = {
-        fs: preFileDoc.fs || {},
-        content: preFileDoc.content || {},
-      }
       let reducedCollectDoc = Object.entries(
         collectDoc.toObject({
-          // depopulate: false, 
+          depopulate: false, 
           minimize: true
         })
       )
-      reducedCollectDoc = reducedCollectDoc
       .reduce(this.#reduce, {})
-      const mergeFileDoc = deepmerge(preFileDoc, reducedCollectDoc, {
-        arrayMerge: combineMerge
-      })
-      // console.log(
-      //   '#FSElement', 'mergeFileDoc', 
-      //   '\n', mergeFileDoc
-      // )
       let fileDoc = await FSElement.findOneAndUpdate(
         { 'fs.id': collectDoc.fs.id },
-        mergeFileDoc,
+        reducedCollectDoc,
         { upsert: true, new: true }
       )
-      // console.log('fileDoc', fileDoc?.fs?.id, fileDoc)
       fileCollect.push(fileDoc/*.toObject()*/)
       collectDocsIndex++
     }
