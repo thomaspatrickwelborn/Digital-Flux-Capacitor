@@ -54,6 +54,7 @@ export default class Worksheet extends EventEmitter {
     }
     return this
   }
+  get hidden() { return this.#settings.worksheetHidden }
   get #worksheetTable() { return this.#_worksheetTable }
   set #worksheetTable($worksheetTable) {
     this.#_worksheetTable = $worksheetTable

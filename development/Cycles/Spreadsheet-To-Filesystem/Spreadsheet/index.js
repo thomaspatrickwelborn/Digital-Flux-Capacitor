@@ -147,8 +147,7 @@ export default class Spreadsheet extends EventEmitter {
     return this.worksheets
   }
   #createWorksheet($worksheetSettings) {
-    const hidden = $worksheetSettings.Hidden
-    if(hidden) return
+    if($worksheetSettings.Hidden) return
     const database = this.#database
     const { Workbook, Sheets } = this.workbook
     const worksheetNameData = $worksheetSettings.name.split('_')
@@ -184,6 +183,7 @@ export default class Spreadsheet extends EventEmitter {
         worksheetClassName,
         worksheetName,
         worksheetTable,
+        worksheetHidden,
         database,
       }, worksheetOptions)
       worksheet.on(
@@ -202,9 +202,17 @@ export default class Spreadsheet extends EventEmitter {
     if(worksheetsHasWorksheet === true) {
       worksheet = this.#worksheets
       .get(worksheetName)
-      worksheet.reconstructor({
-        worksheetTable
-      }, worksheetOptions)
+      if(
+        worksheet.hidden === false &&
+        worksheetHidden === true
+      ) {
+        this.#worksheets
+        .delete(worksheetName)
+      } else {
+        worksheet.reconstructor({
+          worksheetTable
+        }, worksheetOptions)
+      }
     }
     return worksheet
   }
