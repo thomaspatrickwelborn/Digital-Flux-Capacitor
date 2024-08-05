@@ -11,59 +11,99 @@ import Mods from './Mods/index.js'
 export default class Depository extends EventEmitter {
   #worksheetTable = {}
   #options = {}
-  #_rows = []
-  #_cols = []
+  #_rows
+  #_cols
   #_hidden
   #_merges
   #_ranges
   #_lmnRanges
   #_data
   #_mods
-  get rows() { return this.#_rows }
-  get cols() { return this.#_cols }
-  get hidden() { return this.#_hidden }
-  get merges() { return this.#_merges }
-  get ranges() { return this.#_ranges }
-  get lmnRanges() { return this.#_lmnRanges }
-  get data() { return this.#_data }
-  get mods() { return this.#_mods }
   constructor($worksheetTable, $options) {
     super()
     this.#worksheetTable = $worksheetTable
     this.#options = $options
-    this.#_rows = new Rows(
-      this.#worksheetTable['!rows']
-    )
-    this.#_cols = new Cols(
-      this.#worksheetTable['!cols']   
-    )
-    this.#_hidden = new Hidden({
-      rows: this.rows,
-      cols: this.cols,
-    })
-    this.#_merges = new Merges({
-      merges: this.#worksheetTable['!merges'],
-      hidden: this.hidden,
-    })
-    this.#_ranges = new Ranges({
-      ranges: this.#worksheetTable['!ranges'],
-      hidden: this.hidden,
-    }, this.#options.ranges)
-    this.#_lmnRanges = new LMNRanges(
-      this.ranges.getRangesByName(
-        new RegExp(/^LMN_/)
-      ), this.#options.ranges
-    )
-    this.#_data = new Data({
-      data: this.#worksheetTable['!data'],
-      ranges: this.ranges,
-      hidden: this.hidden,
-    })
-    this.#_mods = new Mods({
-      data: this.data,
-      ranges: this.ranges,
-      merges: this.merges,
-    })
+    this.rows
+    this.cols
+    this.hidden
+    this.merges
+    this.ranges
+    this.lmnRanges
+    this.data
+    this.mods
+  }
+  get rows() {
+    if(this.#_rows === undefined) {
+      this.#_rows = new Rows(
+        this.#worksheetTable['!rows']
+      )
+    }
+    return this.#_rows
+  }
+  get cols() {
+    if(this.#_cols === undefined) {
+      this.#_cols = new Cols(
+        this.#worksheetTable['!cols']   
+      )
+    }
+    return this.#_cols
+  }
+  get hidden() {
+    if(this.#_hidden === undefined) {
+      this.#_hidden = new Hidden({
+        rows: this.rows,
+        cols: this.cols,
+      })
+    }
+    return this.#_hidden
+  }
+  get merges() {
+    if(this.#_merges === undefined) {
+      this.#_merges = new Merges({
+        merges: this.#worksheetTable['!merges'],
+        hidden: this.hidden,
+      })
+    }
+    return this.#_merges
+  }
+  get ranges() {
+    if(this.#_ranges === undefined) {
+      this.#_ranges = new Ranges({
+        ranges: this.#worksheetTable['!ranges'],
+        hidden: this.hidden,
+      }, this.#options.ranges)
+    }
+    return this.#_ranges
+  }
+  get lmnRanges() {
+    if(this.#_lmnRanges === undefined) {
+      this.#_lmnRanges = new LMNRanges(
+        this.ranges.getRangesByName(
+          new RegExp(/^LMN_/)
+        ), this.#options.ranges
+      )
+    }
+    return this.#_lmnRanges
+  }
+  get data() {
+    if(this.#_data === undefined) {
+      this.#_data = new Data({
+        data: this.#worksheetTable['!data'],
+        ranges: this.ranges,
+        hidden: this.hidden,
+      })
+    }
+    return this.#_data
+  }
+  get mods() {
+    if(this.#_mods === undefined) {
+      this.#_mods = new Mods({
+        data: this.data,
+        ranges: this.ranges,
+        merges: this.merges,
+      })
+    }
+    return this.#_mods
   }
   worksheetTableHasChanged($worksheetTable) {
     return (
