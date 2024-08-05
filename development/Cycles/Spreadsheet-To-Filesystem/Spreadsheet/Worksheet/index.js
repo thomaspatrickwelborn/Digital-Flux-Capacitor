@@ -8,10 +8,6 @@ export default class Worksheet extends EventEmitter {
   name
   className
   #_worksheetTable
-  get #worksheetTable() { return this.#_worksheetTable }
-  set #worksheetTable($worksheetTable) {
-    this.#_worksheetTable = $worksheetTable
-  }
   #database
   #_depository
   #_suppository
@@ -57,6 +53,10 @@ export default class Worksheet extends EventEmitter {
       this.#compositoryCollectsHaveSaved = false
     }
     return this
+  }
+  get #worksheetTable() { return this.#_worksheetTable }
+  set #worksheetTable($worksheetTable) {
+    this.#_worksheetTable = $worksheetTable
   }
   get depository() { return this.#_depository }
   set depository($worksheetTable) {
