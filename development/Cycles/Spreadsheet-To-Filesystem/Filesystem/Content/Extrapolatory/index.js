@@ -87,7 +87,6 @@ export default class Extrapolatory extends EventEmitter {
     const collectDoc = $collectDoc.toObject({
       lean: true,
     })
-    console.log(collectDoc)
     const { operations, permissions, path } = collectDoc.fs
     if(
       operations?.add === true &&
