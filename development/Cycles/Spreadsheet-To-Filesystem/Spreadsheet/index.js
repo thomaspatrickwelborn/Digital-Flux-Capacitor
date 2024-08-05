@@ -68,7 +68,7 @@ export default class Spreadsheet extends EventEmitter {
   get workbook() { return this.#_workbook }
   set workbook($workbook) { this.#_workbook = $workbook }
   get #worksheetsSettings() {
-    return this.workbook.Workbook.Sheets
+    return this.workbook?.Workbook?.Sheets
   }
   get fsElementWorksheetsSettings() {
     return reducers.valuesByPropertyKeyMatch(
@@ -95,8 +95,21 @@ export default class Spreadsheet extends EventEmitter {
       )
     )
   }
+  #worksheetsSettingsChanged($worksheetsSettings) {
+    return JSON.stringify(
+      $worksheetsSettings
+    ) !== JSON.stringify(
+      this.#worksheetsSettings
+    )
+  }
   async #watcherChange() {
-    await this.read()
+    const workbook = await this.read()
+    if(
+      this.#worksheetsSettingsChanged(
+        workbook.Workbook.Sheets
+      ) === false
+    ) return
+    this.#_workbook = workbook
     this.#createWorksheets()
     await this.saveWorksheets(
       this.fsElementWorksheets
@@ -106,7 +119,7 @@ export default class Spreadsheet extends EventEmitter {
     )
   }
   async read() {
-    this.workbook = await readFile(
+    return readFile(
       this.#settings.path
     )
     .then(($buffer) => XLSX.read($buffer, {
@@ -119,7 +132,7 @@ export default class Spreadsheet extends EventEmitter {
       cellDates: false,
       cellStyles: true, 
     }))
-    return this
+    // return this
   }
   #createWorksheets(worksheetsSettings) {
     worksheetsSettings = worksheetsSettings || this.#worksheetsSettings

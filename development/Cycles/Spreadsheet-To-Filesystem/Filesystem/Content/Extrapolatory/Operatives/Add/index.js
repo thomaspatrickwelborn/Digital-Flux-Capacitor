@@ -10,7 +10,6 @@ export default class Add extends Operative {
       this.root.path,
       $fileDoc.fs.path,
     )
-    console.log($fileDoc)
     // const fileDirPath = path.dirname(fileDocPath)
     // const fileDirStat = await stat(fileDirPath)
     // if(fileDirStat.isDirectory() === false) {

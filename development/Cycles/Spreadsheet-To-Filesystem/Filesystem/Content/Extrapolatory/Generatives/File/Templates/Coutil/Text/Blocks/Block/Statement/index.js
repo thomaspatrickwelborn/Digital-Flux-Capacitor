@@ -42,7 +42,6 @@ export default function Statement($data, $options = {}) {
       '', // '(➎➎)', 
       '', // '(➄➄)'
     )
-    console.log('ten', ten)
     // ------
     // BLOCKS
     // ------
