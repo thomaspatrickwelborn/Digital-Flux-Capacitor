@@ -55,10 +55,10 @@ export default class Extrapository extends EventEmitter {
         models: this.#models
       })
       this.#_fsElementContent.on(
-        'saveCollectDoc', 
+        'saveFileDoc', 
         ($collectDoc) => {
           this.emit(
-            'fsElementContent:saveCollectDoc',
+            'fsElementContent:saveFileDoc',
             $collectDoc
           )
         }

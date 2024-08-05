@@ -21,10 +21,9 @@ export default class Content extends EventEmitter {
         database: this.#settings.database,
       }, this.#settings.extrapository || {}))
       this.#_extrapository.on(
-        'fsElementContent:saveCollectDoc', 
-        ($collectDoc) => {
-          console.log('Content.Extrapository.saveCollectDoc', $collectDoc)
-          // this.extrapolatory.input($collectDoc)
+        'fsElementContent:saveFileDoc', 
+        ($fileDoc) => {
+          this.extrapolatory.input($fileDoc)
         }
       )
     }

@@ -1,3 +1,4 @@
+import deepmerge from 'deepmerge'
 import { EventEmitter } from 'node:events'
 import { populateOptions } from '../../Coutil/index.js'
 export default class FSElementContent extends EventEmitter {
@@ -6,62 +7,12 @@ export default class FSElementContent extends EventEmitter {
     super()
     this.#settings = $settings
   }
-  #reduceProperties(
-    $updateCollectDoc, $updateCollectDocProperty
-  ) {
-    const [
-      $collectDocPropertyKey, $collectDocPropertyVal
-    ] = $updateCollectDocProperty
-    if(
-      $collectDocPropertyKey === 'statement' ||
-      $collectDocPropertyKey === 'element' ||
-      $collectDocPropertyKey === 'blocks'
-    ) {
-      $updateCollectDoc[
-        $collectDocPropertyKey
-      ] = $collectDocPropertyVal
-    }
-    return $updateCollectDoc
-  }
-  async #saveCollectDocs($collectDocs) {
-    const FSElement = this.#settings.models.FSElement
-    const collectDocsLength = $collectDocs.length
-    var collectDocsIndex = 0
-    const fileDocs = []
-    reiterateCollectDocs: 
-    while(collectDocsIndex < collectDocsLength) {
-      const precollectDoc = $collectDocs[collectDocsIndex - 1]
-      const collectDoc = $collectDocs[collectDocsIndex]
-      const preFSID = precollectDoc?.fs?.id
-      const fsID = collectDoc.fs.id
-      let reducedCollectDoc = Object.entries(
-        collectDoc.toObject({
-          depopulate: false, 
-          minimize: true
-        })
-      )
-      .reduce(this.#reduceProperties, {})
-      let fileDoc = await FSElement.findOneAndUpdate(
-        { 'fs.id': fsID },
-        {
-          content: reducedCollectDoc
-        },
-        {
-          upsert: true,
-          new: true,
-        }
-      )
-      this.emit(
-        'saveCollectDoc',
-        fileDoc
-      )
-      fileDocs.push(fileDoc)
-      collectDocsIndex++
-    }
+  async save($collect, $worksheet) {
+    const collectDocs = await this.#saveWorksheetMods($collect, $worksheet)
+    const fileDocs = await this.#saveCollectDocs(collectDocs)
     return fileDocs
   }
   async #saveWorksheetMods($collect, $worksheet) {
-    const FSElement = this.#settings.models.FSElement
     const lmnRanges = $worksheet.depository.lmnRanges
     const worksheetMods = Array.from($worksheet.depository.mods.values())
     const worksheetModsLength = worksheetMods.length
@@ -97,9 +48,79 @@ export default class FSElementContent extends EventEmitter {
     }
     return collectDocs
   }
-  async save($collect, $worksheet) {
-    const collectDocs = await this.#saveWorksheetMods($collect, $worksheet)
-    const fileDocs = await this.#saveCollectDocs(collectDocs)
+  async #saveCollectDocs($collectDocs) {
+    const FSElement = this.#settings.models.FSElement
+    const fileDocs = []
+    let fileDoc
+    const collectDocsLength = $collectDocs.length
+    let collectDocsIndex = 0
+    while(collectDocsIndex < collectDocsLength) {
+      const precollectDoc = $collectDocs[collectDocsIndex - 1]
+      const collectDoc = $collectDocs[collectDocsIndex]
+      if(precollectDoc?.fs?.id !== collectDoc.fs.id) {
+        fileDoc = {
+          fs: {
+            id: collectDoc.fs.id
+          },
+          content: {
+            blocks: []
+          }
+        }
+        fileDocs.push(fileDoc)
+      }
+      const fileDocContentBlock = Object.entries(collectDoc.toObject({
+        depopulate: false,
+      }))
+      .reduce(this.#reduceProperties, {})
+      fileDoc.content.blocks.push(fileDocContentBlock)
+      collectDocsIndex++
+    }
+    let fileDocsIndex = 0
+    const fileDocsLength = fileDocs.length
+    while(fileDocsIndex < fileDocsLength) {
+      const updateFileDoc = fileDocs[fileDocsIndex]
+      let prefileDoc = await FSElement.findOne(
+        { 'fs.id': updateFileDoc.fs.id },
+      )
+      prefileDoc = prefileDoc.toObject({
+        lean: true,
+        transform: ($document, $return, $options) => {
+          delete $return._id
+          delete $return.id
+          delete $return.__v
+          return $return
+        }
+      })
+      const fileDocMerge = deepmerge(prefileDoc, updateFileDoc)
+      const fileDoc = await FSElement.findOneAndUpdate(
+        { 'fs.id': fileDocMerge.fs.id },
+        fileDocMerge,
+        { upsert: true, new: true }
+      )
+      this.emit(
+        'saveFileDoc',
+        fileDoc
+      )
+      fileDocs[fileDocsIndex] = fileDoc
+      fileDocsIndex++
+    }
     return fileDocs
+  }
+  #reduceProperties(
+    $collectDoc, $collectDocProperty
+  ) {
+    const [
+      $collectDocPropertyKey, $collectDocPropertyVal
+    ] = $collectDocProperty
+    if(
+      $collectDocPropertyKey === 'statement' ||
+      $collectDocPropertyKey === 'element' ||
+      $collectDocPropertyKey === 'blocks'
+    ) {
+      $collectDoc[
+        $collectDocPropertyKey
+      ] = $collectDocPropertyVal
+    }
+    return $collectDoc
   }
 }
