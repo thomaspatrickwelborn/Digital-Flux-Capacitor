@@ -10,17 +10,18 @@ export default class Add extends Operative {
       this.root.path,
       $fileDoc.fs.path,
     )
-    const fileDirPath = path.dirname(fileDocPath)
-    const fileDirStat = await stat(fileDirPath)
-    if(fileDirStat.isDirectory() === false) {
-      await mkdir(fileDirPath, {
-        recursive: true,
-      })
-    } else {
+    console.log($fileDoc)
+    // const fileDirPath = path.dirname(fileDocPath)
+    // const fileDirStat = await stat(fileDirPath)
+    // if(fileDirStat.isDirectory() === false) {
+    //   await mkdir(fileDirPath, {
+    //     recursive: true,
+    //   })
+    // } else {
       await writeFile(fileDocPath, '', ($err, $file) => {
         if($err) return
       })
-    }
+    // }
     return 
   }
   async fold($foldDoc) {

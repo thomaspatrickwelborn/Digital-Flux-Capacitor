@@ -1,21 +1,18 @@
 import { EventEmitter } from 'node:events'
 import * as Cycles from '#Cycles/index.js'
 class Capacitor extends EventEmitter {
-  #_settings = {}
+  #settings = {}
   #_name
   #_path
-  #_cycles = new Map()
+  #_cycles
   constructor($settings = {}) {
     super()
     this.#settings = $settings
-    this.Cycles = Cycles
+    this.#cycles
   }
-  get #settings() { return this.#_settings }
-  set #settings($settings) { this.#_settings = $settings }
-  get #name() { return this.#settings.name }
-  get #path() { return this.settings.path }
-  get cycles() {
+  get #cycles() {
     if(this.#_cycles === undefined) {
+      this.#_cycles = new Map()
       iterateCycles: 
       for(const $cycleSettings of this.#settings.cycles) {
         const { name, classname } = $cycleSettings
@@ -24,9 +21,7 @@ class Capacitor extends EventEmitter {
         this.#_cycles.set(name, cycle)
       }
     }
-  }
-  set cycles($cycles) {
-    return this
+    return this.#_cycles
   }
 }
 
