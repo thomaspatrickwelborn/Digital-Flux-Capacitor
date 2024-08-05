@@ -120,7 +120,7 @@ export default class Extrapolatory extends EventEmitter {
           collectDoc.fs.type === 'File' &&
           collectDoc.content
         ) {
-          // await this.#operatives.file.delete(collectDoc)
+          await this.#operatives.file.delete(collectDoc)
         }
     }
   }

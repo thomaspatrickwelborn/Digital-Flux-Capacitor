@@ -5,10 +5,9 @@ export default class Delete extends Operative {
   constructor($settings) {
     super($settings)
   }
-  get #root() { return this.settings.root }
   async element($fileDoc) {
     const rmFileDocPath = path.join(
-      this.#root.path,
+      this.root.path,
       $fileDoc
     )
     const rmFileDoc = await rm(rmFileDocPath, {
@@ -19,7 +18,7 @@ export default class Delete extends Operative {
   }
   async file($fileDoc) {
     const rmFileDocPath = path.join(
-      this.#root.path,
+      this.root.path,
       $fileDoc.fs.path
     )
     const rmFileDoc = await rm(
@@ -33,7 +32,7 @@ export default class Delete extends Operative {
   }
   async fold($foldDoc) {
     const rmFoldDocPath = path.join(
-      this.#root.path,
+      this.root.path,
       $foldDoc.fs.path,
     )
     const rmFoldDoc = await rm(rmFoldDocPath, {
