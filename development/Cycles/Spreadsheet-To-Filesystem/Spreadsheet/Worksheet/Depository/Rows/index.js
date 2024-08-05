@@ -1,6 +1,4 @@
 import { EventEmitter } from 'node:events'
-import { typeOf, tem } from '#Coutil/index.js'
-const { Row } = tem
 export default class Rows extends EventEmitter {
   length = 0
   #settings = []

@@ -1,7 +1,4 @@
 import { EventEmitter } from 'node:events'
-import {
-  typeOf, parseCell, tem
-} from '#Coutil/index.js'
 import Cols from './Cols/index.js'
 import Rows from './Rows/index.js'
 import Hidden from './Hidden/index.js'

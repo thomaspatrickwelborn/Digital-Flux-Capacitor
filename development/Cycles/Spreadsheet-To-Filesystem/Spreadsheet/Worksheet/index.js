@@ -2,7 +2,6 @@ import { EventEmitter } from 'node:events'
 import Depository from './Depository/index.js'
 import Suppository from './Suppository/index.js'
 import Compository from './Compository/index.js'
-import { LMNProps } from '#Coutil/defaults/index.js'
 export default class Worksheet extends EventEmitter {
   #settings
   #options

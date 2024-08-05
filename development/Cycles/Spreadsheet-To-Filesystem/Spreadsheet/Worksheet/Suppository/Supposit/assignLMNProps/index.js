@@ -1,6 +1,5 @@
 import { ObjectId } from 'mongoose'
 import { typeOf } from '#Coutil/index.js'
-import { LMNProps } from '#Coutil/defaults/index.js'
 
 function assignLMNProps($supposit, $settings) {
   // $supposit.coindex = {

@@ -1,5 +1,4 @@
 import path from 'node:path'
-import { typeOf, isNamedRange } from '#Coutil/index.js'
 import transformCollectDocPort from './transformCollectDocPort.js'
 const portalPropKeys = ['flow', 'name', 'default']
 function assignPORProps($collect) {

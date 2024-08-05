@@ -1,4 +1,4 @@
-import { typeOf, isNamedRange } from '#Coutil/index.js'
+import { typeOf } from '#Coutil/index.js'
 
 function assignProps($prop, $settings) {
   var { supRows, comRow, merges } = $settings

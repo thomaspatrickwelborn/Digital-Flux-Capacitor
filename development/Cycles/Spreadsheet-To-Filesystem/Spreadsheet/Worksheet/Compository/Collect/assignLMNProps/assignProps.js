@@ -1,5 +1,4 @@
 import { typeOf } from '#Coutil/index.js'
-import { LMNProps } from '#Coutil/defaults/index.js'
 
 async function assignProps($collect, $settings) {
   var { mods, lmnRanges, composits } = $settings

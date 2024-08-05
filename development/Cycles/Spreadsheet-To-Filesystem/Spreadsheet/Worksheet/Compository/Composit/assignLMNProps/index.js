@@ -1,6 +1,3 @@
-import { typeOf, defaults } from '#Coutil/index.js'
-const { LMNProps } = defaults
-
 function assignLMNProps(apposit, $settings) {
   var {
     comRow, modIndex, mods, ranges, sup, lmnRanges
