@@ -9,8 +9,9 @@ import LMNRanges from './LMNRanges/index.js'
 import Mods from './Mods/index.js'
 
 export default class Depository extends EventEmitter {
-  #worksheetTable = {}
-  #options = {}
+  #worksheetTableClone
+  #worksheetTable
+  #options
   #_rows
   #_cols
   #_hidden
@@ -21,6 +22,7 @@ export default class Depository extends EventEmitter {
   #_mods
   constructor($worksheetTable, $options) {
     super()
+    this.#worksheetTableClone = structuredClone($worksheetTable)
     this.#worksheetTable = $worksheetTable
     this.#options = $options
     this.rows
@@ -119,7 +121,7 @@ export default class Depository extends EventEmitter {
       JSON.stringify(
         $worksheetTable['!ranges']
       ) !== JSON.stringify(
-        this.#worksheetTable['!ranges']
+        this.#worksheetTableClone['!ranges']
       )
     )
   }
@@ -128,7 +130,7 @@ export default class Depository extends EventEmitter {
       JSON.stringify(
         $worksheetTable['!rows']
       ) !== JSON.stringify(
-        this.#worksheetTable['!rows']
+        this.#worksheetTableClone['!rows']
       )
     )
   }
@@ -137,33 +139,26 @@ export default class Depository extends EventEmitter {
       JSON.stringify(
         $worksheetTable['!cols']
       ) !== JSON.stringify(
-        this.#worksheetTable['!cols']   
+        this.#worksheetTableClone['!cols']   
       )
     )
   }
-  #mergesChanged($worksheetTable) {
-    return (
-      JSON.stringify(
-        $worksheetTable['!merges']
-      ) !== JSON.stringify(
-        this.#worksheetTable['!merges']
-      )
-    )
-  }
+  // #mergesChanged($worksheetTable) {
+  //   return (
+  //     JSON.stringify(
+  //       $worksheetTable['!merges']
+  //     ) !== JSON.stringify(
+  //       this.#worksheetTableClone['!merges']
+  //     )
+  //   )
+  // }
   worksheetTableHasChanged($worksheetTable) {
-    console.log((
-      JSON.stringify(
-        $worksheetTable['!ranges']
-      ) !== JSON.stringify(
-        this.#worksheetTable['!ranges']
-      )
-    ))
     return (
-      this.#dataChanged($worksheetTable)
-      // this.#rangesChanged($worksheetTable) ||
-      // this.#rowsChanged($worksheetTable) ||
-      // this.#colsChanged($worksheetTable) ||
-      // this.#mergesChanged($worksheetTable) ||
+      this.#dataChanged($worksheetTable) ||
+      this.#rangesChanged($worksheetTable) ||
+      this.#rowsChanged($worksheetTable) ||
+      this.#colsChanged($worksheetTable) /* ||
+      this.#mergesChanged($worksheetTable) */
     )
   }
 }

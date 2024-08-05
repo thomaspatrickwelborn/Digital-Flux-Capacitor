@@ -18,9 +18,9 @@ export default class Suppository extends EventEmitter {
     this.models = this.#depository
   }
   get supposits() { return this.#_supposits }
-  set supposits($supposits) {
+  set supposits($depository) {
     const _supposits = this.#_supposits
-    var { mods, ranges, lmnRanges } = $supposits
+    var { mods, ranges, lmnRanges } = $depository
     mods = Array.from(mods.entries())
     const modsLength = mods.length
     var modsIndex = 0
@@ -41,8 +41,8 @@ export default class Suppository extends EventEmitter {
     }
   }
   get schemata() { return this.#_schemata }
-  set schemata($schemata) {
-    let { mods, ranges } = $schemata
+  set schemata($depository) {
+    let { mods, ranges } = $depository
     mods = Array.from(mods.entries())
     const supposits = this.supposits
     const modsLength = mods.length
