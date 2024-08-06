@@ -1,7 +1,6 @@
 import EventEmitter from 'node:events'
 import { mkdir, stat } from 'node:fs'
 import path from 'node:path'
-import { globSync } from 'glob'
 import chokidar from 'chokidar'
 
 export default class Root extends EventEmitter {
@@ -13,38 +12,14 @@ export default class Root extends EventEmitter {
     super()
     this.#settings = $settings
     this.stat
-    this.glob
     this.watch
-  }
-  get path() { return this.#settings.path }
-  get glob() {
-    const glob = globSync(
-      path.join(this.path, '**/*'),
-      {
-        dot: true,
-        ignore: [
-          path.join(this.path, 'node_modules/**'),
-          path.join(this.path, '.git/**')
-        ]
-      }
-    )
-    let globElementIndex = 0
-    while(globElementIndex < glob.length) {
-      const globPath = glob[globElementIndex].replace(
-        new RegExp(`^${this.path}/`),
-        ''
-      )
-      Array.prototype.push.call(this, globPath)
-      globElementIndex++
-    }
-    return this
   }
   get stat() {
     this.#_stat = stat(
-      this.path,
+      this.#settings.path,
       ($err, $stat) => {
         if($err) {
-          mkdir(this.path, {
+          mkdir(this.#settings.path, {
             recursive: true,
           }, ($err) => {
             this.stat
@@ -58,16 +33,22 @@ export default class Root extends EventEmitter {
   }
   get watch() {
     if(this.#_watch === undefined) {
-      this.#_watch = chokidar.watch(this.path, {
+      this.#_watch = chokidar.watch(this.#settings.path, {
         ignore: [
-          path.join(this.path, 'node_modules/**'),
-          path.join(this.path, '.git/**')
+          path.join(this.#settings.path, 'node_modules/**'),
+          path.join(this.#settings.path, '.git/**')
         ]
       })
       this.#_watch.on(
         'add',
         ($path) => {
-          Array.prototype.unshift.call(this, $path)
+          if($path === this.#settings.path) return
+          $path = $path.replace(
+            new RegExp(`^${this.#settings.path}/`), ''
+          )
+          if(Array.prototype.includes(this, $path) === false) {
+            Array.prototype.unshift.call(this, $path)
+          }
         },
       )
       this.#_watch.on(
@@ -85,7 +66,13 @@ export default class Root extends EventEmitter {
       this.#_watch.on(
         'addDir', 
         ($path) => {
-          Array.prototype.unshift.call(this, $path)
+          if($path === this.#settings.path) return
+          $path = $path.replace(
+            new RegExp(`^${this.#settings.path}/`), ''
+          )
+          if(Array.prototype.includes(this, $path) === false) {
+            Array.prototype.unshift.call(this, $path)
+          }
         },
       )
       this.#_watch.on(

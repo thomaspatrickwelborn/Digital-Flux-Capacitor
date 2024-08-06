@@ -7,18 +7,23 @@ export default class Delete extends Operative {
   }
   async element($fileDoc) {
     const rmFileDocPath = path.join(
-      this.root.path,
+      this.settings.root.path,
       $fileDoc
     )
-    const rmFileDoc = await rm(rmFileDocPath, {
-      recursion: true,
-      force: true,
-    })
-    return rmFileDoc
+    if(
+      rmFileDocPath !== this.settings.root.path
+    ) {
+      const rmFileDoc = await rm(rmFileDocPath, {
+        recursion: true,
+        force: true,
+      })
+      return rmFileDoc
+    }
+    return
   }
   async file($fileDoc) {
     const rmFileDocPath = path.join(
-      this.root.path,
+      this.settings.root.path,
       $fileDoc.fs.path
     )
     const rmFileDoc = await rm(
@@ -32,7 +37,7 @@ export default class Delete extends Operative {
   }
   async fold($foldDoc) {
     const rmFoldDocPath = path.join(
-      this.root.path,
+      this.settings.root.path,
       $foldDoc.fs.path,
     )
     const rmFoldDoc = await rm(rmFoldDocPath, {

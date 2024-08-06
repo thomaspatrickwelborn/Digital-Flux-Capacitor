@@ -58,7 +58,17 @@ export default class Extrapolatory extends EventEmitter {
   #mapCollectDocsToCollectDocPaths($collect) {
     return Array.from($collect)
     .map(
-      ($collectDoc) => $collectDoc.fs.path
+      ($collectDoc) => {
+        const typeofCollectDoc = typeof $collectDoc
+        if(typeofCollectDoc === 'string') {
+          return $collectDoc
+        } else
+        if(
+          typeofCollectDoc === 'object'
+        ) {
+          return $collectDoc.fs.path
+        }
+      }
     )
   }
   async saveCollects($collects, $worksheet) {
@@ -69,9 +79,12 @@ export default class Extrapolatory extends EventEmitter {
       for(const [
         $collectName, $collect
       ] of $collects.entries()) {
+        const rootCollectPaths = this.#mapCollectDocsToCollectDocPaths(
+          Array.from(this.#root)
+        )
         const collectPaths = this.#mapCollectDocsToCollectDocPaths($collect)
         const deleteDifferative = this.#differatives.delete(
-          Array.from(this.#root), 
+          rootCollectPaths,
           collectPaths
         )
         iterateDeleteDifferative:
@@ -88,6 +101,7 @@ export default class Extrapolatory extends EventEmitter {
       lean: true,
     })
     const { operations, permissions, path } = collectDoc.fs
+    // ADD
     if(
       operations?.add === true &&
       this.#root.includes(path) === false
@@ -100,6 +114,7 @@ export default class Extrapolatory extends EventEmitter {
         await this.#generatives.file.add(collectDoc)
       }
     } else
+    // UPDATE
     if(
       operations?.update === true &&
       this.#root.includes(path) === true
@@ -112,6 +127,7 @@ export default class Extrapolatory extends EventEmitter {
         await this.#generatives.file.update(collectDoc)
       }
     } else
+    // DELETE
     if(
       operations?.delete === true &&
       this.#root.includes(path) === true

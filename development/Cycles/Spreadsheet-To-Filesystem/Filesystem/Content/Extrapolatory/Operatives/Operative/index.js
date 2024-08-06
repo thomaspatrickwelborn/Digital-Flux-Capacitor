@@ -1,9 +1,8 @@
 import { EventEmitter } from 'node:events'
 export default class Operative extends EventEmitter {
-  #settings
+  settings
   constructor($settings) {
     super()
-    this.#settings = $settings
+    this.settings = $settings
   }
-  get root() { return this.#settings.root }
 }

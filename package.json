@@ -3,11 +3,10 @@
   "author": "Thomas Patrick Welborn",
   "description": "Early bird gets the wormhole. ",
   "license": "CC-BY-NC-ND-4.0",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "devDependencies": {
     "chokidar": "^3.5.3",
     "deepmerge": "^4.3.1",
-    "glob": "^10.3.10",
     "mongoose": "^8.0.3",
     "xlsx": "https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz",
     "yargs": "^17.7.2"
@@ -18,7 +17,6 @@
   "bin": {
     "dfc": "./bin/index.js"
   },
-
   "imports": {
     "#Core/*": "./development/Core/*",
     "#Cycles/*": "./development/Cycles/*",

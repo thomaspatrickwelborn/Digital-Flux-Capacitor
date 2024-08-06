@@ -132,7 +132,6 @@ export default class Spreadsheet extends EventEmitter {
       cellDates: false,
       cellStyles: true, 
     }))
-    // return this
   }
   #createWorksheets(worksheetsSettings) {
     worksheetsSettings = worksheetsSettings || this.#worksheetsSettings
