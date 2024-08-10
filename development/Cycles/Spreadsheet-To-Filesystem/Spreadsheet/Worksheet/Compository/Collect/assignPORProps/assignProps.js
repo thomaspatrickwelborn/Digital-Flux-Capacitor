@@ -74,7 +74,8 @@ function assignPORProps($collect) {
         }
         // Collect Doc Import Anterduct Flow
         var anterductCollectDocsIndex = collectDocsIndex + 1
-        iterateAnterductCollectDocs: while(anterductCollectDocsIndex < $collect.length) {
+        iterateAnterductCollectDocs:
+        while(anterductCollectDocsIndex < $collect.length) {
           // Anterduct Collect Doc
           const anterductCollectDoc = $collect[anterductCollectDocsIndex]
           const anterductCollectDocPortal = anterductCollectDoc.portal[collectDocPortalsIndex]

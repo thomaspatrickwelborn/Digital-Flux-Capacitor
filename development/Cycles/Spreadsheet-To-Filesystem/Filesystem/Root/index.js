@@ -14,6 +14,7 @@ export default class Root extends EventEmitter {
     this.stat
     this.watch
   }
+  get path() { return this.#settings.path }
   get stat() {
     this.#_stat = stat(
       this.#settings.path,

@@ -6,7 +6,7 @@ import chokidar from 'chokidar'
 import * as XLSX from 'xlsx'
 import Worksheet from './Worksheet/index.js'
 import { reducers } from './Coutil/index.js'
-
+import { Timer } from '#Coutil/index.js'
 export default class Spreadsheet extends EventEmitter {
   #settings
   #_name
@@ -104,17 +104,12 @@ export default class Spreadsheet extends EventEmitter {
   }
   async #watcherChange() {
     const workbook = await this.read()
-    if(
-      this.#worksheetsSettingsChanged(
-        workbook.Workbook.Sheets
-      ) === false
-    ) return
     this.#_workbook = workbook
     this.#createWorksheets()
-    await this.saveWorksheets(
+    await this.saveWorksheetsSync(
       this.fsElementWorksheets
     )
-    await this.saveWorksheets(
+    this.saveWorksheets(
       this.fsElementContentWorksheets
     )
   }
@@ -215,15 +210,28 @@ export default class Spreadsheet extends EventEmitter {
     }
     return worksheet
   }
-  async saveWorksheets($worksheets) {
+  // Save Worksheets/Worksheet Sync
+  async saveWorksheetsSync($worksheets) {
     $worksheets = $worksheets || this.worksheets
     for(const $worksheet of $worksheets.values()) {
       await this.saveWorksheet($worksheet)
     }
     this.emit('save', this)
-    
+    return $worksheets
   }
-  async saveWorksheet($worksheet) {
-    await $worksheet.saveCompository()
+  async saveWorksheetSync($worksheet) {
+    return await $worksheet.saveCompository()
+  }
+  // Save Worksheets/Worksheet
+  saveWorksheets($worksheets) {
+    $worksheets = $worksheets || this.worksheets
+    for(const $worksheet of $worksheets.values()) {
+      this.saveWorksheet($worksheet)
+    }
+    this.emit('save', this)
+    return $worksheets
+  }
+  saveWorksheet($worksheet) {
+    return $worksheet.saveCompository()
   }
 }

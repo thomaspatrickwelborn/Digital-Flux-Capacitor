@@ -4,6 +4,7 @@ import {
   FSElementContent,
 } from './Models/index.js'
 import { EventEmitter } from 'node:events'
+import { Timer } from '#Coutil/index.js'
 
 export default class Extrapository extends EventEmitter {
   #settings
@@ -59,7 +60,7 @@ export default class Extrapository extends EventEmitter {
         ($collectDoc) => {
           this.emit(
             'fsElementContent:saveFileDoc',
-            $collectDoc
+            $collectDoc,
           )
         }
       )

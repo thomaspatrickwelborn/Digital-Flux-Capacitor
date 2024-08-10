@@ -1,6 +1,6 @@
 import EventEmitter from 'node:events'
 import path from 'node:path'
-import { writeFile, mkdir, stat } from 'node:fs'
+import { writeFile, mkdir } from 'node:fs'
 import mongoose from 'mongoose'
 import Root from './Root/index.js'
 import Content from './Content/index.js'

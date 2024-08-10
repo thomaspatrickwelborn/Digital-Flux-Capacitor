@@ -1,3 +1,4 @@
+import { Timer } from '#Coutil/index.js'
 import path from 'node:path'
 import { EventEmitter } from 'node:events'
 import { readFile, writeFile, rm } from 'node:fs/promises'
@@ -11,7 +12,6 @@ export default class File extends EventEmitter {
   }
   get #templates() { return this.#settings.templates }
   #render($collectDoc) {
-    console.log('#render', '$collectDoc', $collectDoc)
     const templateModel = {
       content: $collectDoc.content,
       coutils: {

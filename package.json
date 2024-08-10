@@ -8,6 +8,7 @@
     "chokidar": "^3.5.3",
     "deepmerge": "^4.3.1",
     "mongoose": "^8.0.3",
+    "source-map": "^0.7.4",
     "xlsx": "https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz",
     "yargs": "^17.7.2"
   },

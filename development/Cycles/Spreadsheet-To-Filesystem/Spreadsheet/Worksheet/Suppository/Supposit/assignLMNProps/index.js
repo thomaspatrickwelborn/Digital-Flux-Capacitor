@@ -2,13 +2,6 @@ import { ObjectId } from 'mongoose'
 import { typeOf } from '#Coutil/index.js'
 
 function assignLMNProps($supposit, $settings) {
-  // $supposit.coindex = {
-  //   type: {
-  //     scope: Number,
-  //     block: Number,
-  //     blockLen: Number,
-  //   }
-  // }
   var { modIndex, mods, lmnRanges, sup, com } = $settings
   if(lmnRanges.length === 0) return $supposit
   const mod = mods[modIndex][1]

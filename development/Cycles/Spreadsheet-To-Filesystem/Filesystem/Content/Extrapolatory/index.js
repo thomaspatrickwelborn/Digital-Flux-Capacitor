@@ -1,11 +1,11 @@
 import EventEmitter from 'node:events'
 import path from 'node:path'
-import { stat } from 'node:fs'
 import url from 'node:url'
 import { writeFile, readFile } from 'node:fs'
 import Differatives from './Differatives/index.js'
 import Operatives from './Operatives/index.js'
 import Generatives from './Generatives/index.js'
+import { Timer } from '#Coutil/index.js'
 const modulePath = path.dirname(
   url.fileURLToPath(import.meta.url)
 )
@@ -95,6 +95,7 @@ export default class Extrapolatory extends EventEmitter {
         }
       }
     }
+    return
   }
   async input($collectDoc) {
     const collectDoc = $collectDoc.toObject({

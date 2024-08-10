@@ -86,6 +86,9 @@ export default class Collect extends EventEmitter {
     return this
   }
   async save() {
+    const saveTimer = new Timer({
+      name: 'Spreadsheet.Worksheet.Compository.Collect.Save'
+    }).start()
     const collectDocsLength = this.length
     var collectDocsIndex = 0
     while(collectDocsIndex < collectDocsLength) {
@@ -100,6 +103,7 @@ export default class Collect extends EventEmitter {
       })
       collectDocsIndex++
     }
+    saveTimer.stop().log()
     this.emit(
       'save', 
       this

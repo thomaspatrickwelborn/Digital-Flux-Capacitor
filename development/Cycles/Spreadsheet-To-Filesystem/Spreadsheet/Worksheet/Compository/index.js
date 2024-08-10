@@ -5,21 +5,20 @@ export default class Compository extends EventEmitter {
   #database
   #_settings = {}
   #_options = {}
-  #_composits = new Map()
-  #_collects = new Map()
+  #_composits
+  #_collects
   constructor($depository = {}, $options = {}) {
     super()
-    this.depository = $depository
+    this.settings = $depository
     this.options = $options
-    this.#database = this.options.database
-    this.composits = this.depository
-    this.collects = this.depository
+    this.composits
+    this.collects
   }
-  get composits() { return this.#_composits }
-  set composits($composits) {
-    var { mods, ranges, merges, lmnRanges } = this.depository
+  get composits() {
+    if(this.#_composits !== undefined) return this.#_composits
+    var { mods, ranges, merges, lmnRanges } = this.settings
     mods = Array.from(mods.entries())
-    const _composits = this.#_composits
+    this.#_composits = new Map()
     const modsLength = mods.length 
     var modsIndex = 0
     while(modsIndex < modsLength) {
@@ -33,14 +32,15 @@ export default class Compository extends EventEmitter {
         modsIndex, mods,
         merges,
       })
-      _composits.set($modIndex, composit)
+      this.#_composits.set($modIndex, composit)
       modsIndex++
     }
+    return this.#_composits
   }
-  get collects() { return this.#_collects }
-  set collects($collects) {
-    const _collects = this.#_collects
-    var { mods, ranges, lmnRanges } = $collects
+  get collects() {
+    if(this.#_collects !== undefined) return this.#_collects
+    this.#_collects = new Map()
+    var { mods, ranges, lmnRanges } = this.settings
     mods = Array.from(mods.entries())
     var composits = Array.from(this.composits.entries())
     const modsLength = mods.length 
@@ -69,9 +69,10 @@ export default class Compository extends EventEmitter {
           )
         }
       )
-      _collects.set($modIndex, collect)
+      this.#_collects.set($modIndex, collect)
       modsIndex++
     }
+    return this.#_collects = new Map()
   }
   async deleteCollects() {
     for(const $collect of this.collects.values()) {

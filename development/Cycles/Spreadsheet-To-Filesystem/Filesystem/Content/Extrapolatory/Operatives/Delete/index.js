@@ -1,6 +1,7 @@
+import { Timer } from '#Coutil/index.js'
 import Operative from '../Operative/index.js'
 import path from 'node:path'
-import { stat, rm } from 'node:fs/promises'
+import { rm } from 'node:fs/promises'
 export default class Delete extends Operative {
   constructor($settings) {
     super($settings)

@@ -1,3 +1,4 @@
+import { Timer } from '#Coutil/index.js'
 import deepmerge from 'deepmerge'
 import { EventEmitter } from 'node:events'
 import Spreadsheet from './Spreadsheet/index.js'
@@ -32,11 +33,12 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       this.#_spreadsheet.on(
         'worksheet:saveCollects',
         async ($collects, $worksheet) => {
-          // this.#filesystem.content.extrapository
-          // .saveCollects(
-          //   $collects, $worksheet
-          // )
+          console.log('worksheet:saveCollects')
           this.#filesystem.content.extrapolatory
+          .saveCollects(
+            $collects, $worksheet
+          )
+          this.#filesystem.content.extrapository
           .saveCollects(
             $collects, $worksheet
           )

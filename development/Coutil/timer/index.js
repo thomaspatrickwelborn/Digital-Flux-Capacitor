@@ -37,5 +37,6 @@ export default class Timer extends EventEmitter {
       `${this.elapse / 1000} seconds`,
       '-----',
     ].join('\n'))
+    return this
   }
 }
