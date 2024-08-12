@@ -84,7 +84,7 @@ export default class Spreadsheet extends EventEmitter {
               ) {
                 $WorkbookRanges[$Name.Name] = $Name
                 $WorkbookRanges[$Name.Name].Ref = XLSX.utils.decode_range(
-                  $WorkbookRanges[$Name.Name].Ref
+                  $WorkbookRanges[$Name.Name].Ref.split('!')[1]
                 )
               }
               return $WorkbookRanges
@@ -93,7 +93,6 @@ export default class Spreadsheet extends EventEmitter {
           const sheetSettings = deepmerge.all([
             {
               table: this.#workbook.Sheets[$Sheet.name],
-              ranges: worksheetsRanges,
             }, 
             this.#settings.worksheets[$sheetName],
             $Sheet,
@@ -103,7 +102,7 @@ export default class Spreadsheet extends EventEmitter {
             sheetSettings.sheetId
           ) - 1
           sheetSettings.className = sheetSettings.name.split('_')[0]
-          sheetSettings.table['!ranges'] = Object.values(sheetSettings.ranges)
+          sheetSettings.table['!ranges'] = Object.values(worksheetsRanges)
           delete sheetSettings.Hidden
           delete sheetSettings.sheetId
           delete sheetSettings.sheetid
@@ -128,7 +127,6 @@ export default class Spreadsheet extends EventEmitter {
           database: this.#database
         }
       )
-      console.log('this.#_fsElementWorksheets', this.#_fsElementWorksheets)
     } else {
       // this.#_fsElementWorksheets.reconstructor(
       //   this.#fsElementWorksheetsSettings
@@ -150,15 +148,10 @@ export default class Spreadsheet extends EventEmitter {
   }
   async #watcherChange() {
     this.#workbook = await this.read()
-    this.#fsElementWorksheets
-    // this.#worksheets.save
-    // this.#worksheets = this.#worksheets.settings
-    // await this.saveWorksheetsSync(
-    //   this.fsElementWorksheets
-    // )
-    // this.saveWorksheets(
-    //   this.#fsElementContentWorksheets
-    // )
+    const fsElementWorksheets = this.#fsElementWorksheets
+    await fsElementWorksheets.saveSync()
+    // const fsElementContentWorksheets = this.#fsElementContentWorksheets
+    // fsElementContentWorksheets.save()
   }
   async read() {
     return readFile(

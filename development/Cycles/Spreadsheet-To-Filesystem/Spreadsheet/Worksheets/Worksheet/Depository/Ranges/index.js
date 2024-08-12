@@ -1,6 +1,5 @@
 import { EventEmitter } from 'node:events'
 import { typeOf } from '#Coutil/index.js'
-// import * as XLSX from 'xlsx'
 
 export default class Ranges extends EventEmitter {
   length = 0
@@ -21,19 +20,11 @@ export default class Ranges extends EventEmitter {
   }
   get #hidden() { return this.#settings.hidden }
   get raw() {
-    console.log('raw', this.#settings.ranges)
     return Array.prototype.concat(
       Object.values(this.#settings.ranges),
       this.#options
     )
   }
-  // #parseRangeRef($rangeRef) {
-  //   const rangeRefFrags = $rangeRef.split('!')
-  //   const rangeRefFragsIndex = rangeRefFrags.length - 1
-  //   return XLSX.utils.decode_range(
-  //     rangeRefFrags[rangeRefFragsIndex]
-  //   )
-  // }
   constructor($settings = {}, $options = {}) {
     super()
     this.#settings = $settings
@@ -44,7 +35,6 @@ export default class Ranges extends EventEmitter {
     iterateRanges: 
     for(let $range of this.raw) {
       if($range.Ref) {
-        // $range.Ref = this.#parseRangeRef($range.Ref)      
         $range = structuredClone($range)
         const hiddenRows = hidden.rows
         const hiddenRowsLength = hiddenRows.length
@@ -129,7 +119,6 @@ export default class Ranges extends EventEmitter {
   }
   getRangesByName($rangeName/*, $raw = false*/) {
     const targetRanges = Array.from(this)
-    console.log(targetRanges)
     var ranges
     if(typeOf($rangeName) === 'string') {
       ranges = targetRanges.filter(

@@ -3,11 +3,12 @@ import Worksheet from './Worksheet/index.js'
 
 export default class Worksheets extends Map {
   #settings
-  constructor($settings = {}) {
+  #options
+  constructor($settings = {}, $options = {}) {
     super()
     this.#settings = $settings
-    console.log(this.#settings)
-    // this.#createWorksheets()
+    this.#options = $options
+    this.#createWorksheets()
   }
   reconstructor() {
     // 
@@ -38,18 +39,22 @@ export default class Worksheets extends Map {
     let worksheetsHasWorksheet = this.has($worksheetSettings.name)
     let worksheet
     if(worksheetsHasWorksheet === false) {
-      worksheet = new Worksheet($worksheetSettings, this.#settings)
-      worksheet.on(
-        'compository:saveCollects',
-        ($collects) => {
-          this.emit(
-            'worksheet:saveCollects', 
-            $collects, 
-            worksheet
-          )
-        }
-      )
+      worksheet = new Worksheet($worksheetSettings, {
+        database: this.#options.database
+      })
+      console.log(worksheet)
+      // worksheet.on(
+      //   'compository:saveCollects',
+      //   ($collects) => {
+      //     this.emit(
+      //       'worksheet:saveCollects', 
+      //       $collects, 
+      //       worksheet
+      //     )
+      //   }
+      // )
       this.set($worksheetSettings.name, worksheet)
+
     } else
     if(worksheetsHasWorksheet === true) {
     //   worksheet = this.get(worksheetName)
@@ -67,23 +72,19 @@ export default class Worksheets extends Map {
     return worksheet
   }
   // Save Sync
-  async saveSync($worksheets) {
-    $worksheets = $worksheets || this.worksheets
-    for(const $worksheet of $worksheets.values()) {
+  async saveSync() {
+    for(const $worksheet of this.values()) {
       await $worksheet.save()
     }
-    this.emit('save', this)
-    return $worksheets
+    return this
   }
   async saveWorksheetSync($worksheet) {
   }
   // Save
-  save($worksheets) {
-    $worksheets = $worksheets || this.worksheets
-    for(const $worksheet of $worksheets.values()) {
+  save() {
+    for(const $worksheet of this.values()) {
       $worksheet.save()
     }
-    this.emit('save', this)
-    return $worksheets
+    return this
   }
 }

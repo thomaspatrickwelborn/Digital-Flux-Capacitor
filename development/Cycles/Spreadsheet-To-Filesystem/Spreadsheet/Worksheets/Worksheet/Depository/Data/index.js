@@ -13,8 +13,8 @@ export default class Data extends EventEmitter {
     const $data = this.raw
     const hidden = this.#hidden
     const _data = this
-    const areas = this.#ranges.getRawRangesByName('AREA', true)
-    // const areas = this.#ranges.getRangesByName('AREA', true)
+    // const areas = this.#ranges.getRawRangesByName('AREA', true)
+    const areas = this.#ranges.getRangesByName('AREA', true)
     console.log(areas)
     if(areas.length === 0) return
     const area = areas[0]
