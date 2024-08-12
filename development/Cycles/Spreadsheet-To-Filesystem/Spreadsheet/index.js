@@ -136,21 +136,26 @@ export default class Spreadsheet extends EventEmitter {
   }
   get #fsElementContentWorksheets() {
     if(this.#_fsElementContentWorksheets === undefined) {
+      const fsElementContentWorksheetsSettings = this.#fsElementContentWorksheetsSettings
       this.#_fsElementContentWorksheets = new Worksheets(
-        this.#fsElementContentWorksheetsSettings
+        fsElementContentWorksheetsSettings,
+        {
+          database: this.#database
+        }
       )
     } else {
-      this.#_fsElementContentWorksheets.reconstructor(
-        this.#fsElementContentWorksheetsSettings
-      )
+      // this.#_fsElementContentWorksheets.reconstructor(
+      //   this.#fsElementContentWorksheetsSettings
+      // )
     }
     return this.#_fsElementContentWorksheets
   }
   async #watcherChange() {
     this.#workbook = await this.read()
-    const fsElementWorksheets = this.#fsElementWorksheets
-    await fsElementWorksheets.saveSync()
-    // const fsElementContentWorksheets = this.#fsElementContentWorksheets
+    // const fsElementWorksheets = this.#fsElementWorksheets
+    // await fsElementWorksheets.saveSync()
+    const fsElementContentWorksheets = this.#fsElementContentWorksheets
+    console.log(fsElementContentWorksheets)
     // fsElementContentWorksheets.save()
   }
   async read() {

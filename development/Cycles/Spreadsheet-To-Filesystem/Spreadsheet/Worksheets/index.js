@@ -42,17 +42,6 @@ export default class Worksheets extends Map {
       worksheet = new Worksheet($worksheetSettings, {
         database: this.#options.database
       })
-      console.log(worksheet)
-      // worksheet.on(
-      //   'compository:saveCollects',
-      //   ($collects) => {
-      //     this.emit(
-      //       'worksheet:saveCollects', 
-      //       $collects, 
-      //       worksheet
-      //     )
-      //   }
-      // )
       this.set($worksheetSettings.name, worksheet)
 
     } else
