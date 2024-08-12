@@ -88,8 +88,6 @@ export default class Worksheets extends EventEmitter {
     }
     return this
   }
-  async saveWorksheetSync($worksheet) {
-  }
   // Save
   save() {
     for(const [
