@@ -6,10 +6,6 @@ import Compository from './Compository/index.js'
 export default class Worksheet extends EventEmitter {
   #settings
   #options
-  name
-  className
-  #_worksheetTable
-  #database
   #_depository
   #_suppository
   #_compository
@@ -19,77 +15,69 @@ export default class Worksheet extends EventEmitter {
     super()
     this.#settings = $settings
     this.#options = $options
-    const {
-      worksheetClassName, 
-      worksheetName, 
-      worksheetTable, 
-      database
-    } = this.#settings
-    this.name = worksheetName
-    this.className = worksheetClassName
-    this.#database = database
-    this.#worksheetTable = worksheetTable
-    this.depository = this.#worksheetTable
-    this.suppository = this.depository
-    this.compository = this.depository
+    // console.log("this.#settings", this.#settings)
+    // console.log("this.#options", this.#options)
+    console.log(this.depository)
+    // this.depository
+    // console.log(this.suppository)
+    // this.suppository
+    // this.compository
   }
   async reconstructor($settings, $options) {
-    this.#settings = $settings
-    this.#options = $options
-    const {
-      worksheetTable, 
-    } = this.#settings
-    this.#depositoryWorksheetTableHasChanged = this
-    .depository.worksheetTableHasChanged(
-      worksheetTable
+    this.#depositoryWorksheetTableHasChanged = this.#_depository
+    .worksheetTableHasChanged(
+      $settings.worksheetTable
     )
     if(this.#depositoryWorksheetTableHasChanged === true) {
-      this.#worksheetTable = worksheetTable
-      this.depository = this.#worksheetTable
-      this.suppository = this.depository
-      const precompository = this.compository
+      const precompository = this.#_compository
       precompository.deleteCollects()
-      this.compository = this.depository
+      this.#settings = $settings
+      this.#options = $options
+      this.depository
+      this.suppository
+      this.compository
       this.#depositoryWorksheetTableHasChanged = false
       this.#compositoryCollectsHaveSaved = false
     }
     return this
   }
-  get hidden() { return this.#settings.worksheetHidden }
-  get #worksheetTable() { return this.#_worksheetTable }
-  set #worksheetTable($worksheetTable) {
-    this.#_worksheetTable = $worksheetTable
-  }
-  get depository() { return this.#_depository }
-  set depository($worksheetTable) {
+  get name() { return this.#settings.name }
+  get className() { return this.#settings.className }
+  get hidden() { return this.#settings.hidden }
+  get #worksheetTable() { return this.#settings.table }
+  get depository() {
+    console.log(this.#settings.table)
+    if(this.#_depository !== undefined) return this.#_depository
     this.#_depository = new Depository(
-      $worksheetTable, 
+      this.#settings.table, 
       {
         name: this.name,
         className: this.className,
-        ranges: this.#options.ranges
+        ranges: this.#settings.ranges
       }
     )
+    return this.#_depository
   }
-  get suppository() { return this.#_suppository }
-  set suppository($depository) {
+  get suppository() {
+    if(this.#_suppository !== undefined) return this.#_suppository
     this.#_suppository = new Suppository(
-      $depository, 
+      this.depository, 
       {
         name: this.name,
         className: this.className,
-        database: this.#database
+        database: this.#settings.database
       }
     )
+    return this.#_suppository
   }
-  get compository() { return this.#_compository }
-  set compository($depository) {
+  get compository() {
+    if(this.#_compository !== undefined) return this.#_compository
     this.#_compository = new Compository(
-      $depository, 
+      this.depository, 
       {
         name: this.name,
         className: this.className,
-        database: this.#database
+        database: this.#settings.database
       }
     )
     this.#_compository.on(
@@ -98,6 +86,7 @@ export default class Worksheet extends EventEmitter {
         this.emit('compository:saveCollects', $collects)
       }
     )
+    return  this.#_compository
   }
   async saveCompository() {
     if(this.#compositoryCollectsHaveSaved === false) {

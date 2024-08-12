@@ -8,7 +8,7 @@ const LMNRangeDefaults = {
 }
 export default class LMNRanges extends EventEmitter {
   length = 0
-  constructor($settings, $options) {
+  constructor($settings) {
     super()
     for(const $lmnRange of $settings) {
       Array.prototype.push.call(this, $lmnRange)

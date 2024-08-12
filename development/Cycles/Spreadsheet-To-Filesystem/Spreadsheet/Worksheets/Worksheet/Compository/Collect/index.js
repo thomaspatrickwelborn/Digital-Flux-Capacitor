@@ -9,10 +9,9 @@ const Translexes = [
 ]
 
 export default class Collect extends EventEmitter {
-  length = 0
   #settings = {}
   #options = {}
-  #database
+  length = 0
   constructor($settings, $options) {
     super()
     this.#settings = $settings
@@ -24,7 +23,6 @@ export default class Collect extends EventEmitter {
     const {
       name, className, database
     } = $options
-    this.#database = database
     const modsLength = mods.length
     var modsIndex = 0
     iterateMods: 
@@ -67,7 +65,7 @@ export default class Collect extends EventEmitter {
     var collectDocsIndex = collectDocsLength - 1
     while(collectDocsIndex > -1) {
       const collectDoc = this[collectDocsIndex]
-      await this.#database.models[
+      await this.#options.database.models[
         collectDoc.$collection.modelName
       ].findOneAndDelete({
         _id: collectDoc._id
@@ -86,14 +84,11 @@ export default class Collect extends EventEmitter {
     return this
   }
   async save() {
-    const saveTimer = new Timer({
-      name: 'Spreadsheet.Worksheet.Compository.Collect.Save'
-    }).start()
     const collectDocsLength = this.length
     var collectDocsIndex = 0
     while(collectDocsIndex < collectDocsLength) {
       const collectDoc = this[collectDocsIndex]
-      const savedCollectDoc = await this.#database.models[
+      const savedCollectDoc = await this.#options.database.models[
         collectDoc.$collection.modelName
       ].findOneAndUpdate({
         _id: collectDoc._id
@@ -103,7 +98,6 @@ export default class Collect extends EventEmitter {
       })
       collectDocsIndex++
     }
-    saveTimer.stop().log()
     this.emit(
       'save', 
       this

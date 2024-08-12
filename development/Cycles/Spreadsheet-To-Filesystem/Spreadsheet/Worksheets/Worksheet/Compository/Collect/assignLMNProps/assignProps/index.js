@@ -1,5 +1,3 @@
-import { typeOf } from '#Coutil/index.js'
-
 async function assignProps($collect, $settings) {
   var { mods, lmnRanges, composits } = $settings
   const modsLength = mods.length

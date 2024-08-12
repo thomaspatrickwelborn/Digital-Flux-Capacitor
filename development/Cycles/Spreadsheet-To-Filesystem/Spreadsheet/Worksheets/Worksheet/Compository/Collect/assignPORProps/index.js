@@ -1,4 +1,4 @@
-import assignProps from './assignProps.js'
+import assignProps from './assignProps/index.js'
 
 async function assignPORProps($collect, $settings) {
   var { mods, composits, lmnRanges } = $settings

@@ -8,30 +8,27 @@ const translexes = [
 ]
 
 export default class Composit extends EventEmitter {
-  length = 0
-  #settings = {}
-  name
+  #settings
   #_supRows
   #_comRows
+  length = 0
   constructor($settings = {}) {
     super()
     this.#settings = $settings
-    const {
-      nom, sup, com, modIndex, mods, merges, lmnRanges
-    } = $settings
-    this.name = nom
-    this.supRows = sup
-    this.comRows = com
+    this.#supRows
+    this.#comRows
   }
-  get supRows() { return this.#_supRows }
-  set supRows($supRows) {
-    this.#_supRows = fillEmptyCells($supRows)
+  get name() { this.#settings.nom }
+  get #supRows() {
+    if(this.#_supRows !== undefined) return this.#_supRows
+    this.#_supRows = fillEmptyCells(this.#settings.sup)
+    return this.#_supRows
   }
-  get comRows() { return this.#_comRows }
-  set comRows($comRows) {
-    this.#_comRows = $comRows
-    const comRows = this.#_comRows
-    const supRows  = this.supRows
+  get #comRows() {
+    if(this.#_comRows !== undefined) return this.#_comRows
+    this.#_comRows = this.#settings.com
+    const comRows = this.#settings.com
+    const supRows  = this.#supRows
     const comRowsLength = comRows.length
     var comRowsIndex = 0
     const composit = this
@@ -54,6 +51,6 @@ export default class Composit extends EventEmitter {
       Array.prototype.push.call(composit, apposit)
       comRowsIndex++
     }
-    // this.#_com
+    return this.#_comRows
   }
 }

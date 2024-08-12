@@ -1,7 +1,7 @@
 import path from 'node:path'
-import transformCollectDocPort from './transformCollectDocPort.js'
+import transformCollectDocPort from './transformCollectDocPort/index.js'
 const portalPropKeys = ['flow', 'name', 'default']
-function assignPORProps($collect) {
+function assignProps($collect) {
   const collectDocsLength = $collect.length
   var collectDocsIndex = 0
   iterateCollectDocs: 
@@ -142,4 +142,4 @@ function assignPORProps($collect) {
   return $collect
 }
 
-export default assignPORProps
+export default assignProps

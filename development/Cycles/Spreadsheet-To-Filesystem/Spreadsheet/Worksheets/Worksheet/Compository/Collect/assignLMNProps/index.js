@@ -1,5 +1,5 @@
-import assignProps from './assignProps.js'
-import assignPropPath from './assignPropPath.js'
+import assignProps from './assignProps/index.js'
+import assignPropPath from './assignPropPath/index.js'
 
 async function assignLMNProps($collect, $settings) {
   var { mods, composits, lmnRanges } = $settings

@@ -2,21 +2,20 @@ import { EventEmitter } from 'node:events'
 import Composit from './Composit/index.js'
 import Collect from './Collect/index.js'
 export default class Compository extends EventEmitter {
-  #database
-  #_settings = {}
-  #_options = {}
+  #settings = {}
+  #options = {}
   #_composits
   #_collects
   constructor($depository = {}, $options = {}) {
     super()
-    this.settings = $depository
-    this.options = $options
+    this.#settings = $depository
+    this.#options = $options
     this.composits
     this.collects
   }
   get composits() {
     if(this.#_composits !== undefined) return this.#_composits
-    var { mods, ranges, merges, lmnRanges } = this.settings
+    var { mods, ranges, merges, lmnRanges } = this.#settings
     mods = Array.from(mods.entries())
     this.#_composits = new Map()
     const modsLength = mods.length 
@@ -40,7 +39,7 @@ export default class Compository extends EventEmitter {
   get collects() {
     if(this.#_collects !== undefined) return this.#_collects
     this.#_collects = new Map()
-    var { mods, ranges, lmnRanges } = this.settings
+    var { mods, ranges, lmnRanges } = this.#settings
     mods = Array.from(mods.entries())
     var composits = Array.from(this.composits.entries())
     const modsLength = mods.length 
@@ -52,7 +51,7 @@ export default class Compository extends EventEmitter {
         composits, 
         ranges,
         lmnRanges,
-      }, this.options)
+      }, this.#options)
       collect.on(
         'saveCollectDoc', ($collectDoc) => {
           this.emit(
@@ -72,7 +71,7 @@ export default class Compository extends EventEmitter {
       this.#_collects.set($modIndex, collect)
       modsIndex++
     }
-    return this.#_collects = new Map()
+    return this.#_collects
   }
   async deleteCollects() {
     for(const $collect of this.collects.values()) {

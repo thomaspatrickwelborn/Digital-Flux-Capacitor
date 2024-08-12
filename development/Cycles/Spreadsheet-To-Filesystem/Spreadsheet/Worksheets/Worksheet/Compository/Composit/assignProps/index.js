@@ -1,5 +1,4 @@
 import { typeOf } from '#Coutil/index.js'
-
 function assignProps($prop, $settings) {
   var { supRows, comRow, merges } = $settings
   const supRowsLength = supRows.length

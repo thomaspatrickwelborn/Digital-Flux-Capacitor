@@ -2,25 +2,23 @@ import { EventEmitter } from 'node:events'
 import { Schema } from 'mongoose'
 import Supposit from './Supposit/index.js'
 export default class Suppository extends EventEmitter {
-  #depository
+  #settings
   #options
-  #database
-  #_supposits = new Map()
-  #_schemata = new Map()
-  #_models = new Map()
+  #_supposits
+  #_schemata
+  #_models
   constructor($depository = {}, $options = {}) {
     super()
-    this.#depository = $depository
+    this.#settings = $depository
     this.#options = $options
-    this.#database = this.#options.database
-    this.supposits = this.#depository
-    this.schemata = this.#depository
-    this.models = this.#depository
+    this.supposits
+    this.schemata
+    this.models
   }
-  get supposits() { return this.#_supposits }
-  set supposits($depository) {
-    const _supposits = this.#_supposits
-    var { mods, ranges, lmnRanges } = $depository
+  get supposits() {
+    if(this.#_supposits !== undefined) return this.#_supposits
+    this.#_supposits = new Map()
+    var { mods, ranges, lmnRanges } = this.#settings
     mods = Array.from(mods.entries())
     const modsLength = mods.length
     var modsIndex = 0
@@ -36,13 +34,15 @@ export default class Suppository extends EventEmitter {
         ranges: ranges, 
         lmnRanges: lmnRanges,
       })
-      _supposits.set(nom, supposit)
+      this.#_supposits.set(nom, supposit)
       modsIndex++
     }
+    return this.#_supposits
   }
-  get schemata() { return this.#_schemata }
-  set schemata($depository) {
-    let { mods, ranges } = $depository
+  get schemata() {
+    if(this.#_schemata !== undefined) return this.#_schemata
+    this.#_schemata = new Map()
+    let { mods, ranges } = this.#settings
     mods = Array.from(mods.entries())
     const supposits = this.supposits
     const modsLength = mods.length
@@ -67,26 +67,27 @@ export default class Suppository extends EventEmitter {
       }
       modsIndex++
     }
-    return schemata
+    return this.#_schemata
   }
-  get models() { return this.#_models }
-  set models($models) {
-    let { mods, ranges } = $models
+  get models() {
+    if(this.#_models !== undefined) return this.#_models
+    this.#_models = new Map()
+    let { mods, ranges } = this.#settings
     mods = Array.from(mods.entries())
     const schemata = this.schemata
     const modsLength = mods.length
     var modsIndex = 0
-    const _models = this.#_models
     while(modsIndex < modsLength) {
       var [$modIndex, $mod] = mods[modsIndex]
       var { nom, sup, com } = $mod
       var schema = schemata.get(nom)
-      if(_models[nom] === undefined) {
-        var model = this.#database.models[nom] ||
-        this.#database.model(nom, schema)
-        _models.set(nom, model)
+      if(this.#_models[nom] === undefined) {
+        var model = this.#options.database.models[nom] ||
+        this.#options.database.model(nom, schema)
+        this.#_models.set(nom, model)
       }
       modsIndex++
     }
+    return this.#_models
   }
 }

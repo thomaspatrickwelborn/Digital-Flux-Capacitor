@@ -30,9 +30,10 @@ export default class Depository extends EventEmitter {
     this.hidden
     this.merges
     this.ranges
-    this.lmnRanges
-    this.data
-    this.mods
+    // console.log(this.lmnRanges)
+    // this.lmnRanges
+    // this.data
+    // this.mods
   }
   get rows() {
     if(this.#_rows === undefined) {
@@ -79,10 +80,13 @@ export default class Depository extends EventEmitter {
   }
   get lmnRanges() {
     if(this.#_lmnRanges === undefined) {
+      console.log('this.ranges', this.ranges.getRangesByName(
+        new RegExp(/^LMN/)
+      ))
       this.#_lmnRanges = new LMNRanges(
         this.ranges.getRangesByName(
           new RegExp(/^LMN_/)
-        ), this.#options.ranges
+        )
       )
     }
     return this.#_lmnRanges
@@ -143,15 +147,6 @@ export default class Depository extends EventEmitter {
       )
     )
   }
-  // #mergesChanged($worksheetTable) {
-  //   return (
-  //     JSON.stringify(
-  //       $worksheetTable['!merges']
-  //     ) !== JSON.stringify(
-  //       this.#worksheetTableClone['!merges']
-  //     )
-  //   )
-  // }
   worksheetTableHasChanged($worksheetTable) {
     return (
       this.#dataChanged($worksheetTable) ||
