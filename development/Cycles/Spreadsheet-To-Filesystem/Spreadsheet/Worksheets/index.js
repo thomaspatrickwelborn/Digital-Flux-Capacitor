@@ -1,7 +1,8 @@
 import { EventEmitter } from 'node:events'
 import Worksheet from './Worksheet/index.js'
 
-export default class Worksheets extends Map {
+export default class Worksheets extends EventEmitter {
+  length = 0
   #settings
   #options
   constructor($settings = {}, $options = {}) {
@@ -36,13 +37,31 @@ export default class Worksheets extends Map {
   }
   #createWorksheet($worksheetSettings) {
     if($worksheetSettings.hidden) return
-    let worksheetsHasWorksheet = this.has($worksheetSettings.name)
+    let worksheetsHasWorksheet = (
+      Array.prototype.findIndex.call(
+        this, (
+          [$worksheetName, $worksheet]
+        ) => $worksheetName === $worksheetSettings.name
+      ) !== -1
+    ) ? true
+      : false
     let worksheet
     if(worksheetsHasWorksheet === false) {
       worksheet = new Worksheet($worksheetSettings, {
         database: this.#options.database
       })
-      this.set($worksheetSettings.name, worksheet)
+      worksheet.on(
+        'compository:saveCollects', 
+        ($collects, $worksheet) => {
+          this.emit(
+            'worksheet:save',
+            $worksheet,
+            this
+          )
+        }
+      )
+      Array.prototype.push.call(
+        this, [$worksheetSettings.name, worksheet])
 
     } else
     if(worksheetsHasWorksheet === true) {
@@ -62,7 +81,9 @@ export default class Worksheets extends Map {
   }
   // Save Sync
   async saveSync() {
-    for(const $worksheet of this.values()) {
+    for(const [
+      $worksheetName, $worksheet
+    ] of Array.from(this)) {
       await $worksheet.save()
     }
     return this
@@ -71,7 +92,9 @@ export default class Worksheets extends Map {
   }
   // Save
   save() {
-    for(const $worksheet of this.values()) {
+    for(const [
+      $worksheetName, $worksheet
+    ] of Array.from(this)) {
       $worksheet.save()
     }
     return this

@@ -9,8 +9,8 @@ export default class Worksheet extends EventEmitter {
   #_depository
   #_suppository
   #_compository
-  #depositoryWorksheetTableHasChanged
-  #compositoryCollectsHaveSaved = false
+  #depositoryTableChanged
+  #compositorySaved = false
   constructor($settings, $options) {
     super()
     this.#settings = $settings
@@ -20,11 +20,11 @@ export default class Worksheet extends EventEmitter {
     this.compository
   }
   async reconstructor($settings, $options) {
-    this.#depositoryWorksheetTableHasChanged = this.#_depository
+    this.#depositoryTableChanged = this.#_depository
     .tableHasChanged(
       $settings.table
     )
-    if(this.#depositoryWorksheetTableHasChanged === true) {
+    if(this.#depositoryTableChanged === true) {
       const precompository = this.#_compository
       precompository.deleteCollects()
       this.#settings = $settings
@@ -32,8 +32,8 @@ export default class Worksheet extends EventEmitter {
       this.depository
       this.suppository
       this.compository
-      this.#depositoryWorksheetTableHasChanged = false
-      this.#compositoryCollectsHaveSaved = false
+      this.#depositoryTableChanged = false
+      this.#compositorySaved = false
     }
     return this
   }
@@ -78,15 +78,19 @@ export default class Worksheet extends EventEmitter {
     this.#_compository.on(
       'saveCollects', 
       ($collects) => {
-        this.emit('compository:saveCollects', $collects)
+        this.emit(
+          'compository:saveCollects', 
+          $collects, 
+          this
+        )
       }
     )
     return  this.#_compository
   }
   async save() {
-    if(this.#compositoryCollectsHaveSaved === false) {
+    if(this.#compositorySaved === false) {
       const compository = await this.compository.saveCollects()
-      this.#compositoryCollectsHaveSaved = true
+      this.#compositorySaved = true
       return compository
     } else {
       return this.compository

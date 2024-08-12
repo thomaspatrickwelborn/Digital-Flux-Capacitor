@@ -15,8 +15,8 @@ export default class Spreadsheet extends EventEmitter {
   #_watcher
   #_watch
   #_worksheets
-  #_fsElementWorksheets
-  #_fsElementContentWorksheets
+  #_fsElements
+  #_fsElementContent
   constructor($settings) {
     super()
     this.#settings = $settings
@@ -112,51 +112,62 @@ export default class Spreadsheet extends EventEmitter {
       }, []
     )
   }
-  get #fsElementWorksheetsSettings() {
+  get #fsElementsSettings() {
     return this.#worksheetsSettings('VINE', true)
   }
-  get #fsElementContentWorksheetsSettings() {
+  get #fsElementContentSettings() {
     return this.#worksheetsSettings('VINE', false)
   }
-  get #fsElementWorksheets() {
-    if(this.#_fsElementWorksheets === undefined) {
-      const fsElementWorksheetsSettings = this.#fsElementWorksheetsSettings
-      this.#_fsElementWorksheets = new Worksheets(
-        fsElementWorksheetsSettings,
+  get fsElements() {
+    if(this.#_fsElements === undefined) {
+      const fsElementsSettings = this.#fsElementsSettings
+      this.#_fsElements = new Worksheets(
+        fsElementsSettings,
         {
           database: this.#database
         }
       )
+      this.#_fsElements.on(
+        'worksheet:save',
+        ($worksheet, $worksheets) => {
+          console.log('fsElements', $worksheet)
+        } 
+      )
     } else {
-      // this.#_fsElementWorksheets.reconstructor(
-      //   this.#fsElementWorksheetsSettings
+      // this.#_fsElements.reconstructor(
+      //   this.#fsElementsSettings
       // )
     }
-    return this.#_fsElementWorksheets
+    return this.#_fsElements
   }
-  get #fsElementContentWorksheets() {
-    if(this.#_fsElementContentWorksheets === undefined) {
-      const fsElementContentWorksheetsSettings = this.#fsElementContentWorksheetsSettings
-      this.#_fsElementContentWorksheets = new Worksheets(
-        fsElementContentWorksheetsSettings,
+  get fsElementContent() {
+    if(this.#_fsElementContent === undefined) {
+      const fsElementContentSettings = this.#fsElementContentSettings
+      this.#_fsElementContent = new Worksheets(
+        fsElementContentSettings,
         {
           database: this.#database
         }
       )
+      this.#_fsElementContent.on(
+        'worksheet:save',
+        ($worksheet, $worksheets) => {
+          console.log('fsElementContent', $worksheet)
+        } 
+      )
     } else {
-      // this.#_fsElementContentWorksheets.reconstructor(
-      //   this.#fsElementContentWorksheetsSettings
+      // this.#_fsElementContent.reconstructor(
+      //   this.#fsElementContentSettings
       // )
     }
-    return this.#_fsElementContentWorksheets
+    return this.#_fsElementContent
   }
   async #watcherChange() {
     this.#workbook = await this.read()
-    // const fsElementWorksheets = this.#fsElementWorksheets
-    // await fsElementWorksheets.saveSync()
-    const fsElementContentWorksheets = this.#fsElementContentWorksheets
-    console.log(fsElementContentWorksheets)
-    // fsElementContentWorksheets.save()
+    const fsElements = this.fsElements
+    await fsElements.saveSync()
+    const fsElementContent = this.fsElementContent
+    fsElementContent.save()
   }
   async read() {
     return readFile(
