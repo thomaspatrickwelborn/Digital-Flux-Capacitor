@@ -88,14 +88,22 @@ export default class Collect extends EventEmitter {
     var collectDocsIndex = 0
     while(collectDocsIndex < collectDocsLength) {
       const collectDoc = this[collectDocsIndex]
-      const savedCollectDoc = await this.#options.database.models[
+      const databaseModel = this.#options.database.models[
         collectDoc.$collection.modelName
-      ].findOneAndUpdate({
-        _id: collectDoc._id
-      }, collectDoc, {
-        new: true,
-        upsert: true,
-      })
+      ]
+      // let savedCollectDoc = await databaseModel.findOneAndReplace({
+      //   _id: collectDoc._id
+      // }, collectDoc, {
+      //   returnDocument: 'after'
+      // })
+      // if(savedCollectDoc === null) {
+        let savedCollectDoc = await databaseModel.findOneAndUpdate({
+          _id: collectDoc._id
+        }, collectDoc, {
+          new: true,
+          upsert: true,
+        })
+      // }
       collectDocsIndex++
     }
     this.emit(

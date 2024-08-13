@@ -67,12 +67,13 @@ export default class File extends EventEmitter {
       file.path = this.#path(collectDoc)
       file.write = this.#render(collectDoc)
       file.read = await readFile(file.path)
+      file.read = file.read.toString()
       if(
         this.#readAndWriteFilesSame(
           file.read, file.write
         ) === false
       ) {
-        file.handle = await writeFile(
+        await writeFile(
           file.path, 
           file.write
         )

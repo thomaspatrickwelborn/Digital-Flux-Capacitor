@@ -45,11 +45,18 @@ export default class FSElement extends EventEmitter {
         })
       )
       .reduce(this.#reduce, {})
-      let fileDoc = await FSElement.findOneAndUpdate(
-        { 'fs.id': collectDoc.fs.id },
-        reducedCollectDoc,
-        { upsert: true, new: true }
-      )
+      // let fileDoc = await FSElement.findOneAndReplace(
+      //   { 'fs.id': collectDoc.fs.id },
+      //   reducedCollectDoc,
+      //   { returnDocument: 'after' }
+      // )
+      // if(fileDoc === null) {
+        let fileDoc = await FSElement.findOneAndUpdate(
+          { 'fs.id': collectDoc.fs.id },
+          reducedCollectDoc,
+          { upsert: true, new: true }
+        )
+      // }
       fileCollect.push(fileDoc/*.toObject()*/)
       collectDocsIndex++
     }
