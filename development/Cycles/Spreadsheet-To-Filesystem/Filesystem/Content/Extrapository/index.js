@@ -67,7 +67,7 @@ export default class Extrapository extends EventEmitter {
     }
     return this.#_fsElementContent
   }
-  async saveCollects($collects, $worksheet) {
+  async save($collects, $worksheet) {
     const collects = new Map()
     if(
       $worksheet.name.match(new RegExp(/^VINE/))

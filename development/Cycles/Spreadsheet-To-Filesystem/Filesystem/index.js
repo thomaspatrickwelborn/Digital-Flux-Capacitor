@@ -45,12 +45,20 @@ export default class Filesystem extends EventEmitter {
       this.#_content = new Content(Object.assign(
         {
           root: this.#root,
-          database: this.#database
+          database: this.#database,
         },
         this.#settings.content
       ))
     }
     return this.#_content
   }
-  
+
+  async save($collects, $worksheet) {
+    this.content.extrapolatory.save(
+      $collects, $worksheet
+    )
+    this.content.extrapository.save(
+      $collects, $worksheet
+    )
+  }
 }

@@ -82,7 +82,9 @@ export default class FSElementContent extends EventEmitter {
       let prefileDoc = await FSElement.findOne(
         { 'fs.id': updateFileDoc.fs.id },
       )
-      prefileDoc = prefileDoc.toObject({
+      prefileDoc = (
+        prefileDoc
+      ) ? prefileDoc.toObject({
         lean: true,
         transform: ($document, $return, $options) => {
           delete $return._id
@@ -90,7 +92,7 @@ export default class FSElementContent extends EventEmitter {
           delete $return.__v
           return $return
         }
-      })
+      }) : {}
       const fileDocMerge = deepmerge(prefileDoc, updateFileDoc)
       const fileDoc = await FSElement.findOneAndUpdate(
         { 'fs.id': fileDocMerge.fs.id },

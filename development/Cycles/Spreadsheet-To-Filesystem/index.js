@@ -32,16 +32,10 @@ export default class SpreadsheetToFilesystem extends EventEmitter {
       )
       this.#_spreadsheet.on(
         'worksheets:worksheetSave',
-        async ($collects, $worksheet) => {
-          console.log('worksheets:worksheetSave')
-          // this.#filesystem.content.extrapolatory
-          // .saveCollects(
-          //   $collects, $worksheet
-          // )
-          // this.#filesystem.content.extrapository
-          // .saveCollects(
-          //   $collects, $worksheet
-          // )
+        async ($collects, $worksheet, $worksheets, $spreadsheet) => {
+          this.#filesystem.save(
+            $collects, $worksheet
+          )
         }
       )
     }

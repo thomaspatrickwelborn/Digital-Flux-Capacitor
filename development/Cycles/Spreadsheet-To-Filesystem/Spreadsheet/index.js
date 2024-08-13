@@ -129,9 +129,10 @@ export default class Spreadsheet extends EventEmitter {
       )
       this.#_fsElements.on(
         'worksheet:save',
-        ($worksheet, $worksheets) => {
+        ($collects, $worksheet, $worksheets) => {
           this.emit(
             'worksheets:worksheetSave',
+            $collects,
             $worksheet,
             $worksheets,
             this
@@ -139,9 +140,9 @@ export default class Spreadsheet extends EventEmitter {
         } 
       )
     } else {
-      // this.#_fsElements.reconstructor(
-      //   this.#fsElementsSettings
-      // )
+      this.#_fsElements.reconstructor(
+        this.#fsElementsSettings
+      )
     }
     return this.#_fsElements
   }
@@ -156,9 +157,10 @@ export default class Spreadsheet extends EventEmitter {
       )
       this.#_fsElementContent.on(
         'worksheet:save',
-        ($worksheet, $worksheets) => {
+        ($collects, $worksheet, $worksheets) => {
           this.emit(
             'worksheets:worksheetSave',
+            $collects,
             $worksheet,
             $worksheets,
             this
@@ -166,9 +168,9 @@ export default class Spreadsheet extends EventEmitter {
         }
       )
     } else {
-      // this.#_fsElementContent.reconstructor(
-      //   this.#fsElementContentSettings
-      // )
+      this.#_fsElementContent.reconstructor(
+        this.#fsElementContentSettings
+      )
     }
     return this.#_fsElementContent
   }

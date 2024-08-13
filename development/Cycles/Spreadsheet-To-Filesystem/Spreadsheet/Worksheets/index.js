@@ -11,8 +11,9 @@ export default class Worksheets extends EventEmitter {
     this.#options = $options
     this.#createWorksheets()
   }
-  reconstructor() {
-    // 
+  reconstructor($settings) {
+    this.#settings = $settings
+    this.#createWorksheets()
   }
   get #worksheetsSettings() {
     return this.#settings?.Workbook?.Sheets
@@ -55,6 +56,7 @@ export default class Worksheets extends EventEmitter {
         ($collects, $worksheet) => {
           this.emit(
             'worksheet:save',
+            $collects,
             $worksheet,
             this
           )
@@ -65,17 +67,18 @@ export default class Worksheets extends EventEmitter {
 
     } else
     if(worksheetsHasWorksheet === true) {
-    //   worksheet = this.get(worksheetName)
-    //   if(
-    //     worksheet.hidden === false &&
-    //     worksheetHidden === true
-    //   ) {
-    //     this.delete(worksheetName)
-    //   } else {
-    //     worksheet.reconstructor({
-    //       worksheetTable
-    //     }, worksheetOptions)
-    //   }
+      worksheet = Array.prototype.find.call(
+        this,
+        ([$worksheetName, $worksheet]) => $worksheet.name === $worksheetName
+      )[1]
+      if(
+        worksheet.hidden === false &&
+        $worksheetSettings.hidden === true
+      ) {
+        this.delete($worksheetName)
+      } else {
+        worksheet.reconstructor($worksheetSettings)
+      }
     }
     return worksheet
   }

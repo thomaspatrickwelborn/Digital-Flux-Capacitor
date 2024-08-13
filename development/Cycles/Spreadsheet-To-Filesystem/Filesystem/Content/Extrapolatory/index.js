@@ -71,7 +71,7 @@ export default class Extrapolatory extends EventEmitter {
       }
     )
   }
-  async saveCollects($collects, $worksheet) {
+  async save($collects, $worksheet) {
     if(
       this.#deleteExtraneous === true &&
       $worksheet.name.match(new RegExp(/^VINE/))

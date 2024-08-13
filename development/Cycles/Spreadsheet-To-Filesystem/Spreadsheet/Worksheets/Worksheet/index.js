@@ -19,7 +19,7 @@ export default class Worksheet extends EventEmitter {
     this.suppository
     this.compository
   }
-  async reconstructor($settings, $options) {
+  async reconstructor($settings) {
     this.#depositoryTableChanged = this.#_depository
     .tableHasChanged(
       $settings.table
@@ -28,7 +28,9 @@ export default class Worksheet extends EventEmitter {
       const precompository = this.#_compository
       precompository.deleteCollects()
       this.#settings = $settings
-      this.#options = $options
+      this.#_depository = undefined
+      this.#_suppository = undefined
+      this.#_compository = undefined
       this.depository
       this.suppository
       this.compository
