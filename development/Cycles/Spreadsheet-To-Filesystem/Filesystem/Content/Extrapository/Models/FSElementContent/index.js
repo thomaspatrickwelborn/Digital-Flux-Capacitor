@@ -96,18 +96,11 @@ export default class FSElementContent extends EventEmitter {
       const fileDocMerge = deepmerge(prefileDoc, updateFileDoc, {
         arrayMerge: ($destinationArray, $sourceArray, $options) => $sourceArray
       })
-      // let fileDoc = await FSElement.findOneAndReplace(
-      //   { 'fs.id': fileDocMerge.fs.id },
-      //   fileDocMerge,
-      //   { returnDocument: 'after' }
-      // )
-      // if(fileDoc === null) {
-        let fileDoc = await FSElement.findOneAndUpdate(
-          { 'fs.id': fileDocMerge.fs.id },
-          fileDocMerge,
-          { upsert: true, new: true }
-        )
-      // }
+      let fileDoc = await FSElement.findOneAndUpdate(
+        { 'fs.id': fileDocMerge.fs.id },
+        fileDocMerge,
+        { upsert: true, new: true }
+      )
       this.emit(
         'saveFileDoc',
         fileDoc
