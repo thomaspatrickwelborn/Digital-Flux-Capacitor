@@ -130,7 +130,6 @@ export default class Spreadsheet extends EventEmitter {
       this.#_fsElements.on(
         'worksheet:save',
         ($collects, $worksheet, $worksheets) => {
-          console.log('fsElements:worksheets:worksheetSave')
           this.emit(
             'worksheets:worksheetSave',
             $collects,
@@ -159,7 +158,6 @@ export default class Spreadsheet extends EventEmitter {
       this.#_fsElementContent.on(
         'worksheet:save',
         ($collects, $worksheet, $worksheets) => {
-          console.log('fsElementContent:worksheets:worksheetSave')
           this.emit(
             'worksheets:worksheetSave',
             $collects,

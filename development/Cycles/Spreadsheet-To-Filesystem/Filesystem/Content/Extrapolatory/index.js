@@ -71,7 +71,7 @@ export default class Extrapolatory extends EventEmitter {
       }
     )
   }
-  async save($collects, $worksheet) {
+  async delete($collects, $worksheet) {
     if(
       this.#deleteExtraneous === true &&
       $worksheet.name.match(new RegExp(/^VINE/))
@@ -97,14 +97,14 @@ export default class Extrapolatory extends EventEmitter {
     }
     return
   }
-  async input($collectDoc) {
+  async save($collectDoc) {
     const collectDoc = $collectDoc.toObject({
       lean: true,
     })
-    const { operations, permissions, path } = collectDoc.fs
+    const { operations, permissions, path } = collectDoc.fs || {}
     // ADD
     if(
-      operations?.add === true &&
+      operations?.add &&
       this.#root.includes(path) === false
     ) {
       await this.#operatives.add(collectDoc)
@@ -117,7 +117,7 @@ export default class Extrapolatory extends EventEmitter {
     } else
     // UPDATE
     if(
-      operations?.update === true &&
+      operations?.update &&
       this.#root.includes(path) === true
     ) {
       await this.#operatives.update(collectDoc)
@@ -130,7 +130,7 @@ export default class Extrapolatory extends EventEmitter {
     } else
     // DELETE
     if(
-      operations?.delete === true &&
+      operations?.delete &&
       this.#root.includes(path) === true
     ) {
         if(

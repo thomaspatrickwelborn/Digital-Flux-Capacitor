@@ -26,7 +26,7 @@ export default class Filesystem extends EventEmitter {
         async () => {
           await this.#_database.dropDatabase()
           this.#root
-          this.content
+          this.#content
         }
       )
     }
@@ -40,7 +40,7 @@ export default class Filesystem extends EventEmitter {
     }
     return this.#_root
   }
-  get content() {
+  get #content() {
     if(this.#_content === undefined) {
       this.#_content = new Content(Object.assign(
         {
@@ -54,11 +54,6 @@ export default class Filesystem extends EventEmitter {
   }
 
   async save($collects, $worksheet) {
-    this.content.extrapolatory.save(
-      $collects, $worksheet
-    )
-    this.content.extrapository.save(
-      $collects, $worksheet
-    )
+    this.#content.save($collects, $worksheet)
   }
 }

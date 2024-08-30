@@ -49,6 +49,10 @@ export default class FSElement extends EventEmitter {
         reducedCollectDoc,
         { upsert: true, new: true }
       )
+      this.emit(
+        'saveFileDoc',
+        collectDoc,
+      )
       fileCollect.push(fileDoc/*.toObject()*/)
       collectDocsIndex++
     }

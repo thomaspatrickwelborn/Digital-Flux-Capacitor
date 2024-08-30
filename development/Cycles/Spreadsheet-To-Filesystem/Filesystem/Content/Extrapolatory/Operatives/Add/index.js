@@ -1,7 +1,7 @@
 import { Timer } from '#Coutil/index.js'
 import Operative from '../Operative/index.js'
 import path from 'node:path'
-import { mkdir, writeFile } from 'node:fs/promises'
+import { mkdir, writeFile, stat } from 'node:fs/promises'
 export default class Add extends Operative {
   constructor($settings) {
     super($settings)
@@ -11,9 +11,7 @@ export default class Add extends Operative {
       this.settings.root.path,
       $fileDoc.fs.path,
     )
-    await writeFile(fileDocPath, '', ($err, $file) => {
-      if($err) return
-    })
+    await writeFile(fileDocPath, '')
     return 
   }
   async fold($foldDoc) {
@@ -24,7 +22,6 @@ export default class Add extends Operative {
     await mkdir(foldDocPath, {
       recursive: true,
     })
-    // this.emit('addFold', $foldDoc)
     return $foldDoc
   }
 }

@@ -7,11 +7,6 @@ export default class FSElementContent extends EventEmitter {
     super()
     this.#settings = $settings
   }
-  async save($collect, $worksheet) {
-    const collectDocs = await this.#saveWorksheetMods($collect, $worksheet)
-    const fileDocs = await this.#saveCollectDocs(collectDocs)
-    return fileDocs
-  }
   async #saveWorksheetMods($collect, $worksheet) {
     const lmnRanges = $worksheet.depository.lmnRanges
     const worksheetMods = Array.from($worksheet.depository.mods.values())
@@ -126,5 +121,10 @@ export default class FSElementContent extends EventEmitter {
       ] = $collectDocPropertyVal
     }
     return $collectDoc
+  }
+  async save($collect, $worksheet) {
+    const collectDocs = await this.#saveWorksheetMods($collect, $worksheet)
+    const fileDocs = await this.#saveCollectDocs(collectDocs)
+    return fileDocs
   }
 }

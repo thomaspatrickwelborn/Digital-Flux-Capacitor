@@ -43,28 +43,35 @@ export default class Extrapository extends EventEmitter {
     return this.#_models
   }
   get #fsElement() {
-    if(this.#_fsElement === undefined) {
-      this.#_fsElement = new FSElement({
-        models: this.#models
-      })
-    }
+    if(this.#_fsElement !== undefined) this.#_fsElement
+    this.#_fsElement = new FSElement({
+      models: this.#models
+    })
+    this.#_fsElement.on(
+      'saveFileDoc', 
+      ($collectDoc) => {
+        this.emit(
+          'fsElement:saveFileDoc',
+          $collectDoc,
+        )
+      }
+    )
     return this.#_fsElement
   }
   get #fsElementContent() {
-    if(this.#_fsElementContent === undefined) {
-      this.#_fsElementContent = new FSElementContent({
-        models: this.#models
-      })
-      this.#_fsElementContent.on(
-        'saveFileDoc', 
-        ($collectDoc) => {
-          this.emit(
-            'fsElementContent:saveFileDoc',
-            $collectDoc,
-          )
-        }
-      )
-    }
+    if(this.#_fsElementContent !== undefined) this.#_fsElementContent
+    this.#_fsElementContent = new FSElementContent({
+      models: this.#models
+    })
+    this.#_fsElementContent.on(
+      'saveFileDoc', 
+      ($collectDoc) => {
+        this.emit(
+          'fsElementContent:saveFileDoc',
+          $collectDoc,
+        )
+      }
+    )
     return this.#_fsElementContent
   }
   async save($collects, $worksheet) {
